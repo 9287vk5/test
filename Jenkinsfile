@@ -9,8 +9,7 @@ pipeline {
         stage('Build') { 
             steps {
               git branch: 'test1', url: 'https://github.com/9287vk5/test'
-              sh 'ls -la'
-              sh 'echo $LD_LIBRARY_PATH'
+              sh 'printenv'
             }
         }
         stage('Test') { 
