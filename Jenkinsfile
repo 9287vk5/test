@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-              sh 'echo "$THIRD_PARTY_INSTALL_PREFIX $THIRD_PARTY_INSTALL_PREFIX_ARCH $LD_LIBRARY_PATH"' 
+              git url: 'https://github.com/9287vk5/test'
+              sh 'ls -la'
             }
         }
         stage('Test') { 
