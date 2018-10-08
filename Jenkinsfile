@@ -12,6 +12,11 @@ pipeline {
               sh 'printenv'
             }
         }
+        stage ('check-style') {
+            steps {
+              sh 'tools/infrastructure/check_style.sh'
+            }
+        }
         stage ('cmake') {
             steps {
                 dir('build') {
@@ -32,11 +37,6 @@ pipeline {
         stage ('cppcheck') {
             steps {
               sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml'
-            }
-        }
-        stage('Test') { 
-            steps {
-              echo 'Test' 
             }
         }
         stage('Deploy') { 
