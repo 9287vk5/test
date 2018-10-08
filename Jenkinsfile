@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-              git url: 'https://github.com/9287vk5/test'
+              git branch: 'test1', url: 'https://github.com/9287vk5/test'
               sh 'ls -la'
             }
         }
