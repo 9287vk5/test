@@ -6,15 +6,23 @@ pipeline {
         LD_LIBRARY_PATH="$THIRD_PARTY_INSTALL_PREFIX_ARCH/lib:$THIRD_PARTY_INSTALL_PREFIX/lib"
     }
     stages {
-        stage ('check-style') {
+        stage ('Preparation') {
             steps { 
-              sh 'tools/infrastructure/check_style.sh || true'
+                sh '''
+                echo Desc: "SDL: " ${GIT_BRANCH:7:29} " " ${GIT_COMMIT:0:8};
+                ulimit -c unlimited;
+                rm -rf /tmp/corefiles;
+                mkdir /tmp/corefiles;
+                echo '/tmp/corefiles/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+                '''
+                
             }
         }
+        stage ('check-style') {
+            steps { sh 'tools/infrastructure/check_style.sh || true' }
+        }
         stage ('cppcheck') {
-            steps {
-              sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml'
-            }
+            steps { sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' }
         }
         /*
         stage ('cmake') {
