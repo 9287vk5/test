@@ -7,15 +7,14 @@ pipeline {
     }
     stages {
         stage ('Preparation') {
-            steps { 
+            steps {
                 sh '''
-                echo Desc: "SDL: " ${GIT_BRANCH:7:29} " " ${GIT_COMMIT:0:8};
-                ulimit -c unlimited;
-                rm -rf /tmp/corefiles;
-                mkdir /tmp/corefiles;
-                echo '/tmp/corefiles/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+                    ulimit -c unlimited;
+                    rm -rf /tmp/corefiles;
+                    mkdir /tmp/corefiles;
+                    echo '/tmp/corefiles/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
                 '''
-                
+                echo 'Desc: "SDL: " ${GIT_BRANCH:7:29} " " ${GIT_COMMIT:0:8}''
             }
         }
         stage ('check-style') {
