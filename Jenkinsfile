@@ -6,12 +6,6 @@ pipeline {
         LD_LIBRARY_PATH="$THIRD_PARTY_INSTALL_PREFIX_ARCH/lib:$THIRD_PARTY_INSTALL_PREFIX/lib"
     }
     stages {
-        stage('git') { 
-            steps {
-              git branch: 'test1', url: 'https://github.com/9287vk5/test'
-              sh 'printenv'
-            }
-        }
         stage ('check-style') {
             steps { 
               sh 'tools/infrastructure/check_style.sh || true'
