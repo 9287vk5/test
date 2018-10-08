@@ -1,19 +1,23 @@
+#!/usr/bin/env groovy
+
 pipeline {
-    agent any 
+    agent any
     stages {
-        stage('Build') { 
+        stage("build") {
             steps {
-              sh 'echo "build"' 
+                retry(3) { echo "Build" }
             }
         }
-        stage('Test') { 
+        stage("tests") {
             steps {
-              echo 'Test' 
-            }
-        }
-        stage('Deploy') { 
-            steps {
-              echo 'Deploy' 
+                parallel (
+                    "unit test" : {
+                        build("unit-test-job")
+                    },
+                    "component test" : {
+                        build("component-test-job")
+                    }
+                )
             }
         }
     }
