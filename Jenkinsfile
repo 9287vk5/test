@@ -28,7 +28,7 @@ pipeline {
         stage ('cmake') {
             steps {
                 dir('build') {
-                    sh 'cmake .. -DBUILD_TESTS=OFF'
+                    sh 'cmake .. -DBUILD_TESTS=ON'
                 }
             }
         }
@@ -38,20 +38,51 @@ pipeline {
                     sh '''
                     make install-3rd_party_logger
                     make install -j4
+                    '''
+                }
+            }
+        }
+        stage ('UT') {
+            steps { dir('build') {
+                sh '''
+                    make test | tee ut.log || true; result=${PIPESTATUS[0]};
+                    if [ $result -ne 0 ]; then
+                     COREFILE=$(find /tmp/corefiles -type f -name 'core*');
+                     echo $COREFILE;
+                     grep -w "SegFault" ut.log | while read -r line; do 
+                      arr=($line); 
+                      echo ${arr[3]};
+                     done > res.txt;
+                     test_file=$(find ${WORKSPACE}/build/src/components/ -type f -name "$(cat res.txt)");
+                     echo $test_file;
+                     echo "Started gdb!";
+                     echo thread apply all bt | gdb $test_file $COREFILE;
+                     tar -zcf coredump.tar.gz /tmp/corefiles/
+                     pwd
+                     find ${WORKSPACE}/build/src/components/ -maxdepth 3 -mindepth 3 -type f -executable| xargs tar -uf tests.tar
+                     gzip -c tests.tar > tests.tar.gz
+                     tar -zcf OpenSDL.tar.gz bin/
+                     exit 2;
+                    fi
+                '''
+            }}
+        }
+        stage ('tar') {
+            steps {
+                sh '''
                     cp -r src/3rdparty/LINUX/x86/lib/* bin
                     cp -r src/3rdparty/LINUX/lib/* bin
                     mkdir bin/api
                     cp -r ../src/components/interfaces/* bin/api
                     cp CMakeCache.txt bin
                     tar -zcf OpenSDL.tar.gz bin
-                    '''
-                }
+                '''
             }
-        }
-        stage ('archive') {
-            steps {
+        }}
+        post {
+            always {
                 archive 'build/OpenSDL.tar.gz'
-            }
+                junit "build/*.xml"
         }
     }
 }
