@@ -25,7 +25,6 @@ pipeline {
         stage ('cppcheck') {
             steps { sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' }
         }
-        /*
         stage ('cmake') {
             steps {
                 dir('build') {
@@ -39,10 +38,20 @@ pipeline {
                     sh '''
                     make install-3rd_party_logger
                     make install -j4
+                    cp -r src/3rdparty/LINUX/x86/lib/* bin
+                    cp -r src/3rdparty/LINUX/lib/* bin
+                    mkdir bin/api
+                    cp -r ../src/components/interfaces/* bin/api
+                    cp CMakeCache.txt bin
+                    tar -zcf OpenSDL.tar.gz bin
                     '''
                 }
             }
         }
-*/
+        stage ('archive') {
+            steps {
+                archive 'build/OpenSDL.tar.gz'
+            }
+        }
     }
 }
