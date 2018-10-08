@@ -13,8 +13,8 @@ pipeline {
             }
         }
         stage ('check-style') {
-            steps {
-              sh 'tools/infrastructure/check_style.sh'
+            steps { 
+              sh 'tools/infrastructure/check_style.sh || true'
             }
         }
         stage ('cmake') {
@@ -37,11 +37,6 @@ pipeline {
         stage ('cppcheck') {
             steps {
               sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml'
-            }
-        }
-        stage('Deploy') { 
-            steps {
-              echo 'Deploy' 
             }
         }
     }
