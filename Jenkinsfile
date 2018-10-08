@@ -4,6 +4,7 @@ pipeline {
         THIRD_PARTY_INSTALL_PREFIX="${WORKSPACE}/build/src/3rdparty/LINUX"
         THIRD_PARTY_INSTALL_PREFIX_ARCH="${THIRD_PARTY_INSTALL_PREFIX}/x86"
         LD_LIBRARY_PATH="$THIRD_PARTY_INSTALL_PREFIX_ARCH/lib:$THIRD_PARTY_INSTALL_PREFIX/lib"
+        GIT_BRANCH="$BRANCH"
     }
     stages {
         stage ('Preparation') {
@@ -12,9 +13,10 @@ pipeline {
                     ulimit -c unlimited;
                     rm -rf /tmp/corefiles;
                     mkdir /tmp/corefiles;
-                    echo '/tmp/corefiles/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+                    echo '/tmp/corefiles/core.%e.%p' | sudo tee /proc/sys/kernel/core_pattern;
+                    GIT_COMMIT="$(git rev-parse --short HEAD)";
                 '''
-                echo 'Desc: "SDL: " ${GIT_BRANCH:7:29} " " ${GIT_COMMIT:0:8}''
+                echo 'Desc: "SDL: " ${GIT_BRANCH:0:29} " " ${GIT_COMMIT:0:8}'
             }
         }
         stage ('check-style') {
