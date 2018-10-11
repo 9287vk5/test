@@ -18,13 +18,13 @@ pipeline {
                 '''
                 echo 'Desc: "SDL: " ${GIT_BRANCH:0:29} " " ${GIT_COMMIT:0:8}'
             }
-        }
+        }/*
         stage ('check-style') {
             steps { sh 'tools/infrastructure/check_style.sh || true' }
-        }
+        }*/
         stage ('cppcheck') {
             steps { sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' }
-        }
+        }/*
         stage ('cmake') {
             steps {
                 dir('build') {
@@ -78,11 +78,10 @@ pipeline {
                     tar -zcf OpenSDL.tar.gz bin
                 '''
             }
-        }}
+        }*/}
         post {
             always {
-                archive 'build/OpenSDL.tar.gz'
-                junit "build/*.xml"
+                publishCppcheck pattern:'cppcheck.xml'
         }
     }
 }
