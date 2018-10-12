@@ -45,13 +45,14 @@ pipeline {
         stage ('UT') {
             steps { dir('build') {
                 sh '''
+                    sudo ldconfig
                     make test | tee ut.log || true; result=${PIPESTATUS[0]};
                     if [ $result -ne 0 ]; then
-                     COREFILE=$(find /tmp/corefiles -type f -name 'core*');
-                     echo $COREFILE;
-                     grep -w "SegFault" ut.log | while read -r line; do 
-                      arr=($line); 
-                      echo ${arr[3]};
+                        COREFILE=$(find /tmp/corefiles -type f -name 'core*');
+                        echo $COREFILE;
+                        grep -w "SegFault" ut.log | while read -r line; do 
+                            arr=($line); 
+                            echo ${arr[3]};
                      done > res.txt;
                      test_file=$(find ${WORKSPACE}/build/src/components/ -type f -name "$(cat res.txt)");
                      echo $test_file;
