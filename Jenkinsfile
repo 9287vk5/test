@@ -20,7 +20,7 @@ pipeline {
             }
         }
         stage ('check-style') {
-            steps { script { try { sh 'tools/infrastructure/check_style.sh' } finally } }
+            steps { script { try { sh 'tools/infrastructure/check_style.sh' } } }
         }
         stage ('cppcheck') {
             steps { script { try { 
@@ -28,7 +28,7 @@ pipeline {
             }   finally {
                 junit 'cppcheck.xml'
             }
-            }
+            }}
         }
         stage ('cmake') {
             steps {
