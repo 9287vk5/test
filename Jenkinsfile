@@ -24,7 +24,7 @@ pipeline {
                 script { 
                     try { 
                         sh 'tools/infrastructure/check_style.sh' 
-                    } finally {
+                    } catch (Exception e) {
                         sh 'echo "check-style good"'
                     }
                 }
