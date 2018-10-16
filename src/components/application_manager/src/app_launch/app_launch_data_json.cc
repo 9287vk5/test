@@ -152,11 +152,10 @@ bool AppLaunchDataJson::AddNewAppData(const ApplicationData& app_data) {
   json_app_data[strings::app_launch_last_session] =
       static_cast<Json::Value::UInt64>(getSecs(getCurrentTime()));
 
-  LOG4CXX_DEBUG(logger_,
-                "New application data saved. Detatils device_id: "
-                    << app_data.device_mac_
-                    << ", app_id: " << app_data.mobile_app_id_
-                    << ", bundle_id: " << app_data.bundle_id_ << ".");
+  LOG4CXX_DEBUG(logger_, "New application data saved. Detatils device_id: "
+                             << app_data.device_mac_
+                             << ", app_id: " << app_data.mobile_app_id_
+                             << ", bundle_id: " << app_data.bundle_id_ << ".");
 
   return true;
 }
@@ -242,8 +241,7 @@ bool AppLaunchDataJson::DeleteOldestAppData() {
   // Copy in temporary vector Json list without oldest record
   int32_t i = 0;
   for (Json::Value::iterator it = GetSavedApplicationDataList().begin();
-       it != GetSavedApplicationDataList().end();
-       ++it, i++) {
+       it != GetSavedApplicationDataList().end(); ++it, i++) {
     if ((*it).isMember(strings::device_id) &&
         (*it).isMember(strings::bundle_id) && (*it).isMember(strings::app_id) &&
         (*it).isMember(strings::app_launch_last_session)) {
@@ -259,8 +257,7 @@ bool AppLaunchDataJson::DeleteOldestAppData() {
 
   // Copy to Json new list without oldest one
   for (std::vector<Json::Value>::iterator it = temp_json_list.begin();
-       it != temp_json_list.end();
-       ++it) {
+       it != temp_json_list.end(); ++it) {
     GetSavedApplicationDataList().append((*it));
   }
 

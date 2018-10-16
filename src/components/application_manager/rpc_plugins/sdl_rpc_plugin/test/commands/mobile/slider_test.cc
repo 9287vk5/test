@@ -80,8 +80,8 @@ class SliderRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   SliderRequestTest()
-      : mock_app_(CreateMockApp())
-      , msg_(CreateMessage(smart_objects::SmartType_Map)) {}
+      : mock_app_(CreateMockApp()),
+        msg_(CreateMessage(smart_objects::SmartType_Map)) {}
 
   MessageSharedPtr CreateFullParamsUISO() {
     MessageSharedPtr msg = CreateMessage(smart_objects::SmartType_Map);
@@ -184,9 +184,7 @@ class CallOnTimeOut {
  public:
   CallOnTimeOut(CommandRequestImpl& command) : command_(command) {}
 
-  void operator()() {
-    command_.onTimeOut();
-  }
+  void operator()() { command_.onTimeOut(); }
 
   CommandRequestImpl& command_;
 };

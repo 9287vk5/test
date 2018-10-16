@@ -101,13 +101,12 @@ MobileMessageHandler::HandleIncomingMessageProtocol(
     LOG4CXX_WARN(logger_, "Message is NULL");
     return NULL;
   }
-  LOG4CXX_DEBUG(logger_,
-                "Incoming RPC_INFO: " << (out_message->connection_key() >> 16)
-                                      << ", "
-                                      << message_types[out_message->type()]
-                                      << ", " << out_message->function_id()
-                                      << ", " << out_message->correlation_id()
-                                      << ", " << out_message->json_message());
+  LOG4CXX_DEBUG(logger_, "Incoming RPC_INFO: "
+                             << (out_message->connection_key() >> 16) << ", "
+                             << message_types[out_message->type()] << ", "
+                             << out_message->function_id() << ", "
+                             << out_message->correlation_id() << ", "
+                             << out_message->json_message());
   return out_message;
 }
 
@@ -168,8 +167,8 @@ MobileMessageHandler::HandleIncomingMessageProtocolV2(
   LOG4CXX_AUTO_TRACE(logger_);
   utils::BitStream message_bytestream(message->data(), message->data_size());
   protocol_handler::ProtocolPayloadV2 payload;
-  protocol_handler::Extract(
-      &message_bytestream, &payload, message->data_size());
+  protocol_handler::Extract(&message_bytestream, &payload,
+                            message->data_size());
 
   // Silently drop message if it wasn't parsed correctly
   if (message_bytestream.IsBad()) {
@@ -216,11 +215,9 @@ MobileMessageHandler::HandleOutgoingMessageProtocolV1(
   BinaryData raw_message(message_string.length() + 1);
   memcpy(&raw_message[0], message_string.c_str(), message_string.length() + 1);
 
-  protocol_handler::RawMessage* result =
-      new protocol_handler::RawMessage(message->connection_key(),
-                                       1,
-                                       &raw_message[0],
-                                       message_string.length() + 1);
+  protocol_handler::RawMessage* result = new protocol_handler::RawMessage(
+      message->connection_key(), 1, &raw_message[0],
+      message_string.length() + 1);
 
   return result;
 }
@@ -294,11 +291,9 @@ MobileMessageHandler::HandleOutgoingMessageProtocolV2(
   }
 
   protocol_handler::RawMessage* msg_to_protocol_handler =
-      new protocol_handler::RawMessage(message->connection_key(),
-                                       message->protocol_version(),
-                                       &data_for_sending[0],
-                                       data_for_sending_size,
-                                       type);
+      new protocol_handler::RawMessage(
+          message->connection_key(), message->protocol_version(),
+          &data_for_sending[0], data_for_sending_size, type);
 
   return msg_to_protocol_handler;
 }

@@ -46,8 +46,7 @@ using namespace ::transport_manager::transport_adapter;
 class MockTCPTransportAdapter : public TcpTransportAdapter {
  public:
   MockTCPTransportAdapter(
-      uint16_t port,
-      resumption::LastState& last_state,
+      uint16_t port, resumption::LastState& last_state,
       const transport_manager::TransportManagerSettings& settings)
       : TcpTransportAdapter(port, last_state, settings) {}
   MOCK_CONST_METHOD2(FindEstablishedConnection,
@@ -58,12 +57,8 @@ class MockTCPTransportAdapter : public TcpTransportAdapter {
   MOCK_METHOD2(Connect,
                TransportAdapter::Error(const DeviceUID& device_handle,
                                        const ApplicationHandle& app_handle));
-  void CallStore() {
-    Store();
-  }
-  bool CallRestore() {
-    return Restore();
-  }
+  void CallStore() { Store(); }
+  bool CallRestore() { return Restore(); }
 };
 
 }  // namespace transport_manager_test

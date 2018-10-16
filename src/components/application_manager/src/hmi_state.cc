@@ -43,27 +43,26 @@ namespace application_manager {
 CREATE_LOGGERPTR_GLOBAL(logger_, "HmiState")
 
 HmiState::HmiState(std::shared_ptr<Application> app,
-                   const ApplicationManager& app_mngr,
-                   StateID state_id)
-    : app_(app)
-    , state_id_(state_id)
-    , app_mngr_(app_mngr)
-    , hmi_level_(mobile_apis::HMILevel::INVALID_ENUM)
-    , audio_streaming_state_(mobile_apis::AudioStreamingState::INVALID_ENUM)
-    , video_streaming_state_(mobile_apis::VideoStreamingState::INVALID_ENUM)
-    , system_context_(mobile_apis::SystemContext::INVALID_ENUM) {
+                   const ApplicationManager& app_mngr, StateID state_id)
+    : app_(app),
+      state_id_(state_id),
+      app_mngr_(app_mngr),
+      hmi_level_(mobile_apis::HMILevel::INVALID_ENUM),
+      audio_streaming_state_(mobile_apis::AudioStreamingState::INVALID_ENUM),
+      video_streaming_state_(mobile_apis::VideoStreamingState::INVALID_ENUM),
+      system_context_(mobile_apis::SystemContext::INVALID_ENUM) {
   LOG4CXX_DEBUG(logger_, *this);
 }
 
 HmiState::HmiState(std::shared_ptr<Application> app,
                    const ApplicationManager& app_mngr)
-    : app_(app)
-    , state_id_(STATE_ID_REGULAR)
-    , app_mngr_(app_mngr)
-    , hmi_level_(mobile_apis::HMILevel::INVALID_ENUM)
-    , audio_streaming_state_(mobile_apis::AudioStreamingState::INVALID_ENUM)
-    , video_streaming_state_(mobile_apis::VideoStreamingState::INVALID_ENUM)
-    , system_context_(mobile_apis::SystemContext::INVALID_ENUM) {
+    : app_(app),
+      state_id_(STATE_ID_REGULAR),
+      app_mngr_(app_mngr),
+      hmi_level_(mobile_apis::HMILevel::INVALID_ENUM),
+      audio_streaming_state_(mobile_apis::AudioStreamingState::INVALID_ENUM),
+      video_streaming_state_(mobile_apis::VideoStreamingState::INVALID_ENUM),
+      system_context_(mobile_apis::SystemContext::INVALID_ENUM) {
   LOG4CXX_DEBUG(logger_, *this);
 }
 
@@ -72,13 +71,9 @@ void HmiState::set_parent(HmiStatePtr parent) {
   parent_ = parent;
 }
 
-bool HmiState::is_navi_app() const {
-  return app_->is_navi();
-}
+bool HmiState::is_navi_app() const { return app_->is_navi(); }
 
-bool HmiState::is_media_app() const {
-  return app_->is_media_application();
-}
+bool HmiState::is_media_app() const { return app_->is_media_application(); }
 
 bool HmiState::is_voice_communication_app() const {
   return app_->is_voice_communication_supported();
@@ -110,8 +105,8 @@ mobile_apis::AudioStreamingState::eType TTSHmiState::audio_streaming_state()
   AudioStreamingState::eType expected_state = AudioStreamingState::NOT_AUDIBLE;
   if (app_mngr_.is_attenuated_supported() &&
       AudioStreamingState::NOT_AUDIBLE != parent()->audio_streaming_state() &&
-      Compare<HMILevel::eType, EQ, ONE>(
-          hmi_level(), HMILevel::HMI_FULL, HMILevel::HMI_LIMITED)) {
+      Compare<HMILevel::eType, EQ, ONE>(hmi_level(), HMILevel::HMI_FULL,
+                                        HMILevel::HMI_LIMITED)) {
     expected_state = AudioStreamingState::ATTENUATED;
   }
   return expected_state;
@@ -143,8 +138,7 @@ NaviStreamingHmiState::audio_streaming_state() const {
 
   AudioStreamingState::eType expected_state = parent()->audio_streaming_state();
   if (!is_navi_app() && Compare<AudioStreamingState::eType, EQ, ONE>(
-                            expected_state,
-                            AudioStreamingState::AUDIBLE,
+                            expected_state, AudioStreamingState::AUDIBLE,
                             AudioStreamingState::ATTENUATED)) {
     if (app_mngr_.is_attenuated_supported()) {
       expected_state = AudioStreamingState::ATTENUATED;

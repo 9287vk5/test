@@ -106,11 +106,9 @@ MATCHER(CheckMessageData, "") {
       kAppId;
 
   using namespace helpers;
-  return Compare<bool, EQ, ALL>(true,
-                                kIsMobileProtocolTypeCorrect,
-                                kIsProtocolVersionCorrect,
-                                kIsNotificationCorrect,
-                                kIsConnectionKeyCorrect);
+  return Compare<bool, EQ, ALL>(
+      true, kIsMobileProtocolTypeCorrect, kIsProtocolVersionCorrect,
+      kIsNotificationCorrect, kIsConnectionKeyCorrect);
 }
 
 TEST_F(OnTBTClientStateNotificationTest,

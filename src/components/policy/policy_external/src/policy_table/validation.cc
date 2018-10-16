@@ -93,30 +93,27 @@ bool ApplicationPoliciesSection::Validate() const {
     RequestTypes& app_request_types = *iter->second.RequestType;
 
     if (app_request_types.is_omitted()) {
-      LOG4CXX_WARN(logger_,
-                   "RequestTypes omitted for "
-                       << app_id << " Will be replaced with default.");
+      LOG4CXX_WARN(logger_, "RequestTypes omitted for "
+                                << app_id << " Will be replaced with default.");
       app_request_types = *apps[kDefaultApp].RequestType;
       ++iter;
       continue;
     }
 
     if (!app_request_types.is_valid()) {
-      LOG4CXX_WARN(logger_,
-                   "Invalid RequestTypes for " << app_id
-                                               << " Will be cleaned up.");
+      LOG4CXX_WARN(logger_, "Invalid RequestTypes for "
+                                << app_id << " Will be cleaned up.");
       app_request_types.CleanUp();
       if (app_request_types.is_cleaned_up()) {
         if (PT_PRELOADED == pt_type) {
-          LOG4CXX_ERROR(logger_,
-                        "RequestTypes empty after clean-up for "
-                            << app_id << " Exiting.");
+          LOG4CXX_ERROR(logger_, "RequestTypes empty after clean-up for "
+                                     << app_id << " Exiting.");
           return false;
         }
 
-        LOG4CXX_WARN(logger_,
-                     "RequestTypes empty after clean-up for "
-                         << app_id << " Will be replaced with default.");
+        LOG4CXX_WARN(logger_, "RequestTypes empty after clean-up for "
+                                  << app_id
+                                  << " Will be replaced with default.");
 
         app_request_types = *apps[kDefaultApp].RequestType;
       }
@@ -177,9 +174,7 @@ bool ApplicationParams::ValidateModuleTypes() const {
   }
 
   struct IsInvalid {
-    bool operator()(Enum<ModuleType> item) const {
-      return !item.is_valid();
-    }
+    bool operator()(Enum<ModuleType> item) const { return !item.is_valid(); }
   };
   // cut invalid items
   moduleType->erase(
@@ -207,20 +202,14 @@ bool ApplicationParams::Validate() const {
   return ValidateModuleTypes();
 }
 
-bool RpcParameters::Validate() const {
-  return true;
-}
-bool Rpcs::Validate() const {
-  return true;
-}
+bool RpcParameters::Validate() const { return true; }
+bool Rpcs::Validate() const { return true; }
 bool ModuleConfig::Validate() const {
   switch (GetPolicyTableType()) {
     case PT_PRELOADED: {
       if (helpers::Compare<bool, helpers::EQ, helpers::ONE>(
-              true,
-              vehicle_make.is_initialized(),
-              vehicle_year.is_initialized(),
-              vehicle_model.is_initialized())) {
+              true, vehicle_make.is_initialized(),
+              vehicle_year.is_initialized(), vehicle_model.is_initialized())) {
         return false;
       }
       break;
@@ -239,13 +228,11 @@ bool ModuleConfig::Validate() const {
   }
 
   for (ServiceEndpoints::const_iterator it_endpoints = endpoints.begin();
-       it_endpoints != endpoints.end();
-       ++it_endpoints) {
+       it_endpoints != endpoints.end(); ++it_endpoints) {
     const URLList& endpoint_list = it_endpoints->second;
     if (endpoint_list.end() == endpoint_list.find(kDefaultApp)) {
-      LOG4CXX_ERROR(logger_,
-                    "Endpoint " << it_endpoints->first
-                                << "does not contain default group");
+      LOG4CXX_ERROR(logger_, "Endpoint " << it_endpoints->first
+                                         << "does not contain default group");
       return false;
     }
   }
@@ -253,18 +240,14 @@ bool ModuleConfig::Validate() const {
   return true;
 }
 
-bool MessageString::Validate() const {
-  return true;
-}
+bool MessageString::Validate() const { return true; }
 bool MessageLanguages::Validate() const {
   if (PT_SNAPSHOT == GetPolicyTableType()) {
     return false;
   }
   return true;
 }
-bool ConsumerFriendlyMessages::Validate() const {
-  return true;
-}
+bool ConsumerFriendlyMessages::Validate() const { return true; }
 bool ModuleMeta::Validate() const {
   if (GetPolicyTableType() == PT_UPDATE ||
       GetPolicyTableType() == PT_PRELOADED) {
@@ -293,9 +276,7 @@ bool ConsentRecords::Validate() const {
 
   return true;
 }
-bool DeviceParams::Validate() const {
-  return true;
-}
+bool DeviceParams::Validate() const { return true; }
 bool PolicyTable::Validate() const {
   PolicyTableType policy_table_type = GetPolicyTableType();
 
@@ -322,8 +303,6 @@ bool PolicyTable::Validate() const {
   return true;
 }
 
-bool Table::Validate() const {
-  return true;
-}
+bool Table::Validate() const { return true; }
 }  // namespace policy_table_interface_base
 }  // namespace rpc

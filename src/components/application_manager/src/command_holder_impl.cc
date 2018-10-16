@@ -41,14 +41,12 @@ CommandHolderImpl::CommandHolderImpl(ApplicationManager& app_manager)
     : app_manager_(app_manager) {}
 
 void CommandHolderImpl::Suspend(
-    ApplicationSharedPtr application,
-    CommandType type,
+    ApplicationSharedPtr application, CommandType type,
     std::shared_ptr<smart_objects::SmartObject> command) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN_VOID(application);
-  LOG4CXX_DEBUG(logger_,
-                "Suspending command(s) for application: "
-                    << application->policy_app_id());
+  LOG4CXX_DEBUG(logger_, "Suspending command(s) for application: "
+                             << application->policy_app_id());
   sync_primitives::AutoLock lock(commands_lock_);
 
   if (CommandType::kHmiCommand == type) {
@@ -57,9 +55,8 @@ void CommandHolderImpl::Suspend(
                   "Suspended HMI command(s): " << app_hmi_commands_.size());
   } else {
     app_mobile_commands_[application].push_back(command);
-    LOG4CXX_DEBUG(
-        logger_,
-        "Suspended mobile command(s): " << app_mobile_commands_.size());
+    LOG4CXX_DEBUG(logger_, "Suspended mobile command(s): "
+                               << app_mobile_commands_.size());
   }
 }
 
@@ -67,9 +64,8 @@ void CommandHolderImpl::Resume(ApplicationSharedPtr application,
                                CommandType type) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN_VOID(application);
-  LOG4CXX_DEBUG(
-      logger_,
-      "Resuming command(s) for application: " << application->policy_app_id());
+  LOG4CXX_DEBUG(logger_, "Resuming command(s) for application: "
+                             << application->policy_app_id());
   if (CommandType::kHmiCommand == type) {
     ResumeHmiCommand(application);
   } else {
@@ -80,23 +76,20 @@ void CommandHolderImpl::Resume(ApplicationSharedPtr application,
 void CommandHolderImpl::Clear(ApplicationSharedPtr application) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN_VOID(application);
-  LOG4CXX_DEBUG(
-      logger_,
-      "Clearing command(s) for application: " << application->policy_app_id());
+  LOG4CXX_DEBUG(logger_, "Clearing command(s) for application: "
+                             << application->policy_app_id());
   sync_primitives::AutoLock lock(commands_lock_);
   auto app_hmi_commands = app_hmi_commands_.find(application);
   if (app_hmi_commands_.end() != app_hmi_commands) {
-    LOG4CXX_DEBUG(
-        logger_,
-        "Clearing HMI command(s): " << app_hmi_commands->second.size());
+    LOG4CXX_DEBUG(logger_, "Clearing HMI command(s): "
+                               << app_hmi_commands->second.size());
     app_hmi_commands_.erase(app_hmi_commands);
   }
 
   auto app_mobile_commands = app_mobile_commands_.find(application);
   if (app_mobile_commands_.end() != app_mobile_commands) {
-    LOG4CXX_DEBUG(
-        logger_,
-        "Clearing mobile command(s): " << app_mobile_commands->second.size());
+    LOG4CXX_DEBUG(logger_, "Clearing mobile command(s): "
+                               << app_mobile_commands->second.size());
     app_mobile_commands_.erase(app_mobile_commands);
   }
 }

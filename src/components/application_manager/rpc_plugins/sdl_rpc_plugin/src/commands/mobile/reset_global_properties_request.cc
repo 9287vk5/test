@@ -50,13 +50,10 @@ ResetGlobalPropertiesRequest::ResetGlobalPropertiesRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler)
-    , ui_result_(hmi_apis::Common_Result::INVALID_ENUM)
-    , tts_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler),
+      ui_result_(hmi_apis::Common_Result::INVALID_ENUM),
+      tts_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
 
 ResetGlobalPropertiesRequest::~ResetGlobalPropertiesRequest() {}
 
@@ -166,8 +163,8 @@ void ResetGlobalPropertiesRequest::Run() {
     }
 
     msg_params[strings::app_id] = app->app_id();
-    SendHMIRequest(
-        hmi_apis::FunctionID::UI_SetGlobalProperties, &msg_params, true);
+    SendHMIRequest(hmi_apis::FunctionID::UI_SetGlobalProperties, &msg_params,
+                   true);
   }
 
   if (timeout_prompt || helpt_promt) {
@@ -185,8 +182,8 @@ void ResetGlobalPropertiesRequest::Run() {
 
     msg_params[strings::app_id] = app->app_id();
 
-    SendHMIRequest(
-        hmi_apis::FunctionID::TTS_SetGlobalProperties, &msg_params, true);
+    SendHMIRequest(hmi_apis::FunctionID::TTS_SetGlobalProperties, &msg_params,
+                   true);
   }
 }
 
@@ -279,8 +276,7 @@ void ResetGlobalPropertiesRequest::on_event(const event_engine::Event& event) {
   std::string response_info;
   const bool result = PrepareResponseParameters(result_code, response_info);
 
-  SendResponse(result,
-               static_cast<mobile_apis::Result::eType>(result_code),
+  SendResponse(result, static_cast<mobile_apis::Result::eType>(result_code),
                response_info.empty() ? NULL : response_info.c_str(),
                &(message[strings::msg_params]));
 }
@@ -317,10 +313,9 @@ bool ResetGlobalPropertiesRequest::PrepareResponseParameters(
         PrepareResultForMobileResponse(ui_properties_info, tts_properties_info);
     out_result_code =
         PrepareResultCodeForResponse(ui_properties_info, tts_properties_info);
-    out_response_info = app_mngr::commands::MergeInfos(tts_properties_info,
-                                                       tts_response_info_,
-                                                       ui_properties_info,
-                                                       ui_response_info_);
+    out_response_info =
+        app_mngr::commands::MergeInfos(tts_properties_info, tts_response_info_,
+                                       ui_properties_info, ui_response_info_);
   }
 
   return result;

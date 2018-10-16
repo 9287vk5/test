@@ -58,8 +58,7 @@ class GlobalCounter {
 class AppCounter {
  public:
   AppCounter(std::shared_ptr<StatisticsManager> statistics_manager,
-             const std::string& app_id,
-             AppCounterId counter_type);
+             const std::string& app_id, AppCounterId counter_type);
   void operator++() const;
 
  private:
@@ -71,8 +70,7 @@ class AppCounter {
 class AppInfo {
  public:
   AppInfo(std::shared_ptr<StatisticsManager> statistics_manager,
-          const std::string& app_id,
-          AppInfoId info_type);
+          const std::string& app_id, AppInfoId info_type);
   void Update(const std::string& new_info) const;
 
  private:
@@ -86,8 +84,7 @@ class AppStopwatchImpl : public AppStopwatch {
   AppStopwatchImpl(std::shared_ptr<StatisticsManager> statistics_manager,
                    const std::string& app_id);
   AppStopwatchImpl(std::shared_ptr<StatisticsManager> statistics_manager,
-                   const std::string& app_id,
-                   std::uint32_t timeout);
+                   const std::string& app_id, std::uint32_t timeout);
   ~AppStopwatchImpl();
   void Start(AppStopwatchId stopwatch_type) OVERRIDE;
   void Switch(AppStopwatchId stopwatch_type) OVERRIDE;

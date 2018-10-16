@@ -85,12 +85,12 @@ class GetInteriorVehicleDataRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   GetInteriorVehicleDataRequestTest()
-      : mock_app_(std::make_shared<NiceMock<MockApplication> >())
-      , mock_app2_(std::make_shared<NiceMock<MockApplication> >())
-      , rc_app_extention_(std::make_shared<RCAppExtension>(kModuleId))
-      , rc_app_extention2_(std::make_shared<RCAppExtension>(kModuleId))
-      , apps_lock_(std::make_shared<sync_primitives::Lock>())
-      , apps_da_(apps_, apps_lock_) {
+      : mock_app_(std::make_shared<NiceMock<MockApplication> >()),
+        mock_app2_(std::make_shared<NiceMock<MockApplication> >()),
+        rc_app_extention_(std::make_shared<RCAppExtension>(kModuleId)),
+        rc_app_extention2_(std::make_shared<RCAppExtension>(kModuleId)),
+        apps_lock_(std::make_shared<sync_primitives::Lock>()),
+        apps_da_(apps_, apps_lock_) {
     ON_CALL(*mock_app_, app_id()).WillByDefault(Return(kAppId));
     ON_CALL(*mock_app2_, app_id()).WillByDefault(Return(kAppId2));
     ON_CALL(*mock_app_, is_remote_control_supported())
@@ -145,9 +145,8 @@ class GetInteriorVehicleDataRequestTest
     ON_CALL(mock_hmi_capabilities_, rc_capability())
         .WillByDefault(Return(nullptr));
     ON_CALL(mock_policy_handler_,
-            CheckHMIType(
-                _, mobile_apis::AppHMIType::eType::REMOTE_CONTROL, nullptr))
-        .WillByDefault(Return(true));
+            CheckHMIType(_, mobile_apis::AppHMIType::eType::REMOTE_CONTROL,
+                         nullptr)).WillByDefault(Return(true));
     ON_CALL(mock_policy_handler_, CheckModule(_, _))
         .WillByDefault(Return(true));
     ON_CALL(mock_allocation_manager_, is_rc_enabled())
@@ -157,11 +156,8 @@ class GetInteriorVehicleDataRequestTest
   template <class Command>
   std::shared_ptr<Command> CreateRCCommand(MessageSharedPtr& msg) {
     InitCommand(kDefaultTimeout_);
-    RCCommandParams params{app_mngr_,
-                           mock_rpc_service_,
-                           mock_hmi_capabilities_,
-                           mock_policy_handler_,
-                           mock_allocation_manager_,
+    RCCommandParams params{app_mngr_, mock_rpc_service_, mock_hmi_capabilities_,
+                           mock_policy_handler_, mock_allocation_manager_,
                            mock_interior_data_cache_,
                            mock_interior_data_manager_};
     return std::make_shared<Command>(msg ? msg : msg = CreateMessage(), params);

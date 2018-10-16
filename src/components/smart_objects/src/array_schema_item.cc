@@ -43,8 +43,7 @@ std::shared_ptr<CArraySchemaItem> CArraySchemaItem::create(
 }
 
 errors::eType CArraySchemaItem::validate(
-    const SmartObject& Object,
-    rpc::ValidationReport* report__,
+    const SmartObject& Object, rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   if (SmartType_Array != Object.getType()) {
     std::string validation_info = "Incorrect type, expected: " +
@@ -77,10 +76,9 @@ errors::eType CArraySchemaItem::validate(
   for (size_t i = 0u; i < array_len; ++i) {
     std::stringstream strVal;
     strVal << i;
-    const errors::eType result =
-        mElementSchemaItem->validate(Object.getElement(i),
-                                     &report__->ReportSubobject(strVal.str()),
-                                     MessageVersion);
+    const errors::eType result = mElementSchemaItem->validate(
+        Object.getElement(i), &report__->ReportSubobject(strVal.str()),
+        MessageVersion);
     if (errors::OK != result) {
       return result;
     }
@@ -89,13 +87,12 @@ errors::eType CArraySchemaItem::validate(
 }
 
 void CArraySchemaItem::applySchema(
-    SmartObject& Object,
-    const bool RemoveFakeParameters,
+    SmartObject& Object, const bool RemoveFakeParameters,
     const utils::SemanticVersion& MessageVersion) {
   if (SmartType_Array == Object.getType()) {
     for (size_t i = 0U; i < Object.length(); ++i) {
-      mElementSchemaItem->applySchema(
-          Object[i], RemoveFakeParameters, MessageVersion);
+      mElementSchemaItem->applySchema(Object[i], RemoveFakeParameters,
+                                      MessageVersion);
     }
   }
 }
@@ -127,9 +124,9 @@ void CArraySchemaItem::BuildObjectBySchema(const SmartObject& pattern_object,
 CArraySchemaItem::CArraySchemaItem(const ISchemaItemPtr ElementSchemaItem,
                                    const TSchemaItemParameter<size_t>& MinSize,
                                    const TSchemaItemParameter<size_t>& MaxSize)
-    : mElementSchemaItem(ElementSchemaItem)
-    , mMinSize(MinSize)
-    , mMaxSize(MaxSize) {}
+    : mElementSchemaItem(ElementSchemaItem),
+      mMinSize(MinSize),
+      mMaxSize(MaxSize) {}
 
 }  // namespace ns_smart_objects
 }  // namespace ns_smart_device_link

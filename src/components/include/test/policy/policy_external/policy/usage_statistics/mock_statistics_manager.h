@@ -43,17 +43,14 @@ namespace usage_statistics_test {
 class MockStatisticsManager : public usage_statistics::StatisticsManager {
  public:
   MOCK_METHOD1(Increment, void(usage_statistics::GlobalCounterId type));
-  MOCK_METHOD2(Increment,
-               void(const std::string& app_id,
-                    usage_statistics::AppCounterId type));
+  MOCK_METHOD2(Increment, void(const std::string& app_id,
+                               usage_statistics::AppCounterId type));
   MOCK_METHOD3(Set,
-               void(const std::string& app_id,
-                    usage_statistics::AppInfoId type,
+               void(const std::string& app_id, usage_statistics::AppInfoId type,
                     const std::string& value));
-  MOCK_METHOD3(Add,
-               void(const std::string& app_id,
-                    usage_statistics::AppStopwatchId type,
-                    int32_t timespan_seconds));
+  MOCK_METHOD3(Add, void(const std::string& app_id,
+                         usage_statistics::AppStopwatchId type,
+                         int32_t timespan_seconds));
 };
 
 }  // namespace usage_statistics_test

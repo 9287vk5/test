@@ -41,11 +41,8 @@ RCGetInteriorVehicleDataConsentResponse::
         const application_manager::commands::MessageSharedPtr& message,
         const RCCommandParams& params)
     : application_manager::commands::ResponseFromHMI(
-          message,
-          params.application_manager_,
-          params.rpc_service_,
-          params.hmi_capabilities_,
-          params.policy_handler_) {}
+          message, params.application_manager_, params.rpc_service_,
+          params.hmi_capabilities_, params.policy_handler_) {}
 
 void RCGetInteriorVehicleDataConsentResponse::Run() {
   LOG4CXX_AUTO_TRACE(logger_);

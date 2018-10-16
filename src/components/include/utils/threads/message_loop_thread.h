@@ -77,8 +77,7 @@ class MessageLoopThread {
   /*
    * Constructs new MessageLoopThread. Must be named to aid debugging.
    */
-  MessageLoopThread(const std::string& name,
-                    Handler* handler,
+  MessageLoopThread(const std::string& name, Handler* handler,
                     const ThreadOptions& thread_opts = ThreadOptions());
   ~MessageLoopThread();
 
@@ -136,8 +135,8 @@ template <class Q>
 MessageLoopThread<Q>::MessageLoopThread(const std::string& name,
                                         Handler* handler,
                                         const ThreadOptions& thread_opts)
-    : thread_delegate_(new LoopThreadDelegate(&message_queue_, handler))
-    , thread_(threads::CreateThread(name.c_str(), thread_delegate_)) {
+    : thread_delegate_(new LoopThreadDelegate(&message_queue_, handler)),
+      thread_(threads::CreateThread(name.c_str(), thread_delegate_)) {
   const bool started = thread_->start(thread_opts);
   if (!started) {
     CREATE_LOGGERPTR_LOCAL(logger_, "Utils")

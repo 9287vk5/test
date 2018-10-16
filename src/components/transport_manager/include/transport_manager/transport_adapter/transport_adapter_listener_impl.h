@@ -203,8 +203,7 @@ class TransportAdapterListenerImpl
    * @param data_container Smart pointer to the raw message.
    */
   virtual void OnDataReceiveDone(
-      const TransportAdapter* adapter,
-      const DeviceUID& device,
+      const TransportAdapter* adapter, const DeviceUID& device,
       const ApplicationHandle& app_id,
       const ::protocol_handler::RawMessagePtr data_container);
 
@@ -235,8 +234,7 @@ class TransportAdapterListenerImpl
    * @param data_container Smart pointer to the raw message.
    */
   virtual void OnDataSendDone(
-      const TransportAdapter* adapter,
-      const DeviceUID& device,
+      const TransportAdapter* adapter, const DeviceUID& device,
       const ApplicationHandle& app_id,
       const ::protocol_handler::RawMessagePtr data_container);
 
@@ -246,8 +244,7 @@ class TransportAdapterListenerImpl
    * launch event ON_SEND_FAIL in transport manager.
    */
   virtual void OnDataSendFailed(
-      const TransportAdapter* adapter,
-      const DeviceUID& device,
+      const TransportAdapter* adapter, const DeviceUID& device,
       const ApplicationHandle& app_id,
       const ::protocol_handler::RawMessagePtr data_container,
       const DataSendError& error);

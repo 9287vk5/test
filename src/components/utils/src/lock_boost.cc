@@ -89,8 +89,8 @@ RecursiveLock::RecursiveLock() : lock_taken_(0) {}
 
 RecursiveLock::~RecursiveLock() {
   if (lock_taken_ > 0) {
-    LOG4CXX_FATAL(logger_,
-                  "Destroying non-released recursive mutex " << &mutex_);
+    LOG4CXX_FATAL(logger_, "Destroying non-released recursive mutex "
+                               << &mutex_);
   }
 }
 
@@ -112,9 +112,7 @@ bool RecursiveLock::Try() {
   return status;
 }
 
-void RecursiveLock::AssertFreeAndMarkTaken() {
-  lock_taken_++;
-}
+void RecursiveLock::AssertFreeAndMarkTaken() { lock_taken_++; }
 
 void RecursiveLock::AssertTakenAndMarkFree() {
   if (lock_taken_ == 0) {

@@ -53,10 +53,10 @@ using testing::_;
 class EventEngineTest : public testing::Test {
  public:
   EventEngineTest()
-      : event_id(Event::EventID::BasicCommunication_ActivateApp)
-      , event_id2(Event::EventID::BasicCommunication_OnAppActivated)
-      , event_id3(Event::EventID::VR_IsReady)
-      , event_observer_mock_(mock_event_dispatcher_) {}
+      : event_id(Event::EventID::BasicCommunication_ActivateApp),
+        event_id2(Event::EventID::BasicCommunication_OnAppActivated),
+        event_id3(Event::EventID::VR_IsReady),
+        event_observer_mock_(mock_event_dispatcher_) {}
 
  protected:
   EventDispatcherImpl* event_dispatcher_instance_;
@@ -119,8 +119,8 @@ class EventEngineTest : public testing::Test {
                        const uint32_t calls_number,
                        const smart_objects::SmartObject& so) {
     // Arrange
-    event_dispatcher_instance_->add_observer(
-        event_id, correlation_id, event_observer_mock_);
+    event_dispatcher_instance_->add_observer(event_id, correlation_id,
+                                             event_observer_mock_);
     event_->set_smart_object(so);
     EXPECT_CALL(event_observer_mock_, on_event(_)).Times(calls_number);
     event_dispatcher_instance_->raise_event(*event_);

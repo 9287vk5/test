@@ -74,9 +74,7 @@ namespace strings = ::application_manager::strings;
 class SDLGetUserFriendlyMessageRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  protected:
-  void SetUp() OVERRIDE {
-    mock_app_ = CreateMockApp();
-  }
+  void SetUp() OVERRIDE { mock_app_ = CreateMockApp(); }
 
   void InitCommand(const uint32_t& timeout) OVERRIDE {
     CommandRequestTest<CommandsTestMocks::kIsNice>::InitCommand(timeout);

@@ -51,9 +51,7 @@ using testing::ReturnRef;
 class OnSystemTimeReadyNotificationTest
     : public CommandsTest<CommandsTestMocks::kIsNice> {};
 
-ACTION_P(GetEventId, event_id) {
-  *event_id = arg0.id();
-}
+ACTION_P(GetEventId, event_id) { *event_id = arg0.id(); }
 
 TEST_F(OnSystemTimeReadyNotificationTest, Run_SUCCESS) {
   int32_t event_id = hmi_apis::FunctionID::INVALID_ENUM;

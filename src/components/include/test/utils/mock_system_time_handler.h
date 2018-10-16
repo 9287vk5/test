@@ -56,12 +56,8 @@ class MockSystemTimeHandler : public ::utils::SystemTimeHandler {
   void DoSubscribe(utils::SystemTimeListener*) {}
   void DoSystemTimeQuery() {}
   void DoUnsubscribe(utils::SystemTimeListener* listener) {}
-  bool utc_time_can_be_received() const {
-    return true;
-  }
-  time_t FetchSystemTime() {
-    return 0;
-  }
+  bool utc_time_can_be_received() const { return true; }
+  time_t FetchSystemTime() { return 0; }
 };
 }  // namespace security_manager_test
 }  // namespace components

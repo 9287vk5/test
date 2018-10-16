@@ -83,9 +83,7 @@ MATCHER_P2(CheckNotificationParams, function_id, state, "") {
   return is_function_id_matched && is_state_matched;
 }
 
-ACTION_P(GetArg3, result) {
-  arg3 = *result;
-}
+ACTION_P(GetArg3, result) { arg3 = *result; }
 
 TEST_F(HMIOnDriverDistractionNotificationTest, Run_PushMobileMessage_SUCCESS) {
   const hmi_apis::Common_DriverDistractionState::eType state =

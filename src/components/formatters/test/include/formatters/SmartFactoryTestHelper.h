@@ -91,9 +91,9 @@ namespace StructIdentifiersTest {
 enum eType { INVALID_ENUM = -1, Common_1, Common_2, Common_3 };
 }  // namespace StructIdentifiersTest
 
-class CSmartFactoryTest : public CSmartFactory<FunctionIdTest::eType,
-                                               MessageTypeTest::eType,
-                                               StructIdentifiersTest::eType> {
+class CSmartFactoryTest
+    : public CSmartFactory<FunctionIdTest::eType, MessageTypeTest::eType,
+                           StructIdentifiersTest::eType> {
  public:
   CSmartFactoryTest();
   std::map<SmartSchemaKey<FunctionIdTest::eType, MessageTypeTest::eType>,

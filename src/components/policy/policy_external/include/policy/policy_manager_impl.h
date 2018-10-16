@@ -65,9 +65,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @brief listener get current policy listener instance
    * @return current policy listener
    */
-  PolicyListener* listener() const {
-    return listener_;
-  }
+  PolicyListener* listener() const { return listener_; }
 
   /**
    * @brief Inits Policy Table
@@ -129,10 +127,8 @@ class PolicyManagerImpl : public PolicyManager {
    * @param result containing flag if HMI Level is allowed
    * and list of allowed params.
    */
-  void CheckPermissions(const PTString& app_id,
-                        const PTString& hmi_level,
-                        const PTString& rpc,
-                        const RPCParams& rpc_params,
+  void CheckPermissions(const PTString& app_id, const PTString& hmi_level,
+                        const PTString& rpc, const RPCParams& rpc_params,
                         CheckPermissionResult& result) OVERRIDE;
 
   /**
@@ -238,8 +234,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @param permissions Array of functional groups permissions
    */
   void GetUserConsentForApp(
-      const std::string& device_id,
-      const std::string& policy_app_id,
+      const std::string& device_id, const std::string& policy_app_id,
       std::vector<FunctionalGroupPermission>& permissions) OVERRIDE;
 
   /**
@@ -326,8 +321,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @return Array of structs with appropriate message parameters
    */
   std::vector<UserFriendlyMessage> GetUserFriendlyMessages(
-      const std::vector<std::string>& message_code,
-      const std::string& language,
+      const std::vector<std::string>& message_code, const std::string& language,
       const std::string& active_hmi_language) OVERRIDE;
 
   /**
@@ -345,8 +339,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @param permissions Array of functional groups permissions
    */
   void GetPermissionsForApp(
-      const std::string& device_id,
-      const std::string& policy_app_id,
+      const std::string& device_id, const std::string& policy_app_id,
       std::vector<FunctionalGroupPermission>& permissions) OVERRIDE;
 
   /**
@@ -660,9 +653,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @brief Getter for cache_manager instance
    * @return cache_manager instance
    */
-  inline CacheManagerInterfaceSPtr GetCache() {
-    return cache_;
-  }
+  inline CacheManagerInterfaceSPtr GetCache() { return cache_; }
 
   /**
    * @brief Setter for send_on_update_sent_out and wrong_ptu_update_received
@@ -696,8 +687,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @param type application info type
    * @param value new value for counter
    */
-  void Set(const std::string& app_id,
-           usage_statistics::AppInfoId type,
+  void Set(const std::string& app_id, usage_statistics::AppInfoId type,
            const std::string& value) OVERRIDE;
 
   /**
@@ -706,8 +696,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @param type application stopwatch type
    * @param timespan_seconds seconds to add
    */
-  void Add(const std::string& app_id,
-           usage_statistics::AppStopwatchId type,
+  void Add(const std::string& app_id, usage_statistics::AppStopwatchId type,
            int32_t timespan_seconds) OVERRIDE;
   // Interface StatisticsManager (end)
 
@@ -871,8 +860,7 @@ class PolicyManagerImpl : public PolicyManager {
    * @param permissions Array of RPC param/HMI permissions
    */
   void GetPermissions(const std::string device_id,
-                      const std::string application_id,
-                      Permissions* data);
+                      const std::string application_id, Permissions* data);
 
   /**
    * @brief Checks if module for application is present in policy table
@@ -954,10 +942,8 @@ class PolicyManagerImpl : public PolicyManager {
    * considered or external consents take over
    */
   void UpdateAppConsentWithExternalConsent(
-      const std::string& device_id,
-      const std::string& application_id,
-      const GroupsNames& allowed_groups,
-      const GroupsNames& disallowed_groups,
+      const std::string& device_id, const std::string& application_id,
+      const GroupsNames& allowed_groups, const GroupsNames& disallowed_groups,
       const ConsentProcessingPolicy processing_policy);
 
   typedef policy_table::ApplicationPolicies::value_type AppPoliciesValueType;

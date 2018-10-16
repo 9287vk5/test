@@ -47,14 +47,10 @@ namespace commands {
 ListFilesRequest::ListFilesRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 ListFilesRequest::~ListFilesRequest() {}
 
@@ -104,9 +100,7 @@ void ListFilesRequest::Run() {
   }
   (*message_)[strings::params][strings::message_type] =
       application_manager::MessageType::kResponse;
-  SendResponse(true,
-               mobile_apis::Result::SUCCESS,
-               NULL,
+  SendResponse(true, mobile_apis::Result::SUCCESS, NULL,
                &(*message_)[strings::msg_params]);
 }
 

@@ -66,8 +66,8 @@ namespace formatters = ns_smart_device_link::ns_json_handler::formatters;
 class ResumptionDataJsonTest : public ResumptionDataTest {
  protected:
   ResumptionDataJsonTest()
-      : last_state_("app_storage_folder", "app_info_storage")
-      , res_json(last_state_, mock_application_manager_) {}
+      : last_state_("app_storage_folder", "app_info_storage"),
+        res_json(last_state_, mock_application_manager_) {}
   virtual void SetUp() {
     app_mock = std::make_shared<
         NiceMock<application_manager_test::MockApplication> >();
@@ -201,9 +201,8 @@ TEST_F(ResumptionDataJsonTest, GetDataForLoadResumeData) {
 
   EXPECT_EQ(policy_app_id_, saved_app[0][am::strings::app_id].asString());
   EXPECT_EQ(kMacAddress_, saved_app[0][am::strings::device_id].asString());
-  EXPECT_EQ(hmi_level_,
-            static_cast<HMILevel::eType>(
-                saved_app[0][am::strings::hmi_level].asInt()));
+  EXPECT_EQ(hmi_level_, static_cast<HMILevel::eType>(
+                            saved_app[0][am::strings::hmi_level].asInt()));
   EXPECT_EQ(ign_off_count_, saved_app[0][am::strings::ign_off_count].asUInt());
 }
 

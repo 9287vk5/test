@@ -49,9 +49,7 @@ class PolicyTable {
    * actual class storing policy table.
    * @return PTRepresentation* Policy Table Content Handler
    */
-  std::shared_ptr<PTRepresentation> pt_data() const {
-    return pt_data_;
-  }
+  std::shared_ptr<PTRepresentation> pt_data() const { return pt_data_; }
 
  private:
   std::shared_ptr<PTRepresentation> pt_data_;

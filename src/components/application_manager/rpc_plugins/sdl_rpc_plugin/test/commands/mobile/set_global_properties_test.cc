@@ -76,8 +76,8 @@ class SetGlobalPropertiesRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   SetGlobalPropertiesRequestTest()
-      : lock_ptr_(std::make_shared<sync_primitives::Lock>())
-      , mock_app_(CreateMockApp()) {
+      : lock_ptr_(std::make_shared<sync_primitives::Lock>()),
+        mock_app_(CreateMockApp()) {
     mock_help_prompt_manager_ =
         std::shared_ptr<application_manager_test::MockHelpPromptManager>(
             new application_manager_test::MockHelpPromptManager());
@@ -114,8 +114,7 @@ class SetGlobalPropertiesRequestTest
     return msg;
   }
 
-  void VRArraySetupHelper(MessageSharedPtr msg,
-                          SmartObject& vr_help_title,
+  void VRArraySetupHelper(MessageSharedPtr msg, SmartObject& vr_help_title,
                           SmartObject& vr_help_array) {
     (*msg)[am::strings::msg_params][am::strings::vr_help_title] = vr_help_title;
     vr_help_array[0] = SmartObject(smart_objects::SmartType_Map);
@@ -316,11 +315,10 @@ TEST_F(SetGlobalPropertiesRequestTest,
   EXPECT_CALL(*mock_help_prompt_manager_,
               OnSetGlobalPropertiesReceived(_, false)).Times(2);
 
-  EXPECT_CALL(
-      mock_message_helper_,
-      VerifyTtsFiles(
-          (*msg_vr)[am::strings::msg_params][am::strings::help_prompt], _, _))
-      .WillOnce(Return(mobile_apis::Result::SUCCESS));
+  EXPECT_CALL(mock_message_helper_,
+              VerifyTtsFiles(
+                  (*msg_vr)[am::strings::msg_params][am::strings::help_prompt],
+                  _, _)).WillOnce(Return(mobile_apis::Result::SUCCESS));
   EXPECT_CALL(mock_rpc_service_,
               ManageHMICommand(HMIResultCodeIs(
                   hmi_apis::FunctionID::UI_SetGlobalProperties)))

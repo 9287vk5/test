@@ -50,10 +50,10 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "RemoteControlModule")
 ResourceAllocationManagerImpl::ResourceAllocationManagerImpl(
     application_manager::ApplicationManager& app_mngr,
     application_manager::rpc_service::RPCService& rpc_service)
-    : current_access_mode_(hmi_apis::Common_RCAccessMode::AUTO_ALLOW)
-    , app_mngr_(app_mngr)
-    , rpc_service_(rpc_service)
-    , is_rc_enabled_(true) {}
+    : current_access_mode_(hmi_apis::Common_RCAccessMode::AUTO_ALLOW),
+      app_mngr_(app_mngr),
+      rpc_service_(rpc_service),
+      is_rc_enabled_(true) {}
 
 ResourceAllocationManagerImpl::~ResourceAllocationManagerImpl() {}
 
@@ -72,24 +72,21 @@ AcquireResult::eType ResourceAllocationManagerImpl::AcquireResource(
       allocated_resources_.find(module_type);
   if (allocated_resources_.end() == allocated_it) {
     SetResourceAquired(module_type, app_id);
-    LOG4CXX_DEBUG(logger_,
-                  "Resource is not acquired yet. "
-                      << "App: " << app_id << " is allowed to acquire "
-                      << module_type);
+    LOG4CXX_DEBUG(logger_, "Resource is not acquired yet. "
+                               << "App: " << app_id << " is allowed to acquire "
+                               << module_type);
     return AcquireResult::ALLOWED;
   }
 
   if (app_id == allocated_resources_[module_type]) {
-    LOG4CXX_DEBUG(logger_,
-                  "App: " << app_id << " is already acquired resource "
-                          << module_type);
+    LOG4CXX_DEBUG(logger_, "App: " << app_id << " is already acquired resource "
+                                   << module_type);
     return AcquireResult::ALLOWED;
   }
 
   if (IsModuleTypeRejected(module_type, app_id)) {
-    LOG4CXX_DEBUG(logger_,
-                  "Driver disallowed app: " << app_id << " to acquire "
-                                            << module_type);
+    LOG4CXX_DEBUG(logger_, "Driver disallowed app: " << app_id << " to acquire "
+                                                     << module_type);
     return AcquireResult::REJECTED;
   }
 
@@ -97,19 +94,18 @@ AcquireResult::eType ResourceAllocationManagerImpl::AcquireResource(
       acquiring_app->hmi_level();
 
   if (mobile_apis::HMILevel::HMI_FULL != acquiring_app_hmi_level) {
-    LOG4CXX_DEBUG(logger_,
-                  "Aquiring resources is not allowed in HMI level: "
-                      << acquiring_app_hmi_level << ". App: " << app_id
-                      << " is disallowed to acquire " << module_type);
+    LOG4CXX_DEBUG(logger_, "Aquiring resources is not allowed in HMI level: "
+                               << acquiring_app_hmi_level << ". App: " << app_id
+                               << " is disallowed to acquire " << module_type);
     return AcquireResult::REJECTED;
   }
 
   switch (current_access_mode_) {
     case hmi_apis::Common_RCAccessMode::AUTO_DENY: {
-      LOG4CXX_DEBUG(logger_,
-                    "Current access_mode is AUTO_DENY. "
-                        << "App: " << app_id << " is disallowed to acquire "
-                        << module_type);
+      LOG4CXX_DEBUG(logger_, "Current access_mode is AUTO_DENY. "
+                                 << "App: " << app_id
+                                 << " is disallowed to acquire "
+                                 << module_type);
       return AcquireResult::IN_USE;
     }
     case hmi_apis::Common_RCAccessMode::ASK_DRIVER: {
@@ -120,10 +116,9 @@ AcquireResult::eType ResourceAllocationManagerImpl::AcquireResource(
       return AcquireResult::ASK_DRIVER;
     }
     case hmi_apis::Common_RCAccessMode::AUTO_ALLOW: {
-      LOG4CXX_DEBUG(logger_,
-                    "Current access_mode is AUTO_ALLOW. "
-                        << "App: " << app_id << " is allowed to acquire "
-                        << module_type);
+      LOG4CXX_DEBUG(logger_, "Current access_mode is AUTO_ALLOW. "
+                                 << "App: " << app_id
+                                 << " is allowed to acquire " << module_type);
 
       SetResourceAquired(module_type, app_id);
       return AcquireResult::ALLOWED;
@@ -155,16 +150,13 @@ void ResourceAllocationManagerImpl::ProcessApplicationPolicyUpdate() {
                                                 &allowed_modules);
     std::sort(allowed_modules.begin(), allowed_modules.end());
 
-    LOG4CXX_DEBUG(logger_,
-                  "Acquired modules: " << acquired_modules.size()
-                                       << " , allowed modules: "
-                                       << allowed_modules.size());
+    LOG4CXX_DEBUG(logger_, "Acquired modules: " << acquired_modules.size()
+                                                << " , allowed modules: "
+                                                << allowed_modules.size());
 
     Resources disallowed_modules;
-    std::set_difference(acquired_modules.begin(),
-                        acquired_modules.end(),
-                        allowed_modules.begin(),
-                        allowed_modules.end(),
+    std::set_difference(acquired_modules.begin(), acquired_modules.end(),
+                        allowed_modules.begin(), allowed_modules.end(),
                         std::back_inserter(disallowed_modules));
 
     auto rc_extention = RCHelpers::GetRCExtension(**app);
@@ -236,8 +228,7 @@ ResourceAllocationManagerImpl::CreateOnRCStatusNotificationToMobile(
       mobile_apis::FunctionID::OnRCStatusID, app->app_id());
   auto& msg_params = (*msg_to_mobile)[application_manager::strings::msg_params];
   if (is_rc_enabled()) {
-    ConstructOnRCStatusNotificationParams(msg_params,
-                                          allocated_resources_,
+    ConstructOnRCStatusNotificationParams(msg_params, allocated_resources_,
                                           RCHelpers::GetModulesList(),
                                           app->app_id());
   } else {
@@ -257,8 +248,7 @@ ResourceAllocationManagerImpl::CreateOnRCStatusNotificationToHmi(
   auto msg_to_hmi =
       MessageHelper::CreateHMINotification(hmi_apis::FunctionID::RC_OnRCStatus);
   auto& msg_params = (*msg_to_hmi)[application_manager::strings::msg_params];
-  ConstructOnRCStatusNotificationParams(msg_params,
-                                        allocated_resources_,
+  ConstructOnRCStatusNotificationParams(msg_params, allocated_resources_,
                                         RCHelpers::GetModulesList(),
                                         app->app_id());
   msg_params[application_manager::strings::app_id] = app->hmi_app_id();
@@ -319,10 +309,10 @@ void ResourceAllocationManagerImpl::SetResourceFree(
     return;
   }
   if (app_id != allocation->second) {
-    LOG4CXX_ERROR(logger_,
-                  "Resource " << module_type
-                              << " is allocated by different application "
-                              << allocation->second);
+    LOG4CXX_ERROR(logger_, "Resource "
+                               << module_type
+                               << " is allocated by different application "
+                               << allocation->second);
   }
   allocated_resources_.erase(allocation);
   LOG4CXX_DEBUG(logger_, "Resource " << module_type << " is released.");
@@ -339,22 +329,20 @@ std::vector<std::string> ResourceAllocationManagerImpl::GetAcquiredResources(
     }
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Application " << application_id << " acquired "
-                               << allocated_resources.size()
-                               << " resource(s).");
+  LOG4CXX_DEBUG(logger_, "Application " << application_id << " acquired "
+                                        << allocated_resources.size()
+                                        << " resource(s).");
 
   return allocated_resources;
 }
 
 void ResourceAllocationManagerImpl::SetResourceState(
-    const std::string& module_type,
-    const uint32_t app_id,
+    const std::string& module_type, const uint32_t app_id,
     const ResourceState::eType state) {
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(logger_,
-                "Setting state for " << module_type << " by app_id " << app_id
-                                     << " to state " << state);
+  LOG4CXX_DEBUG(logger_, "Setting state for " << module_type << " by app_id "
+                                              << app_id << " to state "
+                                              << state);
   {
     sync_primitives::AutoLock lock(allocated_resources_lock_);
     const AllocatedResources::const_iterator allocated_it =
@@ -362,14 +350,14 @@ void ResourceAllocationManagerImpl::SetResourceState(
 
     const bool acquired = allocated_resources_.end() != allocated_it;
     if (acquired) {
-      LOG4CXX_DEBUG(logger_,
-                    "Resource " << module_type << " is already acquired."
-                                << " Owner application id is "
-                                << allocated_it->second
-                                << " Changing application id is " << app_id);
+      LOG4CXX_DEBUG(logger_, "Resource "
+                                 << module_type << " is already acquired."
+                                 << " Owner application id is "
+                                 << allocated_it->second
+                                 << " Changing application id is " << app_id);
     } else {
-      LOG4CXX_DEBUG(logger_,
-                    "Resource " << module_type << " is not acquired yet");
+      LOG4CXX_DEBUG(logger_, "Resource " << module_type
+                                         << " is not acquired yet");
     }
   }
 
@@ -390,8 +378,8 @@ bool ResourceAllocationManagerImpl::IsResourceFree(
     return true;
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Resource " << module_type << " state is " << resource->second);
+  LOG4CXX_DEBUG(logger_, "Resource " << module_type << " state is "
+                                     << resource->second);
 
   return ResourceState::FREE == resource->second;
 }
@@ -453,8 +441,8 @@ void ResourceAllocationManagerImpl::OnApplicationEvent(
     application_manager::ApplicationSharedPtr application) {
   using application_manager::plugin_manager::ApplicationEvent;
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(logger_,
-                "Event " << event << " came for " << application->app_id());
+  LOG4CXX_DEBUG(logger_, "Event " << event << " came for "
+                                  << application->app_id());
 
   if (ApplicationEvent::kApplicationExit == event ||
       ApplicationEvent::kApplicationUnregistered == event) {

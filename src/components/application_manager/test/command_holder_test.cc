@@ -53,11 +53,11 @@ namespace am = application_manager;
 class CommandHolderImplTest : public testing::Test {
  public:
   CommandHolderImplTest()
-      : kPolicyAppId_("p_app_id")
-      , kHmiApplicationId_(123)
-      , kConnectionKey_(56789)
-      , cmd_ptr_(new smart_objects::SmartObject)
-      , mock_app_ptr_(new MockApplication) {}
+      : kPolicyAppId_("p_app_id"),
+        kHmiApplicationId_(123),
+        kConnectionKey_(56789),
+        cmd_ptr_(new smart_objects::SmartObject),
+        mock_app_ptr_(new MockApplication) {}
 
   void SetUp() OVERRIDE {
     ON_CALL(*mock_app_ptr_, app_id()).WillByDefault(Return(kConnectionKey_));
@@ -80,8 +80,8 @@ class CommandHolderImplTest : public testing::Test {
 
 TEST_F(CommandHolderImplTest, HoldOne_ExpectReleaseOne) {
   am::CommandHolderImpl cmd_holder(mock_app_manager_);
-  cmd_holder.Suspend(
-      mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
+  cmd_holder.Suspend(mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand,
+                     cmd_ptr_);
 
   // Act
   EXPECT_CALL(mock_rpc_service_, ManageHMICommand(cmd_ptr_));
@@ -93,8 +93,8 @@ TEST_F(CommandHolderImplTest, HoldMany_ExpectReleaseSame) {
 
   int32_t iterations = 0;
   do {
-    cmd_holder.Suspend(
-        mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
+    cmd_holder.Suspend(mock_app_ptr_,
+                       am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
     ++iterations;
   } while (iterations < 5);
 
@@ -105,10 +105,10 @@ TEST_F(CommandHolderImplTest, HoldMany_ExpectReleaseSame) {
 
 TEST_F(CommandHolderImplTest, Hold_Drop_ExpectNoReleased) {
   am::CommandHolderImpl cmd_holder(mock_app_manager_);
-  cmd_holder.Suspend(
-      mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
-  cmd_holder.Suspend(
-      mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
+  cmd_holder.Suspend(mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand,
+                     cmd_ptr_);
+  cmd_holder.Suspend(mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand,
+                     cmd_ptr_);
 
   // Act
   cmd_holder.Clear(mock_app_ptr_);
@@ -118,10 +118,10 @@ TEST_F(CommandHolderImplTest, Hold_Drop_ExpectNoReleased) {
 
 TEST_F(CommandHolderImplTest, Hold_ReleaseAnotherId_ExpectNoReleased) {
   am::CommandHolderImpl cmd_holder(mock_app_manager_);
-  cmd_holder.Suspend(
-      mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
-  cmd_holder.Suspend(
-      mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
+  cmd_holder.Suspend(mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand,
+                     cmd_ptr_);
+  cmd_holder.Suspend(mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand,
+                     cmd_ptr_);
 
   // Act
   std::shared_ptr<MockApplication> another_app =
@@ -136,8 +136,8 @@ TEST_F(CommandHolderImplTest, Hold_DropAnotherId_ExpectReleased) {
 
   int32_t iterations = 0;
   do {
-    cmd_holder.Suspend(
-        mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
+    cmd_holder.Suspend(mock_app_ptr_,
+                       am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
     ++iterations;
   } while (iterations < 3);
 
@@ -153,11 +153,11 @@ TEST_F(CommandHolderImplTest, Hold_DropAnotherId_ExpectReleased) {
 TEST_F(CommandHolderImplTest, Hold_Mobile_and_HMI_commands_ExpectReleased) {
   am::CommandHolderImpl cmd_holder(mock_app_manager_);
 
-  cmd_holder.Suspend(
-      mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand, cmd_ptr_);
+  cmd_holder.Suspend(mock_app_ptr_, am::CommandHolder::CommandType::kHmiCommand,
+                     cmd_ptr_);
 
-  cmd_holder.Suspend(
-      mock_app_ptr_, am::CommandHolder::CommandType::kMobileCommand, cmd_ptr_);
+  cmd_holder.Suspend(mock_app_ptr_,
+                     am::CommandHolder::CommandType::kMobileCommand, cmd_ptr_);
 
   // Act
   EXPECT_CALL(mock_rpc_service_, ManageHMICommand(cmd_ptr_));

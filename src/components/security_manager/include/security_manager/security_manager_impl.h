@@ -59,9 +59,7 @@ struct SecurityMessage : public SecurityQueryPtr {
   explicit SecurityMessage(const SecurityQueryPtr& message)
       : SecurityQueryPtr(message) {}
   // PrioritizedQueue requires this method to decide which priority to assign
-  size_t PriorityOrder() const {
-    return 0;
-  }
+  size_t PriorityOrder() const { return 0; }
 };
 typedef utils::PrioritizedQueue<SecurityMessage> SecurityMessageQueue;
 typedef threads::MessageLoopThread<SecurityMessageQueue> SecurityMessageLoop;
@@ -124,8 +122,7 @@ class SecurityManagerImpl : public SecurityManager,
    * \param erorr_text SSL impelmentation error text
    * \param seq_number received from Mobile Application
    */
-  void SendInternalError(const uint32_t connection_key,
-                         const uint8_t& error_id,
+  void SendInternalError(const uint32_t connection_key, const uint8_t& error_id,
                          const std::string& erorr_text,
                          const uint32_t seq_number) OVERRIDE;
 
@@ -224,8 +221,7 @@ class SecurityManagerImpl : public SecurityManager,
    * \param seq_number received from Mobile Application
    */
   void SendHandshakeBinData(const uint32_t connection_key,
-                            const uint8_t* const data,
-                            const size_t data_size,
+                            const uint8_t* const data, const size_t data_size,
                             const uint32_t seq_number = 0);
   /**
    * \brief Parse SecurityMessage as HandshakeData request

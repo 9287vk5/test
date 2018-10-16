@@ -64,9 +64,7 @@ void Signals::WaitPid(pid_t cpid, int* status, int options) {
   MockSignalsPosix::signals_posix_mock()->WaitPid(cpid, status, options);
 }
 
-pid_t Signals::Fork() {
-  return MockSignalsPosix::signals_posix_mock()->Fork();
-}
+pid_t Signals::Fork() { return MockSignalsPosix::signals_posix_mock()->Fork(); }
 
 MockSignalsPosix* MockSignalsPosix::signals_posix_mock() {
   static ::testing::NiceMock<MockSignalsPosix> signals_posix_mock;

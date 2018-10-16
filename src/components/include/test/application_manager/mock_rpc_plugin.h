@@ -10,11 +10,10 @@ namespace plugin_manager {
 
 class MockRPCPlugin : public RPCPlugin {
  public:
-  MOCK_METHOD4(Init,
-               bool(ApplicationManager& app_manager,
-                    rpc_service::RPCService& rpc_service,
-                    HMICapabilities& hmi_capabilities,
-                    policy::PolicyHandlerInterface& policy_handler));
+  MOCK_METHOD4(Init, bool(ApplicationManager& app_manager,
+                          rpc_service::RPCService& rpc_service,
+                          HMICapabilities& hmi_capabilities,
+                          policy::PolicyHandlerInterface& policy_handler));
   MOCK_METHOD2(IsAbleToProcess,
                bool(const int32_t function_id,
                     const commands::Command::CommandSource message_source));

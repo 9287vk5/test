@@ -179,8 +179,8 @@ class SSLHandshakeTest : public testing::TestWithParam<Protocol> {
       ss << cert.rdbuf();
     }
     cert.close();
-    SetServerInitialValues(
-        protocol, ss.str(), ciphers_list, verify_peer, ca_certificate_path);
+    SetServerInitialValues(protocol, ss.str(), ciphers_list, verify_peer,
+                           ca_certificate_path);
     const bool initialized = server_manager_->Init();
 
     if (!initialized) {
@@ -212,11 +212,8 @@ class SSLHandshakeTest : public testing::TestWithParam<Protocol> {
       certificate << cert.rdbuf();
     }
     cert.close();
-    SetClientInitialValues(protocol,
-                           certificate.str(),
-                           ciphers_list,
-                           verify_peer,
-                           ca_certificate_path);
+    SetClientInitialValues(protocol, certificate.str(), ciphers_list,
+                           verify_peer, ca_certificate_path);
     const bool initialized = client_manager_->Init();
     if (!initialized) {
       return false;
@@ -254,18 +251,16 @@ class SSLHandshakeTest : public testing::TestWithParam<Protocol> {
     StartHandshake();
 
     while (true) {
-      ASSERT_EQ(
-          SSLContext::Handshake_Result_Success,
-          server_ctx_->DoHandshakeStep(
-              client_buf_, client_buf_len_, &server_buf_, &server_buf_len_))
+      ASSERT_EQ(SSLContext::Handshake_Result_Success,
+                server_ctx_->DoHandshakeStep(client_buf_, client_buf_len_,
+                                             &server_buf_, &server_buf_len_))
           << ERR_reason_error_string(ERR_get_error());
       ASSERT_FALSE(server_buf_ == NULL);
       ASSERT_GT(server_buf_len_, 0u);
 
-      ASSERT_EQ(
-          SSLContext::Handshake_Result_Success,
-          client_ctx_->DoHandshakeStep(
-              server_buf_, server_buf_len_, &client_buf_, &client_buf_len_))
+      ASSERT_EQ(SSLContext::Handshake_Result_Success,
+                client_ctx_->DoHandshakeStep(server_buf_, server_buf_len_,
+                                             &client_buf_, &client_buf_len_))
           << ERR_reason_error_string(ERR_get_error());
       if (server_ctx_->IsInitCompleted()) {
         break;
@@ -295,10 +290,9 @@ class SSLHandshakeTest : public testing::TestWithParam<Protocol> {
       ASSERT_FALSE(server_buf_ == NULL);
       ASSERT_GT(server_buf_len_, 0u);
 
-      ASSERT_EQ(
-          SSLContext::Handshake_Result_Success,
-          client_ctx_->DoHandshakeStep(
-              server_buf_, server_buf_len_, &client_buf_, &client_buf_len_))
+      ASSERT_EQ(SSLContext::Handshake_Result_Success,
+                client_ctx_->DoHandshakeStep(server_buf_, server_buf_len_,
+                                             &client_buf_, &client_buf_len_))
           << ERR_reason_error_string(ERR_get_error());
       ASSERT_FALSE(client_ctx_->IsInitCompleted())
           << "Expected server side handshake fail";
@@ -316,10 +310,9 @@ class SSLHandshakeTest : public testing::TestWithParam<Protocol> {
     StartHandshake();
 
     while (true) {
-      ASSERT_EQ(
-          SSLContext::Handshake_Result_Success,
-          server_ctx_->DoHandshakeStep(
-              client_buf_, client_buf_len_, &server_buf_, &server_buf_len_))
+      ASSERT_EQ(SSLContext::Handshake_Result_Success,
+                server_ctx_->DoHandshakeStep(client_buf_, client_buf_len_,
+                                             &server_buf_, &server_buf_len_))
           << ERR_reason_error_string(ERR_get_error());
 
       ASSERT_FALSE(server_buf_ == NULL);
@@ -370,8 +363,7 @@ class SSLHandshakeTest : public testing::TestWithParam<Protocol> {
 };
 
 INSTANTIATE_TEST_CASE_P(
-    CorrectProtocol,
-    SSLHandshakeTest,
+    CorrectProtocol, SSLHandshakeTest,
     ::testing::Values(
         Protocol(security_manager::TLSv1, security_manager::TLSv1),
         Protocol(security_manager::TLSv1_1, security_manager::TLSv1_1),
@@ -379,57 +371,39 @@ INSTANTIATE_TEST_CASE_P(
         Protocol(security_manager::DTLSv1, security_manager::DTLSv1)));
 
 TEST_P(SSLHandshakeTest, NoVerification) {
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", skip_peer_verification, ""))
       << server_manager_->LastError();
 
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", skip_peer_verification, ""))
       << client_manager_->LastError();
 
   GTEST_TRACE(HandshakeProcedure_Success());
 }
 
 TEST_P(SSLHandshakeTest, CAVerification_ServerSide) {
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 client_ca_cert_filename))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", verify_peer, client_ca_cert_filename))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", skip_peer_verification, ""))
       << client_manager_->LastError();
 
   GTEST_TRACE(HandshakeProcedure_Success());
 }
 
 TEST_P(SSLHandshakeTest, CAVerification_ServerSide_NoCACertificate) {
-  ASSERT_TRUE(InitServerManagers(
-      GetParam().server_protocol, "", "ALL", verify_peer, "unex"))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, "", "ALL",
+                                 verify_peer, "unex"))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", skip_peer_verification, ""))
       << client_manager_->LastError();
 
   GTEST_TRACE(HandshakeProcedure_ServerSideFail());
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 client_ca_cert_filename))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", verify_peer, client_ca_cert_filename))
       << server_manager_->LastError();
 
   GTEST_TRACE(ResetConnections());
@@ -438,27 +412,18 @@ TEST_P(SSLHandshakeTest, CAVerification_ServerSide_NoCACertificate) {
 }
 
 TEST_P(SSLHandshakeTest, CAVerification_ClientSide_NoCACertificate) {
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", skip_peer_verification, ""))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 "",
-                                 "ALL",
-                                 verify_peer,
-                                 "client_ca_cert_filename"))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, "", "ALL",
+                                 verify_peer, "client_ca_cert_filename"))
       << client_manager_->LastError();
 
   GTEST_TRACE(HandshakeProcedure_ClientSideFail(
       security_manager::SSLContext::Handshake_Result_Fail));
 
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 server_ca_cert_filename))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", verify_peer, server_ca_cert_filename))
       << client_manager_->LastError();
 
   GTEST_TRACE(ResetConnections());
@@ -467,17 +432,11 @@ TEST_P(SSLHandshakeTest, CAVerification_ClientSide_NoCACertificate) {
 }
 
 TEST_P(SSLHandshakeTest, CAVerification_BothSides) {
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 client_ca_cert_filename))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", verify_peer, client_ca_cert_filename))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 server_ca_cert_filename))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", verify_peer, server_ca_cert_filename))
       << client_manager_->LastError();
 
   GTEST_TRACE(HandshakeProcedure_Success());
@@ -485,16 +444,11 @@ TEST_P(SSLHandshakeTest, CAVerification_BothSides) {
 
 TEST_P(SSLHandshakeTest, UnsignedCert) {
   ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_unsigned_cert_file,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+                                 server_unsigned_cert_file, "ALL",
+                                 skip_peer_verification, ""))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 client_ca_cert_filename))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", verify_peer, client_ca_cert_filename))
       << client_manager_->LastError();
   GTEST_TRACE(HandshakeProcedure_ClientSideFail(
       security_manager::SSLContext::Handshake_Result_CertNotSigned));
@@ -502,16 +456,11 @@ TEST_P(SSLHandshakeTest, UnsignedCert) {
 
 TEST_P(SSLHandshakeTest, ExpiredCert) {
   ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_expired_cert_file,
-                                 "ALL",
-                                 verify_peer,
+                                 server_expired_cert_file, "ALL", verify_peer,
                                  client_ca_cert_filename))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 server_ca_cert_filename))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", verify_peer, server_ca_cert_filename))
       << client_manager_->LastError();
 
   GTEST_TRACE(HandshakeProcedure_ClientSideFail(
@@ -519,17 +468,11 @@ TEST_P(SSLHandshakeTest, ExpiredCert) {
 }
 
 TEST_P(SSLHandshakeTest, AppNameAndAppIDInvalid) {
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 client_ca_cert_filename))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", verify_peer, client_ca_cert_filename))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 server_ca_cert_filename))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", verify_peer, server_ca_cert_filename))
       << client_manager_->LastError();
 
   client_ctx_->SetHandshakeContext(
@@ -542,17 +485,11 @@ TEST_P(SSLHandshakeTest, AppNameAndAppIDInvalid) {
 }
 
 TEST_P(SSLHandshakeTest, NoVerification_ResetConnection) {
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", skip_peer_verification, ""))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
-                                 ""))
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", skip_peer_verification, ""))
       << client_manager_->LastError();
 
   const int times = 100;
@@ -566,16 +503,11 @@ TEST_P(SSLHandshakeTest, NoVerification_ResetConnection) {
 }
 
 TEST_P(SSLHandshakeTest, CAVerification_BothSides_ResetConnection) {
-  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol,
-                                 server_certificate,
-                                 "ALL",
-                                 verify_peer,
-                                 client_ca_cert_filename))
+  ASSERT_TRUE(InitServerManagers(GetParam().server_protocol, server_certificate,
+                                 "ALL", verify_peer, client_ca_cert_filename))
       << server_manager_->LastError();
-  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol,
-                                 client_certificate,
-                                 "ALL",
-                                 skip_peer_verification,
+  ASSERT_TRUE(InitClientManagers(GetParam().client_protocol, client_certificate,
+                                 "ALL", skip_peer_verification,
                                  server_ca_cert_filename))
       << client_manager_->LastError();
 

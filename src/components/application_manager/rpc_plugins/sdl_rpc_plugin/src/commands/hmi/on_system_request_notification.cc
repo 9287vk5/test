@@ -47,14 +47,10 @@ namespace commands {
 OnSystemRequestNotification::OnSystemRequestNotification(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : NotificationFromHMI(message,
-                          application_manager,
-                          rpc_service,
-                          hmi_capabilities,
-                          policy_handle) {}
+    : NotificationFromHMI(message, application_manager, rpc_service,
+                          hmi_capabilities, policy_handle) {}
 
 OnSystemRequestNotification::~OnSystemRequestNotification() {}
 
@@ -104,16 +100,15 @@ void OnSystemRequestNotification::Run() {
 
   if (policy::kDeviceAllowed !=
       policy_handler_.GetUserConsentForDevice(device_mac)) {
-    LOG4CXX_WARN(logger_,
-                 "Application "
-                     << app->policy_app_id()
-                     << " is registered from non-consented device."
-                        "Can't forward notification to application.");
+    LOG4CXX_WARN(logger_, "Application "
+                              << app->policy_app_id()
+                              << " is registered from non-consented device."
+                                 "Can't forward notification to application.");
     return;
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Sending request with application id " << app->policy_app_id());
+  LOG4CXX_DEBUG(logger_, "Sending request with application id "
+                             << app->policy_app_id());
 
   params[strings::connection_key] = app->app_id();
   SendNotificationToMobile(message_);

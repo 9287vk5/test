@@ -73,8 +73,7 @@ class ResourceAllocationManagerImpl : public ResourceAllocationManager {
     * @param app_id Application aquired resource before
     * @param state State to set for resource
     */
-  void SetResourceState(const std::string& module_type,
-                        const uint32_t app_id,
+  void SetResourceState(const std::string& module_type, const uint32_t app_id,
                         const ResourceState::eType state) FINAL;
 
   /**

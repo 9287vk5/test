@@ -44,9 +44,7 @@ class HMICapabilitiesForTesting
  public:
   HMICapabilitiesForTesting(::application_manager::ApplicationManager& app_mngr)
       : HMICapabilitiesImpl(app_mngr) {}
-  bool LoadCapabilitiesFromFile() {
-    return load_capabilities_from_file();
-  }
+  bool LoadCapabilitiesFromFile() { return load_capabilities_from_file(); }
 };
 
 }  // namespace application_manager_test

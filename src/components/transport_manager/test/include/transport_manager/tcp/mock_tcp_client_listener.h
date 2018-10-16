@@ -12,12 +12,11 @@ using namespace ::transport_manager::transport_adapter;
 
 class MockTcpClientListener : public TcpClientListener {
  public:
-  MockTcpClientListener(TransportAdapterController* controller,
-                        uint16_t port,
+  MockTcpClientListener(TransportAdapterController* controller, uint16_t port,
                         bool enable_keepalive,
                         const std::string designated_interface = "")
-      : TcpClientListener(
-            controller, port, enable_keepalive, designated_interface) {}
+      : TcpClientListener(controller, port, enable_keepalive,
+                          designated_interface) {}
   MOCK_METHOD0(Init, TransportAdapter::Error());
   MOCK_METHOD0(Terminate, void());
   MOCK_CONST_METHOD0(IsInitialised, bool());

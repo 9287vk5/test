@@ -94,9 +94,7 @@ class PolicyEventObserverTest : public ::testing::Test {
     policy_event_observer_->on_event(*event_);
   }
 
-  void DeleteEvent() {
-    delete event_;
-  }
+  void DeleteEvent() { delete event_; }
 };
 
 TEST_F(PolicyEventObserverTest, OnEvent_EventInvalid_ExpectNoProcessingEvent) {
@@ -110,8 +108,8 @@ TEST_F(PolicyEventObserverTest,
        OnEvent_EventInvalidCommonResult_ExpectNoProcessingEvent) {
   // Arrange
   CreateEvent(Event::EventID::VehicleInfo_GetVehicleData);
-  CookSmartObject(
-      hmi_apis::Common_Result::INVALID_DATA, field_name, field_value);
+  CookSmartObject(hmi_apis::Common_Result::INVALID_DATA, field_name,
+                  field_value);
   // Check
   CheckResultsOnEvent(0u, 0u);
 }

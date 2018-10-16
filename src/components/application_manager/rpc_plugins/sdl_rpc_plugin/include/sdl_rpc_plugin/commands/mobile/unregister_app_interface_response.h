@@ -55,11 +55,8 @@ class UnregisterAppInterfaceResponse
       app_mngr::rpc_service::RPCService& rpc_service,
       app_mngr::HMICapabilities& hmi_capabilities,
       policy::PolicyHandlerInterface& policy_handler)
-      : CommandResponseImpl(response,
-                            application_manager,
-                            rpc_service,
-                            hmi_capabilities,
-                            policy_handler) {}
+      : CommandResponseImpl(response, application_manager, rpc_service,
+                            hmi_capabilities, policy_handler) {}
 
   /**
    * \brief UnregisterAppInterfaceResponse class destructor

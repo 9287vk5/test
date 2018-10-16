@@ -53,10 +53,8 @@ class MockCacheManagerInterface : public ::policy::CacheManagerInterface {
                      ConsentPriorityType(const std::string& device_id,
                                          const std::string& application_id));
   MOCK_METHOD4(CheckPermissions,
-               void(const PTString& app_id,
-                    const PTString& hmi_level,
-                    const PTString& rpc,
-                    CheckPermissionResult& result));
+               void(const PTString& app_id, const PTString& hmi_level,
+                    const PTString& rpc, CheckPermissionResult& result));
   MOCK_METHOD0(IsPTPreloaded, bool());
   MOCK_METHOD0(IgnitionCyclesBeforeExchange, int());
   MOCK_METHOD1(KilometersBeforeExchange, int(int current));
@@ -91,29 +89,24 @@ class MockCacheManagerInterface : public ::policy::CacheManagerInterface {
                    const std::vector<std::string>& msg_codes,
                    const std::string& language,
                    const std::string& active_hmi_language));
-  MOCK_METHOD2(GetUpdateUrls,
-               void(const std::string& service_type,
-                    EndpointUrls& out_end_points));
+  MOCK_METHOD2(GetUpdateUrls, void(const std::string& service_type,
+                                   EndpointUrls& out_end_points));
   MOCK_METHOD2(GetUpdateUrls,
                void(const uint32_t service_type, EndpointUrls& out_end_points));
   MOCK_CONST_METHOD0(GetLockScreenIconUrl, std::string());
-  MOCK_METHOD1(
-      GetNotificationsNumber,
-      policy_table::NumberOfNotificationsType(const std::string& priority));
-  MOCK_CONST_METHOD2(GetPriority,
-                     bool(const std::string& policy_app_id,
-                          std::string& priority));
-  MOCK_METHOD2(Init,
-               bool(const std::string& file_name,
-                    const PolicySettings* settings));
+  MOCK_METHOD1(GetNotificationsNumber, policy_table::NumberOfNotificationsType(
+                                           const std::string& priority));
+  MOCK_CONST_METHOD2(GetPriority, bool(const std::string& policy_app_id,
+                                       std::string& priority));
+  MOCK_METHOD2(Init, bool(const std::string& file_name,
+                          const PolicySettings* settings));
   MOCK_METHOD0(GenerateSnapshot, std::shared_ptr<policy_table::Table>());
   MOCK_METHOD1(ApplyUpdate, bool(const policy_table::Table& update_pt));
   MOCK_METHOD1(Save, bool(const policy_table::Table& table));
   MOCK_CONST_METHOD0(UpdateRequired, bool());
   MOCK_METHOD1(SaveUpdateRequired, void(bool status));
   MOCK_METHOD3(GetInitialAppData,
-               bool(const std::string& app_id,
-                    StringArray& nicknames,
+               bool(const std::string& app_id, StringArray& nicknames,
                     StringArray& app_hmi_types));
   MOCK_CONST_METHOD1(IsApplicationRevoked, bool(const std::string& app_id));
   MOCK_METHOD1(GetFunctionalGroupings,
@@ -134,23 +127,18 @@ class MockCacheManagerInterface : public ::policy::CacheManagerInterface {
                           StringArray& consented_groups,
                           StringArray& disallowed_groups));
   MOCK_METHOD3(GetPermissionsForApp,
-               bool(const std::string& device_id,
-                    const std::string& app_id,
+               bool(const std::string& device_id, const std::string& app_id,
                     FunctionalIdType& group_types));
   MOCK_CONST_METHOD2(
       GetDeviceGroupsFromPolicies,
       bool(rpc::policy_table_interface_base::Strings& groups,
            rpc::policy_table_interface_base::Strings& preconsented_groups));
-  MOCK_METHOD2(AddDevice,
-               bool(const std::string& device_id,
-                    const std::string& connection_type));
+  MOCK_METHOD2(AddDevice, bool(const std::string& device_id,
+                               const std::string& connection_type));
   MOCK_METHOD8(SetDeviceData,
-               bool(const std::string& device_id,
-                    const std::string& hardware,
-                    const std::string& firmware,
-                    const std::string& os,
-                    const std::string& os_version,
-                    const std::string& carrier,
+               bool(const std::string& device_id, const std::string& hardware,
+                    const std::string& firmware, const std::string& os,
+                    const std::string& os_version, const std::string& carrier,
                     const uint32_t number_of_ports,
                     const std::string& connection_type));
   MOCK_METHOD3(SetUserPermissionsForDevice,
@@ -162,37 +150,29 @@ class MockCacheManagerInterface : public ::policy::CacheManagerInterface {
   MOCK_METHOD2(SetUserPermissionsForApp,
                bool(const PermissionConsent& permissions,
                     bool* out_app_permissions_changed));
-  MOCK_METHOD3(SetMetaInfo,
-               bool(const std::string& ccpu_version,
-                    const std::string& wers_country_code,
-                    const std::string& language));
+  MOCK_METHOD3(SetMetaInfo, bool(const std::string& ccpu_version,
+                                 const std::string& wers_country_code,
+                                 const std::string& language));
   MOCK_CONST_METHOD0(IsMetaInfoPresent, bool());
   MOCK_METHOD1(SetSystemLanguage, bool(const std::string& language));
   MOCK_METHOD1(Increment, void(usage_statistics::GlobalCounterId type));
-  MOCK_METHOD2(Increment,
-               void(const std::string& app_id,
-                    usage_statistics::AppCounterId type));
+  MOCK_METHOD2(Increment, void(const std::string& app_id,
+                               usage_statistics::AppCounterId type));
   MOCK_METHOD3(Set,
-               void(const std::string& app_id,
-                    usage_statistics::AppInfoId type,
+               void(const std::string& app_id, usage_statistics::AppInfoId type,
                     const std::string& value));
-  MOCK_METHOD3(Add,
-               void(const std::string& app_id,
-                    usage_statistics::AppStopwatchId type,
-                    int seconds));
-  MOCK_METHOD2(CountUnconsentedGroups,
-               int(const std::string& policy_app_id,
-                   const std::string& device_id));
+  MOCK_METHOD3(Add, void(const std::string& app_id,
+                         usage_statistics::AppStopwatchId type, int seconds));
+  MOCK_METHOD2(CountUnconsentedGroups, int(const std::string& policy_app_id,
+                                           const std::string& device_id));
   MOCK_METHOD1(GetFunctionalGroupNames, bool(FunctionalGroupNames& names));
-  MOCK_METHOD2(GetAllAppGroups,
-               void(const std::string& app_id,
-                    FunctionalGroupIDs& all_group_ids));
+  MOCK_METHOD2(GetAllAppGroups, void(const std::string& app_id,
+                                     FunctionalGroupIDs& all_group_ids));
   MOCK_METHOD2(GetPreConsentedGroups,
                void(const std::string& app_id,
                     FunctionalGroupIDs& preconsented_groups));
   MOCK_METHOD4(GetConsentedGroups,
-               void(const std::string& device_id,
-                    const std::string& app_id,
+               void(const std::string& device_id, const std::string& app_id,
                     FunctionalGroupIDs& allowed_groups,
                     FunctionalGroupIDs& disallowed_groups));
   MOCK_METHOD3(GetUnconsentedGroups,
@@ -218,19 +198,17 @@ class MockCacheManagerInterface : public ::policy::CacheManagerInterface {
   MOCK_METHOD1(GetHMIAppTypeAfterUpdate,
                void(std::map<std::string, StringArray>& app_hmi_types));
 
-  MOCK_CONST_METHOD2(AppHasHMIType,
-                     bool(const std::string& application_id,
-                          policy_table::AppHMIType hmi_type));
+  MOCK_CONST_METHOD2(AppHasHMIType, bool(const std::string& application_id,
+                                         policy_table::AppHMIType hmi_type));
 
   MOCK_METHOD0(ResetCalculatedPermissions, void());
   MOCK_METHOD3(AddCalculatedPermissions,
                void(const std::string& device_id,
                     const std::string& policy_app_id,
                     const policy::Permissions& permissions));
-  MOCK_METHOD3(IsPermissionsCalculated,
-               bool(const std::string& device_id,
-                    const std::string& policy_app_id,
-                    policy::Permissions& permission));
+  MOCK_METHOD3(IsPermissionsCalculated, bool(const std::string& device_id,
+                                             const std::string& policy_app_id,
+                                             policy::Permissions& permission));
   MOCK_CONST_METHOD0(GetPT, std::shared_ptr<policy_table::Table>());
   MOCK_CONST_METHOD0(GetMetaInfo, const MetaInfo());
   MOCK_CONST_METHOD0(GetCertificate, std::string());
@@ -247,9 +225,8 @@ class MockCacheManagerInterface : public ::policy::CacheManagerInterface {
                GroupsByExternalConsentStatus(const ExternalConsentStatus&));
   MOCK_METHOD0(GetKnownLinksFromPT, std::map<std::string, std::string>());
   MOCK_METHOD1(SetExternalConsentForApp, void(const PermissionConsent&));
-  MOCK_METHOD2(OnDeviceSwitching,
-               void(const std::string& device_id_from,
-                    const std::string& device_id_to));
+  MOCK_METHOD2(OnDeviceSwitching, void(const std::string& device_id_from,
+                                       const std::string& device_id_to));
   MOCK_CONST_METHOD2(GetAppRequestSubTypes,
                      void(const std::string& policy_app_id,
                           std::vector<std::string>& request_subtypes));

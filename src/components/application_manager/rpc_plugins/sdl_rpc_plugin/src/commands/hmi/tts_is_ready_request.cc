@@ -42,15 +42,11 @@ namespace commands {
 TTSIsReadyRequest::TTSIsReadyRequest(
     const app_mngr::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : RequestToHMI(message,
-                   application_manager,
-                   rpc_service,
-                   hmi_capabilities,
-                   policy_handler)
-    , EventObserver(application_manager.event_dispatcher()) {}
+    : RequestToHMI(message, application_manager, rpc_service, hmi_capabilities,
+                   policy_handler),
+      EventObserver(application_manager.event_dispatcher()) {}
 
 TTSIsReadyRequest::~TTSIsReadyRequest() {}
 

@@ -60,12 +60,10 @@ class CryptoManagerImpl : public CryptoManager {
                                             size_t in_data_size,
                                             const uint8_t** const out_data,
                                             size_t* out_data_size) OVERRIDE;
-    bool Encrypt(const uint8_t* const in_data,
-                 size_t in_data_size,
+    bool Encrypt(const uint8_t* const in_data, size_t in_data_size,
                  const uint8_t** const out_data,
                  size_t* out_data_size) OVERRIDE;
-    bool Decrypt(const uint8_t* const in_data,
-                 size_t in_data_size,
+    bool Decrypt(const uint8_t* const in_data, size_t in_data_size,
                  const uint8_t** const out_data,
                  size_t* out_data_size) OVERRIDE;
     bool IsInitCompleted() const OVERRIDE;

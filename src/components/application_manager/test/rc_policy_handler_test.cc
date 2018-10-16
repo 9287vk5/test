@@ -77,20 +77,20 @@ using ::testing::SetArgPointee;
 class RCPolicyHandlerTest : public ::testing::Test {
  public:
   RCPolicyHandlerTest()
-      : policy_handler_(policy_settings_, app_manager_)
-      , kPolicyAppId_("fake_app_id")
-      , kMacAddr_("kMacAddr_ess")
-      , kDeviceId_("fake_device_id")
-      , kHmiLevel_("NONE")
-      , default_hmi_("fake_hmi")
-      , app_lock_ptr_(std::make_shared<sync_primitives::Lock>())
-      , app_set(test_app, app_lock_ptr_)
-      , kAppId1_(10u)
-      , kAppId2_(11u)
-      , kConnectionKey_(1u)
-      , kCorrelationKey_(2u)
-      , kUrl_("test_url")
-      , mock_message_helper_(*MockMessageHelper::message_helper_mock()) {}
+      : policy_handler_(policy_settings_, app_manager_),
+        kPolicyAppId_("fake_app_id"),
+        kMacAddr_("kMacAddr_ess"),
+        kDeviceId_("fake_device_id"),
+        kHmiLevel_("NONE"),
+        default_hmi_("fake_hmi"),
+        app_lock_ptr_(std::make_shared<sync_primitives::Lock>()),
+        app_set(test_app, app_lock_ptr_),
+        kAppId1_(10u),
+        kAppId2_(11u),
+        kConnectionKey_(1u),
+        kCorrelationKey_(2u),
+        kUrl_("test_url"),
+        mock_message_helper_(*MockMessageHelper::message_helper_mock()) {}
 
  protected:
   NiceMock<policy_handler_test::MockPolicySettings> policy_settings_;
@@ -278,9 +278,7 @@ TEST_F(RCPolicyHandlerTest, CheckModule_SUCCESS) {
   EXPECT_TRUE(policy_handler_.CheckModule(kPolicyAppId_, module));
 }
 
-ACTION_P(SetDeviceHandle, handle) {
-  *arg1 = handle;
-}
+ACTION_P(SetDeviceHandle, handle) { *arg1 = handle; }
 
 TEST_F(RCPolicyHandlerTest,
        OnRemoteAppPermissionsChanged_DifferentDeviceHandle_SUCCESS) {

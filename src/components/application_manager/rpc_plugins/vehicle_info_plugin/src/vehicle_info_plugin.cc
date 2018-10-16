@@ -60,9 +60,7 @@ bool VehicleInfoPlugin::IsAbleToProcess(
   return command_factory_->IsAbleToProcess(function_id, source);
 }
 
-std::string VehicleInfoPlugin::PluginName() {
-  return "Vehicle Info Plugin";
-}
+std::string VehicleInfoPlugin::PluginName() { return "Vehicle Info Plugin"; }
 
 app_mngr::CommandFactory& VehicleInfoPlugin::GetCommandFactory() {
   return *command_factory_;

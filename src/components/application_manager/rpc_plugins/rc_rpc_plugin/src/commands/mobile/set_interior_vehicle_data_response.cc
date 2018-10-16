@@ -9,11 +9,8 @@ SetInteriorVehicleDataResponse::SetInteriorVehicleDataResponse(
     const app_mngr::commands::MessageSharedPtr& message,
     const RCCommandParams& params)
     : application_manager::commands::CommandResponseImpl(
-          message,
-          params.application_manager_,
-          params.rpc_service_,
-          params.hmi_capabilities_,
-          params.policy_handler_) {}
+          message, params.application_manager_, params.rpc_service_,
+          params.hmi_capabilities_, params.policy_handler_) {}
 SetInteriorVehicleDataResponse::~SetInteriorVehicleDataResponse() {}
 
 void SetInteriorVehicleDataResponse::Run() {

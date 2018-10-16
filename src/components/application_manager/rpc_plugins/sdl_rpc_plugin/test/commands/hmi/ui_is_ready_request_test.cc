@@ -130,8 +130,7 @@ class UIIsReadyRequestTest
     EXPECT_CALL(mock_rpc_service_, ManageHMICommand(get_capabilities));
   }
 
-  void PrepareEvent(bool is_message_contain_param,
-                    Event& event,
+  void PrepareEvent(bool is_message_contain_param, Event& event,
                     bool is_ui_cooperating_available = false) {
     MessageSharedPtr msg = CreateMessage(smart_objects::SmartType_Map);
     if (is_message_contain_param) {
@@ -152,8 +151,7 @@ TEST_F(UIIsReadyRequestTest,
   const bool is_message_contain_param = false;
   Event event(hmi_apis::FunctionID::UI_IsReady);
   PrepareEvent(is_message_contain_param, event);
-  SetUpExpectations(is_ui_cooperating_available,
-                    is_send_message_to_hmi,
+  SetUpExpectations(is_ui_cooperating_available, is_send_message_to_hmi,
                     is_message_contain_param,
                     am::HmiInterfaces::STATE_NOT_RESPONSE);
 
@@ -167,8 +165,7 @@ TEST_F(UIIsReadyRequestTest,
   const bool is_message_contain_param = true;
   Event event(hmi_apis::FunctionID::UI_IsReady);
   PrepareEvent(is_message_contain_param, event);
-  SetUpExpectations(is_ui_cooperating_available,
-                    is_send_message_to_hmi,
+  SetUpExpectations(is_ui_cooperating_available, is_send_message_to_hmi,
                     is_message_contain_param,
                     am::HmiInterfaces::STATE_NOT_AVAILABLE);
   command_->on_event(event);
@@ -180,8 +177,7 @@ TEST_F(UIIsReadyRequestTest, OnEvent_KeyAvailableEqualToTrue_StateAvailable) {
   const bool is_message_contain_param = true;
   Event event(hmi_apis::FunctionID::UI_IsReady);
   PrepareEvent(is_message_contain_param, event, is_ui_cooperating_available);
-  SetUpExpectations(is_ui_cooperating_available,
-                    is_send_message_to_hmi,
+  SetUpExpectations(is_ui_cooperating_available, is_send_message_to_hmi,
                     is_message_contain_param,
                     am::HmiInterfaces::STATE_AVAILABLE);
   command_->on_event(event);

@@ -371,40 +371,40 @@ void InitCapabilities() {
 }  // namespace
 
 HMICapabilitiesImpl::HMICapabilitiesImpl(ApplicationManager& app_mngr)
-    : is_vr_cooperating_(false)
-    , is_tts_cooperating_(false)
-    , is_ui_cooperating_(false)
-    , is_navi_cooperating_(false)
-    , is_ivi_cooperating_(false)
-    , is_rc_cooperating_(false)
-    , attenuated_supported_(false)
-    , ui_language_(hmi_apis::Common_Language::INVALID_ENUM)
-    , vr_language_(hmi_apis::Common_Language::INVALID_ENUM)
-    , tts_language_(hmi_apis::Common_Language::INVALID_ENUM)
-    , vehicle_type_(NULL)
-    , ui_supported_languages_(NULL)
-    , tts_supported_languages_(NULL)
-    , vr_supported_languages_(NULL)
-    , display_capabilities_(NULL)
-    , hmi_zone_capabilities_(NULL)
-    , soft_buttons_capabilities_(NULL)
-    , button_capabilities_(NULL)
-    , preset_bank_capabilities_(NULL)
-    , vr_capabilities_(NULL)
-    , speech_capabilities_(NULL)
-    , audio_pass_thru_capabilities_(NULL)
-    , pcm_stream_capabilities_(NULL)
-    , prerecorded_speech_(NULL)
-    , is_navigation_supported_(false)
-    , is_phone_call_supported_(false)
-    , is_video_streaming_supported_(false)
-    , is_rc_supported_(false)
-    , navigation_capability_(NULL)
-    , phone_capability_(NULL)
-    , video_streaming_capability_(NULL)
-    , rc_capability_(NULL)
-    , app_mngr_(app_mngr)
-    , hmi_language_handler_(app_mngr) {
+    : is_vr_cooperating_(false),
+      is_tts_cooperating_(false),
+      is_ui_cooperating_(false),
+      is_navi_cooperating_(false),
+      is_ivi_cooperating_(false),
+      is_rc_cooperating_(false),
+      attenuated_supported_(false),
+      ui_language_(hmi_apis::Common_Language::INVALID_ENUM),
+      vr_language_(hmi_apis::Common_Language::INVALID_ENUM),
+      tts_language_(hmi_apis::Common_Language::INVALID_ENUM),
+      vehicle_type_(NULL),
+      ui_supported_languages_(NULL),
+      tts_supported_languages_(NULL),
+      vr_supported_languages_(NULL),
+      display_capabilities_(NULL),
+      hmi_zone_capabilities_(NULL),
+      soft_buttons_capabilities_(NULL),
+      button_capabilities_(NULL),
+      preset_bank_capabilities_(NULL),
+      vr_capabilities_(NULL),
+      speech_capabilities_(NULL),
+      audio_pass_thru_capabilities_(NULL),
+      pcm_stream_capabilities_(NULL),
+      prerecorded_speech_(NULL),
+      is_navigation_supported_(false),
+      is_phone_call_supported_(false),
+      is_video_streaming_supported_(false),
+      is_rc_supported_(false),
+      navigation_capability_(NULL),
+      phone_capability_(NULL),
+      video_streaming_capability_(NULL),
+      rc_capability_(NULL),
+      app_mngr_(app_mngr),
+      hmi_language_handler_(app_mngr) {
   InitCapabilities();
   if (false == app_mngr_.get_settings().launch_hmi()) {
     is_vr_cooperating_ = true;
@@ -820,9 +820,7 @@ bool HMICapabilitiesImpl::video_streaming_supported() const {
   return is_video_streaming_supported_;
 }
 
-bool HMICapabilitiesImpl::rc_supported() const {
-  return is_rc_supported_;
-}
+bool HMICapabilitiesImpl::rc_supported() const { return is_rc_supported_; }
 
 const smart_objects::SmartObject* HMICapabilitiesImpl::navigation_capability()
     const {
@@ -961,8 +959,7 @@ bool HMICapabilitiesImpl::load_capabilities_from_file() {
               smart_objects::SmartObject image_type_supported_enum(
                   smart_objects::SmartType_Array);
               for (uint32_t k = 0, j = 0;
-                   k < image_type_supported_array.length();
-                   ++k) {
+                   k < image_type_supported_array.length(); ++k) {
                 std::map<std::string,
                          hmi_apis::Common_FileType::eType>::const_iterator it =
                     file_type_enum.find(
@@ -1133,11 +1130,10 @@ bool HMICapabilitiesImpl::load_capabilities_from_file() {
                 continue;
               }
 
-              std::map<std::string,
-                       hmi_apis::Common_VideoStreamingProtocol::eType>::
-                  const_iterator it_protocol =
-                      video_streaming_protocol_enum.find(
-                          supported_format_array[i]["protocol"].asString());
+              std::map<std::string, hmi_apis::Common_VideoStreamingProtocol::
+                                        eType>::const_iterator it_protocol =
+                  video_streaming_protocol_enum.find(
+                      supported_format_array[i]["protocol"].asString());
 
               std::map<std::string,
                        hmi_apis::Common_VideoStreamingCodec::eType>::

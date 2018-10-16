@@ -147,21 +147,18 @@ TEST(GenericJsonFormatter, FromString) {
   ASSERT_EQ(smartobj::SmartType_Map, result.getElement("subobject").getType());
   ASSERT_EQ(smartobj::SmartType_Array,
             result.getElement("subobject").getElement("arrayField").getType());
-  ASSERT_EQ(smartobj::SmartType_Integer,
-            result.getElement("subobject")
-                .getElement("arrayField")
-                .getElement(0U)
-                .getType());
-  ASSERT_EQ(1,
-            result.getElement("subobject")
-                .getElement("arrayField")
-                .getElement(0U)
-                .asInt());
-  ASSERT_EQ(smartobj::SmartType_Null,
-            result.getElement("subobject")
-                .getElement("arrayField")
-                .getElement(1U)
-                .getType());
+  ASSERT_EQ(smartobj::SmartType_Integer, result.getElement("subobject")
+                                             .getElement("arrayField")
+                                             .getElement(0U)
+                                             .getType());
+  ASSERT_EQ(1, result.getElement("subobject")
+                   .getElement("arrayField")
+                   .getElement(0U)
+                   .asInt());
+  ASSERT_EQ(smartobj::SmartType_Null, result.getElement("subobject")
+                                          .getElement("arrayField")
+                                          .getElement(1U)
+                                          .getType());
   ASSERT_EQ(smartobj::SmartType_String,
             result.getElement("subobject").getElement("strField").getType());
   ASSERT_STREQ(

@@ -47,9 +47,8 @@ class MockMediaAdapterImpl : public ::media_manager::MediaAdapterImpl {
   MOCK_METHOD1(AddListener, void(const std::shared_ptr<MediaAdapterListener>&));
   MOCK_METHOD1(RemoveListener,
                void(const std::shared_ptr<MediaAdapterListener>&));
-  MOCK_METHOD2(SendData,
-               void(int32_t application_key,
-                    const ::protocol_handler::RawMessagePtr message));
+  MOCK_METHOD2(SendData, void(int32_t application_key,
+                              const ::protocol_handler::RawMessagePtr message));
   MOCK_METHOD1(StartActivity, void(int32_t application_key));
   MOCK_METHOD1(StopActivity, void(int32_t application_key));
   MOCK_CONST_METHOD1(is_app_performing_activity, bool(int32_t application_key));

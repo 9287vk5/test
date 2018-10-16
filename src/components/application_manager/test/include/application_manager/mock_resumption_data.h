@@ -63,8 +63,7 @@ class MockResumptionData : public ::resumption::ResumptionData {
   MOCK_METHOD0(IncrementIgnOffCount, void());
   MOCK_CONST_METHOD3(GetHashId,
                      bool(const std::string& policy_app_id,
-                          const std::string& device_id,
-                          std::string& hash_id));
+                          const std::string& device_id, std::string& hash_id));
   MOCK_METHOD0(OnAwake, void());
   MOCK_METHOD0(IncrementGlobalIgnOnCounter, void());
   MOCK_CONST_METHOD0(GetGlobalIgnOnCounter, uint32_t());
@@ -84,10 +83,9 @@ class MockResumptionData : public ::resumption::ResumptionData {
                              const std::string& device_id));
   MOCK_CONST_METHOD1(GetDataForLoadResumeData,
                      void(smart_objects::SmartObject& saved_data));
-  MOCK_METHOD3(UpdateHmiLevel,
-               void(const std::string& policy_app_id,
-                    const std::string& device_id,
-                    mobile_apis::HMILevel::eType hmi_level));
+  MOCK_METHOD3(UpdateHmiLevel, void(const std::string& policy_app_id,
+                                    const std::string& device_id,
+                                    mobile_apis::HMILevel::eType hmi_level));
   MOCK_METHOD0(Init, bool());
   MOCK_METHOD2(DropAppDataResumption,
                bool(const std::string& device_id, const std::string& app_id));

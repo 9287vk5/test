@@ -56,11 +56,8 @@ bool RCRPCPlugin::Init(
 
   resource_allocation_manager_.reset(
       new ResourceAllocationManagerImpl(app_manager, rpc_service));
-  RCCommandParams params{app_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler,
-                         *(resource_allocation_manager_.get()),
+  RCCommandParams params{app_manager, rpc_service, hmi_capabilities,
+                         policy_handler, *(resource_allocation_manager_.get()),
                          *(interior_data_cache_.get()),
                          *(interior_data_manager_.get())};
   command_factory_.reset(new rc_rpc_plugin::RCCommandFactory(params));
@@ -76,9 +73,7 @@ bool RCRPCPlugin::IsAbleToProcess(
   return command_factory_->IsAbleToProcess(function_id, message_source);
 }
 
-std::string RCRPCPlugin::PluginName() {
-  return "RC RPC Plugin";
-}
+std::string RCRPCPlugin::PluginName() { return "RC RPC Plugin"; }
 
 application_manager::CommandFactory& RCRPCPlugin::GetCommandFactory() {
   return *command_factory_;

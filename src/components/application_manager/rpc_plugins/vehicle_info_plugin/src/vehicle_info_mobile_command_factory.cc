@@ -59,10 +59,10 @@ VehicleInfoMobileCommandFactory::VehicleInfoMobileCommandFactory(
     application_manager::rpc_service::RPCService& rpc_service,
     application_manager::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : application_manager_(application_manager)
-    , rpc_service_(rpc_service)
-    , hmi_capabilities_(hmi_capabilities)
-    , policy_handler_(policy_handler) {
+    : application_manager_(application_manager),
+      rpc_service_(rpc_service),
+      hmi_capabilities_(hmi_capabilities),
+      policy_handler_(policy_handler) {
   LOG4CXX_AUTO_TRACE(logger_);
 }
 
@@ -87,9 +87,9 @@ app_mngr::CommandSharedPtr VehicleInfoMobileCommandFactory::CreateCommand(
   }
 
   UNUSED(message_type_str);
-  LOG4CXX_DEBUG(logger_,
-                "HMICommandFactory::CreateCommand function_id: "
-                    << function_id << ", message type: " << message_type_str);
+  LOG4CXX_DEBUG(logger_, "HMICommandFactory::CreateCommand function_id: "
+                             << function_id
+                             << ", message type: " << message_type_str);
 
   return buildCommandCreator(function_id, message_type).create(message);
 }

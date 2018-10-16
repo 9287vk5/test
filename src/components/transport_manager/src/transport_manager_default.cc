@@ -79,8 +79,8 @@ int TransportManagerDefault::Init(resumption::LastState& last_state) {
 
   const uint16_t port = get_settings().transport_manager_tcp_adapter_port();
   transport_adapter::TransportAdapterImpl* ta_tcp =
-      new transport_adapter::TcpTransportAdapter(
-          port, last_state, get_settings());
+      new transport_adapter::TcpTransportAdapter(port, last_state,
+                                                 get_settings());
 #ifdef TELEMETRY_MONITOR
   if (metric_observer_) {
     ta_tcp->SetTelemetryObserver(metric_observer_);

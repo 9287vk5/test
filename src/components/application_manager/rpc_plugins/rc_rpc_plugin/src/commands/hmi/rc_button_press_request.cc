@@ -41,11 +41,9 @@ namespace commands {
 RCButtonPressRequest::RCButtonPressRequest(
     const app_mngr::commands::MessageSharedPtr& message,
     const RCCommandParams& params)
-    : app_mngr::commands::RequestToHMI(message,
-                                       params.application_manager_,
-                                       params.rpc_service_,
-                                       params.hmi_capabilities_,
-                                       params.policy_handler_) {}
+    : app_mngr::commands::RequestToHMI(
+          message, params.application_manager_, params.rpc_service_,
+          params.hmi_capabilities_, params.policy_handler_) {}
 
 RCButtonPressRequest::~RCButtonPressRequest() {}
 

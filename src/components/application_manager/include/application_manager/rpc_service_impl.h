@@ -64,9 +64,7 @@ struct MessageToMobile : public std::shared_ptr<Message> {
                            bool final_message)
       : std::shared_ptr<Message>(message), is_final(final_message) {}
   // PrioritizedQueue requires this method to decide which priority to assign
-  size_t PriorityOrder() const {
-    return (*this)->Priority().OrderingValue();
-  }
+  size_t PriorityOrder() const { return (*this)->Priority().OrderingValue(); }
   // Signals if connection to mobile must be closed after sending this message
   bool is_final;
 };
@@ -76,9 +74,7 @@ struct MessageToHmi : public std::shared_ptr<Message> {
   explicit MessageToHmi(const std::shared_ptr<Message>& message)
       : std::shared_ptr<Message>(message) {}
   // PrioritizedQueue requires this method to decide which priority to assign
-  size_t PriorityOrder() const {
-    return (*this)->Priority().OrderingValue();
-  }
+  size_t PriorityOrder() const { return (*this)->Priority().OrderingValue(); }
 };
 
 typedef threads::MessageLoopThread<utils::PrioritizedQueue<MessageToMobile> >

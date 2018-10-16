@@ -110,15 +110,11 @@ class CommandRequestImplTest
                                 app_mngr::rpc_service::RPCService& rpc_service,
                                 app_mngr::HMICapabilities& hmi_capabilities,
                                 policy::PolicyHandlerInterface& policy_handler)
-        : CommandRequestImpl(
-              message, am, rpc_service, hmi_capabilities, policy_handler) {}
+        : CommandRequestImpl(message, am, rpc_service, hmi_capabilities,
+                             policy_handler) {}
 
-    const RequestState current_state() const {
-      return current_state_;
-    }
-    void set_current_state(const RequestState state) {
-      current_state_ = state;
-    }
+    const RequestState current_state() const { return current_state_; }
+    void set_current_state(const RequestState state) { current_state_ = state; }
 
     CommandParametersPermissions& parameters_permissions() {
       return parameters_permissions_;
@@ -128,9 +124,7 @@ class CommandRequestImplTest
       return removed_parameters_permissions_;
     }
 
-    void SetHashUpdateMode(HashUpdateMode mode) {
-      hash_update_mode_ = mode;
-    }
+    void SetHashUpdateMode(HashUpdateMode mode) { hash_update_mode_ = mode; }
   };
 
   MockAppPtr InitAppSetDataAccessor(std::shared_ptr<ApplicationSet>& app_set) {
@@ -399,9 +393,7 @@ TEST_F(CommandRequestImplTest,
   EXPECT_FALSE(command->CheckPermissions());
 }
 
-ACTION_P(GetArg3, output) {
-  *output = arg2;
-}
+ACTION_P(GetArg3, output) { *output = arg2; }
 
 TEST_F(CommandRequestImplTest, CheckAllowedParameters_MsgParamsMap_SUCCESS) {
   MessageSharedPtr msg = CreateMessage();

@@ -83,8 +83,7 @@ TEST_F(RequestFromHMITest, SendResponse_SUCCESS) {
   const uint32_t correlation_id = 1u;
   EXPECT_CALL(mock_rpc_service_, ManageHMICommand(NotNull()));
 
-  command->SendResponse(success,
-                        correlation_id,
+  command->SendResponse(success, correlation_id,
                         hmi_apis::FunctionID::BasicCommunication_ActivateApp,
                         hmi_apis::Common_Result::SUCCESS);
 }

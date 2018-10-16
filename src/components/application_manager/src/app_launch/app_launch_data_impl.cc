@@ -37,8 +37,8 @@ namespace app_launch {
 CREATE_LOGGERPTR_GLOBAL(logger_, "AppLaunch")
 
 AppLaunchDataImpl::AppLaunchDataImpl(const AppLaunchSettings& settings)
-    : settings_(settings)
-    , kMaxNumberOfiOSdevice(settings.max_number_of_ios_device()) {}
+    : settings_(settings),
+      kMaxNumberOfiOSdevice(settings.max_number_of_ios_device()) {}
 
 AppLaunchDataImpl::~AppLaunchDataImpl() {}
 

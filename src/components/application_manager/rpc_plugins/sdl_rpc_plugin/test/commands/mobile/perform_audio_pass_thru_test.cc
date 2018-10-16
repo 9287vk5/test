@@ -78,9 +78,9 @@ class PerformAudioPassThruRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   PerformAudioPassThruRequestTest()
-      : mock_app_(CreateMockApp())
-      , message_(std::make_shared<SmartObject>(::smart_objects::SmartType_Map))
-      , msg_params_((*message_)[am::strings::msg_params]) {}
+      : mock_app_(CreateMockApp()),
+        message_(std::make_shared<SmartObject>(::smart_objects::SmartType_Map)),
+        msg_params_((*message_)[am::strings::msg_params]) {}
 
   MessageSharedPtr CreateFullParamsUISO() {
     MessageSharedPtr msg = CreateMessage(smart_objects::SmartType_Map);
@@ -249,8 +249,8 @@ TEST_F(PerformAudioPassThruRequestTest,
   EXPECT_CALL(mock_message_helper_,
               VerifyTtsFiles((*mobile_request)[am::strings::msg_params]
                                               [am::strings::initial_prompt],
-                             _,
-                             _)).WillOnce(Return(mobile_apis::Result::SUCCESS));
+                             _, _))
+      .WillOnce(Return(mobile_apis::Result::SUCCESS));
 
   command->Run();
   command->on_event(event_tts);
@@ -681,9 +681,8 @@ TEST_F(PerformAudioPassThruRequestTest,
   uint32_t app_id = kConnectionKey;
   EXPECT_CALL(app_mngr_, BeginAudioPassThru(app_id)).WillOnce(Return(true));
 
-  EXPECT_CALL(
-      app_mngr_,
-      StartAudioPassThruThread(kConnectionKey, kCorrelationId, _, _, _, _));
+  EXPECT_CALL(app_mngr_, StartAudioPassThruThread(kConnectionKey,
+                                                  kCorrelationId, _, _, _, _));
 
   EXPECT_CALL(app_mngr_, updateRequestTimeout(_, _, _));
   ON_CALL(mock_hmi_interfaces_, GetInterfaceState(_))
@@ -706,9 +705,8 @@ TEST_F(PerformAudioPassThruRequestTest,
   EXPECT_CALL(mock_rpc_service_, ManageHMICommand(_)).WillOnce(Return(true));
   EXPECT_CALL(app_mngr_, BeginAudioPassThru(app_id)).WillOnce(Return(true));
 
-  EXPECT_CALL(
-      app_mngr_,
-      StartAudioPassThruThread(kConnectionKey, kCorrelationId, _, _, _, _));
+  EXPECT_CALL(app_mngr_, StartAudioPassThruThread(kConnectionKey,
+                                                  kCorrelationId, _, _, _, _));
   EXPECT_CALL(app_mngr_, updateRequestTimeout(_, _, _));
   ON_CALL(mock_hmi_interfaces_, GetInterfaceState(_))
       .WillByDefault(Return(am::HmiInterfaces::STATE_AVAILABLE));

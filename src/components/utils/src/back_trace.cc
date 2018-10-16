@@ -89,9 +89,7 @@ vector<string> Backtrace::CallStack() const {
   return callstack;
 }
 
-threads::PlatformThreadHandle Backtrace::ThreadId() const {
-  return thread_id_;
-}
+threads::PlatformThreadHandle Backtrace::ThreadId() const { return thread_id_; }
 
 ostream& operator<<(ostream& os, const Backtrace& bt) {
   const vector<string> symbols = bt.CallStack();

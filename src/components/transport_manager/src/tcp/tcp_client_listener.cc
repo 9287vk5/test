@@ -78,15 +78,15 @@ TcpClientListener::TcpClientListener(TransportAdapterController* controller,
                                      const uint16_t port,
                                      const bool enable_keepalive,
                                      const std::string designated_interface)
-    : port_(port)
-    , enable_keepalive_(enable_keepalive)
-    , controller_(controller)
-    , initialized_(false)
-    , started_(false)
-    , thread_(0)
-    , socket_(-1)
-    , thread_stop_requested_(false)
-    , designated_interface_(designated_interface) {
+    : port_(port),
+      enable_keepalive_(enable_keepalive),
+      controller_(controller),
+      initialized_(false),
+      started_(false),
+      thread_(0),
+      socket_(-1),
+      thread_stop_requested_(false),
+      designated_interface_(designated_interface) {
   pipe_fds_[0] = pipe_fds_[1] = -1;
   thread_ = threads::CreateThread("TcpClientListener",
                                   new ListeningThreadDelegate(this));
@@ -110,10 +110,9 @@ TransportAdapter::Error TcpClientListener::Init() {
     // Network interface is specified and we wiill listen only on the interface.
     // In this case, the server socket will be created once
     // NetworkInterfaceListener notifies the interface's IP address.
-    LOG4CXX_INFO(logger_,
-                 "TCP server socket will listen on "
-                     << designated_interface_
-                     << " once it has an IPv4 address.");
+    LOG4CXX_INFO(logger_, "TCP server socket will listen on "
+                              << designated_interface_
+                              << " once it has an IPv4 address.");
   }
 
   if (!interface_listener_->Init()) {
@@ -148,9 +147,7 @@ void TcpClientListener::Terminate() {
   initialized_ = false;
 }
 
-bool TcpClientListener::IsInitialised() const {
-  return initialized_;
-}
+bool TcpClientListener::IsInitialised() const { return initialized_; }
 
 TcpClientListener::~TcpClientListener() {
   LOG4CXX_AUTO_TRACE(logger_);
@@ -181,14 +178,11 @@ void SetKeepaliveOptions(const int fd) {
       setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &keepcnt, sizeof(keepcnt))) {
     LOG4CXX_WARN_WITH_ERRNO(logger_, "setsockopt TCP_KEEPCNT failed");
   }
-  if (0 != setsockopt(
-               fd, IPPROTO_TCP, TCP_KEEPINTVL, &keepintvl, sizeof(keepintvl))) {
+  if (0 != setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &keepintvl,
+                      sizeof(keepintvl))) {
     LOG4CXX_WARN_WITH_ERRNO(logger_, "setsockopt TCP_KEEPINTVL failed");
   }
-  if (0 != setsockopt(fd,
-                      IPPROTO_TCP,
-                      TCP_USER_TIMEOUT,
-                      &user_timeout,
+  if (0 != setsockopt(fd, IPPROTO_TCP, TCP_USER_TIMEOUT, &user_timeout,
                       sizeof(user_timeout))) {
     LOG4CXX_WARN_WITH_ERRNO(logger_, "setsockopt TCP_USER_TIMEOUT failed");
   }
@@ -286,8 +280,7 @@ void TcpClientListener::Loop() {
       }
 
       char device_name[32];
-      strncpy(device_name,
-              inet_ntoa(client_address.sin_addr),
+      strncpy(device_name, inet_ntoa(client_address.sin_addr),
               sizeof(device_name) / sizeof(device_name[0]));
       LOG4CXX_INFO(logger_, "Connected client " << device_name);
       LOG4CXX_INFO(logger_, "Port is: " << port_);
@@ -313,10 +306,10 @@ void TcpClientListener::Loop() {
           tcp_device_raw->AddIncomingApplication(connection_fd);
 
       std::shared_ptr<TcpSocketConnection> connection =
-          std::make_shared<TcpSocketConnection>(
-              device->unique_device_id(), app_handle, controller_);
-      controller_->ConnectionCreated(
-          connection, device->unique_device_id(), app_handle);
+          std::make_shared<TcpSocketConnection>(device->unique_device_id(),
+                                                app_handle, controller_);
+      controller_->ConnectionCreated(connection, device->unique_device_id(),
+                                     app_handle);
       connection->set_socket(connection_fd);
       const TransportAdapter::Error error = connection->Start();
       if (TransportAdapter::OK != error) {
@@ -454,15 +447,14 @@ void TcpClientListener::OnIPAddressUpdated(const std::string ipv4_addr,
     if (IsListeningOnSpecificInterface()) {
       if (!current_ip_address_.empty()) {
         // the server socket is running, terminate it
-        LOG4CXX_DEBUG(logger_,
-                      "Stopping current TCP server socket on "
-                          << designated_interface_);
+        LOG4CXX_DEBUG(logger_, "Stopping current TCP server socket on "
+                                   << designated_interface_);
         StopOnNetworkInterface();
       }
       if (!ipv4_addr.empty()) {
         // start (or restart) server socket with the new IP address
-        LOG4CXX_DEBUG(
-            logger_, "Starting TCP server socket on " << designated_interface_);
+        LOG4CXX_DEBUG(logger_, "Starting TCP server socket on "
+                                   << designated_interface_);
         StartOnNetworkInterface();
       }
     }
@@ -503,8 +495,8 @@ bool TcpClientListener::StartOnNetworkInterface() {
       LOG4CXX_WARN(logger_, "Failed to start TCP client listener");
       return false;
     }
-    LOG4CXX_INFO(logger_,
-                 "TCP server socket started on " << designated_interface_);
+    LOG4CXX_INFO(logger_, "TCP server socket started on "
+                              << designated_interface_);
   }
   return true;
 }
@@ -524,9 +516,8 @@ bool TcpClientListener::StopOnNetworkInterface() {
       socket_ = -1;
     }
 
-    LOG4CXX_INFO(logger_,
-                 "TCP server socket on " << designated_interface_
-                                         << " stopped");
+    LOG4CXX_INFO(logger_, "TCP server socket on " << designated_interface_
+                                                  << " stopped");
   }
   return true;
 }
@@ -564,8 +555,7 @@ int TcpClientListener::CreateIPv4ServerSocket(
     LOG4CXX_WARN_WITH_ERRNO(logger_, "setsockopt SO_REUSEADDR failed");
   }
 
-  if (bind(sock,
-           reinterpret_cast<sockaddr*>(&server_address),
+  if (bind(sock, reinterpret_cast<sockaddr*>(&server_address),
            sizeof(server_address)) != 0) {
     LOG4CXX_ERROR_WITH_ERRNO(logger_, "bind() failed");
     close(sock);

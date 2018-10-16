@@ -94,8 +94,7 @@ class CFormatterJsonSDLRPCv2 : public CFormatterJsonBase {
   static bool fromString(
       const std::string& str,
       ns_smart_device_link::ns_smart_objects::SmartObject& out,
-      FunctionId functionId,
-      MessageType messageType);
+      FunctionId functionId, MessageType messageType);
 
   /**
    * @brief Creates a SmartObject from a JSON string.
@@ -117,9 +116,7 @@ class CFormatterJsonSDLRPCv2 : public CFormatterJsonBase {
   static bool fromString(
       const std::string& str,
       ns_smart_device_link::ns_smart_objects::SmartObject& out,
-      FunctionId functionId,
-      MessageType messageType,
-      int32_t correlationId);
+      FunctionId functionId, MessageType messageType, int32_t correlationId);
 
   /**
    * @brief Converts to string the smart object against the given schema
@@ -140,8 +137,7 @@ template <typename FunctionId, typename MessageType>
 inline bool CFormatterJsonSDLRPCv2::fromString(
     const std::string& str,
     ns_smart_device_link::ns_smart_objects::SmartObject& out,
-    FunctionId functionId,
-    MessageType messageType) {
+    FunctionId functionId, MessageType messageType) {
   bool result = true;
 
   try {
@@ -170,9 +166,7 @@ template <typename FunctionId, typename MessageType>
 inline bool CFormatterJsonSDLRPCv2::fromString(
     const std::string& str,
     ns_smart_device_link::ns_smart_objects::SmartObject& out,
-    FunctionId functionId,
-    MessageType messageType,
-    int32_t correlationId) {
+    FunctionId functionId, MessageType messageType, int32_t correlationId) {
   bool result = fromString(str, out, functionId, messageType);
   namespace strings = ns_smart_device_link::ns_json_handler::strings;
 

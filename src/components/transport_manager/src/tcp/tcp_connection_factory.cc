@@ -52,9 +52,8 @@ TransportAdapter::Error TcpConnectionFactory::Init() {
 TransportAdapter::Error TcpConnectionFactory::CreateConnection(
     const DeviceUID& device_uid, const ApplicationHandle& app_handle) {
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(logger_,
-                "DeviceUID: " << &device_uid
-                              << ", ApplicationHandle: " << &app_handle);
+  LOG4CXX_DEBUG(logger_, "DeviceUID: " << &device_uid << ", ApplicationHandle: "
+                                       << &app_handle);
   std::shared_ptr<TcpServerOriginatedSocketConnection> connection =
       std::make_shared<TcpServerOriginatedSocketConnection>(
           device_uid, app_handle, controller_);
@@ -70,9 +69,7 @@ TransportAdapter::Error TcpConnectionFactory::CreateConnection(
 
 void TcpConnectionFactory::Terminate() {}
 
-bool TcpConnectionFactory::IsInitialised() const {
-  return true;
-}
+bool TcpConnectionFactory::IsInitialised() const { return true; }
 
 TcpConnectionFactory::~TcpConnectionFactory() {}
 

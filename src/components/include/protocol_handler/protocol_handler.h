@@ -108,8 +108,7 @@ class ProtocolHandler {
     * \param session_id ID of session to be ended
     */
   virtual void SendEndService(int32_t primary_connection_id,
-                              int32_t connection_id,
-                              uint8_t session_id,
+                              int32_t connection_id, uint8_t session_id,
                               uint8_t service_type) = 0;
 
   /**

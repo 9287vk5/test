@@ -257,14 +257,10 @@ const EnumConversionHelper<test::components::SmartObjects::SchemaItem::
 template <>
 const char* const EnumConversionHelper<
     test::components::SmartObjects::SchemaItem::TestType::eType>::
-    cstring_values_[] = {"USER_EXIT",
-                         "IGNITION_OFF",
-                         "BLUETOOTH_OFF",
-                         "USB_DISCONNECTED",
-                         "TOO_MANY_REQUESTS",
-                         "MASTER_RESET",
-                         "FACTORY_DEFAULTS",
-                         "APP_UNAUTHORIZED"};
+    cstring_values_[] = {"USER_EXIT",         "IGNITION_OFF",
+                         "BLUETOOTH_OFF",     "USB_DISCONNECTED",
+                         "TOO_MANY_REQUESTS", "MASTER_RESET",
+                         "FACTORY_DEFAULTS",  "APP_UNAUTHORIZED"};
 
 template <>
 const test::components::SmartObjects::SchemaItem::TestType::eType

@@ -109,8 +109,7 @@ class AlertRequest : public app_mngr::commands::CommandRequestImpl {
    * @param length_tts_chunks contains length of array
    * tts chunks.
    */
-  void SendSpeakRequest(int32_t app_id,
-                        bool tts_chunks_exists,
+  void SendSpeakRequest(int32_t app_id, bool tts_chunks_exists,
                         size_t length_tts_chunks);
 
   /*

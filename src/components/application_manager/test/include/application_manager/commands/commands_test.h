@@ -97,11 +97,9 @@ class CommandsTest : public ::testing::Test {
 
   typedef NiceMock<MockApplicationManagerSettings> MockAppManagerSettings;
   typedef NiceMock<application_manager_test::MockRPCService> MockRPCService;
-  typedef typename TypeIf<kIsNice,
-                          NiceMock<MockApplicationManager>,
+  typedef typename TypeIf<kIsNice, NiceMock<MockApplicationManager>,
                           MockApplicationManager>::Result MockAppManager;
-  typedef typename TypeIf<kIsNice,
-                          NiceMock<MockApplication>,
+  typedef typename TypeIf<kIsNice, NiceMock<MockApplication>,
                           MockApplication>::Result MockApp;
   typedef std::shared_ptr<MockApp> MockAppPtr;
 
@@ -114,19 +112,15 @@ class CommandsTest : public ::testing::Test {
     return std::make_shared<SmartObject>(type);
   }
 
-  static MockAppPtr CreateMockApp() {
-    return std::make_shared<MockApp>();
-  }
+  static MockAppPtr CreateMockApp() { return std::make_shared<MockApp>(); }
 
   template <class Command>
   std::shared_ptr<Command> CreateCommand(const uint32_t timeout,
                                          MessageSharedPtr& msg) {
     InitCommand(timeout);
-    return std::make_shared<Command>((msg ? msg : msg = CreateMessage()),
-                                     app_mngr_,
-                                     mock_rpc_service_,
-                                     mock_hmi_capabilities_,
-                                     mock_policy_handler_);
+    return std::make_shared<Command>(
+        (msg ? msg : msg = CreateMessage()), app_mngr_, mock_rpc_service_,
+        mock_hmi_capabilities_, mock_policy_handler_);
   }
 
   template <class Command>
@@ -139,9 +133,7 @@ class CommandsTest : public ::testing::Test {
       const uint32_t timeout = kDefaultTimeout_) {
     InitCommand(timeout);
     MessageSharedPtr msg = CreateMessage();
-    return std::make_shared<Command>(msg,
-                                     app_mngr_,
-                                     mock_rpc_service_,
+    return std::make_shared<Command>(msg, app_mngr_, mock_rpc_service_,
                                      mock_hmi_capabilities_,
                                      mock_policy_handler_);
   }
@@ -168,8 +160,8 @@ class CommandsTest : public ::testing::Test {
   }
 
   CommandsTest()
-      : mock_message_helper_(*am::MockMessageHelper::message_helper_mock())
-      , timeout_(0) {
+      : mock_message_helper_(*am::MockMessageHelper::message_helper_mock()),
+        timeout_(0) {
     ON_CALL(app_mngr_, hmi_interfaces())
         .WillByDefault(ReturnRef(mock_hmi_interfaces_));
     ON_CALL(mock_hmi_interfaces_, GetInterfaceFromFunction(_))

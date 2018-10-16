@@ -98,8 +98,7 @@ inline const Json::Value* ValueMember(const Json::Value* value,
 }
 
 template <class T>
-inline void WriteJsonField(const char* field_name,
-                           const T& field,
+inline void WriteJsonField(const char* field_name, const T& field,
                            Json::Value* json_value) {
   if (field.is_initialized()) {
     (*json_value)[field_name] = field.ToJsonValue();
@@ -109,21 +108,19 @@ inline void WriteJsonField(const char* field_name,
 }  // namespace impl
 
 inline Boolean::Boolean(const Json::Value* value)
-    : PrimitiveType(InitHelper(value, &Json::Value::isBool))
-    , value_(is_valid() ? value->asBool() : bool()) {}
+    : PrimitiveType(InitHelper(value, &Json::Value::isBool)),
+      value_(is_valid() ? value->asBool() : bool()) {}
 
 inline Boolean::Boolean(const Json::Value* value, bool def_value)
-    : PrimitiveType(InitHelper(value, &Json::Value::isBool))
-    , value_(is_valid() ? value->asBool() : def_value) {
+    : PrimitiveType(InitHelper(value, &Json::Value::isBool)),
+      value_(is_valid() ? value->asBool() : def_value) {
   // If there is no value, mark it as valid and use def_value
   if (!is_initialized()) {
     value_state_ = kValid;
   }
 }
 
-inline Json::Value Boolean::ToJsonValue() const {
-  return Json::Value(value_);
-}
+inline Json::Value Boolean::ToJsonValue() const { return Json::Value(value_); }
 
 template <typename T, T minval, T maxval>
 Integer<T, minval, maxval>::Integer(const Json::Value* value)
@@ -174,8 +171,8 @@ Float<minnum, maxnum, minden, maxden>::Float(const Json::Value* value)
 template <int64_t minnum, int64_t maxnum, int64_t minden, int64_t maxden>
 Float<minnum, maxnum, minden, maxden>::Float(const Json::Value* value,
                                              double def_value)
-    : PrimitiveType(InitHelper(value, &Json::Value::isDouble))
-    , value_(def_value) {
+    : PrimitiveType(InitHelper(value, &Json::Value::isDouble)),
+      value_(def_value) {
   if (!is_initialized()) {
     value_state_ = kValid;
   } else if (is_valid()) {
@@ -191,8 +188,8 @@ Json::Value Float<minnum, maxnum, minden, maxden>::ToJsonValue() const {
 
 template <size_t minlen, size_t maxlen>
 String<minlen, maxlen>::String(const Json::Value* value)
-    : PrimitiveType(InitHelper(value, &Json::Value::isString))
-    , value_(is_valid() ? value->asString() : std::string()) {
+    : PrimitiveType(InitHelper(value, &Json::Value::isString)),
+      value_(is_valid() ? value->asString() : std::string()) {
   if (is_valid()) {
     value_state_ = length_range_.Includes(value_.length()) ? kValid : kInvalid;
   }
@@ -201,8 +198,8 @@ String<minlen, maxlen>::String(const Json::Value* value)
 template <size_t minlen, size_t maxlen>
 String<minlen, maxlen>::String(const Json::Value* value,
                                const std::string& def_value)
-    : PrimitiveType(InitHelper(value, &Json::Value::isString))
-    , value_(def_value) {
+    : PrimitiveType(InitHelper(value, &Json::Value::isString)),
+      value_(def_value) {
   if (!is_initialized()) {
     value_state_ = kValid;
   } else if (is_valid()) {
@@ -217,8 +214,8 @@ Json::Value String<minlen, maxlen>::ToJsonValue() const {
 
 template <typename T>
 Enum<T>::Enum(const Json::Value* value)
-    : PrimitiveType(InitHelper(value, &Json::Value::isString))
-    , value_(EnumType()) {
+    : PrimitiveType(InitHelper(value, &Json::Value::isString)),
+      value_(EnumType()) {
   if (is_valid()) {
     value_state_ =
         EnumFromJsonString(value->asString(), &value_) ? kValid : kInvalid;
@@ -227,8 +224,8 @@ Enum<T>::Enum(const Json::Value* value)
 
 template <typename T>
 Enum<T>::Enum(const Json::Value* value, EnumType def_value)
-    : PrimitiveType(InitHelper(value, &Json::Value::isString))
-    , value_(def_value) {
+    : PrimitiveType(InitHelper(value, &Json::Value::isString)),
+      value_(def_value) {
   if (!is_initialized()) {
     value_state_ = kValid;
   } else if (is_valid()) {
@@ -350,8 +347,8 @@ inline Json::Value Nullable<T>::ToJsonValue() const {
 template <typename T>
 template <typename U>
 Optional<T>::Optional(const Json::Value* value, const U& def_value)
-    : policy_table_type_(policy_table_interface_base::INVALID_PT_TYPE)
-    , value_(value, def_value) {}
+    : policy_table_type_(policy_table_interface_base::INVALID_PT_TYPE),
+      value_(value, def_value) {}
 
 template <typename T>
 inline Json::Value Optional<T>::ToJsonValue() const {
@@ -360,21 +357,21 @@ inline Json::Value Optional<T>::ToJsonValue() const {
 
 template <typename T>
 Stringifyable<T>::Stringifyable(const Json::Value* value)
-    : T(NULL != value && !value->isString() ? value : NULL)
-    , predefined_string_(NULL != value && value->isString() ? value->asString()
+    : T(NULL != value && !value->isString() ? value : NULL),
+      predefined_string_(NULL != value && value->isString() ? value->asString()
                                                             : "") {}
 
 template <typename T>
 Stringifyable<T>::Stringifyable(Json::Value* value)
-    : T(NULL != value && !value->isString() ? value : NULL)
-    , predefined_string_(NULL != value && value->isString() ? value->asString()
+    : T(NULL != value && !value->isString() ? value : NULL),
+      predefined_string_(NULL != value && value->isString() ? value->asString()
                                                             : "") {}
 
 template <typename T>
 template <typename U>
 Stringifyable<T>::Stringifyable(const Json::Value* value, const U& def_value)
-    : T(NULL != value && !value->isString() ? (value, def_value) : NULL)
-    , predefined_string_(NULL != value && value->isString() ? value->asString()
+    : T(NULL != value && !value->isString() ? (value, def_value) : NULL),
+      predefined_string_(NULL != value && value->isString() ? value->asString()
                                                             : "") {}
 
 template <typename T>

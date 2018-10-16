@@ -103,12 +103,12 @@ class AddCommandRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   AddCommandRequestTest()
-      : msg_(CreateMessage())
-      , default_app_name_("test_default_app_name_")
-      , lock_ptr_(std::make_shared<sync_primitives::Lock>())
-      , mock_help_prompt_manager_(
-            std::make_shared<am_test::MockHelpPromptManager>())
-      , mock_app_(CreateMockApp()) {
+      : msg_(CreateMessage()),
+        default_app_name_("test_default_app_name_"),
+        lock_ptr_(std::make_shared<sync_primitives::Lock>()),
+        mock_help_prompt_manager_(
+            std::make_shared<am_test::MockHelpPromptManager>()),
+        mock_app_(CreateMockApp()) {
     EXPECT_CALL(app_mngr_, application(kConnectionKey))
         .WillRepeatedly(Return(mock_app_));
     InitGetters();
@@ -188,13 +188,11 @@ class AddCommandRequestTest
     {
       InSequence dummy;
 
-      EXPECT_CALL(mock_rpc_service_,
-                  ManageHMICommand(
-                      HMIResultCodeIs(hmi_apis::FunctionID::UI_AddCommand)))
+      EXPECT_CALL(mock_rpc_service_, ManageHMICommand(HMIResultCodeIs(
+                                         hmi_apis::FunctionID::UI_AddCommand)))
           .WillOnce(Return(true));
-      EXPECT_CALL(mock_rpc_service_,
-                  ManageHMICommand(
-                      HMIResultCodeIs(hmi_apis::FunctionID::VR_AddCommand)))
+      EXPECT_CALL(mock_rpc_service_, ManageHMICommand(HMIResultCodeIs(
+                                         hmi_apis::FunctionID::VR_AddCommand)))
           .WillOnce(Return(true));
     }
     EXPECT_CALL(mock_rpc_service_, ManageMobileCommand(_, _)).Times(0);

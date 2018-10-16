@@ -92,8 +92,7 @@ std::string MergeInfos(const ResponseInfo& first_info,
  * @param third - info string that should be second in result info
  * @return resulting string contain merge all incoming parameters
  */
-std::string MergeInfos(const std::string& first,
-                       const std::string& second,
+std::string MergeInfos(const std::string& first, const std::string& second,
                        const std::string& third);
 
 class CommandRequestImpl : public CommandImpl,

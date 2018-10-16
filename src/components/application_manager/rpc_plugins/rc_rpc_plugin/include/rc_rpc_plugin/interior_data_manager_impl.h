@@ -49,8 +49,7 @@ class RCRPCPlugin;
 class InteriorDataManagerImpl : public InteriorDataManager {
  public:
   InteriorDataManagerImpl(
-      RCRPCPlugin& rc_plugin,
-      InteriorDataCache& cache,
+      RCRPCPlugin& rc_plugin, InteriorDataCache& cache,
       application_manager::ApplicationManager& app_mngr,
       application_manager::rpc_service::RPCService& rpc_service);
 

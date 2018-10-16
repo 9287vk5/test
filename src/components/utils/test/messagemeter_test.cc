@@ -46,13 +46,9 @@ namespace utils_test {
 
 // Pair of values <second, msecond>
 typedef std::pair<int, int> TimePair;
-const TimePair testing_time_pairs[] = {TimePair(0, 50),
-                                       TimePair(0, 100),
-                                       TimePair(0, 200),
-                                       TimePair(0, 500),
-                                       TimePair(0, 900),
-                                       TimePair(1, 0),
-                                       TimePair(1, 500)};
+const TimePair testing_time_pairs[] = {
+    TimePair(0, 50),  TimePair(0, 100), TimePair(0, 200), TimePair(0, 500),
+    TimePair(0, 900), TimePair(1, 0),   TimePair(1, 500)};
 
 class MessageMeterTest : public ::testing::TestWithParam<TimePair> {
  protected:
@@ -257,8 +253,7 @@ TEST_P(MessageMeterTest, ClearIds) {
   EXPECT_EQ(0u, meter.Frequency(id3));
 }
 
-INSTANTIATE_TEST_CASE_P(MessageMeterTestCase,
-                        MessageMeterTest,
+INSTANTIATE_TEST_CASE_P(MessageMeterTestCase, MessageMeterTest,
                         ::testing::ValuesIn(testing_time_pairs));
 
 }  // namespace utils_test

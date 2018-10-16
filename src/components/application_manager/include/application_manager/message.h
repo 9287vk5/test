@@ -99,9 +99,7 @@ class Message {
       protocol_handler::MajorProtocolVersion minVersion,
       protocol_handler::MajorProtocolVersion version);
 
-  protocol_handler::MessagePriority Priority() const {
-    return priority_;
-  }
+  protocol_handler::MessagePriority Priority() const { return priority_; }
 
  private:
   int32_t function_id_;     // @remark protocol V2.

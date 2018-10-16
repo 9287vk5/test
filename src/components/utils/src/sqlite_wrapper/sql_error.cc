@@ -38,9 +38,7 @@ namespace dbms {
 SQLError::SQLError(Error number, const std::string& text)
     : number_(number), text_(text) {}
 
-Error SQLError::number() const {
-  return number_;
-}
+Error SQLError::number() const { return number_; }
 
 std::string SQLError::text() const {
   if (!text_.empty()) {

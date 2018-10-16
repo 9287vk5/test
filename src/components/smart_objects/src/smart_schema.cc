@@ -41,8 +41,7 @@ CSmartSchema::CSmartSchema(const ISchemaItemPtr SchemaItem)
     : mSchemaItem(SchemaItem) {}
 
 errors::eType CSmartSchema::validate(
-    const SmartObject& object,
-    rpc::ValidationReport* report__,
+    const SmartObject& object, rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) const {
   return mSchemaItem->validate(object, report__, MessageVersion);
 }

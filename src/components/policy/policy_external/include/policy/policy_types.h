@@ -91,9 +91,9 @@ typedef std::map<std::string, std::set<policy::HMILevel> > HMIPermissions;
 struct ParameterPermissions
     : std::map<std::string, std::set<policy::Parameter> > {
   ParameterPermissions()
-      : any_parameter_allowed(false)
-      , any_parameter_disallowed_by_user(false)
-      , any_parameter_disallowed_by_policy(false) {}
+      : any_parameter_allowed(false),
+        any_parameter_disallowed_by_user(false),
+        any_parameter_disallowed_by_policy(false) {}
   bool any_parameter_allowed;
   bool any_parameter_disallowed_by_user;
   bool any_parameter_disallowed_by_policy;
@@ -147,8 +147,7 @@ struct CheckPermissionResult {
       return false;
     }
     return std::includes(list_of_disallowed_params.begin(),
-                         list_of_disallowed_params.end(),
-                         parameters.begin(),
+                         list_of_disallowed_params.end(), parameters.begin(),
                          parameters.end());
   }
 
@@ -158,8 +157,7 @@ struct CheckPermissionResult {
     }
     return list_of_allowed_params.end() !=
            std::find_first_of(list_of_allowed_params.begin(),
-                              list_of_allowed_params.end(),
-                              parameters.begin(),
+                              list_of_allowed_params.end(), parameters.begin(),
                               parameters.end());
   }
 };
@@ -185,10 +183,10 @@ typedef std::vector<EndpointData> EndpointUrls;
  */
 struct DeviceParams {
   DeviceParams()
-      : device_name(kDefaultDeviceName)
-      , device_mac_address(kDefaultDeviceMacAddress)
-      , device_connection_type(kDefaultDeviceConnectionType)
-      , device_handle(0) {}
+      : device_name(kDefaultDeviceName),
+        device_mac_address(kDefaultDeviceMacAddress),
+        device_connection_type(kDefaultDeviceConnectionType),
+        device_handle(0) {}
 
   std::string device_name;
   std::string device_mac_address;
@@ -263,13 +261,13 @@ struct FunctionalGroupPermission {
  */
 struct AppPermissions {
   AppPermissions(const std::string& app_id)
-      : application_id(app_id)
-      , isAppPermissionsRevoked(false)
-      , appRevoked(false)
-      , appPermissionsConsentNeeded(false)
-      , appUnauthorized(false)
-      , requestTypeChanged(false)
-      , requestSubTypeChanged(false) {}
+      : application_id(app_id),
+        isAppPermissionsRevoked(false),
+        appRevoked(false),
+        appPermissionsConsentNeeded(false),
+        appUnauthorized(false),
+        requestTypeChanged(false),
+        requestSubTypeChanged(false) {}
 
   std::string application_id;
   bool isAppPermissionsRevoked;
@@ -401,8 +399,7 @@ enum ReturnValue { kZero, kNonZero };
  * item
  */
 struct ExternalConsentStatusItem {
-  ExternalConsentStatusItem(const uint32_t type,
-                            const uint32_t id,
+  ExternalConsentStatusItem(const uint32_t type, const uint32_t id,
                             const EntityStatus status)
       : entity_type_(type), entity_id_(id), status_(status) {}
 
@@ -443,9 +440,9 @@ struct ExternalConsentStatusItemSorter {
  */
 struct ApplicationPolicyActions {
   ApplicationPolicyActions()
-      : is_notify_system(false)
-      , is_send_permissions_to_app(false)
-      , is_consent_needed(false) {}
+      : is_notify_system(false),
+        is_send_permissions_to_app(false),
+        is_consent_needed(false) {}
 
   bool is_notify_system;
   bool is_send_permissions_to_app;

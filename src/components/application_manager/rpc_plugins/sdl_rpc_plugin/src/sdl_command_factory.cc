@@ -42,10 +42,10 @@ SDLCommandFactory::SDLCommandFactory(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : app_manager_(app_manager)
-    , rpc_service_(rpc_service)
-    , hmi_capabilities_(hmi_capabilities)
-    , policy_handler_(policy_handler) {
+    : app_manager_(app_manager),
+      rpc_service_(rpc_service),
+      hmi_capabilities_(hmi_capabilities),
+      policy_handler_(policy_handler) {
   hmi_command_factory_.reset(new HMICommandFactory(
       app_manager, rpc_service, hmi_capabilities, policy_handler));
   mobile_command_factory_.reset(new MobileCommandFactory(

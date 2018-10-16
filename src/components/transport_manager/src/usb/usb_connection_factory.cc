@@ -74,11 +74,8 @@ TransportAdapter::Error UsbConnectionFactory::CreateConnection(
 
   UsbDevice* usb_device = static_cast<UsbDevice*>(device.get());
   std::shared_ptr<UsbConnection> connection =
-      std::make_shared<UsbConnection>(device_uid,
-                                      app_handle,
-                                      controller_,
-                                      usb_handler_,
-                                      usb_device->usb_device());
+      std::make_shared<UsbConnection>(device_uid, app_handle, controller_,
+                                      usb_handler_, usb_device->usb_device());
   controller_->ConnectionCreated(connection, device_uid, app_handle);
   if (connection->Init()) {
     LOG4CXX_INFO(logger_, "USB connection initialised");
@@ -96,9 +93,7 @@ TransportAdapter::Error UsbConnectionFactory::CreateConnection(
 
 void UsbConnectionFactory::Terminate() {}
 
-bool UsbConnectionFactory::IsInitialised() const {
-  return true;
-}
+bool UsbConnectionFactory::IsInitialised() const { return true; }
 
 UsbConnectionFactory::~UsbConnectionFactory() {}
 

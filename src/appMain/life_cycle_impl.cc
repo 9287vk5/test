@@ -56,26 +56,31 @@ namespace main_namespace {
 CREATE_LOGGERPTR_GLOBAL(logger_, "SDLMain")
 
 LifeCycleImpl::LifeCycleImpl(const profile::Profile& profile)
-    : transport_manager_(NULL)
-    , protocol_handler_(NULL)
-    , connection_handler_(NULL)
-    , app_manager_(NULL)
+    : transport_manager_(NULL),
+      protocol_handler_(NULL),
+      connection_handler_(NULL),
+      app_manager_(NULL)
 #ifdef ENABLE_SECURITY
-    , crypto_manager_(NULL)
-    , security_manager_(NULL)
+      ,
+      crypto_manager_(NULL),
+      security_manager_(NULL)
 #endif  // ENABLE_SECURITY
-    , hmi_handler_(NULL)
-    , hmi_message_adapter_(NULL)
-    , media_manager_(NULL)
-    , last_state_(NULL)
+      ,
+      hmi_handler_(NULL),
+      hmi_message_adapter_(NULL),
+      media_manager_(NULL),
+      last_state_(NULL)
 #ifdef TELEMETRY_MONITOR
-    , telemetry_monitor_(NULL)
+      ,
+      telemetry_monitor_(NULL)
 #endif  // TELEMETRY_MONITOR
 #ifdef MESSAGEBROKER_HMIADAPTER
-    , mb_adapter_(NULL)
-    , mb_adapter_thread_(NULL)
+      ,
+      mb_adapter_(NULL),
+      mb_adapter_thread_(NULL)
 #endif  // MESSAGEBROKER_HMIADAPTER
-    , profile_(profile) {
+      ,
+      profile_(profile) {
 }
 
 bool LifeCycleImpl::StartComponents() {
@@ -92,11 +97,9 @@ bool LifeCycleImpl::StartComponents() {
       profile_, *transport_manager_);
 
   DCHECK(!protocol_handler_);
-  protocol_handler_ =
-      new protocol_handler::ProtocolHandlerImpl(profile_,
-                                                *connection_handler_,
-                                                *connection_handler_,
-                                                *transport_manager_);
+  protocol_handler_ = new protocol_handler::ProtocolHandlerImpl(
+      profile_, *connection_handler_, *connection_handler_,
+      *transport_manager_);
   DCHECK(protocol_handler_);
 
   DCHECK(!app_manager_);

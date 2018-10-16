@@ -52,17 +52,15 @@ SocketStreamerAdapter::SocketStreamerAdapter(const std::string& ip,
 SocketStreamerAdapter::~SocketStreamerAdapter() {}
 
 SocketStreamerAdapter::SocketStreamer::SocketStreamer(
-    SocketStreamerAdapter* const adapter,
-    const std::string& ip,
-    const uint16_t port,
-    const std::string& header)
-    : Streamer(adapter)
-    , ip_(ip)
-    , port_(port)
-    , header_(header)
-    , socket_fd_(0)
-    , send_socket_fd_(0)
-    , is_first_frame_(true) {}
+    SocketStreamerAdapter* const adapter, const std::string& ip,
+    const uint16_t port, const std::string& header)
+    : Streamer(adapter),
+      ip_(ip),
+      port_(port),
+      header_(header),
+      socket_fd_(0),
+      send_socket_fd_(0),
+      is_first_frame_(true) {}
 
 SocketStreamerAdapter::SocketStreamer::~SocketStreamer() {}
 
@@ -75,8 +73,8 @@ bool SocketStreamerAdapter::SocketStreamer::Connect() {
   }
 
   int32_t optval = 1;
-  if (-1 == setsockopt(
-                socket_fd_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval)) {
+  if (-1 == setsockopt(socket_fd_, SOL_SOCKET, SO_REUSEADDR, &optval,
+                       sizeof optval)) {
     LOG4CXX_ERROR(logger, "Unable to set sockopt");
     return false;
   }
@@ -85,8 +83,7 @@ bool SocketStreamerAdapter::SocketStreamer::Connect() {
   serv_addr_.sin_addr.s_addr = inet_addr(ip_.c_str());
   serv_addr_.sin_family = AF_INET;
   serv_addr_.sin_port = htons(port_);
-  if (-1 == bind(socket_fd_,
-                 reinterpret_cast<struct sockaddr*>(&serv_addr_),
+  if (-1 == bind(socket_fd_, reinterpret_cast<struct sockaddr*>(&serv_addr_),
                  sizeof(serv_addr_))) {
     LOG4CXX_ERROR(logger, "Unable to bind");
     return false;
@@ -108,9 +105,7 @@ bool SocketStreamerAdapter::SocketStreamer::Connect() {
   return true;
 }
 
-void SocketStreamerAdapter::SocketStreamer::Close() {
-  Disconnect();
-}
+void SocketStreamerAdapter::SocketStreamer::Close() { Disconnect(); }
 
 void SocketStreamerAdapter::SocketStreamer::Disconnect() {
   LOG4CXX_AUTO_TRACE(logger);
@@ -146,8 +141,8 @@ bool SocketStreamerAdapter::SocketStreamer::Send(
   }
 
   if (static_cast<uint32_t>(ret) != msg->data_size()) {
-    LOG4CXX_WARN(logger,
-                 "Couldn't send all the data to socket " << send_socket_fd_);
+    LOG4CXX_WARN(logger, "Couldn't send all the data to socket "
+                             << send_socket_fd_);
   }
 
   LOG4CXX_INFO(logger, "Streamer::sent " << msg->data_size());

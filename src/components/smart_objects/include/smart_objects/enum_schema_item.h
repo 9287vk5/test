@@ -52,8 +52,7 @@ struct ElementSignature {
   boost::optional<utils::SemanticVersion> mUntil;
   bool mRemoved;
 
-  ElementSignature(std::string since = "",
-                   std::string until = "",
+  ElementSignature(std::string since = "", std::string until = "",
                    bool removed = false) {
     utils::SemanticVersion since_struct(since);
     utils::SemanticVersion until_struct(until);
@@ -132,8 +131,7 @@ class TEnumSchemaItem : public CDefaultSchemaItem<EnumType> {
    * @param RemoveFakeParameters contains true if need to remove fake parameters
    * from smart object otherwise contains false.
    **/
-  void applySchema(SmartObject& Object,
-                   const bool RemoveFakeParameters,
+  void applySchema(SmartObject& Object, const bool RemoveFakeParameters,
                    const utils::SemanticVersion& MessageVersion =
                        utils::SemanticVersion()) OVERRIDE;
   /**
@@ -274,8 +272,8 @@ TEnumSchemaItem<EnumType>::createWithSignatures(
     const std::map<EnumType, std::vector<ElementSignature> >& ElementSignatures,
     const TSchemaItemParameter<EnumType>& DefaultValue) {
   return std::shared_ptr<TEnumSchemaItem<EnumType> >(
-      new TEnumSchemaItem<EnumType>(
-          AllowedElements, DefaultValue, ElementSignatures));
+      new TEnumSchemaItem<EnumType>(AllowedElements, DefaultValue,
+                                    ElementSignatures));
 }
 
 template <typename EnumType>
@@ -305,8 +303,7 @@ const ElementSignature TEnumSchemaItem<EnumType>::getSignature(
 
 template <typename EnumType>
 errors::eType TEnumSchemaItem<EnumType>::validate(
-    const SmartObject& Object,
-    rpc::ValidationReport* report__,
+    const SmartObject& Object, rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   if (SmartType_Integer != Object.getType()) {
     std::string validation_info;
@@ -365,8 +362,7 @@ errors::eType TEnumSchemaItem<EnumType>::validate(
 
 template <typename EnumType>
 void TEnumSchemaItem<EnumType>::applySchema(
-    SmartObject& Object,
-    const bool RemoveFakeParameters,
+    SmartObject& Object, const bool RemoveFakeParameters,
     const utils::SemanticVersion& MessageVersion) {
   if (SmartType_String == Object.getType()) {
     EnumType enum_val = static_cast<EnumType>(-1);
@@ -400,17 +396,17 @@ template <typename EnumType>
 TEnumSchemaItem<EnumType>::TEnumSchemaItem(
     const std::set<EnumType>& AllowedElements,
     const TSchemaItemParameter<EnumType>& DefaultValue)
-    : CDefaultSchemaItem<EnumType>(DefaultValue)
-    , mAllowedElements(AllowedElements) {}
+    : CDefaultSchemaItem<EnumType>(DefaultValue),
+      mAllowedElements(AllowedElements) {}
 
 template <typename EnumType>
 TEnumSchemaItem<EnumType>::TEnumSchemaItem(
     const std::set<EnumType>& AllowedElements,
     const TSchemaItemParameter<EnumType>& DefaultValue,
     const std::map<EnumType, std::vector<ElementSignature> >& ElementSignatures)
-    : CDefaultSchemaItem<EnumType>(DefaultValue)
-    , mAllowedElements(AllowedElements)
-    , mElementSignatures(ElementSignatures) {}
+    : CDefaultSchemaItem<EnumType>(DefaultValue),
+      mAllowedElements(AllowedElements),
+      mElementSignatures(ElementSignatures) {}
 
 }  // namespace ns_smart_objects
 }  // namespace ns_smart_device_link

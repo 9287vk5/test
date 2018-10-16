@@ -54,8 +54,7 @@ class SQLPTRepresentation : public virtual PTRepresentation {
   SQLPTRepresentation();
   ~SQLPTRepresentation();
   virtual void CheckPermissions(const PTString& app_id,
-                                const PTString& hmi_level,
-                                const PTString& rpc,
+                                const PTString& hmi_level, const PTString& rpc,
                                 CheckPermissionResult& result);
 
   virtual bool IsPTPreloaded();
@@ -92,9 +91,7 @@ class SQLPTRepresentation : public virtual PTRepresentation {
   bool GetFunctionalGroupings(policy_table::FunctionalGroupings& groups);
 
 #ifdef BUILD_TESTS
-  uint32_t open_counter() {
-    return open_counter_;
-  }
+  uint32_t open_counter() { return open_counter_; }
 #endif  // BUILD_TESTS
  protected:
   enum TypeAccess { kAllowed, kManual };
@@ -137,8 +134,7 @@ class SQLPTRepresentation : public virtual PTRepresentation {
                       policy_table::Strings* nicknames) const;
 
   virtual bool SaveApplicationCustomData(const std::string& app_id,
-                                         bool is_revoked,
-                                         bool is_default,
+                                         bool is_revoked, bool is_default,
                                          bool is_predata);
 
   virtual bool SaveModuleMeta(const policy_table::ModuleMeta& meta);

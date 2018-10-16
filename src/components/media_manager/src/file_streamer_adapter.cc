@@ -45,13 +45,12 @@ FileStreamerAdapter::FileStreamerAdapter(const std::string& file_name,
 FileStreamerAdapter::~FileStreamerAdapter() {}
 
 FileStreamerAdapter::FileStreamer::FileStreamer(
-    FileStreamerAdapter* const adapter,
-    const std::string& file_name,
+    FileStreamerAdapter* const adapter, const std::string& file_name,
     const std::string& app_storage_folder)
-    : Streamer(adapter)
-    , file_name_(file_name)
-    , app_storage_folder_(app_storage_folder)
-    , file_stream_(NULL) {}
+    : Streamer(adapter),
+      file_name_(file_name),
+      app_storage_folder_(app_storage_folder),
+      file_stream_(NULL) {}
 
 FileStreamerAdapter::FileStreamer::~FileStreamer() {}
 

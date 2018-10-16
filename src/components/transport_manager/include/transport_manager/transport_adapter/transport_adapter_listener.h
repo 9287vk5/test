@@ -194,8 +194,7 @@ class TransportAdapterListener {
    *Disconnect from device failure.
    */
   virtual void OnDisconnectDeviceFailed(
-      const TransportAdapter* transport_adapter,
-      const DeviceUID& device_handle,
+      const TransportAdapter* transport_adapter, const DeviceUID& device_handle,
       const DisconnectDeviceError& error) = 0;
 
   /**
@@ -209,8 +208,7 @@ class TransportAdapterListener {
    * @param data_container Smart pointer to the raw message.
    */
   virtual void OnDataSendDone(
-      const TransportAdapter* transport_adapter,
-      const DeviceUID& device_handle,
+      const TransportAdapter* transport_adapter, const DeviceUID& device_handle,
       const ApplicationHandle& app_handle,
       const ::protocol_handler::RawMessagePtr data_container) = 0;
 
@@ -226,8 +224,7 @@ class TransportAdapterListener {
    *receive failure.
    */
   virtual void OnDataSendFailed(
-      const TransportAdapter* transport_adapter,
-      const DeviceUID& device_handle,
+      const TransportAdapter* transport_adapter, const DeviceUID& device_handle,
       const ApplicationHandle& app_handle,
       const ::protocol_handler::RawMessagePtr data_container,
       const DataSendError& error) = 0;
@@ -243,8 +240,7 @@ class TransportAdapterListener {
    * @param data_container Smart pointer to the raw message.
    */
   virtual void OnDataReceiveDone(
-      const TransportAdapter* transport_adapter,
-      const DeviceUID& device_handle,
+      const TransportAdapter* transport_adapter, const DeviceUID& device_handle,
       const ApplicationHandle& app_handle,
       const ::protocol_handler::RawMessagePtr data_container) = 0;
 

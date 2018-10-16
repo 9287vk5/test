@@ -45,11 +45,8 @@ SubscribeWayPointsRequest::SubscribeWayPointsRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 SubscribeWayPointsRequest::~SubscribeWayPointsRequest() {}
 
@@ -59,9 +56,8 @@ void SubscribeWayPointsRequest::Run() {
   ApplicationSharedPtr app = application_manager_.application(connection_key());
 
   if (!app) {
-    LOG4CXX_ERROR(logger_,
-                  "An application with connection key "
-                      << connection_key() << " is not registered.");
+    LOG4CXX_ERROR(logger_, "An application with connection key "
+                               << connection_key() << " is not registered.");
     SendResponse(false, mobile_apis::Result::APPLICATION_NOT_REGISTERED);
     return;
   }
@@ -78,8 +74,8 @@ void SubscribeWayPointsRequest::Run() {
   }
 
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_Navigation);
-  SendHMIRequest(
-      hmi_apis::FunctionID::Navigation_SubscribeWayPoints, NULL, true);
+  SendHMIRequest(hmi_apis::FunctionID::Navigation_SubscribeWayPoints, NULL,
+                 true);
 }
 
 void SubscribeWayPointsRequest::on_event(const event_engine::Event& event) {
@@ -100,8 +96,7 @@ void SubscribeWayPointsRequest::on_event(const event_engine::Event& event) {
       if (result) {
         application_manager_.SubscribeAppForWayPoints(app);
       }
-      SendResponse(result,
-                   MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

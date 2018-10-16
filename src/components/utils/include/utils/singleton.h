@@ -55,9 +55,7 @@ class Deleter {
       delete pointer_;
     }
   }
-  void grab(T* pointer) {
-    pointer_ = pointer;
-  }
+  void grab(T* pointer) { pointer_ = pointer; }
 
  private:
   T* pointer_;

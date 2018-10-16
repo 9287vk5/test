@@ -102,8 +102,7 @@ TEST(test_item_with_default_value, test_StringSchemaItemTest) {
   SmartObject obj;
 
   ISchemaItemPtr item = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(),
-      TSchemaItemParameter<size_t>(),
+      TSchemaItemParameter<size_t>(), TSchemaItemParameter<size_t>(),
       TSchemaItemParameter<std::string>(
           "Default string"));  // Default value, no max length
 
@@ -148,8 +147,7 @@ TEST(test_item_with_max_length, test_StringSchemaItemTest) {
   SmartObject obj;
 
   ISchemaItemPtr item = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0),
-      TSchemaItemParameter<size_t>(25),
+      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(25),
       TSchemaItemParameter<std::string>("Default string"));
 
   // Object - valid string
@@ -182,8 +180,7 @@ TEST(test_map_validate, test_StringSchemaItemTest) {
   SmartObject obj;
 
   ISchemaItemPtr item = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0),
-      TSchemaItemParameter<size_t>(25),
+      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(25),
       TSchemaItemParameter<std::string>("Default string"));
 
   obj["str"] = "New valid string";
@@ -244,8 +241,7 @@ TEST(test_array_validate, test_StringSchemaItemTest) {
   SmartObject obj;
 
   ISchemaItemPtr item = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0),
-      TSchemaItemParameter<size_t>(25),
+      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(25),
       TSchemaItemParameter<std::string>("Default string"));
 
   obj[0] = "New valid string";

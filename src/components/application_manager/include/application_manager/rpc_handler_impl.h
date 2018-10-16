@@ -68,18 +68,14 @@ struct MessageFromMobile : public std::shared_ptr<Message> {
   explicit MessageFromMobile(const std::shared_ptr<Message>& message)
       : std::shared_ptr<Message>(message) {}
   // PrioritizedQueue requires this method to decide which priority to assign
-  size_t PriorityOrder() const {
-    return (*this)->Priority().OrderingValue();
-  }
+  size_t PriorityOrder() const { return (*this)->Priority().OrderingValue(); }
 };
 struct MessageFromHmi : public std::shared_ptr<Message> {
   MessageFromHmi() {}
   explicit MessageFromHmi(const std::shared_ptr<Message>& message)
       : std::shared_ptr<Message>(message) {}
   // PrioritizedQueue requires this method to decide which priority to assign
-  size_t PriorityOrder() const {
-    return (*this)->Priority().OrderingValue();
-  }
+  size_t PriorityOrder() const { return (*this)->Priority().OrderingValue(); }
 };
 
 // Short type names for prioritized message queues

@@ -61,24 +61,21 @@ class MockTransportAdapterListener : public TransportAdapterListener {
                void(const TransportAdapter* adapter));
   MOCK_METHOD1(OnDeviceListUpdated,
                void(const TransportAdapter* transport_adapter));
-  MOCK_METHOD3(OnConnectDone,
-               void(const TransportAdapter* transport_adapter,
-                    const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle));
-  MOCK_METHOD4(OnConnectFailed,
-               void(const TransportAdapter* transport_adapter,
-                    const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle,
-                    const ConnectError& error));
+  MOCK_METHOD3(OnConnectDone, void(const TransportAdapter* transport_adapter,
+                                   const DeviceUID& device_handle,
+                                   const ApplicationHandle& app_handle));
+  MOCK_METHOD4(OnConnectFailed, void(const TransportAdapter* transport_adapter,
+                                     const DeviceUID& device_handle,
+                                     const ApplicationHandle& app_handle,
+                                     const ConnectError& error));
   MOCK_METHOD4(OnUnexpectedDisconnect,
                void(const TransportAdapter* transport_adapter,
                     const DeviceUID& device_handle,
                     const ApplicationHandle& app_handle,
                     const CommunicationError& error));
-  MOCK_METHOD3(OnDisconnectDone,
-               void(const TransportAdapter* transport_adapter,
-                    const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle));
+  MOCK_METHOD3(OnDisconnectDone, void(const TransportAdapter* transport_adapter,
+                                      const DeviceUID& device_handle,
+                                      const ApplicationHandle& app_handle));
   MOCK_METHOD4(OnDisconnectFailed,
                void(const TransportAdapter* transport_adapter,
                     const DeviceUID& device_handle,
@@ -91,17 +88,15 @@ class MockTransportAdapterListener : public TransportAdapterListener {
                void(const TransportAdapter* transport_adapter,
                     const DeviceUID& device_handle,
                     const DisconnectDeviceError& error));
-  MOCK_METHOD4(OnDataSendDone,
-               void(const TransportAdapter* transport_adapter,
-                    const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle,
-                    const RawMessagePtr data_container));
-  MOCK_METHOD5(OnDataSendFailed,
-               void(const TransportAdapter* transport_adapter,
-                    const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle,
-                    const RawMessagePtr data_container,
-                    const DataSendError& error));
+  MOCK_METHOD4(OnDataSendDone, void(const TransportAdapter* transport_adapter,
+                                    const DeviceUID& device_handle,
+                                    const ApplicationHandle& app_handle,
+                                    const RawMessagePtr data_container));
+  MOCK_METHOD5(OnDataSendFailed, void(const TransportAdapter* transport_adapter,
+                                      const DeviceUID& device_handle,
+                                      const ApplicationHandle& app_handle,
+                                      const RawMessagePtr data_container,
+                                      const DataSendError& error));
   MOCK_METHOD4(OnDataReceiveDone,
                void(const TransportAdapter* transport_adapter,
                     const DeviceUID& device_handle,
@@ -117,8 +112,7 @@ class MockTransportAdapterListener : public TransportAdapterListener {
                     const DeviceUID& device_handle,
                     const ApplicationHandle& app_handle));
   MOCK_METHOD3(OnConnectRequested,
-               void(const TransportAdapter*,
-                    const DeviceUID&,
+               void(const TransportAdapter*, const DeviceUID&,
                     const ApplicationHandle&));
   MOCK_METHOD1(OnTransportSwitchRequested,
                void(const TransportAdapter* transport_adapter));

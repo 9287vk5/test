@@ -43,10 +43,7 @@ ResponseFromHMI::ResponseFromHMI(const MessageSharedPtr& message,
                                  rpc_service::RPCService& rpc_service,
                                  HMICapabilities& hmi_capabilities,
                                  policy::PolicyHandlerInterface& policy_handle)
-    : CommandImpl(message,
-                  application_manager,
-                  rpc_service,
-                  hmi_capabilities,
+    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
                   policy_handle) {
   // If it is error response, shift info
   if ((*message)[strings::params].keyExists(hmi_response::message)) {
@@ -60,13 +57,9 @@ ResponseFromHMI::ResponseFromHMI(const MessageSharedPtr& message,
 
 ResponseFromHMI::~ResponseFromHMI() {}
 
-bool ResponseFromHMI::Init() {
-  return true;
-}
+bool ResponseFromHMI::Init() { return true; }
 
-bool ResponseFromHMI::CleanUp() {
-  return true;
-}
+bool ResponseFromHMI::CleanUp() { return true; }
 
 void ResponseFromHMI::Run() {}
 

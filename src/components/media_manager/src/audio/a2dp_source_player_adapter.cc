@@ -85,9 +85,8 @@ A2DPSourcePlayerAdapter::~A2DPSourcePlayerAdapter() {
 }
 
 void A2DPSourcePlayerAdapter::StartActivity(int32_t application_key) {
-  LOG4CXX_INFO(logger_,
-               "Starting a2dp playing music for " << application_key
-                                                  << " application.");
+  LOG4CXX_INFO(logger_, "Starting a2dp playing music for " << application_key
+                                                           << " application.");
   if (application_key != current_application_) {
     current_application_ = application_key;
 
@@ -110,9 +109,8 @@ void A2DPSourcePlayerAdapter::StartActivity(int32_t application_key) {
 }
 
 void A2DPSourcePlayerAdapter::StopActivity(int32_t application_key) {
-  LOG4CXX_INFO(logger_,
-               "Stopping 2dp playing for " << application_key
-                                           << " application.");
+  LOG4CXX_INFO(logger_, "Stopping 2dp playing for " << application_key
+                                                    << " application.");
   if (application_key != current_application_) {
     return;
   }
@@ -174,29 +172,16 @@ void A2DPSourcePlayerAdapter::A2DPSourcePlayerThread::threadMain() {
   LOG4CXX_DEBUG(logger_, "Creating streams");
 
   /* Create a new playback stream */
-  if (!(s_out = pa_simple_new(NULL,
-                              "AudioManager",
-                              PA_STREAM_PLAYBACK,
-                              NULL,
-                              "playback",
-                              &sSampleFormat_,
-                              NULL,
-                              NULL,
-                              &error))) {
+  if (!(s_out =
+            pa_simple_new(NULL, "AudioManager", PA_STREAM_PLAYBACK, NULL,
+                          "playback", &sSampleFormat_, NULL, NULL, &error))) {
     LOG4CXX_ERROR(logger_, "pa_simple_new() failed: " << pa_strerror(error));
     freeStreams();
     return;
   }
 
-  if (!(s_in = pa_simple_new(NULL,
-                             "AudioManager",
-                             PA_STREAM_RECORD,
-                             a2dpSource,
-                             "record",
-                             &sSampleFormat_,
-                             NULL,
-                             NULL,
-                             &error))) {
+  if (!(s_in = pa_simple_new(NULL, "AudioManager", PA_STREAM_RECORD, a2dpSource,
+                             "record", &sSampleFormat_, NULL, NULL, &error))) {
     LOG4CXX_ERROR(logger_, "pa_simple_new() failed: " << pa_strerror(error));
     freeStreams();
     return;

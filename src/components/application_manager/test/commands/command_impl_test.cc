@@ -90,11 +90,8 @@ class CommandImplTest : public CommandsTest<CommandsTestMocks::kIsNice> {
                          app_mngr::rpc_service::RPCService& rpc_service,
                          app_mngr::HMICapabilities& hmi_capabilities,
                          policy::PolicyHandlerInterface& policy_handler)
-        : CommandImpl(message,
-                      application_manager,
-                      rpc_service,
-                      hmi_capabilities,
-                      policy_handler) {}
+        : CommandImpl(message, application_manager, rpc_service,
+                      hmi_capabilities, policy_handler) {}
   };
 
   // Create `SmartObject` which handle array of `SmartObjects`
@@ -196,8 +193,8 @@ TEST_F(CommandImplTest, ReplaceMobileWithHMIAppId_Array_SUCCESS) {
   command->ReplaceMobileWithHMIAppId(*msg);
 
   EXPECT_TRUE(msg->asArray());
-  std::for_each(
-      msg->asArray()->begin(), msg->asArray()->end(), ExpectEqualAppId);
+  std::for_each(msg->asArray()->begin(), msg->asArray()->end(),
+                ExpectEqualAppId);
 }
 
 TEST_F(CommandImplTest, ReplaceMobileWithHMIAppId_Map_SUCCESS) {
@@ -214,8 +211,7 @@ TEST_F(CommandImplTest, ReplaceMobileWithHMIAppId_Map_SUCCESS) {
   command->ReplaceMobileWithHMIAppId(*msg);
 
   std::set<std::string> keys(msg->enumerate());
-  std::for_each(keys.begin(),
-                keys.end(),
+  std::for_each(keys.begin(), keys.end(),
                 std::bind2nd(std::ptr_fun(&ExpectEqualKeyAppId), msg));
 }
 
@@ -259,8 +255,8 @@ TEST_F(CommandImplTest, ReplaceHMIWithMobileAppId_Array_SUCCESS) {
   command->ReplaceHMIWithMobileAppId(*msg);
 
   EXPECT_TRUE(msg->asArray());
-  std::for_each(
-      msg->asArray()->begin(), msg->asArray()->end(), ExpectEqualAppId);
+  std::for_each(msg->asArray()->begin(), msg->asArray()->end(),
+                ExpectEqualAppId);
 }
 
 TEST_F(CommandImplTest, ReplaceHMIWithMobileAppId_Map_SUCCESS) {
@@ -277,8 +273,7 @@ TEST_F(CommandImplTest, ReplaceHMIWithMobileAppId_Map_SUCCESS) {
   command->ReplaceHMIWithMobileAppId(*msg);
 
   std::set<std::string> keys = msg->enumerate();
-  std::for_each(keys.begin(),
-                keys.end(),
+  std::for_each(keys.begin(), keys.end(),
                 std::bind2nd(std::ptr_fun(&ExpectEqualKeyAppId), msg));
 }
 

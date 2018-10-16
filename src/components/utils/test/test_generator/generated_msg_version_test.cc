@@ -43,8 +43,7 @@ namespace test {
 namespace components {
 namespace utils_test {
 
-void get_version_from_file(int& first_version,
-                           int& second_version,
+void get_version_from_file(int& first_version, int& second_version,
                            int& third_version) {
   // Supposed that major and minor version include one number
   const std::string& absolute_current_path =

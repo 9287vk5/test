@@ -50,16 +50,9 @@ const EnumConversionHelper<TestType::eType>::CStringToEnumMap
 
 template <>
 const char* const EnumConversionHelper<TestType::eType>::cstring_values_[] = {
-    "APPLICATION_NOT_REGISTERED",
-    "SUCCESS",
-    "TOO_MANY_PENDING_REQUESTS",
-    "REJECTED",
-    "INVALID_DATA",
-    "OUT_OF_MEMORY",
-    "ABORTED",
-    "USER_DISALLOWED",
-    "GENERIC_ERROR",
-    "DISALLOWED"};
+    "APPLICATION_NOT_REGISTERED", "SUCCESS", "TOO_MANY_PENDING_REQUESTS",
+    "REJECTED", "INVALID_DATA", "OUT_OF_MEMORY", "ABORTED", "USER_DISALLOWED",
+    "GENERIC_ERROR", "DISALLOWED"};
 
 template <>
 const TestType::eType EnumConversionHelper<TestType::eType>::enum_values_[] = {
@@ -127,8 +120,7 @@ const MessageTypeTest::eType
         test::components::formatters::MessageTypeTest::notification};
 
 CSmartFactoryTest::CSmartFactoryTest()
-    : CSmartFactory<FunctionIdTest::eType,
-                    MessageTypeTest::eType,
+    : CSmartFactory<FunctionIdTest::eType, MessageTypeTest::eType,
                     StructIdentifiersTest::eType>() {
   TStructsSchemaItems struct_schema_items;
   InitStructSchemes(struct_schema_items);
@@ -142,8 +134,8 @@ CSmartFactoryTest::CSmartFactoryTest()
   message_type_items.insert(MessageTypeTest::response);
   message_type_items.insert(MessageTypeTest::notification);
   message_type_items.insert(MessageTypeTest::error_response);
-  InitFunctionSchemes(
-      struct_schema_items, function_id_items, message_type_items);
+  InitFunctionSchemes(struct_schema_items, function_id_items,
+                      message_type_items);
 }
 
 void CSmartFactoryTest::InitStructSchemes(
@@ -205,8 +197,8 @@ void CSmartFactoryTest::InitFunctionSchemes(
   functions_schemes_.insert(std::make_pair(
       SmartSchemaKey<FunctionIdTest::eType, MessageTypeTest::eType>(
           FunctionIdTest::Function1, MessageTypeTest::response),
-      InitFunction_Function1_response(
-          struct_schema_items, function_id_items, message_type_items)));
+      InitFunction_Function1_response(struct_schema_items, function_id_items,
+                                      message_type_items)));
 
   functions_schemes_.insert(std::make_pair(
       SmartSchemaKey<FunctionIdTest::eType, MessageTypeTest::eType>(
@@ -219,8 +211,8 @@ void CSmartFactoryTest::InitFunctionSchemes(
   functions_schemes_.insert(std::make_pair(
       SmartSchemaKey<FunctionIdTest::eType, MessageTypeTest::eType>(
           FunctionIdTest::Function2, MessageTypeTest::response),
-      InitFunction_Function2_response(
-          struct_schema_items, function_id_items, message_type_items)));
+      InitFunction_Function2_response(struct_schema_items, function_id_items,
+                                      message_type_items)));
 
   functions_schemes_.insert(std::make_pair(
       SmartSchemaKey<FunctionIdTest::eType, MessageTypeTest::eType>(
@@ -233,8 +225,8 @@ void CSmartFactoryTest::InitFunctionSchemes(
   functions_schemes_.insert(std::make_pair(
       SmartSchemaKey<FunctionIdTest::eType, MessageTypeTest::eType>(
           FunctionIdTest::Function3, MessageTypeTest::response),
-      InitFunction_Function3_response(
-          struct_schema_items, function_id_items, message_type_items)));
+      InitFunction_Function3_response(struct_schema_items, function_id_items,
+                                      message_type_items)));
 }
 
 CSmartSchema CSmartFactoryTest::InitFunction_Function1_request(
@@ -436,10 +428,9 @@ std::shared_ptr<ISchemaItem> CSmartFactoryTest::InitStructSchemaItem_Common_1(
   // Struct member text.
   //
   // Text to display
-  std::shared_ptr<ISchemaItem> text_SchemaItem =
-      CStringSchemaItem::create(TSchemaItemParameter<size_t>(1),
-                                TSchemaItemParameter<size_t>(500),
-                                TSchemaItemParameter<std::string>());
+  std::shared_ptr<ISchemaItem> text_SchemaItem = CStringSchemaItem::create(
+      TSchemaItemParameter<size_t>(1), TSchemaItemParameter<size_t>(500),
+      TSchemaItemParameter<std::string>());
 
   // Struct member image.
   //
@@ -477,10 +468,9 @@ CSmartFactoryTest::InitStructSchemaItem_Common_2() {
   // Struct member text.
   //
   // Text to display
-  std::shared_ptr<ISchemaItem> text_SchemaItem =
-      CStringSchemaItem::create(TSchemaItemParameter<size_t>(1),
-                                TSchemaItemParameter<size_t>(500),
-                                TSchemaItemParameter<std::string>());
+  std::shared_ptr<ISchemaItem> text_SchemaItem = CStringSchemaItem::create(
+      TSchemaItemParameter<size_t>(1), TSchemaItemParameter<size_t>(500),
+      TSchemaItemParameter<std::string>());
   // Struct member position.
   //
   // Position to display item

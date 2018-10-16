@@ -105,19 +105,13 @@ class AppLaunchDataDBTest : public ::testing::Test {
   // Memory keep and clear AppLaunchDataDb
   static utils::dbms::SQLDatabase* test_db_;
 
-  static void TearDownTestCase() {
-    DeleteFile(kDatabaseName + ".sqlite");
-  }
+  static void TearDownTestCase() { DeleteFile(kDatabaseName + ".sqlite"); }
 
-  static utils::dbms::SQLDatabase* test_db() {
-    return test_db_;
-  }
+  static utils::dbms::SQLDatabase* test_db() { return test_db_; }
 
   static std::unique_ptr<AppLaunchDataDB> res_db_;
 
-  AppLaunchDataDB* res_db() {
-    return res_db_.get();
-  }
+  AppLaunchDataDB* res_db() { return res_db_.get(); }
 
   const std::string kGetSsession =
       " SELECT * FROM `app_launch` WHERE `deviceMac` = ? AND `appID` = ? AND "
@@ -234,14 +228,14 @@ TEST_F(AppLaunchDataDBTest, MaxCount) {
   const uint32_t max_ios_devs = res_db()->get_max_number_iOS_devs();
 
   for (uint32_t i = 0; i < max_ios_devs; i++) {
-    ApplicationData data(
-        AddCounter(kMobileAppId, i), AddCounter(kBundleId, i), kDeviceMac);
+    ApplicationData data(AddCounter(kMobileAppId, i), AddCounter(kBundleId, i),
+                         kDeviceMac);
     AddApplicationDataWithIncreaseTable(data);
   }
 
   utils::dbms::SQLQuery query(test_db());
-  ApplicationData changedRecord(
-      AddCounter(kMobileAppId, 0), AddCounter(kBundleId, 0), kDeviceMac);
+  ApplicationData changedRecord(AddCounter(kMobileAppId, 0),
+                                AddCounter(kBundleId, 0), kDeviceMac);
   EXPECT_TRUE(query.Prepare(kInsertTimestamp));
   query.Bind(AppLaunchDataDB::device_mac_index, changedRecord.device_mac_);
   query.Bind(AppLaunchDataDB::application_id_index,
@@ -253,8 +247,7 @@ TEST_F(AppLaunchDataDBTest, MaxCount) {
   EXPECT_EQ(max_ios_devs, size_max);
   EXPECT_TRUE(res_db()->AddApplicationData(
       ApplicationData(AddCounter(kMobileAppId, max_ios_devs),
-                      AddCounter(kBundleId, max_ios_devs),
-                      kDeviceMac)));
+                      AddCounter(kBundleId, max_ios_devs), kDeviceMac)));
   uint32_t size_after_max = res_db()->GetCurentNumberOfAppData();
   EXPECT_EQ(size_max, size_after_max);
   EXPECT_FALSE(res_db()->IsAppDataAlreadyExisted(changedRecord));
@@ -306,10 +299,10 @@ TEST_F(AppLaunchDataDBTest, SelectMultipleData) {
   EXPECT_EQ(half_of_max_number_iOS_devs, output_data1.size());
   EXPECT_EQ(half_of_max_number_iOS_devs, output_data2.size());
 
-  std::sort(
-      output_data1.begin(), output_data1.end(), ApplicationDataComporator);
-  std::sort(
-      output_data2.begin(), output_data2.end(), ApplicationDataComporator);
+  std::sort(output_data1.begin(), output_data1.end(),
+            ApplicationDataComporator);
+  std::sort(output_data2.begin(), output_data2.end(),
+            ApplicationDataComporator);
   std::sort(input_data1.begin(), input_data1.end(), ApplicationDataComporator);
   std::sort(input_data2.begin(), input_data2.end(), ApplicationDataComporator);
 
@@ -326,8 +319,8 @@ TEST_F(AppLaunchDataDBTest, SelectMultipleData) {
 // requeste manual Init call
 TEST_F(AppLaunchDataDBTest, DeleteAllTableDataTwice) {
   for (uint32_t i = 0; i < res_db()->get_max_number_iOS_devs(); i++) {
-    ApplicationData data(
-        AddCounter(kMobileAppId, i), AddCounter(kBundleId, i), kDeviceMac);
+    ApplicationData data(AddCounter(kMobileAppId, i), AddCounter(kBundleId, i),
+                         kDeviceMac);
     AddApplicationDataWithIncreaseTable(data);
   }
 

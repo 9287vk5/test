@@ -89,8 +89,7 @@ class CSmartSchema FINAL {
    * from smart object otherwise contains false.
    **/
   void applySchema(
-      SmartObject& Object,
-      const bool RemoveFakeParameters,
+      SmartObject& Object, const bool RemoveFakeParameters,
       const utils::SemanticVersion& MessageVersion = utils::SemanticVersion());
 
   /**

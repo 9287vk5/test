@@ -65,12 +65,9 @@ class CObjectSchemaItem : public ISchemaItem {
      *                    otherwise. Defaults to true.
      **/
 
-    SMember(const ISchemaItemPtr SchemaItem,
-            const bool IsMandatory = true,
-            const std::string& Since = "",
-            const std::string& Until = "",
-            const bool IsDeprecated = false,
-            const bool IsRemoved = false,
+    SMember(const ISchemaItemPtr SchemaItem, const bool IsMandatory = true,
+            const std::string& Since = "", const std::string& Until = "",
+            const bool IsDeprecated = false, const bool IsRemoved = false,
             const std::vector<CObjectSchemaItem::SMember>& history_vector = {});
     /**
      * @brief Checks the version a parameter was removed (until)
@@ -121,8 +118,7 @@ class CObjectSchemaItem : public ISchemaItem {
    * @param RemoveFakeParameters contains true if need to remove fake parameters
    * from smart object otherwise contains false.
    **/
-  void applySchema(SmartObject& Object,
-                   const bool RemoveFakeParameters,
+  void applySchema(SmartObject& Object, const bool RemoveFakeParameters,
                    const utils::SemanticVersion& MessageVersion =
                        utils::SemanticVersion()) OVERRIDE;
   /**

@@ -93,16 +93,12 @@ class ThreadedSocketConnection : public Connection {
    *
    * @return Information which states that connection was marked as terminated.
    */
-  bool IsConnectionTerminated() const {
-    return terminate_flag_;
-  }
+  bool IsConnectionTerminated() const { return terminate_flag_; }
 
   /**
    * @brief Set variable that hold socket No.
    */
-  void set_socket(int socket) {
-    socket_ = socket;
-  }
+  void set_socket(int socket) { socket_ = socket; }
 
  protected:
   /**
@@ -135,30 +131,22 @@ class ThreadedSocketConnection : public Connection {
   /**
    * @brief Return pointer to the device adapter controller.
    */
-  TransportAdapterController* controller() {
-    return controller_;
-  }
+  TransportAdapterController* controller() { return controller_; }
 
   /**
    * @brief Return device unique identifier.
    */
-  DeviceUID device_handle() const {
-    return device_uid_;
-  }
+  DeviceUID device_handle() const { return device_uid_; }
 
   /**
    * @brief Return handle of application.
    */
-  ApplicationHandle application_handle() const {
-    return app_handle_;
-  }
+  ApplicationHandle application_handle() const { return app_handle_; }
 
   /**
    * @brief Get variable that hold socket No.
    */
-  int get_socket() const {
-    return socket_;
-  }
+  int get_socket() const { return socket_; }
 
   /**
    * @brief Checks current socket value, sends shutdown and close commands for

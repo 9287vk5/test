@@ -242,9 +242,7 @@ class ResumeCtrlImpl : public ResumeCtrl,
   /**
    * @brief Updates flag for saving application data
    */
-  void ApplicationsDataUpdated() OVERRIDE {
-    is_data_saved_ = false;
-  }
+  void ApplicationsDataUpdated() OVERRIDE { is_data_saved_ = false; }
 
   /**
    * @brief Resume HMI Level and audio streaming state if needed

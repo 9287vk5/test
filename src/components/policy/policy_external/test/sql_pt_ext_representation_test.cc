@@ -96,8 +96,7 @@ class SQLPTExtRepresentationTest : public ::testing::Test {
   void FillGroupPermission(
       vector<FunctionalGroupPermission>& groups_permissions,
       FunctionalGroupPermission group,
-      const GroupsAliasNameCollection& groups_names,
-      GroupConsent state) {
+      const GroupsAliasNameCollection& groups_names, GroupConsent state) {
     GroupsAliasNameCollection::const_iterator groups_names_it =
         groups_names.begin();
     while (groups_names_it != groups_names.end()) {
@@ -111,9 +110,7 @@ class SQLPTExtRepresentationTest : public ::testing::Test {
   }
 
   void FillPermissionStruct(
-      const string& dev_id,
-      const string& app_id,
-      const string& consent_source,
+      const string& dev_id, const string& app_id, const string& consent_source,
       const GroupsAliasNameCollection& allowed_groups_names,
       const GroupsAliasNameCollection& disallowed_groups_names) {
     // Arrange
@@ -122,12 +119,9 @@ class SQLPTExtRepresentationTest : public ::testing::Test {
     perm_consent.policy_app_id = app_id;
     perm_consent.consent_source = consent_source;
     // Fill groups
-    FillGroupPermission(groups_permissions,
-                        group1_perm,
-                        allowed_groups_names,
+    FillGroupPermission(groups_permissions, group1_perm, allowed_groups_names,
                         GroupConsent::kGroupAllowed);
-    FillGroupPermission(groups_permissions,
-                        group2_perm,
+    FillGroupPermission(groups_permissions, group2_perm,
                         disallowed_groups_names,
                         GroupConsent::kGroupDisallowed);
     perm_consent.group_permissions = groups_permissions;
@@ -142,8 +136,7 @@ class SQLPTExtRepresentationTest : public ::testing::Test {
     EXPECT_EQ(groups_names.size(), group_Ids.size());
     while (group_Ids_it != group_Ids.end()) {
       while (group_alias_name_it != groups_names.end()) {
-        if (group_Ids.end() != std::find(group_Ids.begin(),
-                                         group_Ids.end(),
+        if (group_Ids.end() != std::find(group_Ids.begin(), group_Ids.end(),
                                          ::utils::Djb2HashFromString(
                                              group_alias_name_it->second))) {
           return true;
@@ -503,8 +496,8 @@ TEST_F(SQLPTExtRepresentationTest,
   // Arrange
   StringArray allowed_groups;
   StringArray disallowed_groups;
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   EXPECT_EQ(0u, allowed_groups.size());
   EXPECT_EQ(0u, disallowed_groups.size());
 
@@ -523,8 +516,8 @@ TEST_F(SQLPTExtRepresentationTest,
       "('XXX12345ZZZ', 'Navigation-1', 0,'GUI', '2015-01-01T00:00:52Z')";
   // Assert
   ASSERT_TRUE(query_wrapper_->Exec(query_insert_Navigation));
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   EXPECT_EQ(1u, allowed_groups.size());
   EXPECT_EQ(1u, disallowed_groups.size());
 }
@@ -534,28 +527,26 @@ TEST_F(SQLPTExtRepresentationTest,
   // Arrange
   StringArray allowed_groups;
   StringArray disallowed_groups;
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   EXPECT_EQ(0u, allowed_groups.size());
   EXPECT_EQ(0u, disallowed_groups.size());
   allowed_groups.push_back("DataConsent-2");
   disallowed_groups.push_back("Navigation-1");
-  EXPECT_TRUE(reps_->SetUserPermissionsForDevice(
-      "XXX12345ZZZ", allowed_groups, disallowed_groups));
+  EXPECT_TRUE(reps_->SetUserPermissionsForDevice("XXX12345ZZZ", allowed_groups,
+                                                 disallowed_groups));
 
   allowed_groups.clear();
   disallowed_groups.clear();
   // Act
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   // Checks
   EXPECT_EQ(1u, allowed_groups.size());
   EXPECT_EQ(1u, disallowed_groups.size());
-  EXPECT_TRUE(std::find(allowed_groups.begin(),
-                        allowed_groups.end(),
+  EXPECT_TRUE(std::find(allowed_groups.begin(), allowed_groups.end(),
                         "DataConsent-2") != allowed_groups.end());
-  EXPECT_TRUE(std::find(disallowed_groups.begin(),
-                        disallowed_groups.end(),
+  EXPECT_TRUE(std::find(disallowed_groups.begin(), disallowed_groups.end(),
                         "Navigation-1") != disallowed_groups.end());
 }
 
@@ -564,35 +555,33 @@ TEST_F(SQLPTExtRepresentationTest,
   // Arrange
   StringArray allowed_groups;
   StringArray disallowed_groups;
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   EXPECT_EQ(0u, allowed_groups.size());
   EXPECT_EQ(0u, disallowed_groups.size());
   allowed_groups.push_back("DataConsent-2");
   disallowed_groups.push_back("Navigation-1");
-  EXPECT_TRUE(reps_->SetUserPermissionsForDevice(
-      "XXX12345ZZZ", allowed_groups, disallowed_groups));
+  EXPECT_TRUE(reps_->SetUserPermissionsForDevice("XXX12345ZZZ", allowed_groups,
+                                                 disallowed_groups));
 
   allowed_groups.clear();
   disallowed_groups.clear();
   // Act
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   // Checks
   EXPECT_EQ(1u, allowed_groups.size());
   EXPECT_EQ(1u, disallowed_groups.size());
-  EXPECT_TRUE(std::find(allowed_groups.begin(),
-                        allowed_groups.end(),
+  EXPECT_TRUE(std::find(allowed_groups.begin(), allowed_groups.end(),
                         "DataConsent-2") != allowed_groups.end());
-  EXPECT_TRUE(std::find(disallowed_groups.begin(),
-                        disallowed_groups.end(),
+  EXPECT_TRUE(std::find(disallowed_groups.begin(), disallowed_groups.end(),
                         "Navigation-1") != disallowed_groups.end());
   allowed_groups.clear();
   disallowed_groups.clear();
   // Act
   reps_->ResetDeviceConsents();
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   // Checks
   EXPECT_EQ(0u, allowed_groups.size());
   EXPECT_EQ(0u, disallowed_groups.size());
@@ -637,8 +626,8 @@ TEST_F(SQLPTExtRepresentationTest,
 
   GroupsAliasNameCollection disallowed_groups;
   disallowed_groups.push_back(std::make_pair("DataConsent", "DataConsent-2"));
-  FillPermissionStruct(
-      "XXX12345ZZZ", "12345", "VR", allowed_groups, disallowed_groups);
+  FillPermissionStruct("XXX12345ZZZ", "12345", "VR", allowed_groups,
+                       disallowed_groups);
   EXPECT_TRUE(reps_->SetUserPermissionsForApp(perm_consent));
 
   FunctionalIdType group_types;
@@ -656,8 +645,8 @@ TEST_F(SQLPTExtRepresentationTest,
 
   GroupsAliasNameCollection disallowed_groups;
   disallowed_groups.push_back(std::make_pair("DataConsent", "DataConsent-2"));
-  FillPermissionStruct(
-      "XXX12345ZZZ", "12345", "VR", allowed_groups, disallowed_groups);
+  FillPermissionStruct("XXX12345ZZZ", "12345", "VR", allowed_groups,
+                       disallowed_groups);
   EXPECT_TRUE(reps_->SetUserPermissionsForApp(perm_consent));
 
   FunctionalIdType group_types;
@@ -683,10 +672,7 @@ TEST_F(SQLPTExtRepresentationTest,
   GroupsAliasNameCollection perm_disallowed_groups;
   perm_disallowed_groups.push_back(
       std::make_pair("DataConsent", "DataConsent-2"));
-  FillPermissionStruct("XXX12345ZZZ",
-                       "12345",
-                       "VR",
-                       perm_allowed_groups,
+  FillPermissionStruct("XXX12345ZZZ", "12345", "VR", perm_allowed_groups,
                        perm_disallowed_groups);
   // Set permissions for app
   EXPECT_TRUE(reps_->SetUserPermissionsForApp(perm_consent));
@@ -694,30 +680,30 @@ TEST_F(SQLPTExtRepresentationTest,
   FunctionalIdType group_types;
   ASSERT_TRUE(
       reps_->GetPermissionsForApp("XXX12345ZZZ", "12345", &group_types));
-  EXPECT_TRUE(CheckGroupTypesExist(
-      group_types, perm_allowed_groups, perm_disallowed_groups));
+  EXPECT_TRUE(CheckGroupTypesExist(group_types, perm_allowed_groups,
+                                   perm_disallowed_groups));
 
   StringArray allowed_groups;
   StringArray disallowed_groups;
   allowed_groups.push_back("DataConsent-2");
   disallowed_groups.push_back("Navigation-1");
   // Set permissions for device
-  EXPECT_TRUE(reps_->SetUserPermissionsForDevice(
-      "XXX12345ZZZ", allowed_groups, disallowed_groups));
+  EXPECT_TRUE(reps_->SetUserPermissionsForDevice("XXX12345ZZZ", allowed_groups,
+                                                 disallowed_groups));
 
   allowed_groups.clear();
   disallowed_groups.clear();
   // Act
   reps_->ResetUserConsent();
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   // Checks
   EXPECT_EQ(0u, allowed_groups.size());
   EXPECT_EQ(0u, disallowed_groups.size());
   EXPECT_TRUE(
       reps_->GetPermissionsForApp("XXX12345ZZZ", "12345", &group_types));
-  EXPECT_FALSE(CheckGroupTypesExist(
-      group_types, perm_allowed_groups, perm_disallowed_groups));
+  EXPECT_FALSE(CheckGroupTypesExist(group_types, perm_allowed_groups,
+                                    perm_disallowed_groups));
 }
 
 TEST_F(SQLPTExtRepresentationTest,
@@ -781,14 +767,8 @@ TEST_F(SQLPTExtRepresentationTest,
        SetDeviceData_SetDeviceData_ExpectValuesThatSetInParams) {
   // Arrange
   utils::dbms::SQLQuery query(reps_->db());
-  reps_->SetDeviceData("08-00-27-CE-76-FE",
-                       "hardware IPX",
-                       "v.8.0.1",
-                       "Android",
-                       "4.4.2",
-                       "Life",
-                       2,
-                       "Bluetooth");
+  reps_->SetDeviceData("08-00-27-CE-76-FE", "hardware IPX", "v.8.0.1",
+                       "Android", "4.4.2", "Life", 2, "Bluetooth");
   const std::string query_select_hardware =
       "SELECT `hardware` FROM `device` WHERE `id` = '08-00-27-CE-76-FE'";
   const std::string query_select_firmware_rev =
@@ -1278,8 +1258,8 @@ TEST_F(
 
   GroupsAliasNameCollection disallowed_groups;
 
-  FillPermissionStruct(
-      "XXX12345ZZZ", "1234", "VR", allowed_groups, disallowed_groups);
+  FillPermissionStruct("XXX12345ZZZ", "1234", "VR", allowed_groups,
+                       disallowed_groups);
   FunctionalIdType group_types;
   ASSERT_TRUE(reps_->GetPermissionsForApp("XXX12345ZZZ", "1234", &group_types));
   EXPECT_TRUE(
@@ -1296,25 +1276,19 @@ TEST_F(SQLPTExtRepresentationTest,
        CleanUnpaireDevices_SetDevicesThenCleanup_ExpectDevicesDeleted) {
   // Arrange
   utils::dbms::SQLQuery query(reps_->db());
-  reps_->SetDeviceData("XXX12345ZZZ",
-                       "hardware IPX",
-                       "v.8.0.1",
-                       "Android",
-                       "4.4.2",
-                       "Life",
-                       2,
-                       "Bluetooth");
+  reps_->SetDeviceData("XXX12345ZZZ", "hardware IPX", "v.8.0.1", "Android",
+                       "4.4.2", "Life", 2, "Bluetooth");
 
   StringArray allowed_groups;
   StringArray disallowed_groups;
-  EXPECT_TRUE(reps_->GetUserPermissionsForDevice(
-      "XXX12345ZZZ", &allowed_groups, &disallowed_groups));
+  EXPECT_TRUE(reps_->GetUserPermissionsForDevice("XXX12345ZZZ", &allowed_groups,
+                                                 &disallowed_groups));
   EXPECT_EQ(0u, allowed_groups.size());
   EXPECT_EQ(0u, disallowed_groups.size());
   allowed_groups.push_back("DataConsent-2");
   disallowed_groups.push_back("Navigation-1");
-  EXPECT_TRUE(reps_->SetUserPermissionsForDevice(
-      "XXX12345ZZZ", allowed_groups, disallowed_groups));
+  EXPECT_TRUE(reps_->SetUserPermissionsForDevice("XXX12345ZZZ", allowed_groups,
+                                                 disallowed_groups));
 
   GroupsAliasNameCollection perm_allowed_groups;
   perm_allowed_groups.push_back(
@@ -1322,10 +1296,7 @@ TEST_F(SQLPTExtRepresentationTest,
 
   GroupsAliasNameCollection perm_disallowed_groups;
   perm_disallowed_groups.push_back(std::make_pair("Location", "Location-1"));
-  FillPermissionStruct("XXX12345ZZZ",
-                       "12345",
-                       "VR",
-                       perm_allowed_groups,
+  FillPermissionStruct("XXX12345ZZZ", "12345", "VR", perm_allowed_groups,
                        perm_disallowed_groups);
 
   EXPECT_TRUE(reps_->SetUserPermissionsForApp(perm_consent));
@@ -1388,8 +1359,8 @@ TEST_F(
 
   GroupsAliasNameCollection disallowed_groups;
   disallowed_groups.push_back(std::make_pair("DataConsent", "DataConsent-2"));
-  FillPermissionStruct(
-      "XXX12345ZZZ", "12345", "VR", allowed_groups, disallowed_groups);
+  FillPermissionStruct("XXX12345ZZZ", "12345", "VR", allowed_groups,
+                       disallowed_groups);
   EXPECT_TRUE(reps_->SetUserPermissionsForApp(perm_consent));
   // Act
   ASSERT_TRUE(reps_->SetIsPredata("12345", true));
@@ -1418,8 +1389,8 @@ TEST_F(SQLPTExtRepresentationTest,
 
   GroupsAliasNameCollection disallowed_groups;
   disallowed_groups.push_back(std::make_pair("DataConsent", "DataConsent-2"));
-  FillPermissionStruct(
-      "XXX12345ZZZ", "12345", "VR", allowed_groups, disallowed_groups);
+  FillPermissionStruct("XXX12345ZZZ", "12345", "VR", allowed_groups,
+                       disallowed_groups);
   EXPECT_TRUE(reps_->SetUserPermissionsForApp(perm_consent));
   EXPECT_FALSE(reps_->IsPredataPolicy("12345"));
   // Act
@@ -1450,8 +1421,8 @@ TEST_F(
 
   GroupsAliasNameCollection disallowed_groups;
   disallowed_groups.push_back(std::make_pair("DataConsent", "DataConsent-2"));
-  FillPermissionStruct(
-      "XXX12345ZZZ", "12345", "VR", allowed_groups, disallowed_groups);
+  FillPermissionStruct("XXX12345ZZZ", "12345", "VR", allowed_groups,
+                       disallowed_groups);
   EXPECT_TRUE(reps_->SetUserPermissionsForApp(perm_consent));
   EXPECT_FALSE(reps_->IsPredataPolicy("12345"));
   // Act

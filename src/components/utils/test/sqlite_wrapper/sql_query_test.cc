@@ -57,9 +57,7 @@ class SQLQueryTest : public ::testing::Test {
     sqlite3_exec(conn,
                  "CREATE TABLE testTable (integerValue INTEGER,"
                  " doubleValue REAL, stringValue TEXT)",
-                 NULL,
-                 NULL,
-                 NULL);
+                 NULL, NULL, NULL);
   }
 
   static void TearDownTestCase() {

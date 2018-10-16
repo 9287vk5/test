@@ -54,9 +54,7 @@ class HMIMessageAdapterImpl : public HMIMessageAdapter {
   ~HMIMessageAdapterImpl();
 
  protected:
-  virtual HMIMessageHandler* handler() const {
-    return handler_;
-  }
+  virtual HMIMessageHandler* handler() const { return handler_; }
 
  private:
   /**

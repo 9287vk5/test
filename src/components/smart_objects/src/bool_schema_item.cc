@@ -43,13 +43,9 @@ std::shared_ptr<CBoolSchemaItem> CBoolSchemaItem::create(
 CBoolSchemaItem::CBoolSchemaItem(const TSchemaItemParameter<bool>& DefaultValue)
     : CDefaultSchemaItem<bool>(DefaultValue) {}
 
-SmartType CBoolSchemaItem::getSmartType() const {
-  return SmartType_Boolean;
-}
+SmartType CBoolSchemaItem::getSmartType() const { return SmartType_Boolean; }
 
-bool CBoolSchemaItem::getDefaultValue() const {
-  return false;
-}
+bool CBoolSchemaItem::getDefaultValue() const { return false; }
 
 }  // namespace ns_smart_objects
 }  // namespace ns_smart_device_link

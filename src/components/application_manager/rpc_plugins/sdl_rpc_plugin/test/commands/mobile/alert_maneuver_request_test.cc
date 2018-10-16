@@ -224,29 +224,25 @@ TEST_F(AlertManeuverRequestTest, OnEvent_ReceivedUnknownEvent_UNSUCCESS) {
 TEST_F(AlertManeuverRequestTest, OnEvent_SUCCESS) {
   CheckExpectations(hmi_apis::Common_Result::SUCCESS,
                     mobile_apis::Result::SUCCESS,
-                    am::HmiInterfaces::STATE_AVAILABLE,
-                    true);
+                    am::HmiInterfaces::STATE_AVAILABLE, true);
 }
 
 TEST_F(AlertManeuverRequestTest, OnEvent_UNSUPPORTED_RESOURCE) {
   CheckExpectations(hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                     mobile_apis::Result::UNSUPPORTED_RESOURCE,
-                    am::HmiInterfaces::STATE_AVAILABLE,
-                    false);
+                    am::HmiInterfaces::STATE_AVAILABLE, false);
 }
 
 TEST_F(AlertManeuverRequestTest, OnEvent_WARNINGS) {
   CheckExpectations(hmi_apis::Common_Result::WARNINGS,
                     mobile_apis::Result::WARNINGS,
-                    am::HmiInterfaces::STATE_NOT_RESPONSE,
-                    true);
+                    am::HmiInterfaces::STATE_NOT_RESPONSE, true);
 }
 
 TEST_F(AlertManeuverRequestTest, OnEvent_GENERIC_ERROR) {
   CheckExpectations(hmi_apis::Common_Result::GENERIC_ERROR,
                     mobile_apis::Result::GENERIC_ERROR,
-                    am::HmiInterfaces::STATE_NOT_RESPONSE,
-                    false);
+                    am::HmiInterfaces::STATE_NOT_RESPONSE, false);
 }
 
 }  // namespace alert_maneuver_request

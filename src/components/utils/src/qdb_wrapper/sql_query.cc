@@ -92,14 +92,14 @@ class SetBindNull {
 };
 
 SQLQuery::SQLQuery(SQLDatabase* db)
-    : db_(db)
-    , query_("")
-    , statement_(-1)
-    , bindings_(NULL)
-    , result_(NULL)
-    , current_row_(0)
-    , rows_(0)
-    , error_(Error::OK) {}
+    : db_(db),
+      query_(""),
+      statement_(-1),
+      bindings_(NULL),
+      result_(NULL),
+      current_row_(0),
+      rows_(0),
+      error_(Error::OK) {}
 
 SQLQuery::~SQLQuery() {
   Finalize();
@@ -124,12 +124,12 @@ uint8_t SQLQuery::SetBinds() {
 
   bindings_ = new qdb_binding_t[binding_count];
 
-  std::for_each(
-      int_binds_.begin(), int_binds_.end(), SetBindInteger(bindings_));
-  std::for_each(
-      double_binds_.begin(), double_binds_.end(), SetBindReal(bindings_));
-  std::for_each(
-      string_binds_.begin(), string_binds_.end(), SetBindText(bindings_));
+  std::for_each(int_binds_.begin(), int_binds_.end(),
+                SetBindInteger(bindings_));
+  std::for_each(double_binds_.begin(), double_binds_.end(),
+                SetBindReal(bindings_));
+  std::for_each(string_binds_.begin(), string_binds_.end(),
+                SetBindText(bindings_));
   std::for_each(null_binds_.begin(), null_binds_.end(), SetBindNull(bindings_));
 
   return binding_count;
@@ -152,8 +152,7 @@ bool SQLQuery::Result() {
 
 bool SQLQuery::Exec() {
   sync_primitives::AutoLock auto_lock(bindings_lock_);
-  if (result_)
-    return true;
+  if (result_) return true;
 
   current_row_ = 0;
   uint8_t binding_count = SetBinds();
@@ -216,17 +215,13 @@ void SQLQuery::Bind(int pos, double value) {
   double_binds_.push_back(std::make_pair(pos, value));
 }
 
-void SQLQuery::Bind(int pos, bool value) {
-  Bind(pos, static_cast<int>(value));
-}
+void SQLQuery::Bind(int pos, bool value) { Bind(pos, static_cast<int>(value)); }
 
 void SQLQuery::Bind(int pos, const std::string& value) {
   string_binds_.push_back(std::make_pair(pos, value));
 }
 
-void SQLQuery::Bind(int pos) {
-  null_binds_.push_back(pos);
-}
+void SQLQuery::Bind(int pos) { null_binds_.push_back(pos); }
 
 bool SQLQuery::GetBoolean(int pos) const {
   return static_cast<bool>(GetInteger(pos));

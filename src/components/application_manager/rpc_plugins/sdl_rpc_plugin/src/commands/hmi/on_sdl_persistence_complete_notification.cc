@@ -40,14 +40,10 @@ namespace commands {
 OnSDLPersistenceCompleteNotification::OnSDLPersistenceCompleteNotification(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : NotificationToHMI(message,
-                        application_manager,
-                        rpc_service,
-                        hmi_capabilities,
-                        policy_handle) {}
+    : NotificationToHMI(message, application_manager, rpc_service,
+                        hmi_capabilities, policy_handle) {}
 
 OnSDLPersistenceCompleteNotification::~OnSDLPersistenceCompleteNotification() {}
 

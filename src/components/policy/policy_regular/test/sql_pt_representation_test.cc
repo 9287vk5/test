@@ -103,9 +103,7 @@ class SQLPTRepresentationTest : public SQLPTRepresentation,
     policy_settings_.reset();
   }
 
-  virtual utils::dbms::SQLDatabase* db() const {
-    return reps->db();
-  }
+  virtual utils::dbms::SQLDatabase* db() const { return reps->db(); }
 
   void GatherModuleMeta(policy_table::ModuleMeta* meta) const {
     ::SQLPTRepresentation::GatherModuleMeta(meta);
@@ -154,12 +152,9 @@ class SQLPTRepresentationTest : public SQLPTRepresentation,
   }
 
   void CheckAppPoliciesSection(
-      policy_table::ApplicationPoliciesSection& policies,
-      uint16_t apps_size,
-      policy_table::Priority prio,
-      const std::string& section,
-      uint16_t memory_kb,
-      uint32_t heart_beat_timeout_ms,
+      policy_table::ApplicationPoliciesSection& policies, uint16_t apps_size,
+      policy_table::Priority prio, const std::string& section,
+      uint16_t memory_kb, uint32_t heart_beat_timeout_ms,
       policy_table::Strings& groups) const {
     if (section != "device") {
       policy_table::ApplicationPolicies& apps = policies.apps;
@@ -357,9 +352,9 @@ const std::string SQLPTRepresentationTest::kAppStorageFolder =
 class SQLPTRepresentationTest2 : public ::testing::Test {
  protected:
   SQLPTRepresentationTest2()
-      : kAppStorageFolder("storage123")
-      , kOpenAttemptTimeoutMs(70u)
-      , kAttemptsToOpenPolicyDB(2u) {}
+      : kAppStorageFolder("storage123"),
+        kOpenAttemptTimeoutMs(70u),
+        kAttemptsToOpenPolicyDB(2u) {}
 
   void SetUp() OVERRIDE {
     file_system::CreateDirectory(kAppStorageFolder);
@@ -1181,12 +1176,10 @@ TEST_F(
   const policy_table::HmiLevels& hmi_levels1 = rpc_it->second.hmi_levels;
   EXPECT_EQ(3u, hmi_levels1.size());
   EXPECT_TRUE(hmi_levels1.end() !=
-              std::find(hmi_levels1.begin(),
-                        hmi_levels1.end(),
+              std::find(hmi_levels1.begin(), hmi_levels1.end(),
                         policy_table::HmiLevel::HL_BACKGROUND));
   EXPECT_TRUE(hmi_levels1.end() !=
-              std::find(hmi_levels1.begin(),
-                        hmi_levels1.end(),
+              std::find(hmi_levels1.begin(), hmi_levels1.end(),
                         policy_table::HmiLevel::HL_LIMITED));
   EXPECT_TRUE(hmi_levels1.end() != std::find(hmi_levels1.begin(),
                                              hmi_levels1.end(),
@@ -1630,33 +1623,17 @@ TEST_F(SQLPTRepresentationTest, Save_SetPolicyTableThenSave_ExpectSavedToPT) {
   rpc::String<1ul, 255ul> str("default");
   policy_table::Strings groups;
   groups.push_back(str);
-  CheckAppPoliciesSection(policies,
-                          apps_size,
+  CheckAppPoliciesSection(policies, apps_size,
+                          policy_table::Priority::P_EMERGENCY, "1234", 150u,
+                          200u, groups);
+  CheckAppPoliciesSection(policies, apps_size,
+                          policy_table::Priority::P_EMERGENCY, "default", 50u,
+                          100u, groups);
+  CheckAppPoliciesSection(policies, apps_size,
                           policy_table::Priority::P_EMERGENCY,
-                          "1234",
-                          150u,
-                          200u,
-                          groups);
-  CheckAppPoliciesSection(policies,
-                          apps_size,
-                          policy_table::Priority::P_EMERGENCY,
-                          "default",
-                          50u,
-                          100u,
-                          groups);
-  CheckAppPoliciesSection(policies,
-                          apps_size,
-                          policy_table::Priority::P_EMERGENCY,
-                          "pre_DataConsent",
-                          40u,
-                          90u,
-                          groups);
-  CheckAppPoliciesSection(policies,
-                          apps_size,
-                          policy_table::Priority::P_EMERGENCY,
-                          "device",
-                          0u,
-                          0u,
+                          "pre_DataConsent", 40u, 90u, groups);
+  CheckAppPoliciesSection(policies, apps_size,
+                          policy_table::Priority::P_EMERGENCY, "device", 0u, 0u,
                           groups);
 
   CheckAppGroups("1234", groups);

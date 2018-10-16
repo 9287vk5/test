@@ -63,12 +63,8 @@ class EventDispatcherImpl : public EventDispatcher {
   EventDispatcherImpl();
 
 #ifdef BUILD_TESTS
-  EventObserverMap get_observers() const {
-    return observers_event_;
-  }
-  ObserverVector get_observers_list() const {
-    return observers_;
-  }
+  EventObserverMap get_observers() const { return observers_event_; }
+  ObserverVector get_observers_list() const { return observers_; }
 #endif  // BUILD_TESTS
 
   /*
@@ -85,8 +81,7 @@ class EventDispatcherImpl : public EventDispatcher {
    * @param hmi_correlation_id  The event HMI correlation ID
    * @param observer    The observer to subscribe for event
    */
-  void add_observer(const Event::EventID& event_id,
-                    int32_t hmi_correlation_id,
+  void add_observer(const Event::EventID& event_id, int32_t hmi_correlation_id,
                     EventObserver& observer) OVERRIDE;
 
   /*

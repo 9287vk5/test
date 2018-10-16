@@ -66,9 +66,7 @@ class CompositeType;
 class Boolean;
 template <typename T, T minval, T maxval>
 class Integer;
-template <int64_t minnum,
-          int64_t maxnum,
-          int64_t minden = 1,
+template <int64_t minnum, int64_t maxnum, int64_t minden = 1,
           int64_t maxden = 1>
 class Float;
 template <size_t minlen, size_t maxlen>

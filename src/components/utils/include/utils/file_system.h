@@ -111,8 +111,7 @@ bool FileExists(const std::string& name);
  * @param data data to write
  * @return returns true if the operation is successful.
  */
-bool Write(const std::string& file_name,
-           const std::vector<uint8_t>& data,
+bool Write(const std::string& file_name, const std::vector<uint8_t>& data,
            std::ios_base::openmode mode = std::ios_base::out);
 
 /**
@@ -131,8 +130,7 @@ std::ofstream* Open(const std::string& file_name,
  * @param data_size size of data to be written to file
  * @return returns true if the operation is successful.
  */
-bool Write(std::ofstream* const file_stream,
-           const uint8_t* data,
+bool Write(std::ofstream* const file_stream, const uint8_t* data,
            uint32_t data_size);
 
 /**

@@ -78,11 +78,11 @@ Connection::Connection(ConnectionHandle connection_handle,
                        DeviceHandle connection_device_handle,
                        ConnectionHandler* connection_handler,
                        uint32_t heartbeat_timeout)
-    : connection_handler_(connection_handler)
-    , connection_handle_(connection_handle)
-    , connection_device_handle_(connection_device_handle)
-    , primary_connection_handle_(0)
-    , heartbeat_timeout_(heartbeat_timeout) {
+    : connection_handler_(connection_handler),
+      connection_handle_(connection_handle),
+      connection_device_handle_(connection_device_handle),
+      primary_connection_handle_(0),
+      heartbeat_timeout_(heartbeat_timeout) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK(connection_handler_);
 
@@ -175,11 +175,11 @@ bool Connection::AddNewService(uint8_t session_id,
     return false;
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Add service " << service_type << " for session "
-                               << static_cast<uint32_t>(session_id)
-                               << " using connection ID "
-                               << static_cast<uint32_t>(connection_id));
+  LOG4CXX_DEBUG(logger_, "Add service "
+                             << service_type << " for session "
+                             << static_cast<uint32_t>(session_id)
+                             << " using connection ID "
+                             << static_cast<uint32_t>(connection_id));
   sync_primitives::AutoLock lock(session_map_lock_);
 
   SessionMap::iterator session_it = session_map_.find(session_id);
@@ -190,11 +190,9 @@ bool Connection::AddNewService(uint8_t session_id,
   Session& session = session_it->second;
 
   if (session.protocol_version <= protocol_handler::PROTOCOL_VERSION_2 &&
-      helpers::Compare<protocol_handler::ServiceType,
-                       helpers::EQ,
+      helpers::Compare<protocol_handler::ServiceType, helpers::EQ,
                        helpers::ONE>(
-          service_type,
-          protocol_handler::ServiceType::kAudio,
+          service_type, protocol_handler::ServiceType::kAudio,
           protocol_handler::ServiceType::kMobileNav)) {
     LOG4CXX_WARN(logger_,
                  "Audio and video services are disallowed for protocol version "
@@ -207,17 +205,15 @@ bool Connection::AddNewService(uint8_t session_id,
   if (service) {
 #ifdef ENABLE_SECURITY
     if (!request_protection) {
-      LOG4CXX_WARN(logger_,
-                   "Session " << static_cast<int>(session_id)
-                              << " already has unprotected service "
-                              << static_cast<int>(service_type));
+      LOG4CXX_WARN(logger_, "Session " << static_cast<int>(session_id)
+                                       << " already has unprotected service "
+                                       << static_cast<int>(service_type));
       return false;
     }
     if (service->is_protected_) {
-      LOG4CXX_WARN(logger_,
-                   "Session " << static_cast<int>(session_id)
-                              << " already has protected service "
-                              << static_cast<int>(service_type));
+      LOG4CXX_WARN(logger_, "Session " << static_cast<int>(session_id)
+                                       << " already has protected service "
+                                       << static_cast<int>(service_type));
       return false;
     }
     // For unproteced service could be start protection
@@ -248,8 +244,8 @@ bool Connection::RemoveService(uint8_t session_id,
                                protocol_handler::ServiceType service_type) {
   // Ignore wrong and required for Session services
   if (is_incorrect_for_remove_service(service_type)) {
-    LOG4CXX_WARN(logger_,
-                 "Could not remove service " << static_cast<int>(service_type));
+    LOG4CXX_WARN(logger_, "Could not remove service "
+                              << static_cast<int>(service_type));
     return false;
   }
   sync_primitives::AutoLock lock(session_map_lock_);
@@ -264,9 +260,9 @@ bool Connection::RemoveService(uint8_t session_id,
   ServiceList::iterator service_it =
       find(service_list.begin(), service_list.end(), service_type);
   if (service_list.end() == service_it) {
-    LOG4CXX_WARN(logger_,
-                 "Session " << session_id << " didn't established"
-                                             " service " << service_type);
+    LOG4CXX_WARN(logger_, "Session " << session_id << " didn't established"
+                                                      " service "
+                                     << service_type);
     return false;
   }
   service_list.erase(service_it);
@@ -289,11 +285,9 @@ uint8_t Connection::RemoveSecondaryServices(
   // Session, we walk its ServiceList, looking for all the services
   // that were running on the now-closed Secondary Connection.
   for (SessionMap::iterator session_it = session_map_.begin();
-       session_map_.end() != session_it;
-       ++session_it) {
-    LOG4CXX_INFO(logger_,
-                 "RemoveSecondaryServices found session ID "
-                     << static_cast<int>(session_it->first));
+       session_map_.end() != session_it; ++session_it) {
+    LOG4CXX_INFO(logger_, "RemoveSecondaryServices found session ID "
+                              << static_cast<int>(session_it->first));
 
     // Now, for each session, walk the its ServiceList, looking for services
     // that were using secondary)_connection_handle. If we find such a service,
@@ -301,17 +295,15 @@ uint8_t Connection::RemoveSecondaryServices(
     ServiceList& service_list = session_it->second.service_list;
     ServiceList::iterator service_it = service_list.begin();
     for (; service_it != service_list.end();) {
-      LOG4CXX_INFO(logger_,
-                   "RemoveSecondaryServices found service ID "
-                       << static_cast<int>(service_it->service_type));
+      LOG4CXX_INFO(logger_, "RemoveSecondaryServices found service ID "
+                                << static_cast<int>(service_it->service_type));
       if (service_it->connection_id == secondary_connection_handle) {
         found_session_id = session_it->first;
 
-        LOG4CXX_INFO(logger_,
-                     "RemoveSecondaryServices removing Service "
-                         << static_cast<int>(service_it->service_type)
-                         << " in session "
-                         << static_cast<int>(found_session_id));
+        LOG4CXX_INFO(logger_, "RemoveSecondaryServices removing Service "
+                                  << static_cast<int>(service_it->service_type)
+                                  << " in session "
+                                  << static_cast<int>(found_session_id));
 
         removed_services_list.push_back(service_it->service_type);
         service_it = service_list.erase(service_it);
@@ -356,15 +348,13 @@ security_manager::SSLContext* Connection::GetSSLContext(
   }
   const Session& session = session_it->second;
   // for control services return current SSLContext value
-  if (protocol_handler::kControl == service_type)
-    return session.ssl_context;
+  if (protocol_handler::kControl == service_type) return session.ssl_context;
   const Service* service = session.FindService(service_type);
   if (!service) {
     LOG4CXX_WARN(logger_, "Service not found in this session!");
     return NULL;
   }
-  if (!service->is_protected_)
-    return NULL;
+  if (!service->is_protected_) return NULL;
   LOG4CXX_TRACE(logger_, "SSLContext is " << session.ssl_context);
   return session.ssl_context;
 }
@@ -439,8 +429,8 @@ void Connection::CloseSession(uint8_t session_id) {
     }
   }
 
-  connection_handler_->CloseSession(
-      connection_handle_, session_id, connection_handler::kCommon);
+  connection_handler_->CloseSession(connection_handle_, session_id,
+                                    connection_handler::kCommon);
 }
 
 void Connection::UpdateProtocolVersionSession(uint8_t session_id,

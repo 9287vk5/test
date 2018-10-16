@@ -44,14 +44,10 @@ namespace commands {
 DialNumberRequest::DialNumberRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 DialNumberRequest::~DialNumberRequest() {}
 
@@ -97,8 +93,8 @@ void DialNumberRequest::Run() {
   msg_params[strings::app_id] = application->hmi_app_id();
 
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_BasicCommunication);
-  SendHMIRequest(
-      hmi_apis::FunctionID::BasicCommunication_DialNumber, &msg_params, true);
+  SendHMIRequest(hmi_apis::FunctionID::BasicCommunication_DialNumber,
+                 &msg_params, true);
 }
 
 void DialNumberRequest::on_event(const event_engine::Event& event) {

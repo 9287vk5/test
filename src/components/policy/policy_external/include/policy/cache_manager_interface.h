@@ -86,8 +86,7 @@ class CacheManagerInterface {
    * and list of allowed params.
    */
   virtual void CheckPermissions(const PTString& app_id,
-                                const PTString& hmi_level,
-                                const PTString& rpc,
+                                const PTString& hmi_level, const PTString& rpc,
                                 CheckPermissionResult& result) = 0;
   /**
    * @brief Get state of request types for given application
@@ -184,8 +183,7 @@ class CacheManagerInterface {
    * @return Array of appropriate messages parameters
    */
   virtual std::vector<UserFriendlyMessage> GetUserFriendlyMsg(
-      const std::vector<std::string>& msg_codes,
-      const std::string& language,
+      const std::vector<std::string>& msg_codes, const std::string& language,
       const std::string& active_hmi_language) = 0;
 
   /**
@@ -392,8 +390,7 @@ class CacheManagerInterface {
    * @return true, if query was successfull, otherwise - false
    */
   virtual bool GetUserPermissionsForDevice(
-      const std::string& device_id,
-      StringArray& consented_groups,
+      const std::string& device_id, StringArray& consented_groups,
       StringArray& disallowed_groups) const = 0;
 
   /**
@@ -466,8 +463,7 @@ class CacheManagerInterface {
    */
   virtual bool SetDeviceData(const std::string& device_id,
                              const std::string& hardware,
-                             const std::string& firmware,
-                             const std::string& os,
+                             const std::string& firmware, const std::string& os,
                              const std::string& os_version,
                              const std::string& carrier,
                              const uint32_t number_of_ports,
@@ -479,8 +475,7 @@ class CacheManagerInterface {
    * @return bool Success of operation
    */
   virtual bool SetUserPermissionsForDevice(
-      const std::string& device_id,
-      const StringArray& consented_groups,
+      const std::string& device_id, const StringArray& consented_groups,
       const StringArray& disallowed_groups) = 0;
 
   /**
@@ -541,8 +536,7 @@ class CacheManagerInterface {
    * @param type type of information
    * @param value value of information
    */
-  virtual void Set(const std::string& app_id,
-                   usage_statistics::AppInfoId type,
+  virtual void Set(const std::string& app_id, usage_statistics::AppInfoId type,
                    const std::string& value) = 0;
 
   /**
@@ -552,8 +546,7 @@ class CacheManagerInterface {
    * @param seconds value for adding in seconds
    */
   virtual void Add(const std::string& app_id,
-                   usage_statistics::AppStopwatchId type,
-                   int seconds) = 0;
+                   usage_statistics::AppStopwatchId type, int seconds) = 0;
 
   /**
    * @brief CountUnconsentedGroups allows to obtain the count of unconsented
@@ -705,8 +698,7 @@ class CacheManagerInterface {
    * @param permissions Calculated permissions
    */
   virtual void AddCalculatedPermissions(
-      const std::string& device_id,
-      const std::string& policy_app_id,
+      const std::string& device_id, const std::string& policy_app_id,
       const policy::Permissions& permissions) = 0;
 
   /**

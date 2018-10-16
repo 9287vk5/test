@@ -401,9 +401,8 @@ TEST(MessageHelperTestCreate, CreateAddSubMenuRequestToHMI_SendObject_Equal) {
 
   EXPECT_EQ(function_id, obj[strings::params][strings::function_id].asInt());
   EXPECT_EQ(5, obj[strings::msg_params][strings::menu_id].asInt());
-  EXPECT_EQ(1,
-            obj[strings::msg_params][strings::menu_params][strings::position]
-                .asInt());
+  EXPECT_EQ(1, obj[strings::msg_params][strings::menu_params][strings::position]
+                   .asInt());
   EXPECT_EQ(1,
             obj[strings::msg_params][strings::menu_params][strings::menu_name]
                 .asInt());
@@ -474,123 +473,50 @@ class MessageHelperTest : public ::testing::Test {
                          "AR-SA", "KO-KR", "PT-BR", "CS-CZ", "DA-DK", "NO-NO",
                          "NL-BE", "EL-GR", "HU-HU", "FI-FI", "SK-SK", "EN-IN",
                          "TH-TH", "EN-SA", "HE-IL", "RO-RO", "UK-UA", "ID-ID",
-                         "VI-VN", "MS-MY", "HI-IN"}
-      , hmi_result_strings{"SUCCESS",
-                           "UNSUPPORTED_REQUEST",
-                           "UNSUPPORTED_RESOURCE",
-                           "DISALLOWED",
-                           "REJECTED",
-                           "ABORTED",
-                           "IGNORED",
-                           "RETRY",
-                           "IN_USE",
-                           "DATA_NOT_AVAILABLE",
-                           "TIMED_OUT",
-                           "INVALID_DATA",
-                           "CHAR_LIMIT_EXCEEDED",
-                           "INVALID_ID",
-                           "DUPLICATE_NAME",
-                           "APPLICATION_NOT_REGISTERED",
-                           "WRONG_LANGUAGE",
-                           "OUT_OF_MEMORY",
-                           "TOO_MANY_PENDING_REQUESTS",
-                           "NO_APPS_REGISTERED",
-                           "NO_DEVICES_CONNECTED",
-                           "WARNINGS",
-                           "GENERIC_ERROR",
-                           "USER_DISALLOWED",
-                           "TRUNCATED_DATA"}
-      , mobile_result_strings{"SUCCESS",
-                              "UNSUPPORTED_REQUEST",
-                              "UNSUPPORTED_RESOURCE",
-                              "DISALLOWED",
-                              "REJECTED",
-                              "ABORTED",
-                              "IGNORED",
-                              "RETRY",
-                              "IN_USE",
-                              "VEHICLE_DATA_NOT_AVAILABLE",
-                              "TIMED_OUT",
-                              "INVALID_DATA",
-                              "CHAR_LIMIT_EXCEEDED",
-                              "INVALID_ID",
-                              "DUPLICATE_NAME",
-                              "APPLICATION_NOT_REGISTERED",
-                              "WRONG_LANGUAGE",
-                              "OUT_OF_MEMORY",
-                              "TOO_MANY_PENDING_REQUESTS",
-                              "TOO_MANY_APPLICATIONS",
-                              "APPLICATION_REGISTERED_ALREADY",
-                              "WARNINGS",
-                              "GENERIC_ERROR",
-                              "USER_DISALLOWED",
-                              "UNSUPPORTED_VERSION",
-                              "VEHICLE_DATA_NOT_ALLOWED",
-                              "FILE_NOT_FOUND",
-                              "CANCEL_ROUTE",
-                              "TRUNCATED_DATA",
-                              "SAVED",
-                              "INVALID_CERT",
-                              "EXPIRED_CERT",
-                              "RESUME_FAILED"}
-      , function_id_strings{"RESERVED",
-                            "RegisterAppInterface",
-                            "UnregisterAppInterface",
-                            "SetGlobalProperties",
-                            "ResetGlobalProperties",
-                            "AddCommand",
-                            "DeleteCommand",
-                            "AddSubMenu",
-                            "DeleteSubMenu",
-                            "CreateInteractionChoiceSet",
-                            "PerformInteraction",
-                            "DeleteInteractionChoiceSet",
-                            "Alert",
-                            "Show",
-                            "Speak",
-                            "SetMediaClockTimer",
-                            "PerformAudioPassThru",
-                            "EndAudioPassThru",
-                            "SubscribeButton",
-                            "UnsubscribeButton",
-                            "SubscribeVehicleData",
-                            "UnsubscribeVehicleData",
-                            "GetVehicleData",
-                            "ReadDID",
-                            "GetDTCs",
-                            "ScrollableMessage",
-                            "Slider",
-                            "ShowConstantTBT",
-                            "AlertManeuver",
-                            "UpdateTurnList",
-                            "ChangeRegistration",
-                            "GenericResponse",
-                            "PutFile",
-                            "DeleteFile",
-                            "ListFiles",
-                            "SetAppIcon",
-                            "SetDisplayLayout",
-                            "DiagnosticMessage",
-                            "SystemRequest",
-                            "SendLocation",
-                            "DialNumber"}
-      , events_id_strings{"OnHMIStatus",
-                          "OnAppInterfaceUnregistered",
-                          "OnButtonEvent",
-                          "OnButtonPress",
-                          "OnVehicleData",
-                          "OnCommand",
-                          "OnTBTClientState",
-                          "OnDriverDistraction",
-                          "OnPermissionsChange",
-                          "OnAudioPassThru",
-                          "OnLanguageChange",
-                          "OnKeyboardInput",
-                          "OnTouchEvent",
-                          "OnSystemRequest",
-                          "OnHashChange"}
-      , hmi_level_strings{"FULL", "LIMITED", "BACKGROUND", "NONE"}
-      , delta_from_functions_id(32768) {}
+                         "VI-VN", "MS-MY", "HI-IN"},
+        hmi_result_strings{
+            "SUCCESS", "UNSUPPORTED_REQUEST", "UNSUPPORTED_RESOURCE",
+            "DISALLOWED", "REJECTED", "ABORTED", "IGNORED", "RETRY", "IN_USE",
+            "DATA_NOT_AVAILABLE", "TIMED_OUT", "INVALID_DATA",
+            "CHAR_LIMIT_EXCEEDED", "INVALID_ID", "DUPLICATE_NAME",
+            "APPLICATION_NOT_REGISTERED", "WRONG_LANGUAGE", "OUT_OF_MEMORY",
+            "TOO_MANY_PENDING_REQUESTS", "NO_APPS_REGISTERED",
+            "NO_DEVICES_CONNECTED", "WARNINGS", "GENERIC_ERROR",
+            "USER_DISALLOWED", "TRUNCATED_DATA"},
+        mobile_result_strings{
+            "SUCCESS", "UNSUPPORTED_REQUEST", "UNSUPPORTED_RESOURCE",
+            "DISALLOWED", "REJECTED", "ABORTED", "IGNORED", "RETRY", "IN_USE",
+            "VEHICLE_DATA_NOT_AVAILABLE", "TIMED_OUT", "INVALID_DATA",
+            "CHAR_LIMIT_EXCEEDED", "INVALID_ID", "DUPLICATE_NAME",
+            "APPLICATION_NOT_REGISTERED", "WRONG_LANGUAGE", "OUT_OF_MEMORY",
+            "TOO_MANY_PENDING_REQUESTS", "TOO_MANY_APPLICATIONS",
+            "APPLICATION_REGISTERED_ALREADY", "WARNINGS", "GENERIC_ERROR",
+            "USER_DISALLOWED", "UNSUPPORTED_VERSION",
+            "VEHICLE_DATA_NOT_ALLOWED", "FILE_NOT_FOUND", "CANCEL_ROUTE",
+            "TRUNCATED_DATA", "SAVED", "INVALID_CERT", "EXPIRED_CERT",
+            "RESUME_FAILED"},
+        function_id_strings{
+            "RESERVED", "RegisterAppInterface", "UnregisterAppInterface",
+            "SetGlobalProperties", "ResetGlobalProperties", "AddCommand",
+            "DeleteCommand", "AddSubMenu", "DeleteSubMenu",
+            "CreateInteractionChoiceSet", "PerformInteraction",
+            "DeleteInteractionChoiceSet", "Alert", "Show", "Speak",
+            "SetMediaClockTimer", "PerformAudioPassThru", "EndAudioPassThru",
+            "SubscribeButton", "UnsubscribeButton", "SubscribeVehicleData",
+            "UnsubscribeVehicleData", "GetVehicleData", "ReadDID", "GetDTCs",
+            "ScrollableMessage", "Slider", "ShowConstantTBT", "AlertManeuver",
+            "UpdateTurnList", "ChangeRegistration", "GenericResponse",
+            "PutFile", "DeleteFile", "ListFiles", "SetAppIcon",
+            "SetDisplayLayout", "DiagnosticMessage", "SystemRequest",
+            "SendLocation", "DialNumber"},
+        events_id_strings{
+            "OnHMIStatus", "OnAppInterfaceUnregistered", "OnButtonEvent",
+            "OnButtonPress", "OnVehicleData", "OnCommand", "OnTBTClientState",
+            "OnDriverDistraction", "OnPermissionsChange", "OnAudioPassThru",
+            "OnLanguageChange", "OnKeyboardInput", "OnTouchEvent",
+            "OnSystemRequest", "OnHashChange"},
+        hmi_level_strings{"FULL", "LIMITED", "BACKGROUND", "NONE"},
+        delta_from_functions_id(32768) {}
 
  protected:
   application_manager_test::MockApplicationManager mock_application_manager;
@@ -707,24 +633,18 @@ TEST_F(MessageHelperTest,
 }
 
 TEST_F(MessageHelperTest, VerifySoftButtonString_WrongStrings_False) {
-  const StringArray wrong_strings{"soft_button1\t\ntext",
-                                  "soft_button1\\ntext",
-                                  "soft_button1\\ttext",
-                                  " ",
-                                  "soft_button1\t\n",
-                                  "soft_button1\\n",
-                                  "soft_button1\\t"};
+  const StringArray wrong_strings{
+      "soft_button1\t\ntext", "soft_button1\\ntext", "soft_button1\\ttext", " ",
+      "soft_button1\t\n", "soft_button1\\n", "soft_button1\\t"};
   for (size_t i = 0; i < wrong_strings.size(); ++i) {
     EXPECT_FALSE(MessageHelper::VerifyString(wrong_strings[i]));
   }
 }
 
 TEST_F(MessageHelperTest, VerifySoftButtonString_CorrectStrings_True) {
-  const StringArray wrong_strings{"soft_button1.text",
-                                  "soft_button1?text",
-                                  " asd asdasd    .././/",
-                                  "soft_button1??....asd",
-                                  "soft_button12313fcvzxc./.,"};
+  const StringArray wrong_strings{
+      "soft_button1.text", "soft_button1?text", " asd asdasd    .././/",
+      "soft_button1??....asd", "soft_button12313fcvzxc./.,"};
   for (size_t i = 0; i < wrong_strings.size(); ++i) {
     EXPECT_TRUE(MessageHelper::VerifyString(wrong_strings[i]));
   }
@@ -911,8 +831,7 @@ TEST_F(MessageHelperTest,
   }
   // EventIDs emum strarts from delta_from_functions_id = 32768
   for (size_t i = delta_from_functions_id;
-       i < events_id_strings.size() + delta_from_functions_id;
-       ++i) {
+       i < events_id_strings.size() + delta_from_functions_id; ++i) {
     casted_enum = static_cast<mobile_apis::FunctionID::eType>(i);
     converted = MessageHelper::StringifiedFunctionID(casted_enum);
     EXPECT_EQ(events_id_strings[i - delta_from_functions_id], converted);
@@ -949,8 +868,8 @@ TEST_F(MessageHelperTest, SubscribeApplicationToSoftButton_CallFromApp) {
   //
   EXPECT_CALL(*appSharedPtr,
               SubscribeToSoftButtons(function_id, SoftButtonID())).Times(1);
-  MessageHelper::SubscribeApplicationToSoftButton(
-      message_params, appSharedPtr, function_id);
+  MessageHelper::SubscribeApplicationToSoftButton(message_params, appSharedPtr,
+                                                  function_id);
 }
 #ifdef EXTERNAL_PROPRIETARY_MODE
 TEST_F(MessageHelperTest, SendGetListOfPermissionsResponse_SUCCESS) {
@@ -968,10 +887,9 @@ TEST_F(MessageHelperTest, SendGetListOfPermissionsResponse_SUCCESS) {
       .WillOnce(DoAll(SaveArg<0>(&result), Return(true)));
 
   const uint32_t correlation_id = 0u;
-  MessageHelper::SendGetListOfPermissionsResponse(permissions,
-                                                  external_consent_status,
-                                                  correlation_id,
-                                                  mock_application_manager);
+  MessageHelper::SendGetListOfPermissionsResponse(
+      permissions, external_consent_status, correlation_id,
+      mock_application_manager);
 
   ASSERT_TRUE(result.get());
 
@@ -1008,10 +926,9 @@ TEST_F(MessageHelperTest,
       .WillOnce(DoAll(SaveArg<0>(&result), Return(true)));
 
   const uint32_t correlation_id = 0u;
-  MessageHelper::SendGetListOfPermissionsResponse(permissions,
-                                                  external_consent_status,
-                                                  correlation_id,
-                                                  mock_application_manager);
+  MessageHelper::SendGetListOfPermissionsResponse(
+      permissions, external_consent_status, correlation_id,
+      mock_application_manager);
 
   ASSERT_TRUE(result.get());
 
@@ -1061,8 +978,8 @@ TEST_F(MessageHelperTest, SendNaviSetVideoConfigRequest) {
   video_params[strings::width] = 640;
   video_params[strings::height] = 480;
 
-  MessageHelper::SendNaviSetVideoConfig(
-      app_id, mock_application_manager, video_params);
+  MessageHelper::SendNaviSetVideoConfig(app_id, mock_application_manager,
+                                        video_params);
 
   EXPECT_EQ(hmi_apis::FunctionID::Navigation_SetVideoConfig,
             (*result)[strings::params][strings::function_id].asInt());

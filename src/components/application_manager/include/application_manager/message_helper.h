@@ -95,8 +95,7 @@ class MessageHelper {
    * (e.g. gps, odometer, fuel_level)
    */
   static void CreateGetVehicleDataRequest(
-      const uint32_t correlation_id,
-      const std::vector<std::string>& params,
+      const uint32_t correlation_id, const std::vector<std::string>& params,
       ApplicationManager& app_mngr);
 
   /**
@@ -221,8 +220,7 @@ class MessageHelper {
 
   static smart_objects::SmartObjectSPtr CreateBlockedByPoliciesResponse(
       mobile_apis::FunctionID::eType function_id,
-      mobile_apis::Result::eType result,
-      const uint32_t correlation_id,
+      mobile_apis::Result::eType result, const uint32_t correlation_id,
       uint32_t connection_key);
 
   /*
@@ -247,10 +245,8 @@ class MessageHelper {
    * @brief Sends button subscription notification
    */
   static void SendOnButtonSubscriptionNotification(
-      const uint32_t app_id,
-      const hmi_apis::Common_ButtonName::eType button,
-      const bool is_subscribed,
-      ApplicationManager& app_mngr);
+      const uint32_t app_id, const hmi_apis::Common_ButtonName::eType button,
+      const bool is_subscribed, ApplicationManager& app_mngr);
 
   /**
    * @brief Sends button subscription notifications for all buttons
@@ -291,16 +287,12 @@ class MessageHelper {
   static void SendUIChangeRegistrationRequestToHMI(
       ApplicationConstSharedPtr app, ApplicationManager& app_mngr);
   static void SendAddVRCommandToHMI(
-      uint32_t cmd_id,
-      const smart_objects::SmartObject& vr_commands,
-      const uint32_t app_id,
-      ApplicationManager& app_mngr);
+      uint32_t cmd_id, const smart_objects::SmartObject& vr_commands,
+      const uint32_t app_id, ApplicationManager& app_mngr);
 
   static smart_objects::SmartObjectSPtr CreateAddVRCommandToHMI(
-      uint32_t cmd_id,
-      const smart_objects::SmartObject& vr_commands,
-      const uint32_t app_id,
-      ApplicationManager& app_mngr);
+      uint32_t cmd_id, const smart_objects::SmartObject& vr_commands,
+      const uint32_t app_id, ApplicationManager& app_mngr);
 
   /*
    * @brief Create Common.DeviceInfo struct from device handle
@@ -317,8 +309,7 @@ class MessageHelper {
       connection_handler::DeviceHandle device_handle,
       const protocol_handler::SessionObserver& session_observer,
       const policy::PolicyHandlerInterface& policy_handler,
-      ApplicationManager& app_mngr,
-      smart_objects::SmartObject* output);
+      ApplicationManager& app_mngr, smart_objects::SmartObject* output);
 
   /*
    * @brief Create Common.HMIApplication struct application instance
@@ -330,8 +321,7 @@ class MessageHelper {
       ApplicationConstSharedPtr app,
       const protocol_handler::SessionObserver& session_observer,
       const policy::PolicyHandlerInterface& policy_handler,
-      smart_objects::SmartObject* output,
-      ApplicationManager& app_mngr);
+      smart_objects::SmartObject* output, ApplicationManager& app_mngr);
 
   static void SendAddSubMenuRequestToHMI(ApplicationConstSharedPtr app,
                                          ApplicationManager& app_mngr);
@@ -353,8 +343,7 @@ class MessageHelper {
       ApplicationConstSharedPtr app,
       const protocol_handler::SessionObserver& session_observer,
       const policy::PolicyHandlerInterface& policy_handler,
-      hmi_apis::Common_HMILevel::eType level,
-      bool send_policy_priority,
+      hmi_apis::Common_HMILevel::eType level, bool send_policy_priority,
       ApplicationManager& app_mngr);
 
   static void SendOnResumeAudioSourceToHMI(const uint32_t app_id,
@@ -394,8 +383,7 @@ class MessageHelper {
    */
   static void SendGetUserFriendlyMessageResponse(
       const std::vector<policy::UserFriendlyMessage>& msg,
-      uint32_t correlation_id,
-      ApplicationManager& app_mngr);
+      uint32_t correlation_id, ApplicationManager& app_mngr);
 
 /**
  * @brief Send GetListOfPermissions response to HMI
@@ -407,13 +395,11 @@ class MessageHelper {
   static void SendGetListOfPermissionsResponse(
       const std::vector<policy::FunctionalGroupPermission>& permissions,
       const policy::ExternalConsentStatus& external_consent_status,
-      const uint32_t correlation_id,
-      ApplicationManager& app_mngr);
+      const uint32_t correlation_id, ApplicationManager& app_mngr);
 #else
   static void SendGetListOfPermissionsResponse(
       const std::vector<policy::FunctionalGroupPermission>& permissions,
-      const uint32_t correlation_id,
-      ApplicationManager& app_mngr);
+      const uint32_t correlation_id, ApplicationManager& app_mngr);
 #endif  // EXTERNAL_PROPRIETARY_MODE
 
   /*
@@ -424,8 +410,7 @@ class MessageHelper {
    * @param video_params parameters of video streaming, notified by mobile
    */
   static void SendNaviSetVideoConfig(
-      int32_t app_id,
-      ApplicationManager& app_mngr,
+      int32_t app_id, ApplicationManager& app_mngr,
       const smart_objects::SmartObject& video_params);
 
   /*
@@ -453,10 +438,8 @@ class MessageHelper {
   * @param timeout If -1 no timeout is provdied
   */
   static void SendPolicySnapshotNotification(
-      uint32_t connection_key,
-      const std::vector<uint8_t>& policy_data,
-      const std::string& url,
-      ApplicationManager& app_mngr);
+      uint32_t connection_key, const std::vector<uint8_t>& policy_data,
+      const std::string& url, ApplicationManager& app_mngr);
 
   static void SendSystemRequestNotification(
       uint32_t connection_key,
@@ -490,8 +473,7 @@ class MessageHelper {
   * @param permissions updated permissions for application
   */
   static void SendOnPermissionsChangeNotification(
-      uint32_t connection_key,
-      const policy::Permissions& permissions,
+      uint32_t connection_key, const policy::Permissions& permissions,
       ApplicationManager& app_mngr);
 
   /*
@@ -500,8 +482,7 @@ class MessageHelper {
   * @param permissions updated permissions for application
   */
   static void SendOnAppPermissionsChangedNotification(
-      uint32_t connection_key,
-      const policy::AppPermissions& permissions,
+      uint32_t connection_key, const policy::AppPermissions& permissions,
       ApplicationManager& app_mngr);
 
   /**
@@ -554,8 +535,7 @@ class MessageHelper {
                                   ApplicationManager& app_mngr);
 
   static void SendOnDataStreaming(protocol_handler::ServiceType service,
-                                  bool available,
-                                  ApplicationManager& app_mngr);
+                                  bool available, ApplicationManager& app_mngr);
 
   /*
    * @brief Sends notification to HMI to stop audioPathThru
@@ -573,10 +553,8 @@ class MessageHelper {
   static bool SendUnsubscribedWayPoints(ApplicationManager& app_mngr);
 
   static smart_objects::SmartObjectSPtr CreateNegativeResponse(
-      uint32_t connection_key,
-      int32_t function_id,
-      const uint32_t correlation_id,
-      int32_t result_code);
+      uint32_t connection_key, int32_t function_id,
+      const uint32_t correlation_id, int32_t result_code);
 
   /**
    * @brief Get the full file path of an app file
@@ -605,8 +583,7 @@ class MessageHelper {
    * SUCCESS otherwise
    */
   static mobile_apis::Result::eType VerifyTtsFiles(
-      smart_objects::SmartObject& tts_chunks,
-      ApplicationConstSharedPtr app,
+      smart_objects::SmartObject& tts_chunks, ApplicationConstSharedPtr app,
       ApplicationManager& app_mngr);
 
   /**
@@ -631,8 +608,7 @@ class MessageHelper {
    *
    */
   static mobile_apis::Result::eType VerifyImage(
-      smart_objects::SmartObject& image,
-      ApplicationConstSharedPtr app,
+      smart_objects::SmartObject& image, ApplicationConstSharedPtr app,
       ApplicationManager& app_mngr);
 
   /**
@@ -662,13 +638,11 @@ class MessageHelper {
    *
    */
   static mobile_apis::Result::eType VerifyImageFiles(
-      smart_objects::SmartObject& message,
-      ApplicationConstSharedPtr app,
+      smart_objects::SmartObject& message, ApplicationConstSharedPtr app,
       ApplicationManager& app_mngr);
 
   static mobile_apis::Result::eType VerifyImageVrHelpItems(
-      smart_objects::SmartObject& message,
-      ApplicationConstSharedPtr app,
+      smart_objects::SmartObject& message, ApplicationConstSharedPtr app,
       ApplicationManager& app_mngr);
 
   /**
@@ -681,8 +655,7 @@ class MessageHelper {
   static bool VerifyString(const std::string& str);
 
   static mobile_apis::Result::eType ProcessSoftButtons(
-      smart_objects::SmartObject& message_params,
-      ApplicationConstSharedPtr app,
+      smart_objects::SmartObject& message_params, ApplicationConstSharedPtr app,
       const policy::PolicyHandlerInterface& policy_handler,
       ApplicationManager& app_mngr);
 
@@ -696,8 +669,7 @@ class MessageHelper {
    * @param function_id Unique command id from mobile API
    */
   static void SubscribeApplicationToSoftButton(
-      smart_objects::SmartObject& message_params,
-      ApplicationSharedPtr app,
+      smart_objects::SmartObject& message_params, ApplicationSharedPtr app,
       int32_t function_id);
 
   /**
@@ -841,8 +813,7 @@ class MessageHelper {
    * @param app_mngr Application manager
    */
   static void SendUnsubscribeButtonNotification(
-      mobile_apis::ButtonName::eType button,
-      ApplicationSharedPtr application,
+      mobile_apis::ButtonName::eType button, ApplicationSharedPtr application,
       ApplicationManager& app_mngr);
 
   /**
@@ -863,8 +834,7 @@ class MessageHelper {
    * request
    */
   static void SendActivateAppToHMI(
-      uint32_t const app_id,
-      ApplicationManager& application_manager,
+      uint32_t const app_id, ApplicationManager& application_manager,
       hmi_apis::Common_HMILevel::eType level = hmi_apis::Common_HMILevel::FULL,
       bool send_policy_priority = true);
 
@@ -889,9 +859,7 @@ class MessageHelper {
       smart_objects::SmartObject& message);
 
   static smart_objects::SmartObjectSPtr CreateChangeRegistration(
-      const int32_t function_id,
-      const int32_t language,
-      const uint32_t app_id,
+      const int32_t function_id, const int32_t language, const uint32_t app_id,
       const smart_objects::SmartObject* app_types,
       ApplicationManager& app_mngr);
 

@@ -55,10 +55,9 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "TransportManager")
 
 bool BluetoothDevice::GetRfcommChannel(const ApplicationHandle app_handle,
                                        uint8_t* channel_out) {
-  LOG4CXX_TRACE(logger_,
-                "enter. app_handle: " << app_handle
-                                      << ", channel_out: " << std::hex
-                                      << reinterpret_cast<void*>(channel_out));
+  LOG4CXX_TRACE(logger_, "enter. app_handle: "
+                             << app_handle << ", channel_out: " << std::hex
+                             << reinterpret_cast<void*>(channel_out));
   if (app_handle < 0 || app_handle > std::numeric_limits<uint8_t>::max()) {
     LOG4CXX_TRACE(logger_,
                   "exit with FALSE. Condition: app_handle < 0 || app_handle > "
@@ -90,9 +89,9 @@ std::string BluetoothDevice::GetUniqueDeviceId(const bdaddr_t& device_address) {
 BluetoothDevice::BluetoothDevice(const bdaddr_t& device_address,
                                  const char* device_name,
                                  const RfcommChannelVector& rfcomm_channels)
-    : Device(device_name, GetUniqueDeviceId(device_address))
-    , address_(device_address)
-    , rfcomm_channels_(rfcomm_channels) {}
+    : Device(device_name, GetUniqueDeviceId(device_address)),
+      address_(device_address),
+      rfcomm_channels_(rfcomm_channels) {}
 
 bool BluetoothDevice::IsSameAs(const Device* other) const {
   LOG4CXX_TRACE(logger_, "enter. device: " << other);
@@ -102,8 +101,7 @@ bool BluetoothDevice::IsSameAs(const Device* other) const {
       dynamic_cast<const BluetoothDevice*>(other);
 
   if (0 != other_bluetooth_device) {
-    if (0 == memcmp(&address_,
-                    &other_bluetooth_device->address_,
+    if (0 == memcmp(&address_, &other_bluetooth_device->address_,
                     sizeof(bdaddr_t))) {
       result = true;
     }

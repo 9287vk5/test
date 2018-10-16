@@ -66,14 +66,12 @@ class MockConnectionHandler : public connection_handler::ConnectionHandler {
   MOCK_METHOD1(CloseRevokedConnection, void(uint32_t connection_key));
   MOCK_METHOD1(CloseConnection, void(ConnectionHandle connection_handle));
   MOCK_METHOD1(GetConnectionSessionsCount, uint32_t(uint32_t connection_key));
-  MOCK_METHOD2(GetDeviceID,
-               bool(const std::string& mac_address,
-                    DeviceHandle* device_handle));
+  MOCK_METHOD2(GetDeviceID, bool(const std::string& mac_address,
+                                 DeviceHandle* device_handle));
   MOCK_METHOD2(CloseSession,
                void(uint32_t key, CloseSessionReason close_reason));
   MOCK_METHOD3(CloseSession,
-               void(ConnectionHandle connection_handle,
-                    uint8_t session_id,
+               void(ConnectionHandle connection_handle, uint8_t session_id,
                     CloseSessionReason close_reason));
   MOCK_METHOD2(SendEndService, void(uint32_t key, uint8_t service_type));
   MOCK_METHOD1(StartSessionHeartBeat, void(uint32_t connection_key));
@@ -86,8 +84,7 @@ class MockConnectionHandler : public connection_handler::ConnectionHandler {
   MOCK_METHOD2(BindProtocolVersionWithSession,
                void(uint32_t connection_key, uint8_t protocol_version));
   MOCK_CONST_METHOD4(GetDataOnSessionKey,
-                     int32_t(uint32_t key,
-                             uint32_t* app_id,
+                     int32_t(uint32_t key, uint32_t* app_id,
                              std::list<int32_t>* sessions_list,
                              connection_handler::DeviceHandle* device_id));
   MOCK_CONST_METHOD0(get_settings,
@@ -110,8 +107,7 @@ class MockConnectionHandler : public connection_handler::ConnectionHandler {
   MOCK_CONST_METHOD1(GetSessionTransports,
                      const SessionTransports(uint8_t session_id));
   MOCK_METHOD3(NotifyServiceStartedResult,
-               void(uint32_t session_key,
-                    bool result,
+               void(uint32_t session_key, bool result,
                     std::vector<std::string>& rejected_params));
   MOCK_METHOD3(
       OnSecondaryTransportStarted,

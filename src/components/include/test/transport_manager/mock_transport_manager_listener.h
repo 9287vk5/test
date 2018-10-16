@@ -61,18 +61,16 @@ class MockTransportManagerListener : public TransportManagerListener {
   MOCK_METHOD2(OnConnectionFailed,
                void(const DeviceInfo& device_info, const ConnectError& error));
   MOCK_METHOD1(OnConnectionClosed, void(const ConnectionUID connection_id));
-  MOCK_METHOD2(OnUnexpectedDisconnect,
-               void(const ConnectionUID connection_id,
-                    const CommunicationError& error));
+  MOCK_METHOD2(OnUnexpectedDisconnect, void(const ConnectionUID connection_id,
+                                            const CommunicationError& error));
   MOCK_METHOD2(OnConnectionClosedFailure,
                void(const ConnectionUID connection_id,
                     const DisconnectError& error));
   MOCK_METHOD2(OnDeviceConnectionLost,
                void(const DeviceHandle& device,
                     const DisconnectDeviceError& error));
-  MOCK_METHOD2(OnDisconnectFailed,
-               void(const DeviceHandle& device,
-                    const DisconnectDeviceError& error));
+  MOCK_METHOD2(OnDisconnectFailed, void(const DeviceHandle& device,
+                                        const DisconnectDeviceError& error));
   MOCK_METHOD1(OnTMMessageReceived,
                void(const ::protocol_handler::RawMessagePtr message));
   MOCK_METHOD1(OnTMMessageReceiveFailed, void(const DataReceiveError& error));
@@ -81,9 +79,8 @@ class MockTransportManagerListener : public TransportManagerListener {
   MOCK_METHOD2(OnTMMessageSendFailed,
                void(const DataSendError& error,
                     const ::protocol_handler::RawMessagePtr message));
-  MOCK_METHOD2(OnDeviceSwitchingStart,
-               void(const DeviceUID& device_uid_from,
-                    const DeviceUID& device_uid_to));
+  MOCK_METHOD2(OnDeviceSwitchingStart, void(const DeviceUID& device_uid_from,
+                                            const DeviceUID& device_uid_to));
   MOCK_METHOD1(OnDeviceSwitchingFinish, void(const DeviceUID& device_uid));
   MOCK_METHOD1(OnTransportConfigUpdated,
                void(const std::map<std::string, std::string>& configs));

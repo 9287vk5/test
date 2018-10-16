@@ -42,14 +42,10 @@ namespace commands {
 VRGetLanguageResponse::VRGetLanguageResponse(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : ResponseFromHMI(message,
-                      application_manager,
-                      rpc_service,
-                      hmi_capabilities,
-                      policy_handle) {}
+    : ResponseFromHMI(message, application_manager, rpc_service,
+                      hmi_capabilities, policy_handle) {}
 
 VRGetLanguageResponse::~VRGetLanguageResponse() {}
 
@@ -67,10 +63,9 @@ void VRGetLanguageResponse::Run() {
 
   hmi_capabilities_.set_active_vr_language(language);
 
-  LOG4CXX_DEBUG(logger_,
-                "Raising event for function_id " << function_id()
-                                                 << " and correlation_id "
-                                                 << correlation_id());
+  LOG4CXX_DEBUG(logger_, "Raising event for function_id "
+                             << function_id() << " and correlation_id "
+                             << correlation_id());
   event_engine::Event event(FunctionID::VR_GetLanguage);
   event.set_smart_object(*message_);
   event.raise(application_manager_.event_dispatcher());

@@ -42,14 +42,10 @@ namespace commands {
 GetWayPointsRequest::GetWayPointsRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {
   subscribe_on_event(hmi_apis::FunctionID::UI_OnResetTimeout);
 }
 
@@ -61,9 +57,8 @@ void GetWayPointsRequest::Run() {
   ApplicationSharedPtr app = application_manager_.application(connection_key());
 
   if (!app) {
-    LOG4CXX_ERROR(logger_,
-                  "An application with connection key "
-                      << connection_key() << " is not registered.");
+    LOG4CXX_ERROR(logger_, "An application with connection key "
+                               << connection_key() << " is not registered.");
     SendResponse(false, mobile_apis::Result::APPLICATION_NOT_REGISTERED);
     return;
   }
@@ -74,8 +69,7 @@ void GetWayPointsRequest::Run() {
   msg_params[strings::app_id] = app->app_id();
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_Navigation);
   SendHMIRequest(hmi_apis::FunctionID::Navigation_GetWayPoints,
-                 msg_params.empty() ? NULL : &msg_params,
-                 true);
+                 msg_params.empty() ? NULL : &msg_params, true);
 }
 
 void GetWayPointsRequest::on_event(const event_engine::Event& event) {
@@ -98,8 +92,7 @@ void GetWayPointsRequest::on_event(const event_engine::Event& event) {
       GetInfo(message, response_info);
       const bool result = PrepareResultForMobileResponse(
           result_code, HmiInterfaces::HMI_INTERFACE_Navigation);
-      SendResponse(result,
-                   MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

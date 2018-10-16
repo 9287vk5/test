@@ -73,16 +73,15 @@ static const uint32_t kRIFFHeaderSize = 44;
 CREATE_LOGGERPTR_GLOBAL(logger_, "MediaManager")
 
 AudioStreamSenderThread::AudioStreamSenderThread(
-    const std::string& fileName,
-    uint32_t session_key,
+    const std::string& fileName, uint32_t session_key,
     application_manager::ApplicationManager& app_mngr)
-    : session_key_(session_key)
-    , fileName_(fileName)
-    , offset_(kRIFFHeaderSize)
-    , shouldBeStoped_(false)
-    , shouldBeStoped_lock_()
-    , shouldBeStoped_cv_()
-    , application_manager_(app_mngr) {
+    : session_key_(session_key),
+      fileName_(fileName),
+      offset_(kRIFFHeaderSize),
+      shouldBeStoped_(false),
+      shouldBeStoped_lock_(),
+      shouldBeStoped_cv_(),
+      application_manager_(app_mngr) {
   LOG4CXX_AUTO_TRACE(logger_);
 }
 
@@ -199,8 +198,6 @@ void AudioStreamSenderThread::exitThreadMain() {
   setShouldBeStopped(true);
 }
 
-uint32_t AudioStreamSenderThread::session_key() const {
-  return session_key_;
-}
+uint32_t AudioStreamSenderThread::session_key() const { return session_key_; }
 
 }  // namespace media_manager

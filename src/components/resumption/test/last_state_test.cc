@@ -49,9 +49,9 @@ const std::string kAppInfoStorageFile = "app_info_storage";
 class LastStateTest : public ::testing::Test {
  protected:
   LastStateTest()
-      : empty_dictionary_("null\n")
-      , app_info_dat_file_("app_info.dat")
-      , last_state_(kAppStorageFolder, kAppInfoStorageFile) {}
+      : empty_dictionary_("null\n"),
+        app_info_dat_file_("app_info.dat"),
+        last_state_(kAppStorageFolder, kAppInfoStorageFile) {}
 
   static void SetUpTestCase() {
     file_system::DeleteFile(kAppInfoStorageFile);

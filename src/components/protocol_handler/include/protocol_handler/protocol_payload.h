@@ -49,10 +49,10 @@ namespace protocol_handler {
 // Applink Protocolv5 4.1.2 Protocol Payload Binary header
 struct ProtocolPayloadHeaderV2 {
   ProtocolPayloadHeaderV2()
-      : rpc_type(kRpcTypeReserved)
-      , rpc_function_id(0)
-      , correlation_id(0)
-      , json_size(0) {}
+      : rpc_type(kRpcTypeReserved),
+        rpc_function_id(0),
+        correlation_id(0),
+        json_size(0) {}
   RpcType rpc_type;
   uint32_t rpc_function_id;
   uint32_t correlation_id;
@@ -70,8 +70,7 @@ struct ProtocolPayloadV2 {
 // a bit stream.
 // If error during parsing is detected, bit stream is marked as invalid
 void Extract(utils::BitStream* bs, ProtocolPayloadHeaderV2* headerv2);
-void Extract(utils::BitStream* bs,
-             ProtocolPayloadV2* payload,
+void Extract(utils::BitStream* bs, ProtocolPayloadV2* payload,
              size_t payload_size);
 
 std::ostream& operator<<(std::ostream& os,

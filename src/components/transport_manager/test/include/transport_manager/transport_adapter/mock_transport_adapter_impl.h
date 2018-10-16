@@ -58,11 +58,9 @@ class MockTransportAdapterImpl : public TransportAdapterImpl {
       ClientConnectionListener* client_connection_listener,
       resumption::LastState& last_state,
       const transport_manager::TransportManagerSettings& settings)
-      : TransportAdapterImpl(device_scanner,
-                             server_connection_factory,
-                             client_connection_listener,
-                             last_state,
-                             settings) {}
+      : TransportAdapterImpl(device_scanner, server_connection_factory,
+                             client_connection_listener, last_state, settings) {
+  }
 
   ConnectionSPtr FindStatedConnection(const DeviceUID& device_handle,
                                       const ApplicationHandle& app_handle) {
@@ -70,9 +68,7 @@ class MockTransportAdapterImpl : public TransportAdapterImpl {
   }
   virtual ~MockTransportAdapterImpl() {}
 
-  virtual DeviceType GetDeviceType() const {
-    return DeviceType::UNKNOWN;
-  }
+  virtual DeviceType GetDeviceType() const { return DeviceType::UNKNOWN; }
 
   MOCK_CONST_METHOD0(Store, void());
   MOCK_METHOD0(Restore, bool());

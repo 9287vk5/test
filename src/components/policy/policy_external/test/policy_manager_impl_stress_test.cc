@@ -282,8 +282,8 @@ TEST_F(PolicyManagerImplStressTest,
 
     ::policy::RPCParams input_params;
     ::policy::CheckPermissionResult output;
-    manager->CheckPermissions(
-        app_number, "FULL", "Func-" + func_number, input_params, output);
+    manager->CheckPermissions(app_number, "FULL", "Func-" + func_number,
+                              input_params, output);
     EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   }
 }

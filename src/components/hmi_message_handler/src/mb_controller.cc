@@ -37,10 +37,10 @@ CMessageBrokerController::CMessageBrokerController(const std::string& address,
                                                    uint16_t port,
                                                    std::string name,
                                                    int num_threads)
-    : address_(address)
-    , acceptor_(ioc_)
-    , socket_(ioc_)
-    , mControllersIdCounter(1) {
+    : address_(address),
+      acceptor_(ioc_),
+      socket_(ioc_),
+      mControllersIdCounter(1) {
   port_ = port;
   name_ = name;
   num_threads_ = num_threads;
@@ -93,10 +93,9 @@ bool CMessageBrokerController::StartListener() {
 
 bool CMessageBrokerController::Run() {
   if (acceptor_.is_open() && !shutdown_) {
-    acceptor_.async_accept(socket_,
-                           std::bind(&CMessageBrokerController::StartSession,
-                                     this,
-                                     std::placeholders::_1));
+    acceptor_.async_accept(
+        socket_, std::bind(&CMessageBrokerController::StartSession, this,
+                           std::placeholders::_1));
     ioc_.run();
     return true;
   }
@@ -105,10 +104,9 @@ bool CMessageBrokerController::Run() {
 
 void CMessageBrokerController::WaitForConnection() {
   if (acceptor_.is_open() && !shutdown_) {
-    acceptor_.async_accept(socket_,
-                           std::bind(&CMessageBrokerController::StartSession,
-                                     this,
-                                     std::placeholders::_1));
+    acceptor_.async_accept(
+        socket_, std::bind(&CMessageBrokerController::StartSession, this,
+                           std::placeholders::_1));
   }
 }
 
@@ -211,9 +209,7 @@ void* CMessageBrokerController::MethodForReceiverThread(void* arg) {
   return NULL;
 }
 
-bool CMessageBrokerController::Connect() {
-  return true;
-}
+bool CMessageBrokerController::Connect() { return true; }
 
 void CMessageBrokerController::exitReceivingThread() {
   shutdown_ = true;

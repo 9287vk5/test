@@ -24,8 +24,8 @@ using ::testing::SaveArg;
 class NetworkInterfaceListenerTest : public ::testing::Test {
  public:
   NetworkInterfaceListenerTest()
-      : interface_listener_impl_(NULL)
-      , mock_tcp_client_listener_(NULL, 0, false, "") {}
+      : interface_listener_impl_(NULL),
+        mock_tcp_client_listener_(NULL, 0, false, "") {}
 
   virtual ~NetworkInterfaceListenerTest() {}
 
@@ -37,9 +37,7 @@ class NetworkInterfaceListenerTest : public ::testing::Test {
     unsigned int flags;
   };
 
-  void Deinit() {
-    delete interface_listener_impl_;
-  }
+  void Deinit() { delete interface_listener_impl_; }
 
   void SleepFor(long msec) const {
     if (msec > 0) {

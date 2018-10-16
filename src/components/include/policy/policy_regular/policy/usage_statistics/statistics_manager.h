@@ -91,8 +91,7 @@ class StatisticsManager {
    * @param type application info type
    * @param value new value for counter
    */
-  virtual void Set(const std::string& app_id,
-                   AppInfoId type,
+  virtual void Set(const std::string& app_id, AppInfoId type,
                    const std::string& value) = 0;
 
   /**
@@ -101,8 +100,7 @@ class StatisticsManager {
    * @param type application stopwatch type
    * @param timespan_seconds seconds to add
    */
-  virtual void Add(const std::string& app_id,
-                   AppStopwatchId type,
+  virtual void Add(const std::string& app_id, AppStopwatchId type,
                    int32_t timespan_seconds) = 0;
 };
 

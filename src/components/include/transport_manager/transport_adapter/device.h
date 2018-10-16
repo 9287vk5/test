@@ -56,9 +56,9 @@ class Device {
    * @param unique_device_id device unique identifier.
    **/
   Device(const std::string& name, const DeviceUID& unique_device_id)
-      : name_(name)
-      , unique_device_id_(unique_device_id)
-      , keep_on_disconnect_(false) {}
+      : name_(name),
+        unique_device_id_(unique_device_id),
+        keep_on_disconnect_(false) {}
 
   /**
    * Constructor for creating device supporting transport switch
@@ -67,13 +67,12 @@ class Device {
    * @param unique_device_id Unique device id
    * @param transport_switch_id Id used for transport switching flow
    */
-  Device(const std::string& name,
-         const DeviceUID& unique_device_id,
+  Device(const std::string& name, const DeviceUID& unique_device_id,
          std::string transport_switch_id)
-      : name_(name)
-      , unique_device_id_(unique_device_id)
-      , transport_switch_id_(transport_switch_id)
-      , keep_on_disconnect_(false) {}
+      : name_(name),
+        unique_device_id_(unique_device_id),
+        transport_switch_id_(transport_switch_id),
+        keep_on_disconnect_(false) {}
 
   /**
    * @brief Destructor.
@@ -105,23 +104,17 @@ class Device {
 
   virtual void Stop() {}
 
-  inline const DeviceUID& unique_device_id() const {
-    return unique_device_id_;
-  }
+  inline const DeviceUID& unique_device_id() const { return unique_device_id_; }
 
   /**
    * @brief Return name of device.
    */
-  inline const std::string& name() const {
-    return name_;
-  }
+  inline const std::string& name() const { return name_; }
 
   /**
    * @brief Get @link keep_on_disconnect_ @endlink value
    */
-  inline bool keep_on_disconnect() const {
-    return keep_on_disconnect_;
-  }
+  inline bool keep_on_disconnect() const { return keep_on_disconnect_; }
 
   /**
    * @brief Set @link keep_on_disconnect_ @endlink value

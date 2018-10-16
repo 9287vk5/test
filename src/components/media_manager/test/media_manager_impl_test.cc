@@ -88,13 +88,9 @@ const std::string kOutputFilePath = kStorageFolder + "/" + kOutputFile;
 const uint32_t kProtocolVersion = ::protocol_handler::PROTOCOL_VERSION_2;
 const uint32_t kConnectionKey = 1u;
 
-void dealloc_data(uint8_t* data) {
-  delete[] data;
-}
+void dealloc_data(uint8_t* data) { delete[] data; }
 
-void dealloc_file(std::ofstream* test_file) {
-  delete test_file;
-}
+void dealloc_file(std::ofstream* test_file) { delete test_file; }
 }  // namespace
 
 typedef NiceMock<application_manager_test::MockApplication> MockApp;
@@ -189,12 +185,9 @@ class MediaManagerImplTest : public ::testing::Test {
   void EmulateMobileMessage(const ServiceType serviceType) {
     const uint32_t data_sending_size = 3u;
     unsigned char data_sending[data_sending_size] = {0x20, 0x07, 0x01};
-    const RawMessagePtr raw_message_ptr(
-        new ::protocol_handler::RawMessage(kConnectionKey,
-                                           kProtocolVersion,
-                                           data_sending,
-                                           data_sending_size,
-                                           serviceType));
+    const RawMessagePtr raw_message_ptr(new ::protocol_handler::RawMessage(
+        kConnectionKey, kProtocolVersion, data_sending, data_sending_size,
+        serviceType));
     media_manager_impl_->OnMessageReceived(raw_message_ptr);
     media_manager_impl_->OnMobileMessageSent(raw_message_ptr);
   }
@@ -323,8 +316,8 @@ TEST_F(MediaManagerImplTest,
   for (uint32_t i = 0u; i < data_size; ++i) {
     EXPECT_EQ(data[i], result[i]);
   }
-  media_manager_impl_->StartMicrophoneRecording(
-      kApplicationKey, kOutputFile, kDuration);
+  media_manager_impl_->StartMicrophoneRecording(kApplicationKey, kOutputFile,
+                                                kDuration);
   EXPECT_TRUE(RemoveDirectory(kResourceFolder, true));
   EXPECT_TRUE(RemoveDirectory(kStorageFolder, true));
 }
@@ -334,8 +327,8 @@ TEST_F(MediaManagerImplTest,
   StartMicrophoneCheckHelper();
   media_manager_impl_->set_mock_mic_listener(media_adapter_listener_mock_);
   EXPECT_FALSE(FileExists(kOutputFilePath));
-  media_manager_impl_->StartMicrophoneRecording(
-      kApplicationKey, kOutputFile, kDuration);
+  media_manager_impl_->StartMicrophoneRecording(kApplicationKey, kOutputFile,
+                                                kDuration);
 }
 
 TEST_F(MediaManagerImplTest,
@@ -350,8 +343,8 @@ TEST_F(MediaManagerImplTest,
   EXPECT_FALSE(DeleteFile(kOutputFilePath));
   media_manager_impl_->set_mock_mic_listener(media_adapter_listener_mock_);
   EXPECT_TRUE(FileExists(kOutputFilePath));
-  media_manager_impl_->StartMicrophoneRecording(
-      kApplicationKey, kOutputFile, kDuration);
+  media_manager_impl_->StartMicrophoneRecording(kApplicationKey, kOutputFile,
+                                                kDuration);
   chmod(kOutputFilePath.c_str(), S_IWUSR);
   EXPECT_TRUE(RemoveDirectory(kStorageFolder, true));
 }

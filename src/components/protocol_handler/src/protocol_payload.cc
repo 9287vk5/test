@@ -64,8 +64,7 @@ void Extract(utils::BitStream* bs, ProtocolPayloadHeaderV2* headerv2) {
   }
 }
 
-void Extract(utils::BitStream* bs,
-             ProtocolPayloadV2* payload,
+void Extract(utils::BitStream* bs, ProtocolPayloadV2* payload,
              size_t payload_size) {
   DCHECK(bs && payload);
   if (payload && bs && *bs) {
@@ -93,8 +92,6 @@ std::ostream& operator<<(std::ostream& os, const ProtocolPayloadV2& payload) {
             << ", data (bytes): " << payload.data.size() << ")";
 }
 
-size_t ProtocolPayloadV2SizeBits() {
-  return PayloadHeaderBits;
-}
+size_t ProtocolPayloadV2SizeBits() { return PayloadHeaderBits; }
 
 }  // namespace protocol_handler

@@ -175,23 +175,22 @@ capabilitiesStatus GetItemCapability(
   const auto it = mapping.find(request_parameter);
 
   if (it == mapping.end()) {
-    LOG4CXX_DEBUG(logger_,
-                  "Parameter " << request_parameter
-                               << " doesn't exist in capabilities.");
+    LOG4CXX_DEBUG(logger_, "Parameter " << request_parameter
+                                        << " doesn't exist in capabilities.");
     return capabilitiesStatus::missedParam;
   }
 
   const std::string& caps_key = it->second;
 
-  LOG4CXX_DEBUG(logger_,
-                "Checking request parameter "
-                    << request_parameter
-                    << " with capabilities. Appropriate key is " << caps_key);
+  LOG4CXX_DEBUG(logger_, "Checking request parameter "
+                             << request_parameter
+                             << " with capabilities. Appropriate key is "
+                             << caps_key);
 
   if (!capabilities.keyExists(caps_key)) {
-    LOG4CXX_DEBUG(logger_,
-                  "Capability " << caps_key
-                                << " is missed in RemoteControl capabilities");
+    LOG4CXX_DEBUG(logger_, "Capability "
+                               << caps_key
+                               << " is missed in RemoteControl capabilities");
     return capabilitiesStatus::missedParam;
   }
 
@@ -230,9 +229,7 @@ ModuleCapability GetLightDataCapabilities(
     }
 
     const capabilitiesStatus status_item_capability =
-        GetItemCapability(capabilities,
-                          mapping,
-                          request_parameter,
+        GetItemCapability(capabilities, mapping, request_parameter,
                           mobile_apis::Result::READ_ONLY);
 
     if (capabilitiesStatus::success != status_item_capability) {
@@ -305,9 +302,7 @@ ModuleCapability GetControlDataCapabilities(
     }
 
     const capabilitiesStatus status_item_capability =
-        GetItemCapability(capabilities[0],
-                          mapping,
-                          request_parameter,
+        GetItemCapability(capabilities[0], mapping, request_parameter,
                           mobile_apis::Result::UNSUPPORTED_RESOURCE);
 
     if (capabilitiesStatus::success != status_item_capability) {
@@ -334,9 +329,7 @@ ModuleCapability GetHmiControlDataCapabilities(
 
   for (auto it = control_data.map_begin(); it != control_data.map_end(); ++it) {
     const capabilitiesStatus status_item_capability =
-        GetItemCapability(capabilities,
-                          mapping,
-                          it->first,
+        GetItemCapability(capabilities, mapping, it->first,
                           mobile_apis::Result::UNSUPPORTED_RESOURCE);
 
     if (capabilitiesStatus::success != status_item_capability) {
@@ -462,8 +455,7 @@ void SetInteriorVehicleDataRequest::Execute() {
     if (AreAllParamsReadOnly(module_data)) {
       LOG4CXX_WARN(logger_, "All request params in module type are READ ONLY!");
       SetResourceState(ModuleType(), ResourceState::FREE);
-      SendResponse(false,
-                   mobile_apis::Result::READ_ONLY,
+      SendResponse(false, mobile_apis::Result::READ_ONLY,
                    "All request params in module type are READ ONLY!");
       return;
     }
@@ -477,8 +469,7 @@ void SetInteriorVehicleDataRequest::Execute() {
           capabilitiesStatus::success != module_data_capabilities.second) {
         SetResourceState(ModuleType(), ResourceState::FREE);
         SendResponse(
-            false,
-            mobile_apis::Result::READ_ONLY,
+            false, mobile_apis::Result::READ_ONLY,
             "The LightStatus enum passed is READ ONLY and cannot be written.");
         return;
       }
@@ -503,19 +494,16 @@ void SetInteriorVehicleDataRequest::Execute() {
     if (app_wants_to_set_audio_src && !app->IsAllowedToChangeAudioSource()) {
       LOG4CXX_WARN(logger_, "App is not allowed to change audio source");
       SetResourceState(ModuleType(), ResourceState::FREE);
-      SendResponse(false,
-                   mobile_apis::Result::REJECTED,
+      SendResponse(false, mobile_apis::Result::REJECTED,
                    "App is not allowed to change audio source");
       return;
     }
 
     SendHMIRequest(hmi_apis::FunctionID::RC_SetInteriorVehicleData,
-                   &(*message_)[app_mngr::strings::msg_params],
-                   true);
+                   &(*message_)[app_mngr::strings::msg_params], true);
   } else {
     LOG4CXX_WARN(logger_, "Request module type & data mismatch!");
-    SendResponse(false,
-                 mobile_apis::Result::INVALID_DATA,
+    SendResponse(false, mobile_apis::Result::INVALID_DATA,
                  "Request module type & data mismatch!");
   }
 }
@@ -537,8 +525,7 @@ void SetInteriorVehicleDataRequest::on_event(
 
   bool result =
       helpers::Compare<mobile_apis::Result::eType, helpers::EQ, helpers::ONE>(
-          result_code,
-          mobile_apis::Result::SUCCESS,
+          result_code, mobile_apis::Result::SUCCESS,
           mobile_apis::Result::WARNINGS);
 
   smart_objects::SmartObject response_params;
@@ -552,8 +539,8 @@ void SetInteriorVehicleDataRequest::on_event(
   }
   std::string info;
   GetInfo(hmi_response, info);
-  SendResponse(
-      result, result_code, info.c_str(), result ? &response_params : nullptr);
+  SendResponse(result, result_code, info.c_str(),
+               result ? &response_params : nullptr);
 }
 
 const smart_objects::SmartObject& SetInteriorVehicleDataRequest::ControlData(
@@ -646,8 +633,7 @@ bool CheckReadOnlyParamsForLight(
             static_cast<mobile_apis::LightStatus::eType>(
                 (*it)[message_params::kLightStatus].asUInt());
 
-        if (helpers::Compare<mobile_apis::LightStatus::eType,
-                             helpers::EQ,
+        if (helpers::Compare<mobile_apis::LightStatus::eType, helpers::EQ,
                              helpers::ONE>(light_status,
                                            mobile_apis::LightStatus::RAMP_UP,
                                            mobile_apis::LightStatus::RAMP_DOWN,
@@ -730,9 +716,8 @@ void SetInteriorVehicleDataRequest::CutOffReadOnlyParams(
     for (; it != equalizer_settings.asArray()->end(); ++it) {
       if (it->keyExists(message_params::kChannelName)) {
         it->erase(message_params::kChannelName);
-        LOG4CXX_DEBUG(logger_,
-                      "Cutting-off READ ONLY parameter: "
-                          << message_params::kChannelName);
+        LOG4CXX_DEBUG(logger_, "Cutting-off READ ONLY parameter: "
+                                   << message_params::kChannelName);
       }
     }
   }
@@ -770,8 +755,8 @@ void SetInteriorVehicleDataRequest::SetResourceState(
   LOG4CXX_AUTO_TRACE(logger_);
   app_mngr::ApplicationSharedPtr app =
       application_manager_.application(CommandRequestImpl::connection_key());
-  resource_allocation_manager_.SetResourceState(
-      module_type, app->app_id(), state);
+  resource_allocation_manager_.SetResourceState(module_type, app->app_id(),
+                                                state);
 }
 
 }  // namespace commands

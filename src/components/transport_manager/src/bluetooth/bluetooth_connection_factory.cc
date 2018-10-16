@@ -55,8 +55,8 @@ TransportAdapter::Error BluetoothConnectionFactory::CreateConnection(
     const DeviceUID& device_uid, const ApplicationHandle& app_handle) {
   LOG4CXX_AUTO_TRACE(logger_);
   std::shared_ptr<BluetoothSocketConnection> connection =
-      std::make_shared<BluetoothSocketConnection>(
-          device_uid, app_handle, controller_);
+      std::make_shared<BluetoothSocketConnection>(device_uid, app_handle,
+                                                  controller_);
   controller_->ConnectionCreated(connection, device_uid, app_handle);
   TransportAdapter::Error error = connection->Start();
   if (TransportAdapter::OK != error) {
@@ -68,9 +68,7 @@ TransportAdapter::Error BluetoothConnectionFactory::CreateConnection(
 
 void BluetoothConnectionFactory::Terminate() {}
 
-bool BluetoothConnectionFactory::IsInitialised() const {
-  return true;
-}
+bool BluetoothConnectionFactory::IsInitialised() const { return true; }
 
 BluetoothConnectionFactory::~BluetoothConnectionFactory() {}
 

@@ -8,14 +8,13 @@ namespace rc_rpc_plugin {
 CREATE_LOGGERPTR_GLOBAL(logger_, "RemoteControlModule");
 
 InteriorDataManagerImpl::InteriorDataManagerImpl(
-    RCRPCPlugin& rc_plugin,
-    InteriorDataCache& cache,
+    RCRPCPlugin& rc_plugin, InteriorDataCache& cache,
     application_manager::ApplicationManager& app_mngr,
     application_manager::rpc_service::RPCService& rpc_service)
-    : rc_plugin_(rc_plugin)
-    , cache_(cache)
-    , app_mngr_(app_mngr)
-    , rpc_service_(rpc_service) {}
+    : rc_plugin_(rc_plugin),
+      cache_(cache),
+      app_mngr_(app_mngr),
+      rpc_service_(rpc_service) {}
 
 void InteriorDataManagerImpl::OnPolicyEvent(plugins::PolicyEvent event) {
   UpdateHMISubscriptionsOnPolicyUpdated();
@@ -75,11 +74,8 @@ void InteriorDataManagerImpl::UpdateHMISubscriptionsOnPolicyUpdated() {
     auto& allowed = apps_allowed_modules[pair.first];
     auto& subscribed = pair.second;
     std::vector<std::string> disallowed_modules;
-    std::set_difference(subscribed.begin(),
-                        subscribed.end(),
-                        allowed.begin(),
-                        allowed.end(),
-                        std::back_inserter(disallowed_modules));
+    std::set_difference(subscribed.begin(), subscribed.end(), allowed.begin(),
+                        allowed.end(), std::back_inserter(disallowed_modules));
     apps_disallowed_modules[pair.first] = disallowed_modules;
   }
 
@@ -149,8 +145,7 @@ InteriorDataManagerImpl::AppsSubscribedModules() {
     const auto rc_extension = RCHelpers::GetRCExtension(*app_ptr);
     auto app_subscriptions = rc_extension->InteriorVehicleDataSubscriptions();
     result[app_ptr] = std::vector<std::string>(app_subscriptions.size());
-    std::copy(app_subscriptions.begin(),
-              app_subscriptions.end(),
+    std::copy(app_subscriptions.begin(), app_subscriptions.end(),
               result[app_ptr].begin());
   }
   return result;

@@ -179,12 +179,9 @@ RegisterAppInterfaceRequest::RegisterAppInterfaceRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler)
-    , result_code_(mobile_apis::Result::INVALID_ENUM) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler),
+      result_code_(mobile_apis::Result::INVALID_ENUM) {}
 
 RegisterAppInterfaceRequest::~RegisterAppInterfaceRequest() {}
 
@@ -207,12 +204,11 @@ void RegisterAppInterfaceRequest::Run() {
   // wait till HMI started
   while (!application_manager_.IsStopping() &&
          !application_manager_.IsHMICooperating()) {
-    LOG4CXX_DEBUG(logger_,
-                  "Waiting for the HMI... conn_key="
-                      << connection_key()
-                      << ", correlation_id=" << correlation_id()
-                      << ", default_timeout=" << default_timeout()
-                      << ", thread=" << pthread_self());
+    LOG4CXX_DEBUG(logger_, "Waiting for the HMI... conn_key="
+                               << connection_key()
+                               << ", correlation_id=" << correlation_id()
+                               << ", default_timeout=" << default_timeout()
+                               << ", thread=" << pthread_self());
     application_manager_.updateRequestTimeout(
         connection_key(), correlation_id(), default_timeout());
     sleep(1);
@@ -245,19 +241,15 @@ void RegisterAppInterfaceRequest::Run() {
   // transform app IDs to lowercase for usage in policy checks later
   const std::string app_id_short = msg_params[strings::app_id].asString();
   std::string new_app_id_short = app_id_short;
-  std::transform(app_id_short.begin(),
-                 app_id_short.end(),
-                 new_app_id_short.begin(),
-                 ::tolower);
+  std::transform(app_id_short.begin(), app_id_short.end(),
+                 new_app_id_short.begin(), ::tolower);
   (*message_)[strings::msg_params][strings::app_id] = new_app_id_short;
   // If full ID is present, shift that to lowercase too
   if (msg_params.keyExists(strings::full_app_id)) {
     const std::string app_id_full = msg_params[strings::full_app_id].asString();
     std::string new_app_id_full = app_id_full;
-    std::transform(app_id_full.begin(),
-                   app_id_full.end(),
-                   new_app_id_full.begin(),
-                   ::tolower);
+    std::transform(app_id_full.begin(), app_id_full.end(),
+                   new_app_id_full.begin(), ::tolower);
     (*message_)[strings::msg_params][strings::full_app_id] = new_app_id_full;
   }
   if (application_manager_.IsApplicationForbidden(connection_key(),
@@ -274,8 +266,7 @@ void RegisterAppInterfaceRequest::Run() {
   mobile_apis::Result::eType policy_result = CheckWithPolicyData();
 
   if (Compare<mobile_apis::Result::eType, NEQ, ALL>(
-          policy_result,
-          mobile_apis::Result::SUCCESS,
+          policy_result, mobile_apis::Result::SUCCESS,
           mobile_apis::Result::WARNINGS)) {
     SendResponse(false, policy_result);
     return;
@@ -287,8 +278,7 @@ void RegisterAppInterfaceRequest::Run() {
     LOG4CXX_ERROR(logger_, "Coincidence check failed.");
     if (mobile_apis::Result::DUPLICATE_NAME == coincidence_result) {
       usage_statistics::AppCounter count_of_rejections_duplicate_name(
-          GetPolicyHandler().GetStatisticManager(),
-          policy_app_id,
+          GetPolicyHandler().GetStatisticManager(), policy_app_id,
           usage_statistics::REJECTIONS_DUPLICATE_NAME);
       ++count_of_rejections_duplicate_name;
     }
@@ -333,8 +323,8 @@ void RegisterAppInterfaceRequest::Run() {
 
   // Version negotiation
   utils::SemanticVersion ver_4_5(4, 5, 0);
-  utils::SemanticVersion module_version(
-      major_version, minor_version, patch_version);
+  utils::SemanticVersion module_version(major_version, minor_version,
+                                        patch_version);
   if (mobile_version <= ver_4_5) {
     // Mobile versioning did not exist for
     // versions 4.5 and prior.
@@ -376,13 +366,12 @@ void RegisterAppInterfaceRequest::Run() {
     smart_objects::SmartObject& tts_name =
         (*message_)[strings::msg_params][strings::tts_name];
     mobile_apis::Result::eType verification_result =
-        MessageHelper::VerifyTtsFiles(
-            tts_name, application, application_manager_);
+        MessageHelper::VerifyTtsFiles(tts_name, application,
+                                      application_manager_);
 
     if (mobile_apis::Result::FILE_NOT_FOUND == verification_result) {
-      LOG4CXX_WARN(logger_,
-                   "MessageHelper::VerifyTtsFiles return "
-                       << verification_result);
+      LOG4CXX_WARN(logger_, "MessageHelper::VerifyTtsFiles return "
+                                << verification_result);
       response_info_ = "One or more files needed for tts_name are not present";
       result_code_ = mobile_apis::Result::WARNINGS;
     }
@@ -437,14 +426,11 @@ void RegisterAppInterfaceRequest::Run() {
   if (-1 ==
       application_manager_.connection_handler()
           .get_session_observer()
-          .GetDataOnDeviceID(application->device(),
-                             &dev_params.device_name,
-                             NULL,
-                             &dev_params.device_mac_address,
+          .GetDataOnDeviceID(application->device(), &dev_params.device_name,
+                             NULL, &dev_params.device_mac_address,
                              &dev_params.device_connection_type)) {
-    LOG4CXX_ERROR(logger_,
-                  "Failed to extract information for device "
-                      << application->device());
+    LOG4CXX_ERROR(logger_, "Failed to extract information for device "
+                               << application->device());
   }
   policy::DeviceInfo device_info;
   device_info.AdoptDeviceType(dev_params.device_connection_type);
@@ -626,8 +612,8 @@ void RegisterAppInterfaceRequest::SendRegisterAppInterfaceResponseToMobile(
   resumption::ResumeCtrl& resumer = application_manager_.resume_controller();
 
   if (!application) {
-    LOG4CXX_ERROR(logger_,
-                  "There is no application for such connection key" << key);
+    LOG4CXX_ERROR(logger_, "There is no application for such connection key"
+                               << key);
     LOG4CXX_DEBUG(logger_, "Need to start resume data persistent timer");
     resumer.OnAppRegistrationEnd();
     return;
@@ -649,9 +635,8 @@ void RegisterAppInterfaceRequest::SendRegisterAppInterfaceResponseToMobile(
           hmi_capabilities.active_vr_language() ||
       msg_params[strings::hmi_display_language_desired].asInt() !=
           hmi_capabilities.active_ui_language()) {
-    LOG4CXX_WARN(logger_,
-                 "Wrong language on registering application "
-                     << application->name().c_str());
+    LOG4CXX_WARN(logger_, "Wrong language on registering application "
+                              << application->name().c_str());
 
     LOG4CXX_ERROR(
         logger_,
@@ -748,8 +733,8 @@ void RegisterAppInterfaceRequest::SendRegisterAppInterfaceResponseToMobile(
     application_manager::DeleteApplicationData(application,
                                                application_manager_);
 
-    SendResponse(
-        true, mobile_apis::Result::RESUME_FAILED, NULL, &response_params);
+    SendResponse(true, mobile_apis::Result::RESUME_FAILED, NULL,
+                 &response_params);
     return;
   }
 
@@ -804,10 +789,8 @@ void RegisterAppInterfaceRequest::SendRegisterAppInterfaceResponseToMobile(
     DCHECK_OR_RETURN_VOID(hmi_types_ptr);
     SmartArrayValueExtractor extractor;
     if (hmi_types_ptr && 0 < hmi_types_ptr->size()) {
-      std::transform(hmi_types_ptr->begin(),
-                     hmi_types_ptr->end(),
-                     std::back_inserter(hmi_types),
-                     extractor);
+      std::transform(hmi_types_ptr->begin(), hmi_types_ptr->end(),
+                     std::back_inserter(hmi_types), extractor);
     }
   }
   policy::StatusNotifier notify_upd_manager = GetPolicyHandler().AddApplication(
@@ -817,8 +800,8 @@ void RegisterAppInterfaceRequest::SendRegisterAppInterfaceResponseToMobile(
       file_system::FileExists(application->app_icon_path());
 
   SendResponse(true, result_code, add_info.c_str(), &response_params);
-  SendOnAppRegisteredNotificationToHMI(
-      *(application.get()), resumption, need_restore_vr);
+  SendOnAppRegisteredNotificationToHMI(*(application.get()), resumption,
+                                       need_restore_vr);
   if (msg_params.keyExists(strings::app_hmi_type)) {
     GetPolicyHandler().SetDefaultHmiTypes(application->policy_app_id(),
                                           &(msg_params[strings::app_hmi_type]));
@@ -846,8 +829,7 @@ void RegisterAppInterfaceRequest::SendRegisterAppInterfaceResponseToMobile(
 }
 
 void RegisterAppInterfaceRequest::SendChangeRegistration(
-    const hmi_apis::FunctionID::eType function_id,
-    const int32_t language,
+    const hmi_apis::FunctionID::eType function_id, const int32_t language,
     const uint32_t app_id) {
   using helpers::Compare;
   using helpers::EQ;
@@ -872,14 +854,13 @@ void RegisterAppInterfaceRequest::SendChangeRegistrationOnHMI(
   DCHECK_OR_RETURN_VOID(app);
   DCHECK_OR_RETURN_VOID(mobile_apis::Language::INVALID_ENUM != app->language());
   SendChangeRegistration(VR_ChangeRegistration, app->language(), app->app_id());
-  SendChangeRegistration(
-      TTS_ChangeRegistration, app->language(), app->app_id());
+  SendChangeRegistration(TTS_ChangeRegistration, app->language(),
+                         app->app_id());
   SendChangeRegistration(UI_ChangeRegistration, app->language(), app->app_id());
 }
 
 void RegisterAppInterfaceRequest::SendOnAppRegisteredNotificationToHMI(
-    const app_mngr::Application& application_impl,
-    bool resumption,
+    const app_mngr::Application& application_impl, bool resumption,
     bool need_restore_vr) {
   using namespace smart_objects;
   SmartObjectSPtr notification = std::make_shared<SmartObject>(SmartType_Map);
@@ -988,21 +969,17 @@ void RegisterAppInterfaceRequest::SendOnAppRegisteredNotificationToHMI(
 
   application[strings::device_info] = SmartObject(SmartType_Map);
   smart_objects::SmartObject& device_info = application[strings::device_info];
-  MessageHelper::CreateDeviceInfo(application_impl.device(),
-                                  session_observer,
-                                  GetPolicyHandler(),
-                                  application_manager_,
+  MessageHelper::CreateDeviceInfo(application_impl.device(), session_observer,
+                                  GetPolicyHandler(), application_manager_,
                                   &device_info);
 
   if (application_impl.secondary_device() != 0) {
     application[strings::secondary_device_info] = SmartObject(SmartType_Map);
     smart_objects::SmartObject& secondary_device_info =
         application[strings::secondary_device_info];
-    MessageHelper::CreateDeviceInfo(application_impl.secondary_device(),
-                                    session_observer,
-                                    GetPolicyHandler(),
-                                    application_manager_,
-                                    &secondary_device_info);
+    MessageHelper::CreateDeviceInfo(
+        application_impl.secondary_device(), session_observer,
+        GetPolicyHandler(), application_manager_, &secondary_device_info);
   }
 
   const smart_objects::SmartObject* day_color_scheme =
@@ -1102,8 +1079,7 @@ mobile_apis::Result::eType RegisterAppInterfaceRequest::CheckWithPolicyData() {
       // App should be unregistered, if its name is not present in nicknames
       // list
       usage_statistics::AppCounter count_of_rejections_nickname_mismatch(
-          GetPolicyHandler().GetStatisticManager(),
-          mobile_app_id,
+          GetPolicyHandler().GetStatisticManager(), mobile_app_id,
           usage_statistics::REJECTIONS_NICKNAME_MISMATCH);
       ++count_of_rejections_nickname_mismatch;
       return mobile_apis::Result::DISALLOWED;
@@ -1344,8 +1320,7 @@ bool RegisterAppInterfaceRequest::IsWhiteSpaceExist() {
 }
 
 void RegisterAppInterfaceRequest::CheckResponseVehicleTypeParam(
-    smart_objects::SmartObject& vehicle_type,
-    const std::string& param,
+    smart_objects::SmartObject& vehicle_type, const std::string& param,
     const std::string& backup_value) {
   using namespace hmi_response;
   if (!vehicle_type.keyExists(param) || vehicle_type[param].empty()) {
@@ -1380,17 +1355,16 @@ bool RegisterAppInterfaceRequest::IsApplicationSwitched() {
   auto app = application_manager_.application_by_policy_id(policy_app_id);
 
   if (!app) {
-    LOG4CXX_DEBUG(logger_,
-                  "Application with policy id " << policy_app_id
-                                                << " is not found.");
+    LOG4CXX_DEBUG(logger_, "Application with policy id " << policy_app_id
+                                                         << " is not found.");
     return false;
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Application with policy id " << policy_app_id << " is found.");
+  LOG4CXX_DEBUG(logger_, "Application with policy id " << policy_app_id
+                                                       << " is found.");
   if (!application_manager_.IsAppInReconnectMode(policy_app_id)) {
-    LOG4CXX_DEBUG(logger_,
-                  "Policy id " << policy_app_id
+    LOG4CXX_DEBUG(logger_, "Policy id "
+                               << policy_app_id
                                << " is not found in reconnection list.");
     SendResponse(false, mobile_apis::Result::APPLICATION_REGISTERED_ALREADY);
     return false;

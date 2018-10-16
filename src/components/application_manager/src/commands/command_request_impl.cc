@@ -68,8 +68,7 @@ std::string MergeInfos(const std::string& first, const std::string& second) {
   return first + ((!first.empty() && !second.empty()) ? ", " : "") + second;
 }
 
-std::string MergeInfos(const std::string& first,
-                       const std::string& second,
+std::string MergeInfos(const std::string& first, const std::string& second,
                        const std::string& third) {
   std::string result = MergeInfos(first, second);
   return MergeInfos(result, third);
@@ -161,33 +160,31 @@ struct DisallowedParamsInserter {
 };
 
 ResponseInfo::ResponseInfo()
-    : result_code(hmi_apis::Common_Result::INVALID_ENUM)
-    , interface(HmiInterfaces::HMI_INTERFACE_INVALID_ENUM)
-    , interface_state(HmiInterfaces::STATE_NOT_RESPONSE)
-    , is_ok(false)
-    , is_unsupported_resource(false)
-    , is_not_used(false) {}
+    : result_code(hmi_apis::Common_Result::INVALID_ENUM),
+      interface(HmiInterfaces::HMI_INTERFACE_INVALID_ENUM),
+      interface_state(HmiInterfaces::STATE_NOT_RESPONSE),
+      is_ok(false),
+      is_unsupported_resource(false),
+      is_not_used(false) {}
 
 ResponseInfo::ResponseInfo(const hmi_apis::Common_Result::eType result,
                            const HmiInterfaces::InterfaceID hmi_interface,
                            ApplicationManager& application_manager)
-    : result_code(result)
-    , interface(hmi_interface)
-    , interface_state(HmiInterfaces::STATE_NOT_RESPONSE)
-    , is_ok(false)
-    , is_unsupported_resource(false)
-    , is_not_used(false) {
+    : result_code(result),
+      interface(hmi_interface),
+      interface_state(HmiInterfaces::STATE_NOT_RESPONSE),
+      is_ok(false),
+      is_unsupported_resource(false),
+      is_not_used(false) {
   using namespace helpers;
 
   interface_state =
       application_manager.hmi_interfaces().GetInterfaceState(hmi_interface);
 
   is_ok = Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-      result_code,
-      hmi_apis::Common_Result::SUCCESS,
+      result_code, hmi_apis::Common_Result::SUCCESS,
       hmi_apis::Common_Result::WARNINGS,
-      hmi_apis::Common_Result::WRONG_LANGUAGE,
-      hmi_apis::Common_Result::RETRY,
+      hmi_apis::Common_Result::WRONG_LANGUAGE, hmi_apis::Common_Result::RETRY,
       hmi_apis::Common_Result::SAVED);
 
   is_not_used = hmi_apis::Common_Result::INVALID_ENUM == result_code;
@@ -197,36 +194,23 @@ ResponseInfo::ResponseInfo(const hmi_apis::Common_Result::eType result,
 }
 
 CommandRequestImpl::CommandRequestImpl(
-    const MessageSharedPtr& message,
-    ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    const MessageSharedPtr& message, ApplicationManager& application_manager,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandImpl(message,
-                  application_manager,
-                  rpc_service,
-                  hmi_capabilities,
-                  policy_handler)
-    , EventObserver(application_manager.event_dispatcher())
-    , current_state_(kAwaitingHMIResponse)
-    , hash_update_mode_(kSkipHashUpdate)
-    , is_success_result_(false) {}
+    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
+                  policy_handler),
+      EventObserver(application_manager.event_dispatcher()),
+      current_state_(kAwaitingHMIResponse),
+      hash_update_mode_(kSkipHashUpdate),
+      is_success_result_(false) {}
 
-CommandRequestImpl::~CommandRequestImpl() {
-  UpdateHash();
-}
+CommandRequestImpl::~CommandRequestImpl() { UpdateHash(); }
 
-bool CommandRequestImpl::Init() {
-  return true;
-}
+bool CommandRequestImpl::Init() { return true; }
 
-bool CommandRequestImpl::CheckPermissions() {
-  return CheckAllowedParameters();
-}
+bool CommandRequestImpl::CheckPermissions() { return CheckAllowedParameters(); }
 
-bool CommandRequestImpl::CleanUp() {
-  return true;
-}
+bool CommandRequestImpl::CleanUp() { return true; }
 
 void CommandRequestImpl::Run() {}
 
@@ -247,8 +231,7 @@ void CommandRequestImpl::onTimeOut() {
   }
 
   smart_objects::SmartObjectSPtr response =
-      MessageHelper::CreateNegativeResponse(connection_key(),
-                                            function_id(),
+      MessageHelper::CreateNegativeResponse(connection_key(), function_id(),
                                             correlation_id(),
                                             mobile_api::Result::GENERIC_ERROR);
   AddTimeOutComponentInfoToMessage(*response);
@@ -258,10 +241,8 @@ void CommandRequestImpl::onTimeOut() {
 void CommandRequestImpl::on_event(const event_engine::Event& event) {}
 
 void CommandRequestImpl::SendResponse(
-    const bool success,
-    const mobile_apis::Result::eType& result_code,
-    const char* info,
-    const smart_objects::SmartObject* response_params) {
+    const bool success, const mobile_apis::Result::eType& result_code,
+    const char* info, const smart_objects::SmartObject* response_params) {
   LOG4CXX_AUTO_TRACE(logger_);
   {
     sync_primitives::AutoLock auto_lock(state_lock_);
@@ -339,8 +320,7 @@ bool CommandRequestImpl::CheckSyntax(const std::string& str,
 
 smart_objects::SmartObject CreateUnsupportedResourceResponse(
     const hmi_apis::FunctionID::eType function_id,
-    const uint32_t hmi_correlation_id,
-    HmiInterfaces::InterfaceID interface) {
+    const uint32_t hmi_correlation_id, HmiInterfaces::InterfaceID interface) {
   smart_objects::SmartObject response(smart_objects::SmartType_Map);
   smart_objects::SmartObject& params = response[strings::params];
   params[strings::message_type] = MessageType::kResponse;
@@ -397,10 +377,9 @@ void CommandRequestImpl::UpdateHash() {
   ApplicationSharedPtr application =
       application_manager_.application(connection_key());
   if (!application) {
-    LOG4CXX_ERROR(logger_,
-                  "Application with connection key "
-                      << connection_key()
-                      << " not found. Not able to update hash.");
+    LOG4CXX_ERROR(logger_, "Application with connection key "
+                               << connection_key()
+                               << " not found. Not able to update hash.");
     return;
   }
 
@@ -416,8 +395,7 @@ void CommandRequestImpl::UpdateHash() {
 
 uint32_t CommandRequestImpl::SendHMIRequest(
     const hmi_apis::FunctionID::eType& function_id,
-    const smart_objects::SmartObject* msg_params,
-    bool use_events) {
+    const smart_objects::SmartObject* msg_params, bool use_events) {
   smart_objects::SmartObjectSPtr result =
       std::make_shared<smart_objects::SmartObject>();
 
@@ -438,9 +416,8 @@ uint32_t CommandRequestImpl::SendHMIRequest(
   }
 
   if (use_events) {
-    LOG4CXX_DEBUG(logger_,
-                  "subscribe_on_event " << function_id << " "
-                                        << hmi_correlation_id);
+    LOG4CXX_DEBUG(logger_, "subscribe_on_event " << function_id << " "
+                                                 << hmi_correlation_id);
     subscribe_on_event(function_id, hmi_correlation_id);
   }
   if (ProcessHMIInterfacesAvailability(hmi_correlation_id, function_id)) {
@@ -628,20 +605,16 @@ bool CommandRequestImpl::CheckAllowedParameters() {
 
   mobile_apis::Result::eType check_result =
       application_manager_.CheckPolicyPermissions(
-          app,
-          MessageHelper::StringifiedFunctionID(
-              static_cast<mobile_api::FunctionID::eType>(function_id())),
-          params,
-          &parameters_permissions_);
+          app, MessageHelper::StringifiedFunctionID(
+                   static_cast<mobile_api::FunctionID::eType>(function_id())),
+          params, &parameters_permissions_);
 
   // Check, if RPC is allowed by policy
   if (mobile_apis::Result::SUCCESS != check_result) {
     smart_objects::SmartObjectSPtr response =
         MessageHelper::CreateBlockedByPoliciesResponse(
             static_cast<mobile_api::FunctionID::eType>(function_id()),
-            check_result,
-            correlation_id(),
-            app->app_id());
+            check_result, correlation_id(), app->app_id());
 
     rpc_service_.SendMessageToMobile(response);
     return false;
@@ -685,14 +658,14 @@ bool CommandRequestImpl::CheckHMICapabilities(
     const ButtonName::eType current_button = static_cast<ButtonName::eType>(
         capabilities.getElement(hmi_response::button_name).asInt());
     if (current_button == button) {
-      LOG4CXX_DEBUG(logger_,
-                    "Button capabilities for " << button << " was found");
+      LOG4CXX_DEBUG(logger_, "Button capabilities for " << button
+                                                        << " was found");
       return true;
     }
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Button capabilities for " << button << " was not found");
+  LOG4CXX_DEBUG(logger_, "Button capabilities for " << button
+                                                    << " was not found");
   return false;
 }
 
@@ -742,8 +715,7 @@ void CommandRequestImpl::RemoveDisallowedParameters() {
     if (params.keyExists(key) &&
         parameters_permissions_.allowed_params.end() ==
             std::find(parameters_permissions_.allowed_params.begin(),
-                      parameters_permissions_.allowed_params.end(),
-                      key)) {
+                      parameters_permissions_.allowed_params.end(), key)) {
       params.erase(key);
       removed_parameters_permissions_.undefined_params.insert(key);
       LOG4CXX_INFO(logger_,
@@ -817,12 +789,10 @@ bool CommandRequestImpl::PrepareResultForMobileResponse(
   LOG4CXX_AUTO_TRACE(logger_);
   using namespace helpers;
   if (Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-          result_code,
-          hmi_apis::Common_Result::SUCCESS,
+          result_code, hmi_apis::Common_Result::SUCCESS,
           hmi_apis::Common_Result::WARNINGS,
           hmi_apis::Common_Result::WRONG_LANGUAGE,
-          hmi_apis::Common_Result::RETRY,
-          hmi_apis::Common_Result::SAVED)) {
+          hmi_apis::Common_Result::RETRY, hmi_apis::Common_Result::SAVED)) {
     return true;
   }
 
@@ -969,12 +939,10 @@ void CommandRequestImpl::AddTimeOutComponentInfoToMessage(
 
   const std::string not_responding_interfaces_string =
       std::accumulate(awaiting_response_interfaces_.begin(),
-                      awaiting_response_interfaces_.end(),
-                      std::string(""),
+                      awaiting_response_interfaces_.end(), std::string(""),
                       InfoInterfaceSeparator);
-  LOG4CXX_DEBUG(
-      logger_,
-      "Not responding interfaces string: " << not_responding_interfaces_string);
+  LOG4CXX_DEBUG(logger_, "Not responding interfaces string: "
+                             << not_responding_interfaces_string);
   if (!not_responding_interfaces_string.empty()) {
     const std::string component_info =
         not_responding_interfaces_string + " component does not respond";

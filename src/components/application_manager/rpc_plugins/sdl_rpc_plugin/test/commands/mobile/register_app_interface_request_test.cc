@@ -91,11 +91,11 @@ class RegisterAppInterfaceRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   RegisterAppInterfaceRequestTest()
-      : msg_(CreateMessage())
-      , command_(CreateCommand<RegisterAppInterfaceRequest>(msg_))
-      , app_name_("test_app_name_")
-      , lock_ptr_(std::make_shared<sync_primitives::Lock>())
-      , mock_application_helper_(
+      : msg_(CreateMessage()),
+        command_(CreateCommand<RegisterAppInterfaceRequest>(msg_)),
+        app_name_("test_app_name_"),
+        lock_ptr_(std::make_shared<sync_primitives::Lock>()),
+        mock_application_helper_(
             application_manager_test::MockApplicationHelper::
                 application_helper_mock()) {
     InitGetters();

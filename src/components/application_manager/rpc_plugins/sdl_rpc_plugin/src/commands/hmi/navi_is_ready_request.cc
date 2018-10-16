@@ -40,15 +40,11 @@ namespace commands {
 NaviIsReadyRequest::NaviIsReadyRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : RequestToHMI(message,
-                   application_manager,
-                   rpc_service,
-                   hmi_capabilities,
-                   policy_handle)
-    , EventObserver(application_manager.event_dispatcher()) {}
+    : RequestToHMI(message, application_manager, rpc_service, hmi_capabilities,
+                   policy_handle),
+      EventObserver(application_manager.event_dispatcher()) {}
 
 NaviIsReadyRequest::~NaviIsReadyRequest() {}
 
@@ -67,8 +63,7 @@ void NaviIsReadyRequest::on_event(const event_engine::Event& event) {
       LOG4CXX_DEBUG(logger_, "Received Navigation_IsReady event");
       unsubscribe_from_event(hmi_apis::FunctionID::Navigation_IsReady);
       const bool is_available = app_mngr::commands::ChangeInterfaceState(
-          application_manager_,
-          message,
+          application_manager_, message,
           HmiInterfaces::HMI_INTERFACE_Navigation);
 
       HMICapabilities& hmi_capabilities = hmi_capabilities_;

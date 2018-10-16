@@ -40,8 +40,8 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "Resumption")
 
 LastStateImpl::LastStateImpl(const std::string& app_storage_folder,
                              const std::string& app_info_storage)
-    : app_storage_folder_(app_storage_folder)
-    , app_info_storage_(app_info_storage) {
+    : app_storage_folder_(app_storage_folder),
+      app_info_storage_(app_info_storage) {
   LoadStateFromFileSystem();
   LOG4CXX_AUTO_TRACE(logger_);
 }
@@ -57,22 +57,20 @@ void LastStateImpl::SaveStateToFileSystem() {
   const std::vector<uint8_t> char_vector_pdata(str.begin(), str.end());
 
   DCHECK(file_system::CreateDirectoryRecursively(app_storage_folder_));
-  LOG4CXX_INFO(logger_,
-               "LastState::SaveStateToFileSystem " << app_info_storage_ << str);
+  LOG4CXX_INFO(logger_, "LastState::SaveStateToFileSystem " << app_info_storage_
+                                                            << str);
   DCHECK(file_system::Write(app_info_storage_, char_vector_pdata));
 }
 
-Json::Value& LastStateImpl::get_dictionary() {
-  return dictionary_;
-}
+Json::Value& LastStateImpl::get_dictionary() { return dictionary_; }
 
 void LastStateImpl::LoadStateFromFileSystem() {
   std::string buffer;
   bool result = file_system::ReadFile(app_info_storage_, buffer);
   Json::Reader m_reader;
   if (result && m_reader.parse(buffer, dictionary_)) {
-    LOG4CXX_INFO(logger_,
-                 "Valid last state was found." << dictionary_.toStyledString());
+    LOG4CXX_INFO(logger_, "Valid last state was found."
+                              << dictionary_.toStyledString());
     return;
   }
   LOG4CXX_WARN(logger_, "No valid last state was found.");

@@ -46,14 +46,10 @@ namespace mobile {
 OnButtonEventNotification::OnButtonEventNotification(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandNotificationImpl(message,
-                              application_manager,
-                              rpc_service,
-                              hmi_capabilities,
-                              policy_handler) {}
+    : CommandNotificationImpl(message, application_manager, rpc_service,
+                              hmi_capabilities, policy_handler) {}
 
 OnButtonEventNotification::~OnButtonEventNotification() {}
 
@@ -130,9 +126,8 @@ void OnButtonEventNotification::Run() {
     // Send ButtonEvent notification only in HMI_FULL or HMI_LIMITED mode
     if ((mobile_api::HMILevel::HMI_FULL != subscribed_app->hmi_level()) &&
         (mobile_api::HMILevel::HMI_LIMITED != subscribed_app->hmi_level())) {
-      LOG4CXX_WARN(logger_,
-                   "OnButtonEvent notification is allowed only"
-                       << "in FULL or LIMITED hmi level");
+      LOG4CXX_WARN(logger_, "OnButtonEvent notification is allowed only"
+                                << "in FULL or LIMITED hmi level");
       continue;
     }
     // if "app_id" absent send notification only in HMI_FULL mode

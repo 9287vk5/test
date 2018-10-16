@@ -50,8 +50,7 @@ class StlCollectionDeleter {
   ~StlCollectionDeleter() {
     for (typename Collection::iterator i = collection_->begin(),
                                        end = collection_->end();
-         i != end;
-         ++i) {
+         i != end; ++i) {
       delete *i;
       *i = NULL;
     }
@@ -71,8 +70,7 @@ class StlMapDeleter {
   ~StlMapDeleter() {
     for (typename Collection::iterator i = collection_->begin(),
                                        end = collection_->end();
-         i != end;
-         ++i) {
+         i != end; ++i) {
       delete i->second;
       i->second = NULL;
     }

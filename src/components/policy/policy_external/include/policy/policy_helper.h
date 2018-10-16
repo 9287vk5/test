@@ -237,8 +237,7 @@ struct FillNotificationData {
  * @param does_require_user_consent Specifies whether processed group requires
  * user consent
  */
-  FillNotificationData(Permissions& data,
-                       GroupConsent group_state,
+  FillNotificationData(Permissions& data, GroupConsent group_state,
                        GroupConsent undefined_group_consent,
                        bool does_require_user_consent);
   bool operator()(const RpcValueType& rpc);
@@ -318,9 +317,7 @@ struct FunctionalGroupInserter {
  * @param permissions Struct to be filled with provided params
  */
 void FillFunctionalGroupPermissions(
-    FunctionalGroupIDs& ids,
-    FunctionalGroupNames& names,
-    GroupConsent state,
+    FunctionalGroupIDs& ids, FunctionalGroupNames& names, GroupConsent state,
     std::vector<FunctionalGroupPermission>& permissions);
 
 /**

@@ -527,8 +527,7 @@ class Profile : public protocol_handler::ProtocolHandlerSettings,
    * @return FALSE if could not read the value out of the profile
    * (then the value is equal \c default_value)
    */
-  bool ReadStringValue(std::string* value,
-                       const char* default_value,
+  bool ReadStringValue(std::string* value, const char* default_value,
                        const char* const pSection,
                        const char* const pKey) const;
 
@@ -543,10 +542,8 @@ class Profile : public protocol_handler::ProtocolHandlerSettings,
    * @return FALSE if could not read the value out of the profile
    * (then the value is equal \c default_value)
    */
-  bool ReadIntValue(int32_t* value,
-                    int32_t default_value,
-                    const char* const pSection,
-                    const char* const pKey) const;
+  bool ReadIntValue(int32_t* value, int32_t default_value,
+                    const char* const pSection, const char* const pKey) const;
   /**
    * @brief Reads an bool value from the profile
    *
@@ -558,10 +555,8 @@ class Profile : public protocol_handler::ProtocolHandlerSettings,
    * @return FALSE if could not read the value out of the profile
    * (then the value is equal \c default_value)
    */
-  bool ReadBoolValue(bool* value,
-                     const bool default_value,
-                     const char* const pSection,
-                     const char* const pKey) const;
+  bool ReadBoolValue(bool* value, const bool default_value,
+                     const char* const pSection, const char* const pKey) const;
   /**
    * @brief Reads an container of string values from the profile,
    * which handle as "Value1, Value2, Value3"
@@ -799,8 +794,7 @@ class Profile : public protocol_handler::ProtocolHandlerSettings,
    * @return FALSE if could not read the value out of the profile
    * (then the value is not changed) or the value was empty
    */
-  bool ReadValue(std::string* value,
-                 const char* const pSection,
+  bool ReadValue(std::string* value, const char* const pSection,
                  const char* const pKey) const;
 
   /**
@@ -815,8 +809,7 @@ class Profile : public protocol_handler::ProtocolHandlerSettings,
    *
    * @return TRUE if the value is read, FALSE if the value is not found
    */
-  bool ReadValueEmpty(std::string* value,
-                      const char* const pSection,
+  bool ReadValueEmpty(std::string* value, const char* const pSection,
                       const char* const pKey) const;
 
   /**
@@ -829,8 +822,7 @@ class Profile : public protocol_handler::ProtocolHandlerSettings,
    * @return FALSE if could not read the value out of the profile
    * (then the value is not changed)
    */
-  bool ReadValue(bool* value,
-                 const char* const pSection,
+  bool ReadValue(bool* value, const char* const pSection,
                  const char* const pKey) const;
 
   /**
@@ -860,20 +852,14 @@ class Profile : public protocol_handler::ProtocolHandlerSettings,
    * @return FALSE if could not read the value out of the profile
    * (then the value is changed to default)
    */
-  bool ReadUIntValue(uint16_t* value,
-                     uint16_t default_value,
-                     const char* const pSection,
-                     const char* const pKey) const;
+  bool ReadUIntValue(uint16_t* value, uint16_t default_value,
+                     const char* const pSection, const char* const pKey) const;
 
-  bool ReadUIntValue(uint32_t* value,
-                     uint32_t default_value,
-                     const char* const pSection,
-                     const char* const pKey) const;
+  bool ReadUIntValue(uint32_t* value, uint32_t default_value,
+                     const char* const pSection, const char* const pKey) const;
 
-  bool ReadUIntValue(uint64_t* value,
-                     uint64_t default_value,
-                     const char* const pSection,
-                     const char* const pKey) const;
+  bool ReadUIntValue(uint64_t* value, uint64_t default_value,
+                     const char* const pSection, const char* const pKey) const;
 
   /**
    * @brief Checks, if path is relative

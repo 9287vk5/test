@@ -45,10 +45,8 @@ OnHMIStatusNotificationFromMobile::OnHMIStatusNotificationFromMobile(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandNotificationFromMobileImpl(message,
-                                        application_manager,
-                                        rpc_service,
-                                        hmi_capabilities,
+    : CommandNotificationFromMobileImpl(message, application_manager,
+                                        rpc_service, hmi_capabilities,
                                         policy_handler) {}
 
 OnHMIStatusNotificationFromMobile::~OnHMIStatusNotificationFromMobile() {}
@@ -79,9 +77,8 @@ void OnHMIStatusNotificationFromMobile::Run() {
   bool is_apps_requested_before =
       application_manager_.IsAppsQueriedFrom(handle);
 
-  LOG4CXX_DEBUG(logger_,
-                "Mobile HMI state notication came for connection key:"
-                    << connection_key() << " and handle: " << handle);
+  LOG4CXX_DEBUG(logger_, "Mobile HMI state notication came for connection key:"
+                             << connection_key() << " and handle: " << handle);
 
   if (!is_apps_requested_before &&
       Message::is_sufficient_version(

@@ -42,8 +42,7 @@ TEST_F(CMetaFormatterTestHelper,
        inputObjectIdenticalToSchemaWithAndWithoutMandatoryParams) {
   Json::Value value;
   Json::Reader reader;
-  CSmartFactory<FunctionIDTest::eType,
-                MessageTypeTest::eType,
+  CSmartFactory<FunctionIDTest::eType, MessageTypeTest::eType,
                 StructIdentifiers::eType> factory_;
 
   SmartObject object1 = factory_.CreateSmartObject(
@@ -130,38 +129,38 @@ TEST_F(CMetaFormatterTestHelper, ObjectWithEmptyMap) {
   SmartObject result_object_empty_map;
 
   SmartObject object_empty_map = SmartObject(SmartType_Map);
-  CMetaFormatter::CreateObjectByPattern(
-      object_empty_map, map_schema, result_object_empty_map);
+  CMetaFormatter::CreateObjectByPattern(object_empty_map, map_schema,
+                                        result_object_empty_map);
   EXPECT_EQ(SmartType_Map, result_object_empty_map.getType())
       << "smartObject is not map type";
   EXPECT_EQ(0u, result_object_empty_map.length()) << "non empty map";
 
-  CMetaFormatter::CreateObjectByPattern(
-      object, map_schema, result_object_empty_map);
+  CMetaFormatter::CreateObjectByPattern(object, map_schema,
+                                        result_object_empty_map);
   EXPECT_EQ(SmartType_Map, result_object_empty_map.getType())
       << "smartObject is not map type";
   EXPECT_EQ(0u, result_object_empty_map.length()) << "non empty map";
 
   object["field1"] = 0;
   object["field2"] = SmartObject();
-  CMetaFormatter::CreateObjectByPattern(
-      object, map_schema, result_object_empty_map);
+  CMetaFormatter::CreateObjectByPattern(object, map_schema,
+                                        result_object_empty_map);
   EXPECT_EQ(SmartType_Map, result_object_empty_map.getType())
       << "smartObject is not map type";
   EXPECT_EQ(0u, result_object_empty_map.length()) << "non empty map";
 
   // Fill object with any values. Result must be the same
   FillObjectIdenticalToSchema(object);
-  CMetaFormatter::CreateObjectByPattern(
-      object, map_schema, result_object_empty_map);
+  CMetaFormatter::CreateObjectByPattern(object, map_schema,
+                                        result_object_empty_map);
   EXPECT_EQ(SmartType_Map, result_object_empty_map.getType())
       << "smartObject is not map type";
   EXPECT_EQ(0u, result_object_empty_map.length()) << "non empty map";
 
   // Fill object with any values. Result must be the same
   FillObjectIdenticalToSchemaWithoutNoMandatoriesParams(object);
-  CMetaFormatter::CreateObjectByPattern(
-      object, map_schema, result_object_empty_map);
+  CMetaFormatter::CreateObjectByPattern(object, map_schema,
+                                        result_object_empty_map);
   EXPECT_EQ(SmartType_Map, result_object_empty_map.getType())
       << "smartObject is not map type";
   EXPECT_EQ(0u, result_object_empty_map.length()) << "non empty map";
@@ -175,30 +174,30 @@ TEST_F(CMetaFormatterTestHelper, ObjectWithEmptyArray) {
 
   SmartObject object_empty_aray = SmartObject(SmartType_Array);
 
-  CMetaFormatter::CreateObjectByPattern(
-      object_empty_aray, array_schema, result_object_empty_array);
+  CMetaFormatter::CreateObjectByPattern(object_empty_aray, array_schema,
+                                        result_object_empty_array);
   EXPECT_EQ(SmartType_Array, result_object_empty_array.getType())
       << "smartObject is not array type";
   EXPECT_EQ(0u, result_object_empty_array.length()) << "non empty array";
 
-  CMetaFormatter::CreateObjectByPattern(
-      object, array_schema, result_object_empty_array);
+  CMetaFormatter::CreateObjectByPattern(object, array_schema,
+                                        result_object_empty_array);
   EXPECT_EQ(SmartType_Array, result_object_empty_array.getType())
       << "smartObject is not array type";
   EXPECT_EQ(0u, result_object_empty_array.length()) << "non empty array";
 
   // Fill object with any values. Result must be the same
   FillObjectIdenticalToSchema(object);
-  CMetaFormatter::CreateObjectByPattern(
-      object, array_schema, result_object_empty_array);
+  CMetaFormatter::CreateObjectByPattern(object, array_schema,
+                                        result_object_empty_array);
   EXPECT_EQ(SmartType_Array, result_object_empty_array.getType())
       << "smartObject is not array type";
   EXPECT_EQ(0u, result_object_empty_array.length()) << "non empty array";
 
   // Fill object with any values. Result must be the same
   FillObjectWithoutSomeMandatoryFields(object);
-  CMetaFormatter::CreateObjectByPattern(
-      object, array_schema, result_object_empty_array);
+  CMetaFormatter::CreateObjectByPattern(object, array_schema,
+                                        result_object_empty_array);
   EXPECT_EQ(SmartType_Array, result_object_empty_array.getType())
       << "smartObject is not array type";
   EXPECT_EQ(0u, result_object_empty_array.length()) << "non empty array";
@@ -261,8 +260,7 @@ TEST_F(CMetaFormatterTestHelper,
 
   schemaMembersMap["non_mandatory_string"] = CObjectSchemaItem::SMember(
       CStringSchemaItem::create(
-          TSchemaItemParameter<size_t>(0),
-          TSchemaItemParameter<size_t>(500),
+          TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(500),
           TSchemaItemParameter<std::string>("ignoredDefValue")),
       false);
 

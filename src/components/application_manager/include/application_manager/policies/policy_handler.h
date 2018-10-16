@@ -104,10 +104,8 @@ class PolicyHandler : public PolicyHandlerInterface,
   virtual bool GetPriority(const std::string& policy_app_id,
                            std::string* priority) const OVERRIDE;
   virtual void CheckPermissions(
-      const application_manager::ApplicationSharedPtr app,
-      const PTString& rpc,
-      const RPCParams& rpc_params,
-      CheckPermissionResult& result) OVERRIDE;
+      const application_manager::ApplicationSharedPtr app, const PTString& rpc,
+      const RPCParams& rpc_params, CheckPermissionResult& result) OVERRIDE;
 
   uint32_t GetNotificationsNumber(const std::string& priority) const OVERRIDE;
   virtual DeviceConsent GetUserConsentForDevice(
@@ -288,8 +286,7 @@ class PolicyHandler : public PolicyHandlerInterface,
  */
 #ifdef EXTERNAL_PROPRIETARY_MODE
   void OnAppPermissionConsent(
-      const uint32_t connection_key,
-      const PermissionConsent& permissions,
+      const uint32_t connection_key, const PermissionConsent& permissions,
       const ExternalConsentStatus& external_consent_status) OVERRIDE;
 #else
   void OnAppPermissionConsent(const uint32_t connection_key,
@@ -544,11 +541,9 @@ class PolicyHandler : public PolicyHandlerInterface,
   void Increment(usage_statistics::GlobalCounterId type) OVERRIDE;
   void Increment(const std::string& app_id,
                  usage_statistics::AppCounterId type) OVERRIDE;
-  void Set(const std::string& app_id,
-           usage_statistics::AppInfoId type,
+  void Set(const std::string& app_id, usage_statistics::AppInfoId type,
            const std::string& value) OVERRIDE;
-  void Add(const std::string& app_id,
-           usage_statistics::AppStopwatchId type,
+  void Add(const std::string& app_id, usage_statistics::AppStopwatchId type,
            int32_t timespan_seconds) OVERRIDE;
 
 #ifdef BUILD_TESTS
@@ -681,18 +676,16 @@ class PolicyHandler : public PolicyHandlerInterface,
           new StatisticsDelegate(*policy_handler_, app_id, type));
     }
 
-    void Set(const std::string& app_id,
-             usage_statistics::AppInfoId type,
+    void Set(const std::string& app_id, usage_statistics::AppInfoId type,
              const std::string& value) OVERRIDE {
       policy_handler_->AsyncRun(
           new StatisticsDelegate(*policy_handler_, app_id, type, value));
     }
 
-    void Add(const std::string& app_id,
-             usage_statistics::AppStopwatchId type,
+    void Add(const std::string& app_id, usage_statistics::AppStopwatchId type,
              int32_t timespan_seconds) OVERRIDE {
-      policy_handler_->AsyncRun(new StatisticsDelegate(
-          *policy_handler_, app_id, type, timespan_seconds));
+      policy_handler_->AsyncRun(new StatisticsDelegate(*policy_handler_, app_id,
+                                                       type, timespan_seconds));
     }
 
    private:

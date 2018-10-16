@@ -179,8 +179,7 @@ class TransportAdapterImpl : public TransportAdapter,
    * @return Error information about possible reason of sending data failure
    **/
   TransportAdapter::Error SendData(
-      const DeviceUID& device_handle,
-      const ApplicationHandle& app_handle,
+      const DeviceUID& device_handle, const ApplicationHandle& app_handle,
       const ::protocol_handler::RawMessagePtr data) OVERRIDE;
 
   /**
@@ -520,9 +519,7 @@ class TransportAdapterImpl : public TransportAdapter,
       const DeviceUID& device_handle,
       const ApplicationHandle& app_handle) const;
 
-  const TransportManagerSettings& get_settings() const {
-    return settings_;
-  }
+  const TransportManagerSettings& get_settings() const { return settings_; }
 
  private:
   /**
@@ -606,9 +603,7 @@ class TransportAdapterImpl : public TransportAdapter,
   TMTelemetryObserver* metric_observer_;
 #endif  // TELEMETRY_MONITOR
 
-  resumption::LastState& last_state() const {
-    return last_state_;
-  }
+  resumption::LastState& last_state() const { return last_state_; }
 
   /**
    * @brief Pointer to the device scanner.

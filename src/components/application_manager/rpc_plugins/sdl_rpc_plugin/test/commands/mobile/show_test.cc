@@ -72,9 +72,7 @@ const uint32_t kFunctionID = 3u;
 
 class ShowRequestTest : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
-  ShowRequestTest() {
-    mock_app_ = CreateMockApp();
-  }
+  ShowRequestTest() { mock_app_ = CreateMockApp(); }
   sync_primitives::Lock lock_;
 
   MessageSharedPtr CreateFullParamsUISO() {
@@ -130,8 +128,7 @@ class ShowRequestTest : public CommandRequestTest<CommandsTestMocks::kIsNice> {
   }
 
   void TestSetupHelperWrongSyntax(
-      MessageSharedPtr msg,
-      hmi_apis::Common_TextFieldName::eType field_name,
+      MessageSharedPtr msg, hmi_apis::Common_TextFieldName::eType field_name,
       const char* field) {
     SmartObject msg_params(smart_objects::SmartType_Map);
     (*msg)[am::strings::params][am::strings::connection_key] = kConnectionKey;
@@ -148,11 +145,8 @@ class ShowRequestTest : public CommandRequestTest<CommandsTestMocks::kIsNice> {
   }
 
   void TestSetupHelperWithMetadata(
-      MessageSharedPtr msg,
-      hmi_apis::Common_TextFieldName::eType field_name,
-      const char* field,
-      size_t num_tags,
-      int32_t* field_tags,
+      MessageSharedPtr msg, hmi_apis::Common_TextFieldName::eType field_name,
+      const char* field, size_t num_tags, int32_t* field_tags,
       bool set_field_text = true) {
     SmartObject msg_params(smart_objects::SmartType_Map);
     (*msg)[am::strings::params][am::strings::connection_key] = kConnectionKey;
@@ -269,9 +263,8 @@ TEST_F(ShowRequestTest, Run_SoftButtonExists_SUCCESS) {
   msg_params[am::hmi_request::show_strings] =
       smart_objects::SmartObject(smart_objects::SmartType_Array);
 
-  EXPECT_CALL(
-      mock_message_helper_,
-      SubscribeApplicationToSoftButton(creation_msg_params, _, kFunctionID));
+  EXPECT_CALL(mock_message_helper_, SubscribeApplicationToSoftButton(
+                                        creation_msg_params, _, kFunctionID));
   EXPECT_CALL(mock_rpc_service_, ManageHMICommand(_));
   EXPECT_CALL(*mock_app_, set_show_command(msg_params));
 
@@ -532,8 +525,7 @@ TEST_F(ShowRequestTest, Run_MainField1_SUCCESS) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_1";
-  TestSetupHelper(msg,
-                  hmi_apis::Common_TextFieldName::mainField1,
+  TestSetupHelper(msg, hmi_apis::Common_TextFieldName::mainField1,
                   am::strings::main_field_1);
 
   command->Run();
@@ -545,8 +537,7 @@ TEST_F(ShowRequestTest, Run_MainField1_WrongSyntax) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_1\\n";
-  TestSetupHelperWrongSyntax(msg,
-                             hmi_apis::Common_TextFieldName::mainField1,
+  TestSetupHelperWrongSyntax(msg, hmi_apis::Common_TextFieldName::mainField1,
                              am::strings::main_field_1);
 
   command->Run();
@@ -558,8 +549,7 @@ TEST_F(ShowRequestTest, Run_MainField2_SUCCESS) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_2";
-  TestSetupHelper(msg,
-                  hmi_apis::Common_TextFieldName::mainField2,
+  TestSetupHelper(msg, hmi_apis::Common_TextFieldName::mainField2,
                   am::strings::main_field_2);
   command->Run();
 }
@@ -570,8 +560,7 @@ TEST_F(ShowRequestTest, Run_MainField2_WrongSyntax) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_2\\n";
-  TestSetupHelperWrongSyntax(msg,
-                             hmi_apis::Common_TextFieldName::mainField2,
+  TestSetupHelperWrongSyntax(msg, hmi_apis::Common_TextFieldName::mainField2,
                              am::strings::main_field_2);
   command->Run();
 }
@@ -582,8 +571,7 @@ TEST_F(ShowRequestTest, Run_MainField3_SUCCESS) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_3";
-  TestSetupHelper(msg,
-                  hmi_apis::Common_TextFieldName::mainField3,
+  TestSetupHelper(msg, hmi_apis::Common_TextFieldName::mainField3,
                   am::strings::main_field_3);
   command->Run();
 }
@@ -594,8 +582,7 @@ TEST_F(ShowRequestTest, Run_MainField3_WrongSyntax) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_3\\n";
-  TestSetupHelperWrongSyntax(msg,
-                             hmi_apis::Common_TextFieldName::mainField3,
+  TestSetupHelperWrongSyntax(msg, hmi_apis::Common_TextFieldName::mainField3,
                              am::strings::main_field_3);
   command->Run();
 }
@@ -606,8 +593,7 @@ TEST_F(ShowRequestTest, Run_MainField4_SUCCESS) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_4";
-  TestSetupHelper(msg,
-                  hmi_apis::Common_TextFieldName::mainField4,
+  TestSetupHelper(msg, hmi_apis::Common_TextFieldName::mainField4,
                   am::strings::main_field_4);
   command->Run();
 }
@@ -618,8 +604,7 @@ TEST_F(ShowRequestTest, Run_MainField4_WrongSyntax) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Main_Field_4\\n";
-  TestSetupHelperWrongSyntax(msg,
-                             hmi_apis::Common_TextFieldName::mainField4,
+  TestSetupHelperWrongSyntax(msg, hmi_apis::Common_TextFieldName::mainField4,
                              am::strings::main_field_4);
   command->Run();
 }
@@ -632,11 +617,8 @@ TEST_F(ShowRequestTest, Run_MainField1_MetadataTag) {
   text_field_ = "Main_Field_1";
   const size_t num_tags = 1;
   int32_t tags[num_tags] = {hmi_apis::Common_MetadataType::mediaArtist};
-  TestSetupHelperWithMetadata(msg,
-                              hmi_apis::Common_TextFieldName::mainField1,
-                              am::strings::main_field_1,
-                              num_tags,
-                              tags);
+  TestSetupHelperWithMetadata(msg, hmi_apis::Common_TextFieldName::mainField1,
+                              am::strings::main_field_1, num_tags, tags);
   command->Run();
 }
 
@@ -652,11 +634,8 @@ TEST_F(ShowRequestTest, Run_MainField1_MultipleMetadataTags) {
                             hmi_apis::Common_MetadataType::rating,
                             hmi_apis::Common_MetadataType::humidity,
                             hmi_apis::Common_MetadataType::currentTemperature};
-  TestSetupHelperWithMetadata(msg,
-                              hmi_apis::Common_TextFieldName::mainField1,
-                              am::strings::main_field_1,
-                              num_tags,
-                              tags);
+  TestSetupHelperWithMetadata(msg, hmi_apis::Common_TextFieldName::mainField1,
+                              am::strings::main_field_1, num_tags, tags);
   command->Run();
 }
 
@@ -668,11 +647,8 @@ TEST_F(ShowRequestTest, Run_MainField2_MetadataTag) {
   text_field_ = "Main_Field_2";
   const size_t num_tags = 1;
   int32_t tags[num_tags] = {hmi_apis::Common_MetadataType::mediaArtist};
-  TestSetupHelperWithMetadata(msg,
-                              hmi_apis::Common_TextFieldName::mainField2,
-                              am::strings::main_field_2,
-                              num_tags,
-                              tags);
+  TestSetupHelperWithMetadata(msg, hmi_apis::Common_TextFieldName::mainField2,
+                              am::strings::main_field_2, num_tags, tags);
   command->Run();
 }
 
@@ -684,11 +660,8 @@ TEST_F(ShowRequestTest, Run_MainField3_MetadataTag) {
   text_field_ = "Main_Field_3";
   const size_t num_tags = 1;
   int32_t tags[num_tags] = {hmi_apis::Common_MetadataType::mediaArtist};
-  TestSetupHelperWithMetadata(msg,
-                              hmi_apis::Common_TextFieldName::mainField3,
-                              am::strings::main_field_3,
-                              num_tags,
-                              tags);
+  TestSetupHelperWithMetadata(msg, hmi_apis::Common_TextFieldName::mainField3,
+                              am::strings::main_field_3, num_tags, tags);
   command->Run();
 }
 
@@ -700,11 +673,8 @@ TEST_F(ShowRequestTest, Run_MainField4_MetadataTag) {
   text_field_ = "Main_Field_4";
   const size_t num_tags = 1;
   int32_t tags[num_tags] = {hmi_apis::Common_MetadataType::mediaArtist};
-  TestSetupHelperWithMetadata(msg,
-                              hmi_apis::Common_TextFieldName::mainField4,
-                              am::strings::main_field_4,
-                              num_tags,
-                              tags);
+  TestSetupHelperWithMetadata(msg, hmi_apis::Common_TextFieldName::mainField4,
+                              am::strings::main_field_4, num_tags, tags);
   command->Run();
 }
 
@@ -716,12 +686,8 @@ TEST_F(ShowRequestTest, Run_MainField1_MetadataTagWithNoFieldData) {
   text_field_ = "Main_Field_1";
   const size_t num_tags = 1;
   int32_t tags[num_tags] = {hmi_apis::Common_MetadataType::mediaArtist};
-  TestSetupHelperWithMetadata(msg,
-                              hmi_apis::Common_TextFieldName::mainField1,
-                              am::strings::main_field_1,
-                              num_tags,
-                              tags,
-                              false);
+  TestSetupHelperWithMetadata(msg, hmi_apis::Common_TextFieldName::mainField1,
+                              am::strings::main_field_1, num_tags, tags, false);
   command->Run();
 
   MessageSharedPtr ev_msg = CreateMessage(smart_objects::SmartType_Map);
@@ -756,8 +722,7 @@ TEST_F(ShowRequestTest, Run_MediaClock_SUCCESS) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Media_Clock";
-  TestSetupHelper(msg,
-                  hmi_apis::Common_TextFieldName::mediaClock,
+  TestSetupHelper(msg, hmi_apis::Common_TextFieldName::mediaClock,
                   am::strings::media_clock);
   command->Run();
 }
@@ -768,8 +733,7 @@ TEST_F(ShowRequestTest, Run_MediaClock_WrongSyntax) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Media_Clock\\n";
-  TestSetupHelperWrongSyntax(msg,
-                             hmi_apis::Common_TextFieldName::mediaClock,
+  TestSetupHelperWrongSyntax(msg, hmi_apis::Common_TextFieldName::mediaClock,
                              am::strings::media_clock);
   command->Run();
 }
@@ -780,8 +744,7 @@ TEST_F(ShowRequestTest, Run_MediaTrack_SUCCESS) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Media_Track";
-  TestSetupHelper(msg,
-                  hmi_apis::Common_TextFieldName::mediaTrack,
+  TestSetupHelper(msg, hmi_apis::Common_TextFieldName::mediaTrack,
                   am::strings::media_track);
   command->Run();
 }
@@ -792,8 +755,7 @@ TEST_F(ShowRequestTest, Run_MediaTrack_WrongSyntax) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Media_Track\\n";
-  TestSetupHelperWrongSyntax(msg,
-                             hmi_apis::Common_TextFieldName::mediaTrack,
+  TestSetupHelperWrongSyntax(msg, hmi_apis::Common_TextFieldName::mediaTrack,
                              am::strings::media_track);
   command->Run();
 }
@@ -804,8 +766,8 @@ TEST_F(ShowRequestTest, Run_StatusBar_SUCCESS) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Status_Bar";
-  TestSetupHelper(
-      msg, hmi_apis::Common_TextFieldName::statusBar, am::strings::status_bar);
+  TestSetupHelper(msg, hmi_apis::Common_TextFieldName::statusBar,
+                  am::strings::status_bar);
   command->Run();
 }
 
@@ -815,8 +777,8 @@ TEST_F(ShowRequestTest, Run_StatusBar_WrongSyntax) {
   std::shared_ptr<ShowRequest> command(CreateCommand<ShowRequest>(msg));
 
   text_field_ = "Status_Bar\\n";
-  TestSetupHelperWrongSyntax(
-      msg, hmi_apis::Common_TextFieldName::statusBar, am::strings::status_bar);
+  TestSetupHelperWrongSyntax(msg, hmi_apis::Common_TextFieldName::statusBar,
+                             am::strings::status_bar);
   command->Run();
 }
 

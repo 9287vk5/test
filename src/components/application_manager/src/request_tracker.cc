@@ -49,13 +49,11 @@ TrackResult RequestTracker::Track(const ApplicationID& app_id,
   LOG4CXX_AUTO_TRACE(logger_);
   bool track_result = false;
 
-  LOG4CXX_DEBUG(logger_,
-                "Tracking request for level: "
-                    << MessageHelper::StringifiedHMILevel(level));
+  LOG4CXX_DEBUG(logger_, "Tracking request for level: "
+                             << MessageHelper::StringifiedHMILevel(level));
 
   if (mobile_apis::HMILevel::HMI_NONE == level) {
-    track_result = Track(app_id,
-                         settings_.app_hmi_level_none_time_scale(),
+    track_result = Track(app_id, settings_.app_hmi_level_none_time_scale(),
                          settings_.app_hmi_level_none_time_scale_max_requests(),
                          none_level_tracker_);
 
@@ -63,10 +61,8 @@ TrackResult RequestTracker::Track(const ApplicationID& app_id,
                         : TrackResult::kNoneLevelMaxRequestsExceeded;
   }
 
-  track_result = Track(app_id,
-                       settings_.app_time_scale(),
-                       settings_.app_time_scale_max_requests(),
-                       tracker_);
+  track_result = Track(app_id, settings_.app_time_scale(),
+                       settings_.app_time_scale_max_requests(), tracker_);
 
   return track_result ? TrackResult::kSuccess
                       : TrackResult::kMaxRequestsExceeded;
@@ -84,9 +80,9 @@ bool RequestTracker::Track(const ApplicationID& app_id,
     return true;
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Time scale is: " << time_scale << ". Max requests number is: "
-                                  << max_requests);
+  LOG4CXX_DEBUG(logger_, "Time scale is: " << time_scale
+                                           << ". Max requests number is: "
+                                           << max_requests);
 
   LOG4CXX_DEBUG(logger_, "Tracking app id: " << app_id);
   ApplicationsRequestsTracker::iterator it_app = tracker.find(app_id);

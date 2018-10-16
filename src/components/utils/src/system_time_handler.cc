@@ -38,9 +38,7 @@ SystemTimeHandler::SystemTimeHandler() {}
 
 SystemTimeHandler::~SystemTimeHandler() {}
 
-void SystemTimeHandler::QuerySystemTime() {
-  DoSystemTimeQuery();
-}
+void SystemTimeHandler::QuerySystemTime() { DoSystemTimeQuery(); }
 
 void SystemTimeHandler::SubscribeOnSystemTime(SystemTimeListener* listener) {
   DoSubscribe(listener);
@@ -51,9 +49,7 @@ void SystemTimeHandler::UnsubscribeFromSystemTime(
   DoUnsubscribe(listener);
 }
 
-time_t SystemTimeHandler::GetUTCTime() {
-  return FetchSystemTime();
-}
+time_t SystemTimeHandler::GetUTCTime() { return FetchSystemTime(); }
 
 bool SystemTimeHandler::system_time_can_be_received() const {
   return utc_time_can_be_received();

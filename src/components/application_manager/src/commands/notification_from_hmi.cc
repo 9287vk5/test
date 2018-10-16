@@ -40,15 +40,10 @@ namespace application_manager {
 namespace commands {
 
 NotificationFromHMI::NotificationFromHMI(
-    const MessageSharedPtr& message,
-    ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    const MessageSharedPtr& message, ApplicationManager& application_manager,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : CommandImpl(message,
-                  application_manager,
-                  rpc_service,
-                  hmi_capabilities,
+    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
                   policy_handle) {
   // Replace HMI app id with Mobile connection id
   ReplaceHMIWithMobileAppId(*message);
@@ -56,13 +51,9 @@ NotificationFromHMI::NotificationFromHMI(
 
 NotificationFromHMI::~NotificationFromHMI() {}
 
-bool NotificationFromHMI::Init() {
-  return true;
-}
+bool NotificationFromHMI::Init() { return true; }
 
-bool NotificationFromHMI::CleanUp() {
-  return true;
-}
+bool NotificationFromHMI::CleanUp() { return true; }
 
 void NotificationFromHMI::Run() {}
 

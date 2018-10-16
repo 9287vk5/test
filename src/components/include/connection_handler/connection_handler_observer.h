@@ -95,8 +95,7 @@ class ConnectionHandlerObserver {
    */
   virtual void OnServiceStartedCallback(
       const connection_handler::DeviceHandle& device_handle,
-      const int32_t& session_key,
-      const protocol_handler::ServiceType& type,
+      const int32_t& session_key, const protocol_handler::ServiceType& type,
       const BsonObject* params) = 0;
 
   /**
@@ -107,8 +106,7 @@ class ConnectionHandlerObserver {
    * \param close_reson Service close reason
    */
   virtual void OnServiceEndedCallback(
-      const int32_t& session_key,
-      const protocol_handler::ServiceType& type,
+      const int32_t& session_key, const protocol_handler::ServiceType& type,
       const connection_handler::CloseSessionReason& close_reason) = 0;
 
   /**

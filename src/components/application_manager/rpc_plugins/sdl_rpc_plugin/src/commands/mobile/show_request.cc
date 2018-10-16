@@ -50,17 +50,13 @@ ShowRequest::ShowRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler)
-    , core_result_code_(mobile_apis::Result::INVALID_ENUM) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler),
+      core_result_code_(mobile_apis::Result::INVALID_ENUM) {}
 
 ShowRequest::~ShowRequest() {}
 
-void ShowRequest::HandleMetadata(const char* field_id,
-                                 int32_t field_index,
+void ShowRequest::HandleMetadata(const char* field_id, int32_t field_index,
                                  smart_objects::SmartObject& msg_params) {
   smart_objects::SmartObject& metadata_tags =
       (*message_)[strings::msg_params][strings::metadata_tags];
@@ -78,9 +74,8 @@ void ShowRequest::HandleMetadata(const char* field_id,
                   [hmi_request::field_types][i] = current_tag;
       }
     } else {
-      LOG4CXX_INFO(logger_,
-                   "metadata tag provided with no item for "
-                       << field_id << ", ignoring with warning");
+      LOG4CXX_INFO(logger_, "metadata tag provided with no item for "
+                                << field_id << ", ignoring with warning");
       // tag provided with no item, ignore with warning
       if (mobile_apis::Result::INVALID_ENUM == core_result_code_) {
         core_result_code_ = mobile_apis::Result::WARNINGS;
@@ -122,11 +117,9 @@ void ShowRequest::Run() {
   mobile_apis::Result::eType processing_result = mobile_apis::Result::SUCCESS;
   if (((*message_)[strings::msg_params].keyExists(strings::soft_buttons)) &&
       ((*message_)[strings::msg_params][strings::soft_buttons].length() > 0)) {
-    processing_result =
-        MessageHelper::ProcessSoftButtons((*message_)[strings::msg_params],
-                                          app,
-                                          policy_handler_,
-                                          application_manager_);
+    processing_result = MessageHelper::ProcessSoftButtons(
+        (*message_)[strings::msg_params], app, policy_handler_,
+        application_manager_);
   }
 
   if (mobile_apis::Result::SUCCESS != processing_result) {
@@ -140,8 +133,7 @@ void ShowRequest::Run() {
       ((*message_)[strings::msg_params][strings::graphic][strings::value]
            .asString()).length()) {
     verification_result = MessageHelper::VerifyImage(
-        (*message_)[strings::msg_params][strings::graphic],
-        app,
+        (*message_)[strings::msg_params][strings::graphic], app,
         application_manager_);
     if (mobile_apis::Result::INVALID_DATA == verification_result) {
       LOG4CXX_ERROR(logger_, "Image verification failed.");
@@ -152,8 +144,7 @@ void ShowRequest::Run() {
 
   if ((*message_)[strings::msg_params].keyExists(strings::secondary_graphic)) {
     verification_result = MessageHelper::VerifyImage(
-        (*message_)[strings::msg_params][strings::secondary_graphic],
-        app,
+        (*message_)[strings::msg_params][strings::secondary_graphic], app,
         application_manager_);
     if (mobile_apis::Result::INVALID_DATA == verification_result) {
       LOG4CXX_ERROR(logger_, "Image verification failed.");
@@ -309,8 +300,7 @@ void ShowRequest::on_event(const event_engine::Event& event) {
         converted_result_code = core_result_code_;
         response_info = core_response_info_;
       }
-      SendResponse(result,
-                   converted_result_code,
+      SendResponse(result, converted_result_code,
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

@@ -157,8 +157,7 @@ class PolicyManagerImplTest2 : public ::testing::Test {
   void CreateLocalPT(const std::string& file_name);
 
   void AddRTtoPT(const std::string& update_file_name,
-                 const std::string& section_name,
-                 const uint32_t rt_number,
+                 const std::string& section_name, const uint32_t rt_number,
                  const uint32_t invalid_rt_number);
 
   void AddRTtoAppSectionPT(const std::string& update_file_name,
@@ -271,10 +270,10 @@ class PolicyManagerImplTest_RequestTypes : public ::testing::Test {
 class PolicyManagerImplTest_ExternalConsent : public PolicyManagerImplTest2 {
  public:
   PolicyManagerImplTest_ExternalConsent()
-      : PolicyManagerImplTest2()
-      , group_name_1_("Group1")
-      , group_name_2_("Group2")
-      , group_name_3_("Group3") {}
+      : PolicyManagerImplTest2(),
+        group_name_1_("Group1"),
+        group_name_2_("Group2"),
+        group_name_3_("Group3") {}
 
  protected:
   void PreconditionExternalConsentPreparePTWithAppGroupsAndConsents();
@@ -283,8 +282,7 @@ class PolicyManagerImplTest_ExternalConsent : public PolicyManagerImplTest2 {
 
   policy_table::Table PreparePTWithGroupsHavingExternalConsent();
 
-  std::string PreparePTUWithNewGroup(const uint32_t type,
-                                     const uint32_t id,
+  std::string PreparePTUWithNewGroup(const uint32_t type, const uint32_t id,
                                      const std::string& group_name);
 
   const uint32_t type_1_ = 0;

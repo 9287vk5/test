@@ -65,10 +65,7 @@ RequestToHMI::RequestToHMI(const MessageSharedPtr& message,
                            rpc_service::RPCService& rpc_service,
                            HMICapabilities& hmi_capabilities,
                            policy::PolicyHandlerInterface& policy_handler)
-    : CommandImpl(message,
-                  application_manager,
-                  rpc_service,
-                  hmi_capabilities,
+    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
                   policy_handler) {}
 
 RequestToHMI::~RequestToHMI() {}
@@ -78,13 +75,9 @@ bool RequestToHMI::Init() {
   return ReplaceMobileWithHMIAppId(*message_);
 }
 
-bool RequestToHMI::CleanUp() {
-  return true;
-}
+bool RequestToHMI::CleanUp() { return true; }
 
-void RequestToHMI::Run() {
-  SendRequest();
-}
+void RequestToHMI::Run() { SendRequest(); }
 
 void RequestToHMI::SendRequest() {
   (*message_)[strings::params][strings::protocol_type] = hmi_protocol_type_;

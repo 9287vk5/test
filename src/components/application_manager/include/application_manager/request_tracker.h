@@ -99,10 +99,8 @@ class RequestTracker {
    * time of addition into processing
    * @return
    */
-  bool Track(const ApplicationID& app_id,
-             const uint32_t time_scale,
-             const uint32_t max_requests,
-             ApplicationsRequestsTracker& tracker);
+  bool Track(const ApplicationID& app_id, const uint32_t time_scale,
+             const uint32_t max_requests, ApplicationsRequestsTracker& tracker);
 
   /**
    * @brief settings_ having time scale and maximum requests values

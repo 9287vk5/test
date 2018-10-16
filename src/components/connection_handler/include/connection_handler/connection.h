@@ -75,15 +75,15 @@ struct Service {
   transport_manager::ConnectionUID connection_id;
   bool is_protected_;
   Service()
-      : service_type(protocol_handler::kInvalidServiceType)
-      , connection_id(0)
-      , is_protected_(false) {}
+      : service_type(protocol_handler::kInvalidServiceType),
+        connection_id(0),
+        is_protected_(false) {}
 
   explicit Service(protocol_handler::ServiceType service_type,
                    transport_manager::ConnectionUID connection_id)
-      : service_type(service_type)
-      , connection_id(connection_id)
-      , is_protected_(false) {}
+      : service_type(service_type),
+        connection_id(connection_id),
+        is_protected_(false) {}
 
   bool operator==(const protocol_handler::ServiceType service_type) const {
     return this->service_type == service_type;
@@ -102,18 +102,20 @@ struct Session {
   security_manager::SSLContext* ssl_context;
 #endif  // ENABLE_SECURITY
   Session()
-      : service_list()
-      , protocol_version(::protocol_handler::PROTOCOL_VERSION_2)
+      : service_list(),
+        protocol_version(::protocol_handler::PROTOCOL_VERSION_2)
 #ifdef ENABLE_SECURITY
-      , ssl_context(NULL)
+        ,
+        ssl_context(NULL)
 #endif  // ENABLE_SECURITY
   {
   }
   explicit Session(const ServiceList& services, uint8_t protocol_version)
-      : service_list(services)
-      , protocol_version(protocol_version)
+      : service_list(services),
+        protocol_version(protocol_version)
 #ifdef ENABLE_SECURITY
-      , ssl_context(NULL)
+        ,
+        ssl_context(NULL)
 #endif  // ENABLE_SECURITY
   {
   }
@@ -137,8 +139,7 @@ class Connection {
    */
   Connection(ConnectionHandle connection_handle,
              DeviceHandle connection_device_handle,
-             ConnectionHandler* connection_handler,
-             uint32_t heartbeat_timeout);
+             ConnectionHandler* connection_handler, uint32_t heartbeat_timeout);
 
   /**
    * @brief Destructor

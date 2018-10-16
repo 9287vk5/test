@@ -45,15 +45,15 @@ RPCServiceImpl::RPCServiceImpl(
     protocol_handler::ProtocolHandler* protocol_handler,
     hmi_message_handler::HMIMessageHandler* hmi_handler,
     CommandHolder& commands_holder)
-    : app_manager_(app_manager)
-    , request_ctrl_(request_ctrl)
-    , protocol_handler_(protocol_handler)
-    , hmi_handler_(hmi_handler)
-    , commands_holder_(commands_holder)
-    , messages_to_mobile_("AM ToMobile", this)
-    , messages_to_hmi_("AM ToHMI", this)
-    , hmi_so_factory_(hmi_apis::HMI_API())
-    , mobile_so_factory_(mobile_apis::MOBILE_API()) {}
+    : app_manager_(app_manager),
+      request_ctrl_(request_ctrl),
+      protocol_handler_(protocol_handler),
+      hmi_handler_(hmi_handler),
+      commands_holder_(commands_holder),
+      messages_to_mobile_("AM ToMobile", this),
+      messages_to_hmi_("AM ToHMI", this),
+      hmi_so_factory_(hmi_apis::HMI_API()),
+      mobile_so_factory_(mobile_apis::MOBILE_API()) {}
 
 RPCServiceImpl::~RPCServiceImpl() {}
 
@@ -105,9 +105,7 @@ bool RPCServiceImpl::ManageMobileCommand(
       LOG4CXX_ERROR(logger_, "RET APPLICATION_NOT_REGISTERED");
       smart_objects::SmartObjectSPtr response =
           MessageHelper::CreateNegativeResponse(
-              connection_key,
-              static_cast<int32_t>(function_id),
-              correlation_id,
+              connection_key, static_cast<int32_t>(function_id), correlation_id,
               static_cast<int32_t>(
                   mobile_apis::Result::APPLICATION_NOT_REGISTERED));
 
@@ -171,15 +169,12 @@ bool RPCServiceImpl::ManageMobileCommand(
       LOG4CXX_DEBUG(logger_, "Perform request");
     } else if (result == request_controller::RequestController::
                              TOO_MANY_PENDING_REQUESTS) {
-      LOG4CXX_ERROR(logger_,
-                    "RET  Unable top perform request: "
-                        << "TOO_MANY_PENDING_REQUESTS");
+      LOG4CXX_ERROR(logger_, "RET  Unable top perform request: "
+                                 << "TOO_MANY_PENDING_REQUESTS");
 
       smart_objects::SmartObjectSPtr response =
           MessageHelper::CreateNegativeResponse(
-              connection_key,
-              static_cast<int32_t>(function_id),
-              correlation_id,
+              connection_key, static_cast<int32_t>(function_id), correlation_id,
               static_cast<int32_t>(
                   mobile_apis::Result::TOO_MANY_PENDING_REQUESTS));
       ApplicationSharedPtr app_ptr = app_manager_.application(connection_key);
@@ -191,9 +186,8 @@ bool RPCServiceImpl::ManageMobileCommand(
       return false;
     } else if (result ==
                request_controller::RequestController::TOO_MANY_REQUESTS) {
-      LOG4CXX_ERROR(logger_,
-                    "RET  Unable to perform request: "
-                        << "TOO_MANY_REQUESTS");
+      LOG4CXX_ERROR(logger_, "RET  Unable to perform request: "
+                                 << "TOO_MANY_REQUESTS");
 
       ManageMobileCommand(
           MessageHelper::GetOnAppInterfaceUnregisteredNotificationToMobile(
@@ -202,8 +196,7 @@ bool RPCServiceImpl::ManageMobileCommand(
           commands::Command::SOURCE_SDL);
 
       app_manager_.UnregisterApplication(
-          connection_key,
-          mobile_apis::Result::TOO_MANY_PENDING_REQUESTS,
+          connection_key, mobile_apis::Result::TOO_MANY_PENDING_REQUESTS,
           false);
       ApplicationSharedPtr app_ptr = app_manager_.application(connection_key);
       if (app_ptr) {
@@ -212,15 +205,13 @@ bool RPCServiceImpl::ManageMobileCommand(
       return false;
     } else if (result == request_controller::RequestController::
                              NONE_HMI_LEVEL_MANY_REQUESTS) {
-      LOG4CXX_ERROR(logger_,
-                    "RET  Unable to perform request: "
-                        << "REQUEST_WHILE_IN_NONE_HMI_LEVEL");
+      LOG4CXX_ERROR(logger_, "RET  Unable to perform request: "
+                                 << "REQUEST_WHILE_IN_NONE_HMI_LEVEL");
 
       ManageMobileCommand(
           MessageHelper::GetOnAppInterfaceUnregisteredNotificationToMobile(
-              connection_key,
-              mobile_api::AppInterfaceUnregisteredReason::
-                  REQUEST_WHILE_IN_NONE_HMI_LEVEL),
+              connection_key, mobile_api::AppInterfaceUnregisteredReason::
+                                  REQUEST_WHILE_IN_NONE_HMI_LEVEL),
           commands::Command::SOURCE_SDL);
 
       ApplicationSharedPtr app_ptr = app_manager_.application(connection_key);
@@ -280,8 +271,8 @@ bool RPCServiceImpl::ManageHMICommand(
 
     auto app = app_manager_.application(static_cast<uint32_t>(connection_key));
     if (app && app_manager_.IsAppInReconnectMode(app->policy_app_id())) {
-      commands_holder_.Suspend(
-          app, CommandHolder::CommandType::kHmiCommand, message);
+      commands_holder_.Suspend(app, CommandHolder::CommandType::kHmiCommand,
+                               message);
       return true;
     }
   }
@@ -398,9 +389,8 @@ void RPCServiceImpl::SendMessageToMobile(
   }
 
   mobile_so_factory().attachSchema(*message, false);
-  LOG4CXX_DEBUG(
-      logger_,
-      "Attached schema to message, result if valid: " << message->isValid());
+  LOG4CXX_DEBUG(logger_, "Attached schema to message, result if valid: "
+                             << message->isValid());
 
   // Messages to mobile are not yet prioritized so use default priority value
   std::shared_ptr<Message> message_to_send(
@@ -441,9 +431,9 @@ void RPCServiceImpl::SendMessageToMobile(
     const mobile_apis::Result::eType check_result =
         app_manager_.CheckPolicyPermissions(app, string_functionID, params);
     if (mobile_apis::Result::SUCCESS != check_result) {
-      LOG4CXX_WARN(logger_,
-                   "Function \"" << string_functionID << "\" (#" << function_id
-                                 << ") not allowed by policy");
+      LOG4CXX_WARN(logger_, "Function \"" << string_functionID << "\" (#"
+                                          << function_id
+                                          << ") not allowed by policy");
       return;
     }
 
@@ -461,9 +451,8 @@ void RPCServiceImpl::SendMessageToMobile(
   }
 
   if (message_to_send->binary_data()) {
-    LOG4CXX_DEBUG(
-        logger_,
-        "Binary data size: " << message_to_send->binary_data()->size());
+    LOG4CXX_DEBUG(logger_, "Binary data size: "
+                               << message_to_send->binary_data()->size());
   }
   messages_to_mobile_.PostMessage(
       impl::MessageToMobile(message_to_send, final_message));
@@ -493,9 +482,8 @@ void RPCServiceImpl::SendMessageToHMI(
   }
 
   hmi_so_factory().attachSchema(*message, false);
-  LOG4CXX_INFO(
-      logger_,
-      "Attached schema to message, result if valid: " << message->isValid());
+  LOG4CXX_INFO(logger_, "Attached schema to message, result if valid: "
+                            << message->isValid());
 
   if (!ConvertSOtoMessage(*message, *message_to_send)) {
     LOG4CXX_WARN(logger_,
@@ -527,11 +515,10 @@ bool RPCServiceImpl::ConvertSOtoMessage(
     return false;
   }
 
-  LOG4CXX_DEBUG(
-      logger_,
-      "Message with protocol: " << message.getElement(jhs::S_PARAMS)
-                                       .getElement(jhs::S_PROTOCOL_TYPE)
-                                       .asInt());
+  LOG4CXX_DEBUG(logger_, "Message with protocol: "
+                             << message.getElement(jhs::S_PARAMS)
+                                    .getElement(jhs::S_PROTOCOL_TYPE)
+                                    .asInt());
 
   std::string output_string;
   const int64_t protocol_type = message.getElement(jhs::S_PARAMS)
@@ -616,9 +603,7 @@ bool RPCServiceImpl::ConvertSOtoMessage(
   return true;
 }
 
-hmi_apis::HMI_API& RPCServiceImpl::hmi_so_factory() {
-  return hmi_so_factory_;
-}
+hmi_apis::HMI_API& RPCServiceImpl::hmi_so_factory() { return hmi_so_factory_; }
 
 mobile_apis::MOBILE_API& RPCServiceImpl::mobile_so_factory() {
   return mobile_so_factory_;

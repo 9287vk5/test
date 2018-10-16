@@ -43,17 +43,16 @@ namespace app_launch {
 CREATE_LOGGERPTR_GLOBAL(logger_, "AppLaunch")
 
 AppLaunchCtrlImpl::AppLaunchCtrlImpl(
-    AppLaunchData& data,
-    application_manager::ApplicationManager& app_mngr,
+    AppLaunchData& data, application_manager::ApplicationManager& app_mngr,
     const AppLaunchSettings& settings)
-    : settings_(settings)
-    , app_launch_data_(data)
-    , resume_ctrl_(app_mngr.resume_controller())
-    , apps_launcher_(app_mngr.connection_handler(),
+    : settings_(settings),
+      app_launch_data_(data),
+      resume_ctrl_(app_mngr.resume_controller()),
+      apps_launcher_(app_mngr.connection_handler(),
                      settings.max_number_of_ios_device(),
                      settings.app_launch_max_retry_attempt(),
-                     settings.app_launch_retry_wait_time())
-    , device_apps_launcher_(app_mngr, apps_launcher_, settings) {}
+                     settings.app_launch_retry_wait_time()),
+      device_apps_launcher_(app_mngr, apps_launcher_, settings) {}
 
 void AppLaunchCtrlImpl::OnAppRegistered(
     const application_manager::Application& app) {
@@ -97,10 +96,8 @@ void AppLaunchCtrlImpl::OnDeviceConnected(const std::string& device_mac) {
   }
   std::sort(apps_hmi_levels.begin(), apps_hmi_levels.end(), HmiLevelSorter);
   apps_on_device.clear();
-  std::transform(apps_hmi_levels.begin(),
-                 apps_hmi_levels.end(),
-                 std::back_inserter(apps_on_device),
-                 GetAppFromHmiLevelPair);
+  std::transform(apps_hmi_levels.begin(), apps_hmi_levels.end(),
+                 std::back_inserter(apps_on_device), GetAppFromHmiLevelPair);
   if (apps_on_device.size() > 0) {
     device_apps_launcher_.LaunchAppsOnDevice(device_mac, apps_on_device);
   } else {

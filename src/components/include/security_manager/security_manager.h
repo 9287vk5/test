@@ -113,8 +113,7 @@ class SecurityManager : public protocol_handler::ProtocolObserver,
    * \param error_id  unique error identifier
    * \param erorr_text SSL impelmentation error text
    */
-  void SendInternalError(const uint32_t connection_key,
-                         const uint8_t& error_id,
+  void SendInternalError(const uint32_t connection_key, const uint8_t& error_id,
                          const std::string& erorr_text) {
     SendInternalError(connection_key, error_id, erorr_text, 0);
   }

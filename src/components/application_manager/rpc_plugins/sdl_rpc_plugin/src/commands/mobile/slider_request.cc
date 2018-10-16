@@ -49,11 +49,8 @@ SliderRequest::SliderRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {
   subscribe_on_event(hmi_apis::FunctionID::UI_OnResetTimeout);
 }
 
@@ -158,9 +155,8 @@ void SliderRequest::on_event(const event_engine::Event& event) {
       response_msg_params[strings::slider_position] =
           message[strings::params][strings::data][strings::slider_position];
     } else {
-      LOG4CXX_ERROR(logger_,
-                    strings::slider_position << " field is absent"
-                                                " in response.");
+      LOG4CXX_ERROR(logger_, strings::slider_position << " field is absent"
+                                                         " in response.");
       response_msg_params[strings::slider_position] = 0;
     }
   }

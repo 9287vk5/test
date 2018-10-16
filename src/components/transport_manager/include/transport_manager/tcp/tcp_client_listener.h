@@ -65,8 +65,7 @@ class TcpClientListener : public ClientConnectionListener {
    *interfaces.
    *connections
    */
-  TcpClientListener(TransportAdapterController* controller,
-                    uint16_t port,
+  TcpClientListener(TransportAdapterController* controller, uint16_t port,
                     bool enable_keepalive,
                     const std::string designated_interface = "");
 
@@ -120,21 +119,13 @@ class TcpClientListener : public ClientConnectionListener {
     interface_listener_ = listener;
   }
 
-  uint16_t port() const {
-    return port_;
-  }
+  uint16_t port() const { return port_; }
 
-  int get_socket() const {
-    return socket_;
-  }
+  int get_socket() const { return socket_; }
 
-  threads::Thread* thread() const {
-    return thread_;
-  }
+  threads::Thread* thread() const { return thread_; }
 
-  static void set_testing(bool enabled) {
-    testing_ = enabled;
-  }
+  static void set_testing(bool enabled) { testing_ = enabled; }
 #endif  // BUILD_TESTS
 
  private:

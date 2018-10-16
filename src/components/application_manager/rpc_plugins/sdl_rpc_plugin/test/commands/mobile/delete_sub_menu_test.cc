@@ -97,13 +97,13 @@ class DeleteSubMenuRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   DeleteSubMenuRequestTest()
-      : commands_lock_(std::make_shared<sync_primitives::Lock>())
-      , accessor_(commands_map_, commands_lock_)
-      , message_(CreateMessage())
-      , command_(CreateCommand<DeleteSubMenuRequest>(message_))
-      , mock_help_prompt_manager_(
-            std::make_shared<am_test::MockHelpPromptManager>())
-      , app_(CreateMockApp()) {}
+      : commands_lock_(std::make_shared<sync_primitives::Lock>()),
+        accessor_(commands_map_, commands_lock_),
+        message_(CreateMessage()),
+        command_(CreateCommand<DeleteSubMenuRequest>(message_)),
+        mock_help_prompt_manager_(
+            std::make_shared<am_test::MockHelpPromptManager>()),
+        app_(CreateMockApp()) {}
 
   am::CommandsMap commands_map_;
   mutable std::shared_ptr<sync_primitives::Lock> commands_lock_;

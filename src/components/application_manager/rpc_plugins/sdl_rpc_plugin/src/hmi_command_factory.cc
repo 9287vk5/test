@@ -246,13 +246,12 @@ using namespace application_manager;
 
 HMICommandFactory::HMICommandFactory(
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : application_manager_(application_manager)
-    , rpc_service_(rpc_service)
-    , hmi_capabilities_(hmi_capabilities)
-    , policy_handler_(policy_handler) {}
+    : application_manager_(application_manager),
+      rpc_service_(rpc_service),
+      hmi_capabilities_(hmi_capabilities),
+      policy_handler_(policy_handler) {}
 
 CommandSharedPtr HMICommandFactory::CreateCommand(
     const app_mngr::commands::MessageSharedPtr& message,
@@ -291,11 +290,10 @@ bool HMICommandFactory::IsAbleToProcess(
 }
 
 CommandCreator& HMICommandFactory::get_creator_factory(
-    hmi_apis::FunctionID::eType id,
-    hmi_apis::messageType::eType message_type,
+    hmi_apis::FunctionID::eType id, hmi_apis::messageType::eType message_type,
     application_manager::commands::Command::CommandSource source) const {
-  CommandCreatorFactory factory(
-      application_manager_, rpc_service_, hmi_capabilities_, policy_handler_);
+  CommandCreatorFactory factory(application_manager_, rpc_service_,
+                                hmi_capabilities_, policy_handler_);
 
   switch (static_cast<int32_t>(id)) {
     case hmi_apis::FunctionID::BasicCommunication_OnStartDeviceDiscovery: {

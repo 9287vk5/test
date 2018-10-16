@@ -59,9 +59,8 @@ class MockResumeCtrl : public resumption::ResumeCtrl {
   MOCK_CONST_METHOD0(is_suspended, bool());
   MOCK_METHOD0(StopSavePersistentDataTimer, void());
   MOCK_METHOD0(StartSavePersistentDataTimer, void());
-  MOCK_METHOD2(StartResumption,
-               bool(app_mngr::ApplicationSharedPtr application,
-                    const std::string& hash));
+  MOCK_METHOD2(StartResumption, bool(app_mngr::ApplicationSharedPtr application,
+                                     const std::string& hash));
   MOCK_METHOD1(StartResumptionOnlyHMILevel,
                bool(app_mngr::ApplicationSharedPtr application));
   MOCK_METHOD1(RetryResumption, void(const uint32_t app_id));
@@ -71,9 +70,8 @@ class MockResumeCtrl : public resumption::ResumeCtrl {
                bool(app_mngr::ApplicationSharedPtr application,
                     const std::string& hash));
   MOCK_METHOD1(IsHMIApplicationIdExist, bool(uint32_t hmi_app_id));
-  MOCK_METHOD2(IsApplicationSaved,
-               bool(const std::string& policy_app_id,
-                    const std::string& device_id));
+  MOCK_METHOD2(IsApplicationSaved, bool(const std::string& policy_app_id,
+                                        const std::string& device_id));
   MOCK_CONST_METHOD2(GetHMIApplicationID,
                      uint32_t(const std::string& policy_app_id,
                               const std::string& device_id));
@@ -83,9 +81,8 @@ class MockResumeCtrl : public resumption::ResumeCtrl {
                void(app_mngr::ApplicationSharedPtr application));
   MOCK_METHOD1(RemoveFromResumption, void(uint32_t app_id));
   MOCK_METHOD1(Init, bool(resumption::LastState& last_state));
-  MOCK_METHOD2(OnAppRegistrationStart,
-               void(const std::string& policy_app_id,
-                    const std::string& device_id));
+  MOCK_METHOD2(OnAppRegistrationStart, void(const std::string& policy_app_id,
+                                            const std::string& device_id));
   MOCK_METHOD0(OnAppRegistrationEnd, void());
   MOCK_CONST_METHOD2(GetSavedAppHmiLevel,
                      int32_t(const std::string&, const std::string&));

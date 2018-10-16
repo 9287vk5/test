@@ -49,11 +49,8 @@ SetMediaClockRequest::SetMediaClockRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 SetMediaClockRequest::~SetMediaClockRequest() {}
 
@@ -82,8 +79,8 @@ void SetMediaClockRequest::Run() {
     msg_params[strings::app_id] = app->app_id();
     StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_UI);
 
-    SendHMIRequest(
-        hmi_apis::FunctionID::UI_SetMediaClockTimer, &msg_params, true);
+    SendHMIRequest(hmi_apis::FunctionID::UI_SetMediaClockTimer, &msg_params,
+                   true);
   } else {
     SendResponse(false, mobile_apis::Result::INVALID_DATA);
   }
@@ -104,8 +101,7 @@ void SetMediaClockRequest::on_event(const event_engine::Event& event) {
       std::string response_info;
       GetInfo(message, response_info);
 
-      SendResponse(result,
-                   MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

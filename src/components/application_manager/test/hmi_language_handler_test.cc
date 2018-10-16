@@ -122,8 +122,7 @@ class HmiLanguageHandlerTest : public ::testing::Test {
   }
 
   void AddMockAppsToApplicationSet(ApplicationSet& app_set,
-                                   const uint32_t start_app_id,
-                                   uint32_t count,
+                                   const uint32_t start_app_id, uint32_t count,
                                    bool expect_call = false) {
     while (count-- > 0) {
       app_set.insert(CreateMockApp(start_app_id + count, expect_call));

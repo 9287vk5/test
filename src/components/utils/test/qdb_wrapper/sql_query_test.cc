@@ -66,9 +66,7 @@ class SQLQueryTest : public ::testing::Test {
     qdb_disconnect(conn);
   }
 
-  void SetUp() {
-    qdb_statement(conn, "DELETE FROM testTable");
-  }
+  void SetUp() { qdb_statement(conn, "DELETE FROM testTable"); }
 
   ::testing::AssertionResult IsError(SQLError error) {
     if (error.number() != ::policy::dbms::OK) {

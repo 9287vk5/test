@@ -69,16 +69,14 @@ bool Range<T>::Includes(U val) const {
  * PrimitiveType base class
  */
 inline PrimitiveType::PrimitiveType(ValueState value_state)
-    : value_state_(value_state)
-    , policy_table_type_(policy_table_interface_base::PT_PRELOADED) {}
+    : value_state_(value_state),
+      policy_table_type_(policy_table_interface_base::PT_PRELOADED) {}
 
 inline bool PrimitiveType::is_initialized() const {
   return value_state_ != kUninitialized;
 }
 
-inline bool PrimitiveType::is_valid() const {
-  return value_state_ == kValid;
-}
+inline bool PrimitiveType::is_valid() const { return value_state_ == kValid; }
 
 inline void PrimitiveType::ReportErrors(ValidationReport* report) const {
   switch (value_state_) {
@@ -109,8 +107,8 @@ inline void CompositeType::mark_initialized() {
 }
 
 inline CompositeType::CompositeType(InitializationState init_state)
-    : initialization_state__(init_state)
-    , policy_table_type_(policy_table_interface_base::PT_PRELOADED) {}
+    : initialization_state__(init_state),
+      policy_table_type_(policy_table_interface_base::PT_PRELOADED) {}
 
 inline void CompositeType::ReportErrors(ValidationReport* report) const {
   switch (initialization_state__) {
@@ -145,9 +143,7 @@ inline Boolean& Boolean::operator=(bool new_val) {
   return *this;
 }
 
-inline Boolean::operator bool() const {
-  return value_;
-}
+inline Boolean::operator bool() const { return value_; }
 
 /*
  * Integer class
@@ -161,8 +157,8 @@ Integer<T, minval, maxval>::Integer()
 
 template <typename T, T minval, T maxval>
 Integer<T, minval, maxval>::Integer(IntType value)
-    : PrimitiveType(range_.Includes(value) ? kValid : kInvalid)
-    , value_(value) {}
+    : PrimitiveType(range_.Includes(value) ? kValid : kInvalid),
+      value_(value) {}
 
 template <typename T, T minval, T maxval>
 Integer<T, minval, maxval>& Integer<T, minval, maxval>::operator=(
@@ -213,8 +209,8 @@ Float<minnum, maxnum, minden, maxden>::Float()
 
 template <int64_t minnum, int64_t maxnum, int64_t minden, int64_t maxden>
 Float<minnum, maxnum, minden, maxden>::Float(double value)
-    : PrimitiveType(range_.Includes(value) ? kValid : kInvalid)
-    , value_(value) {}
+    : PrimitiveType(range_.Includes(value) ? kValid : kInvalid),
+      value_(value) {}
 
 template <int64_t minnum, int64_t maxnum, int64_t minden, int64_t maxden>
 Float<minnum, maxnum, minden, maxden>& Float<minnum, maxnum, minden, maxden>::
@@ -241,8 +237,8 @@ String<minlen, maxlen>::String()
 
 template <size_t minlen, size_t maxlen>
 String<minlen, maxlen>::String(const std::string& value)
-    : PrimitiveType(length_range_.Includes(value.length()) ? kValid : kInvalid)
-    , value_(value) {}
+    : PrimitiveType(length_range_.Includes(value.length()) ? kValid : kInvalid),
+      value_(value) {}
 
 template <size_t minlen, size_t maxlen>
 String<minlen, maxlen>::String(const char* value)
@@ -553,8 +549,8 @@ Optional<T>::Optional()
 template <typename T>
 template <typename U>
 Optional<T>::Optional(const U& value)
-    : policy_table_type_(policy_table_interface_base::INVALID_PT_TYPE)
-    , value_(value) {}
+    : policy_table_type_(policy_table_interface_base::INVALID_PT_TYPE),
+      value_(value) {}
 
 template <typename T>
 T& Optional<T>::operator*() {

@@ -50,14 +50,14 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "LowVoltageSignalsHandler")
 
 LowVoltageSignalsHandler::LowVoltageSignalsHandler(
     LifeCycle& life_cycle, const LowVoltageSignalsOffset& offset_data)
-    : notifications_delegate_(new NotificationThreadDelegate(*this))
-    , signals_handler_thread_(threads::CreateThread(
-          "LV_SIGNALS_HANDLER_THREAD", notifications_delegate_.get()))
-    , life_cycle_(life_cycle)
-    , SIGLOWVOLTAGE_(offset_data.low_voltage_signal_offset + SIGRTMIN)
-    , SIGWAKEUP_(offset_data.wake_up_signal_offset + SIGRTMIN)
-    , SIGIGNOFF_(offset_data.ignition_off_signal_offset + SIGRTMIN)
-    , cpid_(-1) {
+    : notifications_delegate_(new NotificationThreadDelegate(*this)),
+      signals_handler_thread_(threads::CreateThread(
+          "LV_SIGNALS_HANDLER_THREAD", notifications_delegate_.get())),
+      life_cycle_(life_cycle),
+      SIGLOWVOLTAGE_(offset_data.low_voltage_signal_offset + SIGRTMIN),
+      SIGWAKEUP_(offset_data.wake_up_signal_offset + SIGRTMIN),
+      SIGIGNOFF_(offset_data.ignition_off_signal_offset + SIGRTMIN),
+      cpid_(-1) {
   sigemptyset(&lv_mask_);
   sigaddset(&lv_mask_, SIGLOWVOLTAGE_);
   signals_handler_thread_->start();
@@ -71,13 +71,9 @@ int LowVoltageSignalsHandler::low_voltage_signo() const {
   return SIGLOWVOLTAGE_;
 }
 
-int LowVoltageSignalsHandler::wake_up_signo() const {
-  return SIGWAKEUP_;
-}
+int LowVoltageSignalsHandler::wake_up_signo() const { return SIGWAKEUP_; }
 
-int LowVoltageSignalsHandler::ignition_off_signo() const {
-  return SIGIGNOFF_;
-}
+int LowVoltageSignalsHandler::ignition_off_signo() const { return SIGIGNOFF_; }
 
 void LowVoltageSignalsHandler::Destroy() {
   if (signals_handler_thread_) {
@@ -87,9 +83,7 @@ void LowVoltageSignalsHandler::Destroy() {
   threads::DeleteThread(signals_handler_thread_);
 }
 
-LowVoltageSignalsHandler::~LowVoltageSignalsHandler() {
-  Destroy();
-}
+LowVoltageSignalsHandler::~LowVoltageSignalsHandler() { Destroy(); }
 
 void LowVoltageSignalsHandler::HandleSignal(const int signo) {
   if (SIGLOWVOLTAGE_ == signo) {

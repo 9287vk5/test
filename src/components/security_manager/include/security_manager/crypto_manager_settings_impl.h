@@ -38,15 +38,12 @@ class CryptoManagerSettingsImpl : public CryptoManagerSettings {
       return security_manager::DTLSv1;
     }
 
-    LOG4CXX_ERROR(
-        logger_,
-        "Unknown protocol: " << profile_.security_manager_protocol_name());
+    LOG4CXX_ERROR(logger_, "Unknown protocol: "
+                               << profile_.security_manager_protocol_name());
     return static_cast<security_manager::Protocol>(-1);
   }
 
-  bool verify_peer() const OVERRIDE {
-    return profile_.verify_peer();
-  }
+  bool verify_peer() const OVERRIDE { return profile_.verify_peer(); }
 
   const std::string& certificate_data() const OVERRIDE {
     return certificate_data_;

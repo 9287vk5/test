@@ -44,8 +44,7 @@ class MockHelpPromptManager : public ::application_manager::HelpPromptManager {
  public:
   MockHelpPromptManager() {}
   MOCK_METHOD3(OnVrCommandAdded,
-               void(uint32_t cmd_id,
-                    const smart_objects::SmartObject& command,
+               void(uint32_t cmd_id, const smart_objects::SmartObject& command,
                     const bool should_send_requests));
   MOCK_METHOD2(OnVrCommandDeleted,
                void(uint32_t cmd_id, const bool should_send_requests));

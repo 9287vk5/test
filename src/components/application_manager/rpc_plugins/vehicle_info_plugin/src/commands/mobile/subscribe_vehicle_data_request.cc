@@ -44,11 +44,8 @@ SubscribeVehicleDataRequest::SubscribeVehicleDataRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 SubscribeVehicleDataRequest::~SubscribeVehicleDataRequest() {}
 
@@ -69,21 +66,18 @@ void SubscribeVehicleDataRequest::Run() {
   smart_objects::SmartObject response_params =
       smart_objects::SmartObject(smart_objects::SmartType_Map);
   bool result = false;
-  CheckVISubscriptions(
-      app, info, result_code, response_params, msg_params, result);
+  CheckVISubscriptions(app, info, result_code, response_params, msg_params,
+                       result);
 
   if (mobile_apis::Result::INVALID_ENUM != result_code) {
-    SendResponse(result,
-                 result_code,
-                 info.empty() ? NULL : info.c_str(),
+    SendResponse(result, result_code, info.empty() ? NULL : info.c_str(),
                  response_params.empty() ? NULL : &response_params);
     return;
   }
 
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_VehicleInfo);
   SendHMIRequest(hmi_apis::FunctionID::VehicleInfo_SubscribeVehicleData,
-                 &msg_params,
-                 true);
+                 &msg_params, true);
 }
 
 void SubscribeVehicleDataRequest::on_event(const event_engine::Event& event) {
@@ -143,8 +137,7 @@ void SubscribeVehicleDataRequest::on_event(const event_engine::Event& event) {
         const_cast<smart_objects::SmartObject&>(message[strings::msg_params]));
   }
 
-  SendResponse(is_succeeded,
-               result_code,
+  SendResponse(is_succeeded, result_code,
                response_info.empty() ? NULL : response_info.c_str(),
                &(message[strings::msg_params]));
 }
@@ -199,12 +192,11 @@ void SubscribeVehicleDataRequest::UnsubscribeFailedSubscriptions(
     if (msg_params.keyExists(it->first)) {
       if (msg_params[it->first][strings::result_code].asInt() !=
           hmi_apis::Common_VehicleDataResultCode::VDRC_SUCCESS) {
-        LOG4CXX_DEBUG(logger_,
-                      "Subscription for VehicleDataType "
-                          << it->first
-                          << " is unsuccessfull. "
-                             "Unsubscribing app with connection key "
-                          << connection_key() << " from it.");
+        LOG4CXX_DEBUG(logger_, "Subscription for VehicleDataType "
+                                   << it->first
+                                   << " is unsuccessfull. "
+                                      "Unsubscribing app with connection key "
+                                   << connection_key() << " from it.");
         VehicleInfoAppExtension::ExtractVIExtension(*app)
             .unsubscribeFromVehicleInfo(it->second);
       }
@@ -229,18 +221,16 @@ bool SubscribeVehicleDataRequest::IsSomeoneSubscribedFor(
   LOG4CXX_AUTO_TRACE(logger_);
   SubscribedToIVIPredicate finder(param_id);
   DataAccessor<ApplicationSet> accessor = application_manager_.applications();
-  ApplicationSetConstIt it = std::find_if(
-      accessor.GetData().begin(), accessor.GetData().end(), finder);
+  ApplicationSetConstIt it = std::find_if(accessor.GetData().begin(),
+                                          accessor.GetData().end(), finder);
   return it != accessor.GetData().end();
 }
 
 void SubscribeVehicleDataRequest::CheckVISubscriptions(
-    ApplicationSharedPtr app,
-    std::string& out_info,
+    ApplicationSharedPtr app, std::string& out_info,
     mobile_apis::Result::eType& out_result_code,
     smart_objects::SmartObject& out_response_params,
-    smart_objects::SmartObject& out_request_params,
-    bool& out_result) {
+    smart_objects::SmartObject& out_request_params, bool& out_result) {
   // counter for items to subscribe
   VehicleInfoSubscriptions::size_type items_to_subscribe = 0;
   // counter for subscribed items by application
@@ -291,9 +281,8 @@ void SubscribeVehicleDataRequest::CheckVISubscriptions(
           auto& ext = VehicleInfoAppExtension::ExtractVIExtension(*app);
 
           if (!ext.subscribeToVehicleInfo(key_type)) {
-            LOG4CXX_ERROR(
-                logger_,
-                "Unable to subscribe for VehicleDataType: " << key_type);
+            LOG4CXX_ERROR(logger_, "Unable to subscribe for VehicleDataType: "
+                                       << key_type);
             continue;
           }
           LOG4CXX_DEBUG(

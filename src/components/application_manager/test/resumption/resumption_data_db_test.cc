@@ -114,12 +114,8 @@ class ResumptionDataDBTest : public ResumptionDataTest {
     delete res_db_;
   }
 
-  utils::dbms::SQLDatabase* test_db() {
-    return test_db_;
-  }
-  std::string path() {
-    return path_;
-  }
+  utils::dbms::SQLDatabase* test_db() { return test_db_; }
+  std::string path() { return path_; }
 
   void SetZeroIgnOffTime() {
     utils::dbms::SQLQuery query(test_db());
@@ -130,9 +126,7 @@ class ResumptionDataDBTest : public ResumptionDataTest {
 
   static TestResumptionDataDB* res_db_;
 
-  TestResumptionDataDB* res_db() {
-    return res_db_;
-  }
+  TestResumptionDataDB* res_db() { return res_db_; }
 
   // Check that db includes tables with given elements
   void CheckSavedDB();
@@ -671,9 +665,8 @@ TEST_F(ResumptionDataDBTest, GetDataForLoadResumeData) {
 
   EXPECT_EQ(policy_app_id_, saved_app[0][am::strings::app_id].asString());
   EXPECT_EQ(kMacAddress_, saved_app[0][am::strings::device_id].asString());
-  EXPECT_EQ(hmi_level_,
-            static_cast<HMILevel::eType>(
-                saved_app[0][am::strings::hmi_level].asInt()));
+  EXPECT_EQ(hmi_level_, static_cast<HMILevel::eType>(
+                            saved_app[0][am::strings::hmi_level].asInt()));
   EXPECT_EQ(ign_off_count_, saved_app[0][am::strings::ign_off_count].asUInt());
 }
 

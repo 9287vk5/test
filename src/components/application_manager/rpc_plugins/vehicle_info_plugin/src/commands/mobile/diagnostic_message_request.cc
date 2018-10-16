@@ -47,14 +47,10 @@ namespace commands {
 DiagnosticMessageRequest::DiagnosticMessageRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 DiagnosticMessageRequest::~DiagnosticMessageRequest() {}
 
@@ -80,11 +76,9 @@ void DiagnosticMessageRequest::Run() {
   if (supported_diag_modes.end() == std::find(supported_diag_modes.begin(),
                                               supported_diag_modes.end(),
                                               msg_diagnostic_mode)) {
-    LOG4CXX_ERROR(logger_,
-                  "Received diagnostic mode " << msg_diagnostic_mode
-                                              << " is not supported.");
-    SendResponse(false,
-                 mobile_apis::Result::REJECTED,
+    LOG4CXX_ERROR(logger_, "Received diagnostic mode " << msg_diagnostic_mode
+                                                       << " is not supported.");
+    SendResponse(false, mobile_apis::Result::REJECTED,
                  "Received diagnostic mode is not supported.");
     return;
   }
@@ -94,8 +88,7 @@ void DiagnosticMessageRequest::Run() {
 
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_VehicleInfo);
   SendHMIRequest(hmi_apis::FunctionID::VehicleInfo_DiagnosticMessage,
-                 &(*message_)[strings::msg_params],
-                 true);
+                 &(*message_)[strings::msg_params], true);
 }
 
 void DiagnosticMessageRequest::on_event(const event_engine::Event& event) {
@@ -112,8 +105,7 @@ void DiagnosticMessageRequest::on_event(const event_engine::Event& event) {
           result_code, HmiInterfaces::HMI_INTERFACE_VehicleInfo);
       std::string response_info;
       GetInfo(message, response_info);
-      SendResponse(result,
-                   MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

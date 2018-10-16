@@ -28,17 +28,13 @@ class InterfaceStatus {
   bool IsAvailable() const;
   bool IsLoopback() const;
   // only for debugging output
-  unsigned int GetFlags() const {
-    return flags_;
-  }
+  unsigned int GetFlags() const { return flags_; }
 
   bool HasIPAddress() const;
   std::string GetIPv4Address() const;
   std::string GetIPv6Address() const;
 
-  void SetFlags(unsigned int flags) {
-    flags_ = flags;
-  }
+  void SetFlags(unsigned int flags) { flags_ = flags; }
 
   // specify NULL to remove existing address
   void SetIPv4Address(struct in_addr* addr);
@@ -98,25 +94,17 @@ class PlatformSpecificNetworkInterfaceListener
   bool Stop() OVERRIDE;
 
 #ifdef BUILD_TESTS
-  void SetTesting(bool enabled) {
-    testing_ = enabled;
-  }
+  void SetTesting(bool enabled) { testing_ = enabled; }
 
-  int GetSocket() const {
-    return socket_;
-  }
+  int GetSocket() const { return socket_; }
 
-  threads::Thread* GetThread() const {
-    return thread_;
-  }
+  threads::Thread* GetThread() const { return thread_; }
 
   void OverwriteStatusTable(const InterfaceStatusTable dummy_table) {
     status_table_ = dummy_table;
   }
 
-  void testCallNotifyIPAddresses() {
-    NotifyIPAddresses();
-  }
+  void testCallNotifyIPAddresses() { NotifyIPAddresses(); }
 
   const std::string& GetSelectedInterfaceName() const {
     return selected_interface_;

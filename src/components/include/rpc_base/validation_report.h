@@ -62,8 +62,7 @@ std::string PrettyFormat(const ValidationReport& report);
 
 namespace impl {
 inline void PrettyFormat(const ValidationReport& report,
-                         const std::string& parent_path,
-                         std::string* result) {
+                         const std::string& parent_path, std::string* result) {
   std::string object_path = parent_path;
   if (!object_path.empty() && report.object_name()[0] != '[') {
     object_path.append(".");
@@ -81,8 +80,7 @@ inline void PrettyFormat(const ValidationReport& report,
   }
   for (ValidationReports::const_iterator i = subreports.begin(),
                                          end = subreports.end();
-       i != end;
-       ++i) {
+       i != end; ++i) {
     PrettyFormat(*i, object_path, result);
   }
 }

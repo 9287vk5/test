@@ -40,26 +40,17 @@ namespace application_manager {
 namespace commands {
 
 CommandNotificationFromMobileImpl::CommandNotificationFromMobileImpl(
-    const MessageSharedPtr& message,
-    ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    const MessageSharedPtr& message, ApplicationManager& application_manager,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandImpl(message,
-                  application_manager,
-                  rpc_service,
-                  hmi_capabilities,
+    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
                   policy_handler) {}
 
 CommandNotificationFromMobileImpl::~CommandNotificationFromMobileImpl() {}
 
-bool CommandNotificationFromMobileImpl::Init() {
-  return true;
-}
+bool CommandNotificationFromMobileImpl::Init() { return true; }
 
-bool CommandNotificationFromMobileImpl::CleanUp() {
-  return true;
-}
+bool CommandNotificationFromMobileImpl::CleanUp() { return true; }
 
 void CommandNotificationFromMobileImpl::Run() {}
 

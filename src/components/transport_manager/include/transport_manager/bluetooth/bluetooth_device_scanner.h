@@ -68,8 +68,7 @@ class BluetoothDeviceScanner : public DeviceScanner {
    * continous search
    */
   BluetoothDeviceScanner(TransportAdapterController* controller,
-                         bool auto_repeat_search,
-                         int repeat_search_pause_sec);
+                         bool auto_repeat_search, int repeat_search_pause_sec);
   /**
    * @brief Destructor.
    */

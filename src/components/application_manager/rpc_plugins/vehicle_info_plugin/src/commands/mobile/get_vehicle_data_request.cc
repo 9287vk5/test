@@ -49,14 +49,10 @@ namespace str = strings;
 GetVehicleDataRequest::GetVehicleDataRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 GetVehicleDataRequest::~GetVehicleDataRequest() {}
 
@@ -94,8 +90,8 @@ void GetVehicleDataRequest::Run() {
   }
   if (msg_params.length() > min_length_msg_params) {
     StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_VehicleInfo);
-    SendHMIRequest(
-        hmi_apis::FunctionID::VehicleInfo_GetVehicleData, &msg_params, true);
+    SendHMIRequest(hmi_apis::FunctionID::VehicleInfo_GetVehicleData,
+                   &msg_params, true);
     return;
   } else if (HasDisallowedParams()) {
     SendResponse(false, mobile_apis::Result::DISALLOWED);
@@ -129,8 +125,7 @@ void GetVehicleDataRequest::on_event(const event_engine::Event& event) {
       if (true == message[strings::params].keyExists(strings::error_msg)) {
         response_info = message[strings::params][strings::error_msg].asString();
       }
-      SendResponse(result,
-                   MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

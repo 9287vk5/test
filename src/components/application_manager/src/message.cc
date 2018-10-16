@@ -33,9 +33,7 @@
 #include "application_manager/message.h"
 
 namespace {
-bool BinaryDataPredicate(uint8_t i, uint8_t j) {
-  return (i == j);
-}
+bool BinaryDataPredicate(uint8_t i, uint8_t j) { return (i == j); }
 }
 
 namespace application_manager {
@@ -56,27 +54,27 @@ MessageType MessageTypeFromRpcType(protocol_handler::RpcType rpc_type) {
 }
 
 Message::Message(protocol_handler::MessagePriority priority)
-    : function_id_(0)
-    , correlation_id_(0)
-    , type_(kUnknownType)
-    , priority_(priority)
-    , connection_key_(0)
-    , binary_data_(NULL)
-    , data_size_(0)
-    , payload_size_(0)
-    , version_(
+    : function_id_(0),
+      correlation_id_(0),
+      type_(kUnknownType),
+      priority_(priority),
+      connection_key_(0),
+      binary_data_(NULL),
+      data_size_(0),
+      payload_size_(0),
+      version_(
           protocol_handler::MajorProtocolVersion::PROTOCOL_VERSION_UNKNOWN) {}
 
 Message::Message(const Message& message)
-    : function_id_(0)
-    , correlation_id_(0)
-    , type_(kUnknownType)
-    , priority_(message.priority_)
-    , connection_key_(0)
-    , binary_data_(NULL)
-    , data_size_(0)
-    , payload_size_(0)
-    , version_(
+    : function_id_(0),
+      correlation_id_(0),
+      type_(kUnknownType),
+      priority_(message.priority_),
+      connection_key_(0),
+      binary_data_(NULL),
+      data_size_(0),
+      payload_size_(0),
+      version_(
           protocol_handler::MajorProtocolVersion::PROTOCOL_VERSION_UNKNOWN) {
   *this = message;
 }
@@ -109,10 +107,9 @@ bool Message::operator==(const Message& message) const {
   bool payload_size = payload_size_ == message.payload_size_;
   bool binary_data_available = true;
   if (binary_data_) {
-    binary_data_available = std::equal(binary_data_->begin(),
-                                       binary_data_->end(),
-                                       message.binary_data_->begin(),
-                                       BinaryDataPredicate);
+    binary_data_available =
+        std::equal(binary_data_->begin(), binary_data_->end(),
+                   message.binary_data_->begin(), BinaryDataPredicate);
   }
 
   return function_id && correlation_id && connection_key && type &&
@@ -126,69 +123,41 @@ Message::~Message() {
   }
 }
 
-int32_t Message::function_id() const {
-  return function_id_;
-}
+int32_t Message::function_id() const { return function_id_; }
 
-std::string Message::function_name() const {
-  return function_name_;
-}
+std::string Message::function_name() const { return function_name_; }
 
-int32_t Message::correlation_id() const {
-  return correlation_id_;
-}
+int32_t Message::correlation_id() const { return correlation_id_; }
 
-int32_t Message::connection_key() const {
-  return connection_key_;
-}
+int32_t Message::connection_key() const { return connection_key_; }
 
-MessageType Message::type() const {
-  return type_;
-}
+MessageType Message::type() const { return type_; }
 
 protocol_handler::MajorProtocolVersion Message::protocol_version() const {
   return version_;
 }
 
-const std::string& Message::json_message() const {
-  return json_message_;
-}
+const std::string& Message::json_message() const { return json_message_; }
 
-const BinaryData* Message::binary_data() const {
-  return binary_data_;
-}
+const BinaryData* Message::binary_data() const { return binary_data_; }
 
-bool Message::has_binary_data() const {
-  return (binary_data_ != NULL);
-}
+bool Message::has_binary_data() const { return (binary_data_ != NULL); }
 
-size_t Message::data_size() const {
-  return data_size_;
-}
+size_t Message::data_size() const { return data_size_; }
 
-size_t Message::payload_size() const {
-  return payload_size_;
-}
+size_t Message::payload_size() const { return payload_size_; }
 
-void Message::set_function_id(int32_t id) {
-  function_id_ = id;
-}
+void Message::set_function_id(int32_t id) { function_id_ = id; }
 
 void Message::set_function_name(const std::string& name) {
   function_name_ = name;
 }
 
-void Message::set_correlation_id(int32_t id) {
-  correlation_id_ = id;
-}
+void Message::set_correlation_id(int32_t id) { correlation_id_ = id; }
 
-void Message::set_connection_key(int32_t key) {
-  connection_key_ = key;
-}
+void Message::set_connection_key(int32_t key) { connection_key_ = key; }
 
-void Message::set_message_type(MessageType type) {
-  type_ = type;
-}
+void Message::set_message_type(MessageType type) { type_ = type; }
 
 void Message::set_binary_data(const BinaryData* data) {
   if (NULL == data) {
@@ -220,9 +189,7 @@ void Message::set_smart_object(const smart_objects::SmartObject& object) {
   smart_object_ = object;
 }
 
-void Message::set_data_size(size_t data_size) {
-  data_size_ = data_size;
-}
+void Message::set_data_size(size_t data_size) { data_size_ = data_size; }
 
 void Message::set_payload_size(size_t payload_size) {
   payload_size_ = payload_size;

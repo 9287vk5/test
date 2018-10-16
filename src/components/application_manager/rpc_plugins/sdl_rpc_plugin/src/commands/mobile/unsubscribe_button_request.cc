@@ -49,11 +49,8 @@ UnsubscribeButtonRequest::UnsubscribeButtonRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler) {}
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler) {}
 
 UnsubscribeButtonRequest::~UnsubscribeButtonRequest() {}
 
@@ -86,8 +83,8 @@ void UnsubscribeButtonRequest::Run() {
       SendResponse(false, mobile_apis::Result::UNSUPPORTED_RESOURCE);
     }
   } else if (!CheckHMICapabilities(btn_id)) {
-    LOG4CXX_ERROR(logger_,
-                  "Button " << btn_id << " isn't allowed by HMI capabilities");
+    LOG4CXX_ERROR(logger_, "Button " << btn_id
+                                     << " isn't allowed by HMI capabilities");
     SendResponse(false, mobile_apis::Result::UNSUPPORTED_RESOURCE);
     return;
   }

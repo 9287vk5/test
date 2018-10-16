@@ -52,8 +52,8 @@ struct SemanticVersion {
   SemanticVersion(const std::string& versionString)
       : major_version_(0), minor_version_(0), patch_version_(0) {
     unsigned int major_int, minor_int, patch_int;
-    int readElements = sscanf(
-        versionString.c_str(), "%u.%u.%u", &major_int, &minor_int, &patch_int);
+    int readElements = sscanf(versionString.c_str(), "%u.%u.%u", &major_int,
+                              &minor_int, &patch_int);
     if (readElements != 3) {
       // LOG4CXX_WARN(logger_,
       //             "Error while parsing version string: " << versionString);

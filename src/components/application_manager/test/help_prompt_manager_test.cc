@@ -84,22 +84,16 @@ using usage_statistics_test::MockStatisticsManager;
 class ApplicationImplTest : public ApplicationImpl {
  public:
   ApplicationImplTest(
-      uint32_t application_id,
-      const std::string& policy_app_id,
+      uint32_t application_id, const std::string& policy_app_id,
       const std::string& mac_address,
       const connection_handler::DeviceHandle device_id,
       const custom_str::CustomString& app_name,
       std::shared_ptr<usage_statistics::StatisticsManager> statistics_manager,
       ApplicationManager& application_manager,
       MockHelpPromptManager& mock_help_prompt_manager)
-      : ApplicationImpl(application_id,
-                        policy_app_id,
-                        mac_address,
-                        device_id,
-                        app_name,
-                        statistics_manager,
-                        application_manager)
-      , mock_help_prompt_manager_(mock_help_prompt_manager) {}
+      : ApplicationImpl(application_id, policy_app_id, mac_address, device_id,
+                        app_name, statistics_manager, application_manager),
+        mock_help_prompt_manager_(mock_help_prompt_manager) {}
 
   HelpPromptManager& help_prompt_manager() OVERRIDE {
     return mock_help_prompt_manager_;
@@ -116,8 +110,7 @@ class HelpPromptManagerTest : public ::testing::Test {
   void SetUp() OVERRIDE;
   void TearDown() OVERRIDE;
   MessageSharedPtr CreateMsgParams();
-  void VRArraySetupHelper(MessageSharedPtr msg,
-                          SmartObject& vr_help_title,
+  void VRArraySetupHelper(MessageSharedPtr msg, SmartObject& vr_help_title,
                           SmartObject& vr_help_array);
   void CreateBasicParamsVRRequest(MessageSharedPtr msg);
   void CreateApplication(MockHelpPromptManager& mock_help_prompt_manager);
@@ -125,9 +118,7 @@ class HelpPromptManagerTest : public ::testing::Test {
 
   template <class Command>
   std::shared_ptr<Command> CreateCommand(MessageSharedPtr& msg) {
-    return std::make_shared<Command>(msg,
-                                     app_mngr_,
-                                     mock_rpc_service_,
+    return std::make_shared<Command>(msg, app_mngr_, mock_rpc_service_,
                                      mock_hmi_capabilities_,
                                      mock_policy_handler_);
   }
@@ -176,8 +167,7 @@ void HelpPromptManagerTest::SetUp() {
       std::shared_ptr<MockHelpPromptManager>(new MockHelpPromptManager());
 
   HmiStatePtr state = std::make_shared<HmiState>(
-      static_cast<std::shared_ptr<Application> >(mock_app_),
-      app_mngr_,
+      static_cast<std::shared_ptr<Application> >(mock_app_), app_mngr_,
       HmiState::STATE_ID_REGULAR);
 
   std::string path = file_system::CreateDirectory("storage");
@@ -221,8 +211,7 @@ void HelpPromptManagerTest::CreateBasicParamsVRRequest(MessageSharedPtr msg) {
 
 HmiStatePtr HelpPromptManagerTest::CreateTestHmiState() {
   HmiStatePtr testState = std::make_shared<HmiState>(
-      static_cast<std::shared_ptr<Application> >(app_impl_),
-      app_mngr_,
+      static_cast<std::shared_ptr<Application> >(app_impl_), app_mngr_,
       HmiState::STATE_ID_REGULAR);
   testState->set_hmi_level(HMILevel::INVALID_ENUM);
   testState->set_audio_streaming_state(AudioStreamingState::NOT_AUDIBLE);
@@ -237,15 +226,10 @@ void HelpPromptManagerTest::CreateApplication(
   const connection_handler::DeviceHandle device_id = 1;
   const custom_str::CustomString app_name("");
 
-  app_impl_.reset(
-      new ApplicationImplTest(kAppId,
-                              policy_app_id,
-                              mac_address,
-                              device_id,
-                              app_name,
-                              std::make_shared<MockStatisticsManager>(),
-                              app_mngr_,
-                              mock_help_prompt_manager));
+  app_impl_.reset(new ApplicationImplTest(
+      kAppId, policy_app_id, mac_address, device_id, app_name,
+      std::make_shared<MockStatisticsManager>(), app_mngr_,
+      mock_help_prompt_manager));
   HmiStatePtr initial_state = CreateTestHmiState();
   app_impl_->SetInitialState(initial_state);
 }

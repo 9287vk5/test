@@ -59,8 +59,7 @@ class Device {
   /**
    * \brief Class constructor
    */
-  Device(DeviceHandle device_handle,
-         const std::string& user_friendly_name,
+  Device(DeviceHandle device_handle, const std::string& user_friendly_name,
          const std::string& mac_address = "",
          const std::string& connection_type = "");
 

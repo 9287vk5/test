@@ -201,9 +201,9 @@ policy_table::AppHmiTypes HmiTypes(const policy_table::AppHMIType hmi_type) {
 
 // PolicyManagerImplTest class methods
 PolicyManagerImplTest::PolicyManagerImplTest()
-    : unpaired_device_id_("08-00-27-CE-76-FE")
-    , policy_manager_(NULL)
-    , cache_manager_(NULL) {}
+    : unpaired_device_id_("08-00-27-CE-76-FE"),
+      policy_manager_(NULL),
+      cache_manager_(NULL) {}
 
 void PolicyManagerImplTest::SetUp() {
   policy_manager_ = new PolicyManagerImpl();
@@ -220,9 +220,7 @@ void PolicyManagerImplTest::SetUp() {
   ON_CALL(listener_, GetRegisteredLinks(_)).WillByDefault(Return());
 }
 
-void PolicyManagerImplTest::TearDown() {
-  delete policy_manager_;
-}
+void PolicyManagerImplTest::TearDown() { delete policy_manager_; }
 
 ::testing::AssertionResult PolicyManagerImplTest::IsValid(
     const policy_table::Table& table) {
@@ -237,19 +235,19 @@ void PolicyManagerImplTest::TearDown() {
 
 // PolicyManagerImplTest2 class methods
 PolicyManagerImplTest2::PolicyManagerImplTest2()
-    : app_id_1_("123456789")
-    , app_id_2_("1010101010")
-    , app_id_3_("123454321")
-    , device_id_1_("XXX123456789ZZZ")
-    , device_id_2_("08-00-27-CE-76-FE")
-    , application_id_("1234")
-    , app_storage_folder_("storage_PolicyManagerImplTest2")
-    , preloaded_pt_filename_(kSdlPreloadedPtJson)
-    , in_memory_(true)
-    , policy_manager_(NULL)
-    , ptu_request_types_size_(0u)
-    , index_(0u)
-    , ptu_request_types_(Json::arrayValue) {}
+    : app_id_1_("123456789"),
+      app_id_2_("1010101010"),
+      app_id_3_("123454321"),
+      device_id_1_("XXX123456789ZZZ"),
+      device_id_2_("08-00-27-CE-76-FE"),
+      application_id_("1234"),
+      app_storage_folder_("storage_PolicyManagerImplTest2"),
+      preloaded_pt_filename_(kSdlPreloadedPtJson),
+      in_memory_(true),
+      policy_manager_(NULL),
+      ptu_request_types_size_(0u),
+      index_(0u),
+      ptu_request_types_(Json::arrayValue) {}
 
 void PolicyManagerImplTest2::SetUp() {
   ON_CALL(listener_, GetRegisteredLinks(_)).WillByDefault(Return());
@@ -323,10 +321,8 @@ void PolicyManagerImplTest2::AddRTtoPT(const std::string& update_file_name,
 }
 
 void PolicyManagerImplTest2::AddRTtoAppSectionPT(
-    const std::string& update_file_name,
-    const std::string& section_name,
-    const uint32_t rt_number,
-    const uint32_t invalid_rt_number) {
+    const std::string& update_file_name, const std::string& section_name,
+    const uint32_t rt_number, const uint32_t invalid_rt_number) {
   // Arrange
   CreateLocalPT(preloaded_pt_filename_);
   // Add app
@@ -440,14 +436,8 @@ void PolicyManagerImplTest2::
   CreateLocalPT("json/sdl_preloaded_pt_send_location.json");
   policy_manager_->AddDevice(device_id_1_, "Bluetooth");
   policy::CacheManagerInterfaceSPtr cache = policy_manager_->GetCache();
-  ASSERT_TRUE(cache->SetDeviceData(device_id_1_,
-                                   "hardware IPX",
-                                   "v.8.0.1",
-                                   "Android",
-                                   "4.4.2",
-                                   "Life",
-                                   2,
-                                   "Bluetooth"));
+  ASSERT_TRUE(cache->SetDeviceData(device_id_1_, "hardware IPX", "v.8.0.1",
+                                   "Android", "4.4.2", "Life", 2, "Bluetooth"));
 
   // Add app from consented device. App will be assigned with default policies
   policy_manager_->AddApplication(application_id_,
@@ -478,8 +468,8 @@ void PolicyManagerImplTest2::
 
   ::policy::CheckPermissionResult output;
   // Rpc in FULL level
-  policy_manager_->CheckPermissions(
-      application_id_, kHmiLevelFull, "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull,
+                                    "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of allowed parameters is not empty
@@ -489,8 +479,8 @@ void PolicyManagerImplTest2::
   ResetOutputList(output);
 
   // Rpc in LIMITED level
-  policy_manager_->CheckPermissions(
-      application_id_, kHmiLevelLimited, "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_, kHmiLevelLimited,
+                                    "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of allowed parameters is not empty
@@ -500,11 +490,8 @@ void PolicyManagerImplTest2::
   ResetOutputList(output);
 
   // Rpc in BACKGROUND level
-  policy_manager_->CheckPermissions(application_id_,
-                                    kHmiLevelBackground,
-                                    "SendLocation",
-                                    input_params,
-                                    output);
+  policy_manager_->CheckPermissions(application_id_, kHmiLevelBackground,
+                                    "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of allowed parameters is not empty
@@ -515,8 +502,8 @@ void PolicyManagerImplTest2::
   ResetOutputList(output);
 
   // Rpc in NONE level
-  policy_manager_->CheckPermissions(
-      application_id_, kHmiLevelNone, "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_, kHmiLevelNone,
+                                    "SendLocation", input_params, output);
   // Check RPC is disallowed
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   // Check lists of parameters are  empty
@@ -529,19 +516,18 @@ void PolicyManagerImplTest2::CheckRpcPermissions(
     const std::string& rpc_name, const PermitResult& expected_permission) {
   ::policy::RPCParams input_params;
   ::policy::CheckPermissionResult output;
-  policy_manager_->CheckPermissions(
-      application_id_, kHmiLevelFull, rpc_name, input_params, output);
+  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull, rpc_name,
+                                    input_params, output);
   EXPECT_EQ(expected_permission, output.hmi_level_permitted);
 }
 
 void PolicyManagerImplTest2::CheckRpcPermissions(
-    const std::string& app_id,
-    const std::string& rpc_name,
+    const std::string& app_id, const std::string& rpc_name,
     const policy::PermitResult& out_expected_permission) {
   ::policy::RPCParams input_params;
   ::policy::CheckPermissionResult output;
-  policy_manager_->CheckPermissions(
-      app_id, kHmiLevelFull, rpc_name, input_params, output);
+  policy_manager_->CheckPermissions(app_id, kHmiLevelFull, rpc_name,
+                                    input_params, output);
   EXPECT_EQ(out_expected_permission, output.hmi_level_permitted);
 }
 
@@ -566,14 +552,8 @@ void PolicyManagerImplTest2::AddSetDeviceData() {
   CreateLocalPT("json/sdl_preloaded_pt_send_location.json");
   policy_manager_->AddDevice(device_id_1_, "Bluetooth");
   ASSERT_TRUE((policy_manager_->GetCache())
-                  ->SetDeviceData(device_id_1_,
-                                  "hardware IPX",
-                                  "v.8.0.1",
-                                  "Android",
-                                  "4.4.2",
-                                  "Life",
-                                  2,
-                                  "Bluetooth"));
+                  ->SetDeviceData(device_id_1_, "hardware IPX", "v.8.0.1",
+                                  "Android", "4.4.2", "Life", 2, "Bluetooth"));
 
   // Add app from consented device. App will be assigned with default policies
   policy_manager_->AddApplication(application_id_,
@@ -628,11 +608,11 @@ PolicyManagerImplTest_RequestTypes::PolicyManagerImplTest_RequestTypes()
                  "json/"
                  "PTU_pre_data_consent_app_one_invalid_value_RequestType_"
                  "array."
-                 "json"}
-    , kAppId("1010101010")
-    , kDefaultAppId(policy::kDefaultId)
-    , app_storage_folder_("storage3")
-    , preloaded_pt_filename_(kSdlPreloadedPtJson) {}
+                 "json"},
+      kAppId("1010101010"),
+      kDefaultAppId(policy::kDefaultId),
+      app_storage_folder_("storage3"),
+      preloaded_pt_filename_(kSdlPreloadedPtJson) {}
 
 void PolicyManagerImplTest_RequestTypes::SetUp() {
   ON_CALL(listener_, GetRegisteredLinks(_)).WillByDefault(Return());

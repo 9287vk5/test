@@ -50,21 +50,17 @@ namespace commands {
 AlertRequest::AlertRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler)
-    , awaiting_ui_alert_response_(false)
-    , awaiting_tts_speak_response_(false)
-    , awaiting_tts_stop_speaking_response_(false)
-    , is_alert_succeeded_(false)
-    , is_ui_alert_sent_(false)
-    , alert_result_(hmi_apis::Common_Result::INVALID_ENUM)
-    , tts_speak_result_(hmi_apis::Common_Result::INVALID_ENUM) {
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler),
+      awaiting_ui_alert_response_(false),
+      awaiting_tts_speak_response_(false),
+      awaiting_tts_stop_speaking_response_(false),
+      is_alert_succeeded_(false),
+      is_ui_alert_sent_(false),
+      alert_result_(hmi_apis::Common_Result::INVALID_ENUM),
+      tts_speak_result_(hmi_apis::Common_Result::INVALID_ENUM) {
   subscribe_on_event(hmi_apis::FunctionID::UI_OnResetTimeout);
   subscribe_on_event(hmi_apis::FunctionID::TTS_OnResetTimeout);
 }
@@ -197,9 +193,7 @@ void AlertRequest::on_event(const event_engine::Event& event) {
   mobile_apis::Result::eType result_code = mobile_apis::Result::INVALID_ENUM;
   std::string info;
   const bool result = PrepareResponseParameters(result_code, info);
-  SendResponse(result,
-               result_code,
-               info.empty() ? NULL : info.c_str(),
+  SendResponse(result, result_code, info.empty() ? NULL : info.c_str(),
                &alert_response_params_);
 }
 
@@ -208,8 +202,7 @@ bool AlertRequest::PrepareResponseParameters(
   app_mngr::commands::ResponseInfo ui_alert_info(
       alert_result_, HmiInterfaces::HMI_INTERFACE_UI, application_manager_);
   app_mngr::commands::ResponseInfo tts_alert_info(
-      tts_speak_result_,
-      HmiInterfaces::HMI_INTERFACE_TTS,
+      tts_speak_result_, HmiInterfaces::HMI_INTERFACE_TTS,
       application_manager_);
 
   bool result = PrepareResultForMobileResponse(ui_alert_info, tts_alert_info);
@@ -227,13 +220,13 @@ bool AlertRequest::PrepareResponseParameters(
       tts_alert_info.is_unsupported_resource &&
       HmiInterfaces::STATE_AVAILABLE == tts_alert_info.interface_state) {
     tts_response_info_ = "Unsupported phoneme type sent in a prompt";
-    info = app_mngr::commands::MergeInfos(
-        ui_alert_info, ui_response_info_, tts_alert_info, tts_response_info_);
+    info = app_mngr::commands::MergeInfos(ui_alert_info, ui_response_info_,
+                                          tts_alert_info, tts_response_info_);
     return result;
   }
   result_code = PrepareResultCodeForResponse(ui_alert_info, tts_alert_info);
-  info = app_mngr::commands::MergeInfos(
-      ui_alert_info, ui_response_info_, tts_alert_info, tts_response_info_);
+  info = app_mngr::commands::MergeInfos(ui_alert_info, ui_response_info_,
+                                        tts_alert_info, tts_response_info_);
   // Mobile Alert request is successful when UI_Alert is successful
   if (is_ui_alert_sent_ && !ui_alert_info.is_ok) {
     return false;
@@ -268,10 +261,8 @@ bool AlertRequest::Validate(uint32_t app_id) {
   // ProcessSoftButtons checks strings on the contents incorrect character
 
   mobile_apis::Result::eType processing_result =
-      MessageHelper::ProcessSoftButtons((*message_)[strings::msg_params],
-                                        app,
-                                        policy_handler_,
-                                        application_manager_);
+      MessageHelper::ProcessSoftButtons((*message_)[strings::msg_params], app,
+                                        policy_handler_, application_manager_);
 
   if (mobile_apis::Result::SUCCESS != processing_result) {
     LOG4CXX_ERROR(logger_, "INVALID_DATA!");
@@ -285,8 +276,7 @@ bool AlertRequest::Validate(uint32_t app_id) {
       (!(*message_)[strings::msg_params].keyExists(strings::tts_chunks) &&
        (1 > (*message_)[strings::msg_params][strings::tts_chunks].length()))) {
     LOG4CXX_ERROR(logger_, "Mandatory parameters are missing");
-    SendResponse(false,
-                 mobile_apis::Result::INVALID_DATA,
+    SendResponse(false, mobile_apis::Result::INVALID_DATA,
                  "Mandatory parameters are missing");
     return false;
   }
@@ -298,11 +288,9 @@ bool AlertRequest::Validate(uint32_t app_id) {
         MessageHelper::VerifyTtsFiles(tts_chunks, app, application_manager_);
 
     if (mobile_apis::Result::FILE_NOT_FOUND == verification_result) {
-      LOG4CXX_ERROR(logger_,
-                    "MessageHelper::VerifyTtsFiles return "
-                        << verification_result);
-      SendResponse(false,
-                   mobile_apis::Result::FILE_NOT_FOUND,
+      LOG4CXX_ERROR(logger_, "MessageHelper::VerifyTtsFiles return "
+                                 << verification_result);
+      SendResponse(false, mobile_apis::Result::FILE_NOT_FOUND,
                    "One or more files needed for tts_chunks are not present");
       return false;
     }
@@ -376,8 +364,7 @@ void AlertRequest::SendAlertRequest(int32_t app_id) {
   }
 }
 
-void AlertRequest::SendSpeakRequest(int32_t app_id,
-                                    bool tts_chunks_exists,
+void AlertRequest::SendSpeakRequest(int32_t app_id, bool tts_chunks_exists,
                                     size_t length_tts_chunks) {
   LOG4CXX_AUTO_TRACE(logger_);
   using namespace hmi_apis;

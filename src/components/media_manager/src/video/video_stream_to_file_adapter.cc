@@ -40,9 +40,9 @@ namespace media_manager {
 CREATE_LOGGERPTR_GLOBAL(logger, "VideoStreamToFileAdapter")
 
 VideoStreamToFileAdapter::VideoStreamToFileAdapter(const std::string& file_name)
-    : file_name_(file_name)
-    , is_ready_(false)
-    , thread_(threads::CreateThread("VideoStreamer", new Streamer(this))) {
+    : file_name_(file_name),
+      is_ready_(false),
+      thread_(threads::CreateThread("VideoStreamer", new Streamer(this))) {
   Init();
 }
 
@@ -68,8 +68,8 @@ void VideoStreamToFileAdapter::Init() {
 
 void VideoStreamToFileAdapter::SendData(
     int32_t application_key, const ::protocol_handler::RawMessagePtr message) {
-  LOG4CXX_INFO(logger,
-               "VideoStreamToFileAdapter::SendData " << application_key);
+  LOG4CXX_INFO(logger, "VideoStreamToFileAdapter::SendData "
+                           << application_key);
 
   if (application_key != current_application_) {
     LOG4CXX_WARN(logger, "Wrong application " << application_key);
@@ -82,11 +82,11 @@ void VideoStreamToFileAdapter::SendData(
 }
 
 void VideoStreamToFileAdapter::StartActivity(int32_t application_key) {
-  LOG4CXX_INFO(logger,
-               "VideoStreamToFileAdapter::StartActivity " << application_key);
+  LOG4CXX_INFO(logger, "VideoStreamToFileAdapter::StartActivity "
+                           << application_key);
   if (application_key == current_application_) {
-    LOG4CXX_WARN(
-        logger, "Already running video stream to file for " << application_key);
+    LOG4CXX_WARN(logger, "Already running video stream to file for "
+                             << application_key);
     return;
   }
 
@@ -94,18 +94,17 @@ void VideoStreamToFileAdapter::StartActivity(int32_t application_key) {
   is_ready_ = true;
 
   for (std::set<MediaListenerPtr>::iterator it = media_listeners_.begin();
-       media_listeners_.end() != it;
-       ++it) {
+       media_listeners_.end() != it; ++it) {
     (*it)->OnActivityStarted(application_key);
   }
 }
 
 void VideoStreamToFileAdapter::StopActivity(int32_t application_key) {
-  LOG4CXX_INFO(logger,
-               "VideoStreamToFileAdapter::StopActivity " << application_key);
+  LOG4CXX_INFO(logger, "VideoStreamToFileAdapter::StopActivity "
+                           << application_key);
   if (application_key != current_application_) {
-    LOG4CXX_WARN(
-        logger, "Performing activity for another key " << current_application_);
+    LOG4CXX_WARN(logger, "Performing activity for another key "
+                             << current_application_);
     return;
   }
 
@@ -113,8 +112,7 @@ void VideoStreamToFileAdapter::StopActivity(int32_t application_key) {
   current_application_ = 0;
 
   for (std::set<MediaListenerPtr>::iterator it = media_listeners_.begin();
-       media_listeners_.end() != it;
-       ++it) {
+       media_listeners_.end() != it; ++it) {
     (*it)->OnActivityEnded(application_key);
   }
 }

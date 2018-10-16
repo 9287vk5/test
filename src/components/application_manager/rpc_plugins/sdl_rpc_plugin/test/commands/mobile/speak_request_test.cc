@@ -84,9 +84,9 @@ const uint32_t kConnectionKey = 5u;
 class SpeakRequestTest : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   SpeakRequestTest()
-      : request_(CreateMessage(smart_objects::SmartType_Map))
-      , response_(CreateMessage(smart_objects::SmartType_Map))
-      , app_(CreateMockApp()) {}
+      : request_(CreateMessage(smart_objects::SmartType_Map)),
+        response_(CreateMessage(smart_objects::SmartType_Map)),
+        app_(CreateMockApp()) {}
 
   void CheckExpectations(const hmi_apis::Common_Result::eType hmi_response,
                          const mobile_apis::Result::eType mobile_response,
@@ -162,24 +162,21 @@ TEST_F(SpeakRequestTest,
        OnEvent_UNSUPPORTED_RESOURCE_STATE_AVAILABLE_Expect_true) {
   CheckExpectations(hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                     mobile_apis::Result::UNSUPPORTED_RESOURCE,
-                    am::HmiInterfaces::STATE_AVAILABLE,
-                    true);
+                    am::HmiInterfaces::STATE_AVAILABLE, true);
 }
 
 TEST_F(SpeakRequestTest,
        OnEvent_UNSUPPORTED_RESOURCE_STATE_NOT_AVAILABLE_Expect_false) {
   CheckExpectations(hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                     mobile_apis::Result::UNSUPPORTED_RESOURCE,
-                    am::HmiInterfaces::STATE_NOT_AVAILABLE,
-                    false);
+                    am::HmiInterfaces::STATE_NOT_AVAILABLE, false);
 }
 
 TEST_F(SpeakRequestTest,
        OnEvent_UNSUPPORTED_RESOURCE_STATE_NOT_RESPONSE_Expect_true) {
   CheckExpectations(hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                     mobile_apis::Result::UNSUPPORTED_RESOURCE,
-                    am::HmiInterfaces::STATE_NOT_RESPONSE,
-                    true);
+                    am::HmiInterfaces::STATE_NOT_RESPONSE, true);
 }
 
 TEST_F(SpeakRequestTest, Run_ApplicationIsNotRegistered) {
@@ -285,11 +282,10 @@ TEST_F(SpeakRequestTest, Run_MsgWithEmptyString_Success) {
              [am::strings::text] = "";
   CommandPtr command(CreateCommand<SpeakRequest>(request_));
 
-  EXPECT_CALL(
-      mock_message_helper_,
-      VerifyTtsFiles(
-          (*request_)[am::strings::msg_params][am::strings::tts_chunks], _, _))
-      .WillOnce(Return(mobile_apis::Result::SUCCESS));
+  EXPECT_CALL(mock_message_helper_,
+              VerifyTtsFiles(
+                  (*request_)[am::strings::msg_params][am::strings::tts_chunks],
+                  _, _)).WillOnce(Return(mobile_apis::Result::SUCCESS));
   ON_CALL(app_mngr_, application(_)).WillByDefault(Return(app_));
   ON_CALL(*app_, app_id()).WillByDefault(Return(kAppId));
 
@@ -305,11 +301,10 @@ TEST_F(SpeakRequestTest, Run_MsgCorrect_Success) {
              [am::strings::text] = "asda";
   CommandPtr command(CreateCommand<SpeakRequest>(request_));
 
-  EXPECT_CALL(
-      mock_message_helper_,
-      VerifyTtsFiles(
-          (*request_)[am::strings::msg_params][am::strings::tts_chunks], _, _))
-      .WillOnce(Return(mobile_apis::Result::SUCCESS));
+  EXPECT_CALL(mock_message_helper_,
+              VerifyTtsFiles(
+                  (*request_)[am::strings::msg_params][am::strings::tts_chunks],
+                  _, _)).WillOnce(Return(mobile_apis::Result::SUCCESS));
   ON_CALL(app_mngr_, application(_)).WillByDefault(Return(app_));
   ON_CALL(*app_, app_id()).WillByDefault(Return(kAppId));
 

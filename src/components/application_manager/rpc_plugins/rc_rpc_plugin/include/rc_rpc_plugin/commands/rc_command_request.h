@@ -119,22 +119,16 @@ class RCCommandRequest : public app_mngr::commands::CommandRequestImpl {
   TypeAccess CheckModule(const std::string& module_type,
                          application_manager::ApplicationSharedPtr app);
 
-  bool auto_allowed() const {
-    return auto_allowed_;
-  }
+  bool auto_allowed() const { return auto_allowed_; }
 
-  void set_auto_allowed(const bool value) {
-    auto_allowed_ = value;
-  }
+  void set_auto_allowed(const bool value) { auto_allowed_ = value; }
 
   /**
    * @brief executes specific logic of children classes
    */
   void virtual Execute() = 0;
 
-  void set_disallowed_info(const std::string& info) {
-    disallowed_info_ = info;
-  }
+  void set_disallowed_info(const std::string& info) { disallowed_info_ = info; }
 
   virtual std::string ModuleType() = 0;
 

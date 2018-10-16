@@ -71,8 +71,8 @@ class UnsubscribeWayPointsRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   UnsubscribeWayPointsRequestTest()
-      : command_msg_(CreateMessage(smart_objects::SmartType_Map))
-      , command_(CreateCommand<UnsubscribeWayPointsRequest>(command_msg_)) {
+      : command_msg_(CreateMessage(smart_objects::SmartType_Map)),
+        command_(CreateCommand<UnsubscribeWayPointsRequest>(command_msg_)) {
     (*command_msg_)[am::strings::params][am::strings::connection_key] =
         kConnectionKey;
   }

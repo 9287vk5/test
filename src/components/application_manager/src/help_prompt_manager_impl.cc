@@ -53,15 +53,13 @@ namespace application_manager {
 
 HelpPromptManagerImpl::HelpPromptManagerImpl(Application& app,
                                              ApplicationManager& app_manager)
-    : app_(app)
-    , app_manager_(app_manager)
-    , sending_type_(SendingType::kSendBoth)
-    , is_tts_send_(false)
-    , is_ui_send_(false) {}
+    : app_(app),
+      app_manager_(app_manager),
+      sending_type_(SendingType::kSendBoth),
+      is_tts_send_(false),
+      is_ui_send_(false) {}
 
-HelpPromptManagerImpl::~HelpPromptManagerImpl() {
-  LOG4CXX_AUTO_TRACE(logger_);
-}
+HelpPromptManagerImpl::~HelpPromptManagerImpl() { LOG4CXX_AUTO_TRACE(logger_); }
 
 bool HelpPromptManagerImpl::AddCommand(
     const uint32_t cmd_id, const smart_objects::SmartObject& command) {
@@ -78,8 +76,7 @@ bool HelpPromptManagerImpl::AddCommand(
 
   sync_primitives::AutoLock lock(vr_commands_lock_);
   auto it = std::find_if(
-      vr_commands_.begin(),
-      vr_commands_.end(),
+      vr_commands_.begin(), vr_commands_.end(),
       [cmd_id](const VRCommandPair& pair) { return pair.first == cmd_id; });
 
   if (vr_commands_.end() != it) {
@@ -90,18 +87,17 @@ bool HelpPromptManagerImpl::AddCommand(
   const bool limit_exceeded =
       kLimitCommand <= GetCommandsCount(vr_commands_.end());
 
-  LOG4CXX_DEBUG(logger_,
-                "Will be added first command from array "
-                    << strings::vr_commands);
+  LOG4CXX_DEBUG(logger_, "Will be added first command from array "
+                             << strings::vr_commands);
 
   smart_objects::SmartObjectSPtr vr_item =
       std::make_shared<smart_objects::SmartObject>(commands.asArray()->front());
   vr_commands_.push_back(std::make_pair(cmd_id, vr_item));
 
-  LOG4CXX_DEBUG(logger_,
-                "VR command with id: " << cmd_id << " added for appID: "
-                                       << app_.app_id() << ". Total "
-                                       << vr_commands_.size() << " in cache");
+  LOG4CXX_DEBUG(logger_, "VR command with id: "
+                             << cmd_id << " added for appID: " << app_.app_id()
+                             << ". Total " << vr_commands_.size()
+                             << " in cache");
 
   return !limit_exceeded;
 }
@@ -112,8 +108,7 @@ bool HelpPromptManagerImpl::DeleteCommand(const uint32_t cmd_id) {
   sync_primitives::AutoLock lock(vr_commands_lock_);
 
   auto it = std::find_if(
-      vr_commands_.begin(),
-      vr_commands_.end(),
+      vr_commands_.begin(), vr_commands_.end(),
       [cmd_id](const VRCommandPair& pair) { return pair.first == cmd_id; });
 
   if (vr_commands_.end() == it) {
@@ -133,15 +128,13 @@ bool HelpPromptManagerImpl::DeleteCommand(const uint32_t cmd_id) {
 }
 
 void HelpPromptManagerImpl::OnVrCommandAdded(
-    const uint32_t cmd_id,
-    const smart_objects::SmartObject& command,
+    const uint32_t cmd_id, const smart_objects::SmartObject& command,
     const bool is_resumption) {
   LOG4CXX_AUTO_TRACE(logger_);
   if (SendingType::kNoneSend == sending_type_) {
-    LOG4CXX_DEBUG(logger_,
-                  "SendingType::kNoneSend"
-                      << " commands with id:" << cmd_id
-                      << " will not be added");
+    LOG4CXX_DEBUG(logger_, "SendingType::kNoneSend"
+                               << " commands with id:" << cmd_id
+                               << " will not be added");
     return;
   }
   if (AddCommand(cmd_id, command) && !is_resumption) {
@@ -153,10 +146,9 @@ void HelpPromptManagerImpl::OnVrCommandDeleted(const uint32_t cmd_id,
                                                const bool is_resumption) {
   LOG4CXX_AUTO_TRACE(logger_);
   if (SendingType::kNoneSend == sending_type_) {
-    LOG4CXX_DEBUG(logger_,
-                  "SendingType::kNoneSend"
-                      << " commands with id:" << cmd_id
-                      << " will not be deleted");
+    LOG4CXX_DEBUG(logger_, "SendingType::kNoneSend"
+                               << " commands with id:" << cmd_id
+                               << " will not be deleted");
     return;
   }
   if (DeleteCommand(cmd_id) && !is_resumption) {
@@ -312,9 +304,8 @@ void HelpPromptManagerImpl::SendRequests() {
     case SendingType::kNoneSend:
       break;
   }
-  LOG4CXX_DEBUG(logger_,
-                "SendingType:" << static_cast<uint32_t>(sending_type_)
-                               << " request not sending");
+  LOG4CXX_DEBUG(logger_, "SendingType:" << static_cast<uint32_t>(sending_type_)
+                                        << " request not sending");
 }
 
 void HelpPromptManagerImpl::CreatePromptMsg(
@@ -379,9 +370,8 @@ void HelpPromptManagerImpl::SetSendingType(
       }
       default: { break; }
     }
-    LOG4CXX_DEBUG(
-        logger_,
-        "Sending type set to:" << static_cast<uint32_t>(sending_type_));
+    LOG4CXX_DEBUG(logger_, "Sending type set to:"
+                               << static_cast<uint32_t>(sending_type_));
   }
 }
 

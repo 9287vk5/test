@@ -278,8 +278,7 @@ bool CSmartFactory<FunctionIdEnum, MessageTypeEnum, StructIdEnum>::attachSchema(
     ns_smart_device_link::ns_smart_objects::SmartObject& object,
     const bool RemoveFakeParameters,
     const utils::SemanticVersion& MessageVersion) {
-  if (false == object.keyExists(strings::S_PARAMS))
-    return false;
+  if (false == object.keyExists(strings::S_PARAMS)) return false;
   if (false == object[strings::S_PARAMS].keyExists(strings::S_MESSAGE_TYPE))
     return false;
   if (false == object[strings::S_PARAMS].keyExists(strings::S_FUNCTION_ID))
@@ -304,8 +303,8 @@ bool CSmartFactory<FunctionIdEnum, MessageTypeEnum, StructIdEnum>::attachSchema(
 
   object.setSchema(schemaIterator->second);
 
-  schemaIterator->second.applySchema(
-      object, RemoveFakeParameters, MessageVersion);
+  schemaIterator->second.applySchema(object, RemoveFakeParameters,
+                                     MessageVersion);
 
   return true;
 }
@@ -363,8 +362,7 @@ CSmartFactory<FunctionIdEnum, MessageTypeEnum, StructIdEnum>::CreateSmartObject(
 
 template <class FunctionIdEnum, class MessageTypeEnum, class StructIdEnum>
 bool CSmartFactory<FunctionIdEnum, MessageTypeEnum, StructIdEnum>::GetSchema(
-    const FunctionIdEnum function_id,
-    const MessageTypeEnum message_type,
+    const FunctionIdEnum function_id, const MessageTypeEnum message_type,
     ns_smart_device_link::ns_smart_objects::CSmartSchema& result) {
   SmartSchemaKey<FunctionIdEnum, MessageTypeEnum> key(function_id,
                                                       message_type);
@@ -403,15 +401,11 @@ SmartSchemaKey<FunctionIdEnum, MessageTypeEnum>::SmartSchemaKey(
 template <class FunctionIdEnum, class MessageTypeEnum>
 bool operator<(const SmartSchemaKey<FunctionIdEnum, MessageTypeEnum>& l,
                const SmartSchemaKey<FunctionIdEnum, MessageTypeEnum>& r) {
-  if (l.functionId < r.functionId)
-    return true;
-  if (l.functionId > r.functionId)
-    return false;
+  if (l.functionId < r.functionId) return true;
+  if (l.functionId > r.functionId) return false;
 
-  if (l.messageType < r.messageType)
-    return true;
-  if (l.messageType > r.messageType)
-    return false;
+  if (l.messageType < r.messageType) return true;
+  if (l.messageType > r.messageType) return false;
 
   return false;
 }

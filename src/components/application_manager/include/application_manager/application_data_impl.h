@@ -187,8 +187,7 @@ class DynamicApplicationDataImpl : public virtual Application {
    * @param choice_set SmartObject that represents choice set
    */
   void AddPerformInteractionChoiceSet(
-      uint32_t correlation_id,
-      uint32_t choice_set_id,
+      uint32_t correlation_id, uint32_t choice_set_id,
       const smart_objects::SmartObject& choice_set);
 
   /*

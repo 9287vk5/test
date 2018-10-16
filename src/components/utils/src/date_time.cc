@@ -46,20 +46,12 @@ namespace date_time {
 TimeDuration getCurrentTime() {
   return bpt::microsec_clock::local_time() - bpt::from_time_t(0);
 }
-TimeDuration TimeDurationZero() {
-  return TimeDuration(0, 0, 0, 0);
-}
-int64_t getSecs(const TimeDuration& t) {
-  return t.total_seconds();
-}
+TimeDuration TimeDurationZero() { return TimeDuration(0, 0, 0, 0); }
+int64_t getSecs(const TimeDuration& t) { return t.total_seconds(); }
 
-int64_t getmSecs(const TimeDuration& t) {
-  return t.total_milliseconds();
-}
+int64_t getmSecs(const TimeDuration& t) { return t.total_milliseconds(); }
 
-int64_t getuSecs(const TimeDuration& t) {
-  return t.total_microseconds();
-}
+int64_t getuSecs(const TimeDuration& t) { return t.total_microseconds(); }
 
 int64_t get_just_mSecs(const TimeDuration& t) {
   return t.total_milliseconds() % MILLISECONDS_IN_SECOND;
@@ -95,10 +87,8 @@ bool Equal(const TimeDuration& time1, const TimeDuration& time2) {
 }
 
 TimeCompare compareTime(const TimeDuration& time1, const TimeDuration& time2) {
-  if (Greater(time1, time2))
-    return GREATER;
-  if (Less(time1, time2))
-    return LESS;
+  if (Greater(time1, time2)) return GREATER;
+  if (Less(time1, time2)) return LESS;
   return EQUAL;
 }
 

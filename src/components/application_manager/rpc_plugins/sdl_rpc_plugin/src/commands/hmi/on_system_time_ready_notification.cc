@@ -42,12 +42,11 @@ namespace commands {
 
 OnSystemTimeReadyNotification::OnSystemTimeReadyNotification(
     const application_manager::commands::MessageSharedPtr& message,
-    ApplicationManager& app_man,
-    rpc_service::RPCService& rpc_service,
+    ApplicationManager& app_man, rpc_service::RPCService& rpc_service,
     HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : NotificationFromHMI(
-          message, app_man, rpc_service, hmi_capabilities, policy_handler) {}
+    : NotificationFromHMI(message, app_man, rpc_service, hmi_capabilities,
+                          policy_handler) {}
 
 OnSystemTimeReadyNotification::~OnSystemTimeReadyNotification() {}
 

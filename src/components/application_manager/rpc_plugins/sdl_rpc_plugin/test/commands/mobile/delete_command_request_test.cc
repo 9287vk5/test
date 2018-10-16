@@ -78,8 +78,8 @@ class DeleteCommandRequestTest
  public:
   DeleteCommandRequestTest()
       : mock_help_prompt_manager_(
-            std::make_shared<am_test::MockHelpPromptManager>())
-      , mock_app_(CreateMockApp()) {}
+            std::make_shared<am_test::MockHelpPromptManager>()),
+        mock_app_(CreateMockApp()) {}
   MessageSharedPtr CreateFullParamsUISO() {
     MessageSharedPtr msg = CreateMessage(smart_objects::SmartType_Map);
     (*msg)[am::strings::params][am::strings::connection_key] = kConnectionKey;

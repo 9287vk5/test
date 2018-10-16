@@ -70,34 +70,27 @@ class MockTransportAdapterController : public TransportAdapterController {
   MOCK_METHOD1(SearchDeviceFailed, void(const SearchDeviceError& error));
   MOCK_CONST_METHOD1(FindDevice, DeviceSptr(const DeviceUID& device_handle));
   MOCK_METHOD3(ConnectionCreated,
-               void(ConnectionSPtr connection,
-                    const DeviceUID& device_handle,
+               void(ConnectionSPtr connection, const DeviceUID& device_handle,
                     const ApplicationHandle& app_handle));
-  MOCK_METHOD2(ConnectDone,
-               void(const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle));
-  MOCK_METHOD3(ConnectFailed,
-               void(const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle,
-                    const ConnectError& error));
-  MOCK_METHOD2(ConnectionFinished,
-               void(const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle));
-  MOCK_METHOD3(ConnectionAborted,
-               void(const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle,
-                    const CommunicationError& error));
-  MOCK_METHOD2(DisconnectDone,
-               void(const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle));
+  MOCK_METHOD2(ConnectDone, void(const DeviceUID& device_handle,
+                                 const ApplicationHandle& app_handle));
+  MOCK_METHOD3(ConnectFailed, void(const DeviceUID& device_handle,
+                                   const ApplicationHandle& app_handle,
+                                   const ConnectError& error));
+  MOCK_METHOD2(ConnectionFinished, void(const DeviceUID& device_handle,
+                                        const ApplicationHandle& app_handle));
+  MOCK_METHOD3(ConnectionAborted, void(const DeviceUID& device_handle,
+                                       const ApplicationHandle& app_handle,
+                                       const CommunicationError& error));
+  MOCK_METHOD2(DisconnectDone, void(const DeviceUID& device_handle,
+                                    const ApplicationHandle& app_handle));
   MOCK_METHOD3(DataReceiveDone,
                void(const DeviceUID& device_handle,
                     const ApplicationHandle& app_handle,
                     const ::protocol_handler::RawMessagePtr message));
-  MOCK_METHOD3(DataReceiveFailed,
-               void(const DeviceUID& device_handle,
-                    const ApplicationHandle& app_handle,
-                    const DataReceiveError& error));
+  MOCK_METHOD3(DataReceiveFailed, void(const DeviceUID& device_handle,
+                                       const ApplicationHandle& app_handle,
+                                       const DataReceiveError& error));
   MOCK_METHOD3(DataSendDone,
                void(const DeviceUID& device_handle,
                     const ApplicationHandle& app_handle,
@@ -109,9 +102,8 @@ class MockTransportAdapterController : public TransportAdapterController {
                     const DataSendError& error));
   MOCK_METHOD0(FindNewApplicationsRequest, void());
   MOCK_METHOD1(ApplicationListUpdated, void(const DeviceUID& device_handle));
-  MOCK_METHOD2(DeviceDisconnected,
-               void(const DeviceUID& device_handle,
-                    const DisconnectDeviceError& error));
+  MOCK_METHOD2(DeviceDisconnected, void(const DeviceUID& device_handle,
+                                        const DisconnectDeviceError& error));
   MOCK_METHOD1(TransportConfigUpdated,
                void(const transport_manager::transport_adapter::TransportConfig&
                         new_config));
@@ -130,12 +122,11 @@ class TcpClientListenerTest : public ::testing::TestWithParam<std::string> {
   TcpClientListenerTest()
       : port_(0) /* On Linux, binding to port 0 lets the system choose an
                     available port */
-      , enable_keep_alive_(false)
-      , interface_listener_mock_(NULL)
-      , tcp_client_listener_(NULL) {}
-  virtual ~TcpClientListenerTest() {
-    delete tcp_client_listener_;
-  }
+        ,
+        enable_keep_alive_(false),
+        interface_listener_mock_(NULL),
+        tcp_client_listener_(NULL) {}
+  virtual ~TcpClientListenerTest() { delete tcp_client_listener_; }
 
  protected:
   void SetUp() OVERRIDE {
@@ -147,9 +138,7 @@ class TcpClientListenerTest : public ::testing::TestWithParam<std::string> {
         interface_listener_mock_);
   }
 
-  bool InterfaceNameSpecified() const {
-    return "" != GetParam();
-  }
+  bool InterfaceNameSpecified() const { return "" != GetParam(); }
 
   void SleepFor(long msec) const {
     if (msec > 0) {
@@ -289,10 +278,9 @@ TEST_P(TcpClientListenerTest, ClientConnection) {
   // get the port number (assigned by system) that the socket is listening on
   struct sockaddr_in server_addr;
   socklen_t server_addr_len = sizeof(server_addr);
-  EXPECT_EQ(0,
-            getsockname(tcp_client_listener_->get_socket(),
-                        reinterpret_cast<struct sockaddr*>(&server_addr),
-                        &server_addr_len));
+  EXPECT_EQ(0, getsockname(tcp_client_listener_->get_socket(),
+                           reinterpret_cast<struct sockaddr*>(&server_addr),
+                           &server_addr_len));
 
   // try connecting to the socket
   struct sockaddr_in client_addr;
@@ -321,10 +309,8 @@ TEST_P(TcpClientListenerTest, ClientConnection) {
   EXPECT_CALL(adapter_controller_mock_, ConnectionFinished(_, _))
       .Times(AtLeast(0));
 
-  EXPECT_EQ(0,
-            connect(s,
-                    reinterpret_cast<struct sockaddr*>(&client_addr),
-                    client_addr_len));
+  EXPECT_EQ(0, connect(s, reinterpret_cast<struct sockaddr*>(&client_addr),
+                       client_addr_len));
 
   // since the connection is handled on another thread, wait for some time
   EXPECT_TRUE(waiter.WaitFor(1, kConnectionCreatedTimeoutMsec));
@@ -592,8 +578,7 @@ TEST_P(TcpClientListenerTest, OnIPAddressUpdated_EmptyIPv4Address) {
   EXPECT_CALL(*interface_listener_mock_, Deinit()).Times(1);
 }
 
-INSTANTIATE_TEST_CASE_P(NetworkInterfaceName,
-                        TcpClientListenerTest,
+INSTANTIATE_TEST_CASE_P(NetworkInterfaceName, TcpClientListenerTest,
                         ::testing::Values(std::string(""),
                                           std::string("dummy_interface0")));
 

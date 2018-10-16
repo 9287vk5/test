@@ -59,9 +59,8 @@ void ResumptionDataTest::CheckSavedApp(sm::SmartObject& resume_app_list) {
   EXPECT_EQ(hmi_app_id_, resume_app_list[am::strings::hmi_app_id].asUInt());
   EXPECT_EQ(ign_off_count_,
             resume_app_list[am::strings::ign_off_count].asUInt());
-  EXPECT_EQ(hmi_level_,
-            static_cast<HMILevel::eType>(
-                resume_app_list[am::strings::hmi_level].asInt()));
+  EXPECT_EQ(hmi_level_, static_cast<HMILevel::eType>(
+                            resume_app_list[am::strings::hmi_level].asInt()));
   EXPECT_EQ(is_audio_,
             resume_app_list[am::strings::is_media_application].asBool());
   EXPECT_EQ("12345", resume_app_list[am::strings::device_id].asString());
@@ -253,15 +252,13 @@ void ResumptionDataTest::CheckKeyboardProperties(sm::SmartObject& res_list) {
               res_list[am::strings::limited_character_list][i].asString());
   }
 
-  EXPECT_EQ(
-      testlanguage,
-      static_cast<Language::eType>(res_list[am::strings::language].asInt()));
+  EXPECT_EQ(testlanguage, static_cast<Language::eType>(
+                              res_list[am::strings::language].asInt()));
   EXPECT_EQ(testlayout,
             static_cast<KeyboardLayout::eType>(
                 res_list[am::hmi_request::keyboard_layout].asInt()));
-  EXPECT_EQ(testmode,
-            static_cast<KeypressMode::eType>(
-                res_list[am::strings::key_press_mode].asInt()));
+  EXPECT_EQ(testmode, static_cast<KeypressMode::eType>(
+                          res_list[am::strings::key_press_mode].asInt()));
   EXPECT_EQ(auto_complete_text,
             res_list[am::strings::auto_complete_text].asString());
 }
@@ -277,9 +274,8 @@ void ResumptionDataTest::CheckMenuIcon(sm::SmartObject& res_list) {
       (*menu_icon_)[am::strings::image_type].asInt());
 
   EXPECT_EQ(value, res_list[am::strings::value].asString());
-  EXPECT_EQ(
-      type,
-      static_cast<ImageType::eType>(res_list[am::strings::image_type].asInt()));
+  EXPECT_EQ(type, static_cast<ImageType::eType>(
+                      res_list[am::strings::image_type].asInt()));
 }
 
 void ResumptionDataTest::CheckHelpPrompt(sm::SmartObject& res_list) {
@@ -297,9 +293,8 @@ void ResumptionDataTest::CheckTimeoutPrompt(
     SpeechCapabilities::eType speech = static_cast<SpeechCapabilities::eType>(
         (*timeout_prompt_)[i][am::strings::type].asInt());
     EXPECT_EQ(text, res_list[i][am::strings::text].asString());
-    EXPECT_EQ(speech,
-              static_cast<SpeechCapabilities::eType>(
-                  res_list[i][am::strings::type].asInt()));
+    EXPECT_EQ(speech, static_cast<SpeechCapabilities::eType>(
+                          res_list[i][am::strings::type].asInt()));
   }
 }
 

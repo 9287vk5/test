@@ -61,8 +61,8 @@ const std::string data_json(
     "ck\": \"OpenDoc()\"},{\"value\": \"Cl"
     "ose\", \"onclick\": \"CloseDoc()\"}]}}}\"");
 
-const unsigned char binary[PROTOCOL_HEADER_V1_SIZE] = {
-    0x20, 0x00, 0x00, 0xf7, 0x00, 0x00, 0x00, 0x10};
+const unsigned char binary[PROTOCOL_HEADER_V1_SIZE] = {0x20, 0x00, 0x00, 0xf7,
+                                                       0x00, 0x00, 0x00, 0x10};
 
 const unsigned char* data_v1 =
     reinterpret_cast<const unsigned char*>(data_json.c_str());

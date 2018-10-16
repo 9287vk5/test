@@ -86,10 +86,8 @@ class PolicyHandlerInterface {
   virtual bool GetPriority(const std::string& policy_app_id,
                            std::string* priority) const = 0;
   virtual void CheckPermissions(
-      const application_manager::ApplicationSharedPtr app,
-      const PTString& rpc,
-      const RPCParams& rpc_params,
-      CheckPermissionResult& result) = 0;
+      const application_manager::ApplicationSharedPtr app, const PTString& rpc,
+      const RPCParams& rpc_params, CheckPermissionResult& result) = 0;
 
   virtual uint32_t GetNotificationsNumber(
       const std::string& priority) const = 0;
@@ -202,8 +200,7 @@ class PolicyHandlerInterface {
 */
 #ifdef EXTERNAL_PROPRIETARY_MODE
   virtual void OnAppPermissionConsent(
-      const uint32_t connection_key,
-      const PermissionConsent& permissions,
+      const uint32_t connection_key, const PermissionConsent& permissions,
       const ExternalConsentStatus& external_consent_status) = 0;
 #else
   virtual void OnAppPermissionConsent(const uint32_t connection_key,
@@ -219,8 +216,7 @@ class PolicyHandlerInterface {
    */
   virtual void OnGetUserFriendlyMessage(
       const std::vector<std::string>& message_codes,
-      const std::string& language,
-      uint32_t correlation_id) = 0;
+      const std::string& language, uint32_t correlation_id) = 0;
 
   /**
    * @brief Get list of permissions for application/device binded to
@@ -447,8 +443,7 @@ class PolicyHandlerInterface {
   virtual void Increment(usage_statistics::GlobalCounterId type) = 0;
   virtual void Increment(const std::string& app_id,
                          usage_statistics::AppCounterId type) = 0;
-  virtual void Set(const std::string& app_id,
-                   usage_statistics::AppInfoId type,
+  virtual void Set(const std::string& app_id, usage_statistics::AppInfoId type,
                    const std::string& value) = 0;
   virtual void Add(const std::string& app_id,
                    usage_statistics::AppStopwatchId type,

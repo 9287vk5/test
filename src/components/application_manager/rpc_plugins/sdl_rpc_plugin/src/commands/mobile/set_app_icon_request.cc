@@ -52,12 +52,9 @@ SetAppIconRequest::SetAppIconRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message,
-                         application_manager,
-                         rpc_service,
-                         hmi_capabilities,
-                         policy_handler)
-    , is_icons_saving_enabled_(false) {
+    : CommandRequestImpl(message, application_manager, rpc_service,
+                         hmi_capabilities, policy_handler),
+      is_icons_saving_enabled_(false) {
   const std::string path =
       application_manager_.get_settings().app_icons_folder();
   is_icons_saving_enabled_ = file_system::IsWritingAllowed(path) &&
@@ -147,11 +144,11 @@ void SetAppIconRequest::CopyToIconStorage(
   const uint64_t file_size = file_system::FileSize(path_to_file);
 
   if (storage_max_size < file_size) {
-    LOG4CXX_ERROR(logger_,
-                  "Icon size (" << file_size << ") is bigger, than "
-                                                " icons storage maximum size ("
-                                << storage_max_size << ")."
-                                                       "Copying skipped.");
+    LOG4CXX_ERROR(logger_, "Icon size ("
+                               << file_size << ") is bigger, than "
+                                               " icons storage maximum size ("
+                               << storage_max_size << ")."
+                                                      "Copying skipped.");
     return;
   }
 
@@ -176,9 +173,8 @@ void SetAppIconRequest::CopyToIconStorage(
       application_manager_.application(connection_key());
 
   if (!app) {
-    LOG4CXX_ERROR(
-        logger_,
-        "Can't get application for connection key: " << connection_key());
+    LOG4CXX_ERROR(logger_, "Can't get application for connection key: "
+                               << connection_key());
     return;
   }
 
@@ -193,9 +189,8 @@ void SetAppIconRequest::CopyToIconStorage(
     return;
   }
 
-  LOG4CXX_DEBUG(logger_,
-                "Icon was successfully copied from :" << path_to_file << " to "
-                                                      << icon_path);
+  LOG4CXX_DEBUG(logger_, "Icon was successfully copied from :"
+                             << path_to_file << " to " << icon_path);
 
   return;
 }
@@ -205,8 +200,7 @@ void SetAppIconRequest::RemoveOldestIcons(const std::string& storage,
   const std::vector<std::string> icons_list = file_system::ListFiles(storage);
   auto compareTime = [](const time_t t1, const time_t t2)
                          -> bool { return difftime(t1, t2) > 0; };
-  std::map<time_t,
-           std::string,
+  std::map<time_t, std::string,
            std::function<bool(const time_t, const time_t)> >
       icon_modification_time(compareTime);
   std::vector<std::string>::const_iterator it = icons_list.begin();
@@ -231,8 +225,8 @@ void SetAppIconRequest::RemoveOldestIcons(const std::string& storage,
       LOG4CXX_DEBUG(logger_, "Error while deleting icon " << file_path);
     }
     icon_modification_time.erase(icon_modification_time.begin());
-    LOG4CXX_DEBUG(logger_,
-                  "Old icon " << file_path << " was deleted successfully.");
+    LOG4CXX_DEBUG(logger_, "Old icon " << file_path
+                                       << " was deleted successfully.");
   }
 }
 
@@ -279,12 +273,11 @@ void SetAppIconRequest::on_event(const event_engine::Event& event) {
 
         app->set_app_icon_path(path);
 
-        LOG4CXX_INFO(logger_,
-                     "Icon path was set to '" << app->app_icon_path() << "'");
+        LOG4CXX_INFO(logger_, "Icon path was set to '" << app->app_icon_path()
+                                                       << "'");
       }
 
-      SendResponse(result,
-                   MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

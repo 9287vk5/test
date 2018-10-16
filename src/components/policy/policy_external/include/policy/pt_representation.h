@@ -60,8 +60,7 @@ class PTRepresentation {
    * and list of allowed params.
    */
   virtual void CheckPermissions(const PTString& app_id,
-                                const PTString& hmi_level,
-                                const PTString& rpc,
+                                const PTString& hmi_level, const PTString& rpc,
                                 CheckPermissionResult& result) = 0;
 
   /**
@@ -290,8 +289,7 @@ class PTRepresentation {
    * @param is_predata parameter to save.
    */
   virtual bool SaveApplicationCustomData(const std::string& app_id,
-                                         bool is_revoked,
-                                         bool is_default,
+                                         bool is_revoked, bool is_default,
                                          bool is_predata) = 0;
 
   virtual void WriteDb() = 0;

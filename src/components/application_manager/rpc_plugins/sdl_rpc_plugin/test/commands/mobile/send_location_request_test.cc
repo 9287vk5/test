@@ -84,11 +84,8 @@ class SendLocationRequestTest
         app_mngr::rpc_service::RPCService& rpc_service,
         app_mngr::HMICapabilities& hmi_capabilities,
         policy::PolicyHandlerInterface& policy_handler)
-        : SendLocationRequest(message,
-                              application_manager,
-                              rpc_service,
-                              hmi_capabilities,
-                              policy_handler) {}
+        : SendLocationRequest(message, application_manager, rpc_service,
+                              hmi_capabilities, policy_handler) {}
     ::application_manager::CommandParametersPermissions&
     get_parameters_permissions() {
       return parameters_permissions_;
@@ -308,9 +305,8 @@ TEST_F(SendLocationRequestTest, Run_LocationImageValid_Success) {
       "1";
   EXPECT_CALL(
       mock_message_helper_,
-      VerifyImage(
-          (*message_)[strings::msg_params][strings::location_image], _, _))
-      .WillOnce(Return(mobile_apis::Result::SUCCESS));
+      VerifyImage((*message_)[strings::msg_params][strings::location_image], _,
+                  _)).WillOnce(Return(mobile_apis::Result::SUCCESS));
   FinishSetup();
   command_->Run();
 }
@@ -323,9 +319,8 @@ TEST_F(SendLocationRequestTest, Run_LocationImageValid_Warnings) {
       "notavailable";
   EXPECT_CALL(
       mock_message_helper_,
-      VerifyImage(
-          (*message_)[strings::msg_params][strings::location_image], _, _))
-      .WillOnce(Return(mobile_apis::Result::WARNINGS));
+      VerifyImage((*message_)[strings::msg_params][strings::location_image], _,
+                  _)).WillOnce(Return(mobile_apis::Result::WARNINGS));
   FinishSetup();
   command_->Run();
 }
@@ -338,9 +333,8 @@ TEST_F(SendLocationRequestTest, Run_LocationImageInvalid_Cancelled) {
       "1";
   EXPECT_CALL(
       mock_message_helper_,
-      VerifyImage(
-          (*message_)[strings::msg_params][strings::location_image], _, _))
-      .WillOnce(Return(mobile_apis::Result::INVALID_DATA));
+      VerifyImage((*message_)[strings::msg_params][strings::location_image], _,
+                  _)).WillOnce(Return(mobile_apis::Result::INVALID_DATA));
   FinishSetupCancelled(mobile_apis::Result::INVALID_DATA);
   command_->Run();
 }

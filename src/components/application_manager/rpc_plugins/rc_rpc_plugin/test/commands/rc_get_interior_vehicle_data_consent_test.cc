@@ -99,19 +99,16 @@ class RCGetInteriorVehicleDataConsentTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   RCGetInteriorVehicleDataConsentTest()
-      : mock_app_(std::make_shared<NiceMock<MockApplication> >())
-      , command_holder(app_mngr_)
-      , request_controller(mock_request_controler)
-      , rpc_service_(app_mngr_,
-                     request_controller,
-                     &mock_protocol_handler,
-                     &mock_hmi_handler,
-                     command_holder)
-      , rc_app_extention_(std::make_shared<RCAppExtension>(kPluginID))
-      , mock_rpc_plugin_manager(
-            std::make_shared<NiceMock<MockRPCPluginManager> >())
-      , rpc_plugin(mock_rpc_plugin)
-      , optional_mock_rpc_plugin(mock_rpc_plugin) {
+      : mock_app_(std::make_shared<NiceMock<MockApplication> >()),
+        command_holder(app_mngr_),
+        request_controller(mock_request_controler),
+        rpc_service_(app_mngr_, request_controller, &mock_protocol_handler,
+                     &mock_hmi_handler, command_holder),
+        rc_app_extention_(std::make_shared<RCAppExtension>(kPluginID)),
+        mock_rpc_plugin_manager(
+            std::make_shared<NiceMock<MockRPCPluginManager> >()),
+        rpc_plugin(mock_rpc_plugin),
+        optional_mock_rpc_plugin(mock_rpc_plugin) {
     ON_CALL(*mock_app_, app_id()).WillByDefault(Return(kAppId));
     ON_CALL(app_mngr_, hmi_interfaces())
         .WillByDefault(ReturnRef(mock_hmi_interfaces_));
@@ -132,9 +129,8 @@ class RCGetInteriorVehicleDataConsentTest
     ON_CALL(mock_hmi_capabilities_, rc_capability())
         .WillByDefault(Return(&rc_capabilities_));
     ON_CALL(mock_policy_handler_,
-            CheckHMIType(
-                _, mobile_apis::AppHMIType::eType::REMOTE_CONTROL, nullptr))
-        .WillByDefault(Return(true));
+            CheckHMIType(_, mobile_apis::AppHMIType::eType::REMOTE_CONTROL,
+                         nullptr)).WillByDefault(Return(true));
     ON_CALL(mock_policy_handler_, CheckModule(_, _))
         .WillByDefault(Return(true));
     ON_CALL(app_mngr_, GetPluginManager())
@@ -150,11 +146,8 @@ class RCGetInteriorVehicleDataConsentTest
   template <class Command>
   std::shared_ptr<Command> CreateRCCommand(MessageSharedPtr& msg) {
     InitCommand(kDefaultTimeout_);
-    RCCommandParams params{app_mngr_,
-                           rpc_service_,
-                           mock_hmi_capabilities_,
-                           mock_policy_handler_,
-                           mock_allocation_manager_,
+    RCCommandParams params{app_mngr_, rpc_service_, mock_hmi_capabilities_,
+                           mock_policy_handler_, mock_allocation_manager_,
                            mock_interior_data_cache_,
                            mock_interior_data_manager_};
     return std::make_shared<Command>(msg ? msg : msg = CreateMessage(), params);

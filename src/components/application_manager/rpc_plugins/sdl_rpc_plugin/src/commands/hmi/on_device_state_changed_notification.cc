@@ -52,10 +52,8 @@ void check_zero(const char& a, const char& b, std::string& bt_mac) {
 }
 
 std::string convert_to_bt_mac(std::string& deviceInternalId) {
-  std::transform(deviceInternalId.begin(),
-                 deviceInternalId.end(),
-                 deviceInternalId.begin(),
-                 ::tolower);
+  std::transform(deviceInternalId.begin(), deviceInternalId.end(),
+                 deviceInternalId.begin(), ::tolower);
 
   std::string bt_mac;
   check_zero(deviceInternalId[10], deviceInternalId[11], bt_mac);
@@ -82,14 +80,10 @@ namespace commands {
 OnDeviceStateChangedNotification::OnDeviceStateChangedNotification(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service,
-    HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : NotificationFromHMI(message,
-                          application_manager,
-                          rpc_service,
-                          hmi_capabilities,
-                          policy_handle) {}
+    : NotificationFromHMI(message, application_manager, rpc_service,
+                          hmi_capabilities, policy_handle) {}
 
 OnDeviceStateChangedNotification::~OnDeviceStateChangedNotification() {}
 

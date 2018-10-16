@@ -51,9 +51,8 @@ class MockSecurityManager : public ::security_manager::SecurityManager {
   MOCK_METHOD1(set_protocol_handler,
                void(::protocol_handler::ProtocolHandler*));
   MOCK_METHOD1(set_crypto_manager, void(::security_manager::CryptoManager*));
-  MOCK_METHOD4(
-      SendInternalError,
-      void(const uint32_t, const uint8_t&, const std::string&, const uint32_t));
+  MOCK_METHOD4(SendInternalError, void(const uint32_t, const uint8_t&,
+                                       const std::string&, const uint32_t));
   MOCK_METHOD2(CreateSSLContext,
                ::security_manager::SSLContext*(const uint32_t&,
                                                ContextCreationStrategy));
@@ -79,8 +78,7 @@ class MockSecurityManager : public ::security_manager::SecurityManager {
  * Matcher for RawMessages
  * Check binary data of RawMessages
  */
-MATCHER_P(RawMessageEqSize,
-          exp_data_size,
+MATCHER_P(RawMessageEqSize, exp_data_size,
           std::string(negation ? "is not" : "is") + " RawMessages ") {
   const size_t arg_data_size = arg->data_size();
   if (arg_data_size != exp_data_size) {
@@ -90,9 +88,7 @@ MATCHER_P(RawMessageEqSize,
   }
   return true;
 }
-MATCHER_P2(RawMessageEq,
-           exp_data,
-           exp_data_size,
+MATCHER_P2(RawMessageEq, exp_data, exp_data_size,
            std::string(negation ? "is not" : "is") + " RawMessages ") {
   const size_t arg_data_size = arg->data_size();
   if (arg_data_size != exp_data_size) {
@@ -113,9 +109,7 @@ MATCHER_P2(RawMessageEq,
 /*
  * Matcher for Handshake data
  */
-MATCHER_P2(HandshakeStepEq,
-           exp_data,
-           exp_data_size,
+MATCHER_P2(HandshakeStepEq, exp_data, exp_data_size,
            std::string(negation ? "is not" : "is") + " Handshake ") {
   const uint8_t* arg_data = arg;
   for (uint32_t i = 0; i < exp_data_size; ++i) {
@@ -131,8 +125,7 @@ MATCHER_P2(HandshakeStepEq,
  * Matcher for checking RawMessage with InternalError Query
  * Check error id
  */
-MATCHER_P(InternalErrorWithErrId,
-          expectedErrorId,
+MATCHER_P(InternalErrorWithErrId, expectedErrorId,
           std::string(negation ? "is not" : "is") +
               " InternalError with selected error") {
   const size_t header_size =
@@ -181,8 +174,7 @@ MATCHER_P(InternalErrorWithErrId,
     * Matcher for checking QueryHeader equal in GTests
     */
 ::testing::AssertionResult QueryHeader_EQ(
-    const char* m_expr,
-    const char* n_expr,
+    const char* m_expr, const char* n_expr,
     const ::security_manager::SecurityQuery::QueryHeader& q1,
     const ::security_manager::SecurityQuery::QueryHeader& q2);
 

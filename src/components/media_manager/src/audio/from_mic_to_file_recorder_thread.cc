@@ -47,13 +47,13 @@ static const int kNumAudioChannels = 1;
 
 FromMicToFileRecorderThread::FromMicToFileRecorderThread(
     const std::string& output_file, int32_t duration)
-    : threads::ThreadDelegate()
-    , argc_(5)
-    , argv_(NULL)
-    , oKey_("-o")
-    , tKey_("-t")
-    , sleepThread_(NULL)
-    , outputFileName_(output_file) {
+    : threads::ThreadDelegate(),
+      argc_(5),
+      argv_(NULL),
+      oKey_("-o"),
+      tKey_("-t"),
+      sleepThread_(NULL),
+      outputFileName_(output_file) {
   LOG4CXX_AUTO_TRACE(logger_);
   set_record_duration(duration);
 }
@@ -131,27 +131,12 @@ void FromMicToFileRecorderThread::threadMain() {
   gint duration = -1;
   GOptionContext* context = NULL;
   GError* err = NULL;
-  GOptionEntry entries[] = {{"device",
-                             'd',
-                             0,
-                             G_OPTION_ARG_FILENAME,
-                             &device,
-                             "device file (Default: hw:0,0)",
-                             "SRC"},
-                            {"output",
-                             'o',
-                             0,
-                             G_OPTION_ARG_FILENAME,
-                             &outfile,
-                             "save output of the stream to DEST",
-                             "DEST"},
-                            {"duration",
-                             't',
-                             0,
-                             G_OPTION_ARG_INT,
-                             &duration,
-                             "length of time in seconds to capture",
-                             "int32_t"},
+  GOptionEntry entries[] = {{"device", 'd', 0, G_OPTION_ARG_FILENAME, &device,
+                             "device file (Default: hw:0,0)", "SRC"},
+                            {"output", 'o', 0, G_OPTION_ARG_FILENAME, &outfile,
+                             "save output of the stream to DEST", "DEST"},
+                            {"duration", 't', 0, G_OPTION_ARG_INT, &duration,
+                             "length of time in seconds to capture", "int32_t"},
                             {NULL}};
   // g_option_context_parse() modifies params, so keep argc_ and argv_
   int32_t argc = argc_;
@@ -206,8 +191,8 @@ void FromMicToFileRecorderThread::threadMain() {
   filesink = gst_element_factory_make("filesink", "filesink0");
 
   // create a capability to downmix the recorded audio to monaural
-  audiocaps = gst_caps_new_simple(
-      "audio/x-raw", "channels", G_TYPE_INT, kNumAudioChannels, NULL);
+  audiocaps = gst_caps_new_simple("audio/x-raw", "channels", G_TYPE_INT,
+                                  kNumAudioChannels, NULL);
 
   // Assert that all the elements were created
   if (!alsasrc || !audioconvert || !capsfilter || !wavenc || !filesink ||
@@ -220,17 +205,12 @@ void FromMicToFileRecorderThread::threadMain() {
   g_object_set(G_OBJECT(filesink), "location", outfile, NULL);
 
   // Add the elements to the pipeline
-  gst_bin_add_many(GST_BIN(pipeline),
-                   alsasrc,
-                   audioconvert,
-                   capsfilter,
-                   wavenc,
-                   filesink,
-                   NULL);
+  gst_bin_add_many(GST_BIN(pipeline), alsasrc, audioconvert, capsfilter, wavenc,
+                   filesink, NULL);
 
   // Link the elements
-  gst_element_link_many(
-      alsasrc, audioconvert, capsfilter, wavenc, filesink, NULL);
+  gst_element_link_many(alsasrc, audioconvert, capsfilter, wavenc, filesink,
+                        NULL);
 
   // set the capability
   g_object_set(G_OBJECT(capsfilter), "caps", audiocaps, NULL);

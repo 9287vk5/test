@@ -71,9 +71,7 @@ class SecurityQuery {
    */
   struct QueryHeader {
     QueryHeader();
-    QueryHeader(uint8_t queryType,
-                uint32_t queryId,
-                uint32_t seqNumber = 0,
+    QueryHeader(uint8_t queryType, uint32_t queryId, uint32_t seqNumber = 0,
                 uint32_t jsonSize = 0);
     // TODO(EZamakhov): check bitfield correctness on other endianness platform
     uint32_t query_type : 8;
@@ -101,10 +99,8 @@ class SecurityQuery {
    * \param raw_data_size size of binary data array
    * \param header QueryHeader
    */
-  SecurityQuery(const QueryHeader& header,
-                const uint32_t connection_key,
-                const uint8_t* const raw_data,
-                const size_t raw_data_size);
+  SecurityQuery(const QueryHeader& header, const uint32_t connection_key,
+                const uint8_t* const raw_data, const size_t raw_data_size);
   /**
    * \brief Serialize income from Mobile Application data
    * as query with header and binary data or json message

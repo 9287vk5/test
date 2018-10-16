@@ -45,12 +45,10 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "RemoteControlModule")
 OnInteriorVehicleDataNotification::OnInteriorVehicleDataNotification(
     const app_mngr::commands::MessageSharedPtr& message,
     const RCCommandParams& params)
-    : app_mngr::commands::CommandNotificationImpl(message,
-                                                  params.application_manager_,
-                                                  params.rpc_service_,
-                                                  params.hmi_capabilities_,
-                                                  params.policy_handler_)
-    , interior_data_cache_(params.interior_data_cache_) {}
+    : app_mngr::commands::CommandNotificationImpl(
+          message, params.application_manager_, params.rpc_service_,
+          params.hmi_capabilities_, params.policy_handler_),
+      interior_data_cache_(params.interior_data_cache_) {}
 
 OnInteriorVehicleDataNotification::~OnInteriorVehicleDataNotification() {}
 
@@ -81,9 +79,9 @@ void OnInteriorVehicleDataNotification::Run() {
 
     const auto extension = RCHelpers::GetRCExtension(app);
     DCHECK(extension);
-    LOG4CXX_TRACE(logger_,
-                  "Check subscription for "
-                      << app.app_id() << "and module type " << module_type);
+    LOG4CXX_TRACE(logger_, "Check subscription for " << app.app_id()
+                                                     << "and module type "
+                                                     << module_type);
     if (extension->IsSubscibedToInteriorVehicleData(module_type)) {
       (*message_)[app_mngr::strings::params]
                  [app_mngr::strings::connection_key] = app.app_id();

@@ -64,9 +64,7 @@ AppLaunchDataDB::AppLaunchDataDB(const AppLaunchSettings& settings,
   init_successeful_ = Init();
 }
 
-AppLaunchDataDB::~AppLaunchDataDB() {
-  db()->Close();
-}
+AppLaunchDataDB::~AppLaunchDataDB() { db()->Close(); }
 
 bool AppLaunchDataDB::Init() {
   LOG4CXX_AUTO_TRACE(logger_);
@@ -92,11 +90,10 @@ bool AppLaunchDataDB::Init() {
       }
     }
     if (!is_opened) {
-      LOG4CXX_ERROR(logger_,
-                    "Open retry sequence failed. Tried "
-                        << attempts << " attempts with "
-                        << open_attempt_timeout_ms
-                        << " open timeout(ms) for each.");
+      LOG4CXX_ERROR(logger_, "Open retry sequence failed. Tried "
+                                 << attempts << " attempts with "
+                                 << open_attempt_timeout_ms
+                                 << " open timeout(ms) for each.");
       return false;
     }
   }
@@ -109,9 +106,8 @@ bool AppLaunchDataDB::Init() {
 
   utils::dbms::SQLQuery query(db());
   if (!query.Exec(kCreateSchema)) {
-    LOG4CXX_ERROR(
-        logger_,
-        "Failed creating schema of database: " << query.LastError().text());
+    LOG4CXX_ERROR(logger_, "Failed creating schema of database: "
+                               << query.LastError().text());
     return false;
   }
 
@@ -332,9 +328,8 @@ uint32_t AppLaunchDataDB::GetCurentNumberOfAppData() const {
                  "Values of ignition off counts were updated successfully");
 
     number_of_app_data = query.GetInteger(result_query);
-    LOG4CXX_DEBUG(logger_,
-                  "Total cout saved mobile applications is "
-                      << number_of_app_data);
+    LOG4CXX_DEBUG(logger_, "Total cout saved mobile applications is "
+                               << number_of_app_data);
   } else {
     LOG4CXX_WARN(logger_,
                  "Failed execute query 'kGetNumberOfApplicationData'. Reson: "

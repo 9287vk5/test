@@ -111,8 +111,7 @@ class AccessRemoteImpl : public AccessRemote {
    * @param app_id application id
    * @param grops_ids output parameter for group ids storing
    */
-  void GetGroupsIds(const std::string& device_id,
-                    const std::string& app_id,
+  void GetGroupsIds(const std::string& device_id, const std::string& app_id,
                     FunctionalGroupIDs& grops_ids);
 
   /**
@@ -124,8 +123,7 @@ class AccessRemoteImpl : public AccessRemote {
    * @return true if allowed otherwise return false
    */
   bool IsAllowed(const policy_table::AccessModules& modules,
-                 const std::string& module_name,
-                 const std::string& rpc_name,
+                 const std::string& module_name, const std::string& rpc_name,
                  RemoteControlParams* input) const;
   /**
    * @brief CompareParameters check if app parameters allowed

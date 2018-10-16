@@ -49,12 +49,12 @@ HandshakeHandler::HandshakeHandler(ProtocolHandlerImpl& protocol_handler,
                                    const SessionContext& context,
                                    const uint8_t protocol_version,
                                    std::shared_ptr<BsonObject> payload)
-    : protocol_handler_(protocol_handler)
-    , session_observer_(session_observer)
-    , context_(context)
-    , full_version_(full_version)
-    , protocol_version_(protocol_version)
-    , payload_(payload) {}
+    : protocol_handler_(protocol_handler),
+      session_observer_(session_observer),
+      context_(context),
+      full_version_(full_version),
+      protocol_version_(protocol_version),
+      payload_(payload) {}
 
 HandshakeHandler::~HandshakeHandler() {
   LOG4CXX_DEBUG(logger_, "Destroying of HandshakeHandler: " << this);
@@ -90,12 +90,12 @@ bool HandshakeHandler::OnHandshakeDone(
   LOG4CXX_AUTO_TRACE(logger_);
 
   if (connection_key != this->connection_key()) {
-    LOG4CXX_DEBUG(logger_,
-                  "Listener " << this
-                              << " expects notification for connection id: "
-                              << this->connection_key()
-                              << ". Received notification for connection id "
-                              << connection_key << " will be ignored");
+    LOG4CXX_DEBUG(logger_, "Listener "
+                               << this
+                               << " expects notification for connection id: "
+                               << this->connection_key()
+                               << ". Received notification for connection id "
+                               << connection_key << " will be ignored");
     return false;
   }
 
@@ -129,8 +129,7 @@ void HandshakeHandler::ProcessSuccessfulHandshake(const uint32_t connection_key,
       protocol_handler_.get_settings().force_unprotected_service();
 
   const bool can_be_protected =
-      std::find(force_unprotected.begin(),
-                force_unprotected.end(),
+      std::find(force_unprotected.begin(), force_unprotected.end(),
                 context_.service_type_) == force_unprotected.end();
 
   const bool is_service_already_protected =
@@ -144,19 +143,14 @@ void HandshakeHandler::ProcessSuccessfulHandshake(const uint32_t connection_key,
 
   if (can_be_protected && !is_service_already_protected) {
     session_observer_.SetProtectionFlag(connection_key, context_.service_type_);
-    protocol_handler_.SendStartSessionAck(context_.connection_id_,
-                                          context_.new_session_id_,
-                                          protocol_version_,
-                                          context_.hash_id_,
-                                          context_.service_type_,
-                                          can_be_protected,
-                                          full_version_,
-                                          params);
+    protocol_handler_.SendStartSessionAck(
+        context_.connection_id_, context_.new_session_id_, protocol_version_,
+        context_.hash_id_, context_.service_type_, can_be_protected,
+        full_version_, params);
   } else {
-    protocol_handler_.SendStartSessionNAck(context_.connection_id_,
-                                           context_.new_session_id_,
-                                           protocol_version_,
-                                           context_.service_type_);
+    protocol_handler_.SendStartSessionNAck(
+        context_.connection_id_, context_.new_session_id_, protocol_version_,
+        context_.service_type_);
   }
 }
 
@@ -167,8 +161,7 @@ void HandshakeHandler::ProcessFailedHandshake(BsonObject& params) {
       protocol_handler_.get_settings().force_protected_service();
 
   const bool can_be_unprotected =
-      std::find(force_protected.begin(),
-                force_protected.end(),
+      std::find(force_protected.begin(), force_protected.end(),
                 context_.service_type_) == force_protected.end();
 
   LOG4CXX_DEBUG(logger_,
@@ -177,19 +170,14 @@ void HandshakeHandler::ProcessFailedHandshake(BsonObject& params) {
                                                << context_.is_new_service_);
 
   if (can_be_unprotected && context_.is_new_service_) {
-    protocol_handler_.SendStartSessionAck(context_.connection_id_,
-                                          context_.new_session_id_,
-                                          protocol_version_,
-                                          context_.hash_id_,
-                                          context_.service_type_,
-                                          PROTECTION_OFF,
-                                          full_version_,
-                                          params);
+    protocol_handler_.SendStartSessionAck(
+        context_.connection_id_, context_.new_session_id_, protocol_version_,
+        context_.hash_id_, context_.service_type_, PROTECTION_OFF,
+        full_version_, params);
   } else {
-    protocol_handler_.SendStartSessionNAck(context_.connection_id_,
-                                           context_.new_session_id_,
-                                           protocol_version_,
-                                           context_.service_type_);
+    protocol_handler_.SendStartSessionNAck(
+        context_.connection_id_, context_.new_session_id_, protocol_version_,
+        context_.service_type_);
   }
 }
 
