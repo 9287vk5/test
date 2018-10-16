@@ -20,16 +20,29 @@ pipeline {
             }
         }
         stage ('check-style') {
-            steps { script { try { sh 'tools/infrastructure/check_style.sh' } } }
+            steps { 
+                script { 
+                    try { 
+                        sh 'tools/infrastructure/check_style.sh' 
+                    } finally {
+                        sh 'echo "check-style good"'
+                    }
+                }
+            }
         }
         stage ('cppcheck') {
-            steps { script { try { 
-                sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' 
-            }   finally {
-                junit 'cppcheck.xml'
+            steps { 
+                script { 
+                    sh 'echo "cppcheck will run **********************************************"'
+                    try {
+                        sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' 
+                    } finally {
+                        junit 'cppcheck.xml'
+                    }
+                }
             }
-            }}
         }
+        /*
         stage ('cmake') {
             steps {
                 dir('build') {
@@ -57,6 +70,6 @@ pipeline {
             steps {
                 archive 'build/OpenSDL.tar.gz'
             }
-        }
+        }*/
     }
 }
