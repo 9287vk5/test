@@ -47,11 +47,11 @@ FILE_NAMES=$(find src -name \*.h -print -o -name \*.cpp -print  -o -name \*.cc -
 
 
 check_style() {
-	$FORMATER -style=file $1 | diff $1 -
+	$FORMATER -style=Google $1 | diff $1 -
 }
 
 fix_style() {
-	$FORMATER -style=file -i $1
+	$FORMATER -style=Google -i $1
 }
 
 if [ "$1" = "--fix" ]
