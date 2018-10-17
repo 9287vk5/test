@@ -37,11 +37,9 @@ pipeline {
                     try {
                         sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' 
                     } finally {
-                        sh 'there are cpp warnings'
+                        sh 'cppcheck finished'
                     }
                 }
-                step([$class: 'CppcheckPublisher', allowNoReport: false, displayAllErrors: true, displayErrorSeverity: false, displayInformationSeverity: false, displayNoCategorySeverity: false, displayPerformanceSeverity: false, displayPortabilitySeverity: false, displayStyleSeverity: false, displayWarningSeverity: false, failureThreshold: '', healthy: '', ignoreBlankFiles: false, newFailureThreshold: '', newThreshold: '', numBuildsInGraph: 0, pattern: 'cppcheck.xml', severityError: true, severityInformation: true, severityNoCategory: true, severityPerformance: true, severityPortability: true, severityStyle: true, severityWarning: true, threshold: '', unHealthy: '', xSize: 500, ySize: 200])
-                /*CppcheckPublisher ( pattern: 'cppcheck.xml' )*/
             }
         }
         /*
