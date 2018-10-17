@@ -41,11 +41,15 @@ namespace commands {
 RCIsReadyRequest::RCIsReadyRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : RequestToHMI(message, application_manager, rpc_service, hmi_capabilities,
-                   policy_handle),
-      EventObserver(application_manager.event_dispatcher()) {}
+    : RequestToHMI(message,
+                   application_manager,
+                   rpc_service,
+                   hmi_capabilities,
+                   policy_handle)
+    , EventObserver(application_manager.event_dispatcher()) {}
 
 RCIsReadyRequest::~RCIsReadyRequest() {}
 

@@ -40,7 +40,8 @@ std::shared_ptr<CAlwaysTrueSchemaItem> CAlwaysTrueSchemaItem::create() {
 }
 
 errors::eType CAlwaysTrueSchemaItem::validate(
-    const SmartObject& Object, rpc::ValidationReport* report__,
+    const SmartObject& Object,
+    rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   return errors::OK;
 }

@@ -98,15 +98,25 @@ CustomString::CustomString(size_t n, char c)
   InitData();
 }
 
-size_t CustomString::size() const { return amount_characters_; }
+size_t CustomString::size() const {
+  return amount_characters_;
+}
 
-size_t CustomString::length() const { return amount_characters_; }
+size_t CustomString::length() const {
+  return amount_characters_;
+}
 
-size_t CustomString::length_bytes() const { return mb_string_.size(); }
+size_t CustomString::length_bytes() const {
+  return mb_string_.size();
+}
 
-bool CustomString::is_ascii_string() const { return is_ascii_string_; }
+bool CustomString::is_ascii_string() const {
+  return is_ascii_string_;
+}
 
-bool CustomString::empty() const { return 0 == amount_characters_; }
+bool CustomString::empty() const {
+  return 0 == amount_characters_;
+}
 
 bool CustomString::operator==(const CustomString& str) const {
   return mb_string_ == str.mb_string_;
@@ -162,13 +172,17 @@ bool CustomString::CompareIgnoreCase(const char* str) const {
   return CompareIgnoreCase(CustomString(str));
 }
 
-const char* CustomString::c_str() const { return mb_string_.c_str(); }
+const char* CustomString::c_str() const {
+  return mb_string_.c_str();
+}
 
 std::wstring CustomString::ToWString() const {
   return ConvertUTFToWString(mb_string_.c_str());
 }
 
-std::string CustomString::AsMBString() const { return mb_string_; }
+std::string CustomString::AsMBString() const {
+  return mb_string_;
+}
 
 std::wstring CustomString::ToWStringLowerCase() const {
   std::wstring wstr(ConvertUTFToWString(mb_string_.c_str()));

@@ -122,10 +122,13 @@ class ApplicationManagerImplMockHmiTest : public ::testing::Test {
 
   void SetCommonExpectationOnAppReconnection(
       const connection_handler::DeviceHandle new_device_id,
-      const uint32_t new_application_id, const std::string& mac_address) {
+      const uint32_t new_application_id,
+      const std::string& mac_address) {
     EXPECT_CALL(
         mock_session_observer_,
-        GetDataOnSessionKey(new_application_id, _, _,
+        GetDataOnSessionKey(new_application_id,
+                            _,
+                            _,
                             testing::An<connection_handler::DeviceHandle*>()))
         .WillOnce(DoAll(SetArgPointee<3u>(new_device_id), Return(0)));
 
@@ -134,9 +137,13 @@ class ApplicationManagerImplMockHmiTest : public ::testing::Test {
         mock_session_observer_,
         GetDataOnDeviceID(
             ::testing::Matcher<connection_handler::DeviceHandle>(new_device_id),
-            _, _, _, _))
+            _,
+            _,
+            _,
+            _))
         .WillOnce(DoAll(SetArgPointee<3u>(mac_address),
-                        SetArgPointee<4u>(connection_type), Return(0)));
+                        SetArgPointee<4u>(connection_type),
+                        Return(0)));
   }
 
   std::shared_ptr<NiceMock<resumption_test::MockResumptionData> > mock_storage_;
@@ -161,8 +168,11 @@ TEST_F(ApplicationManagerImplMockHmiTest,
       new plugin_manager::MockRPCPluginManager;
 
   std::shared_ptr<ApplicationImpl> app_impl = std::make_shared<ApplicationImpl>(
-      application_id, policy_app_id, encryption::MakeHash(mac_address),
-      device_id, app_name,
+      application_id,
+      policy_app_id,
+      encryption::MakeHash(mac_address),
+      device_id,
+      app_name,
       std::shared_ptr<usage_statistics::StatisticsManager>(
           new usage_statistics_test::MockStatisticsManager()),
       *app_manager_impl_);
@@ -173,11 +183,11 @@ TEST_F(ApplicationManagerImplMockHmiTest,
 
   app_manager_impl_->AddMockApplication(app_impl);
 
-  const connection_handler::Device bt(device_id, "BT_device", mac_address,
-                                      "BLUETOOTH");
+  const connection_handler::Device bt(
+      device_id, "BT_device", mac_address, "BLUETOOTH");
 
-  const connection_handler::Device usb(device_id + 1, "USB_device",
-                                       "USB_serial", "USB_IOS");
+  const connection_handler::Device usb(
+      device_id + 1, "USB_device", "USB_serial", "USB_IOS");
 
   MockCommandFactory mock_command_factory;
 
@@ -250,8 +260,8 @@ TEST_F(ApplicationManagerImplMockHmiTest,
 
   const connection_handler::DeviceHandle new_device_id = 2;
   const uint32_t new_application_id = 2;
-  SetCommonExpectationOnAppReconnection(new_device_id, new_application_id,
-                                        mac_address);
+  SetCommonExpectationOnAppReconnection(
+      new_device_id, new_application_id, mac_address);
 
   app_manager_impl_->ProcessReconnection(app_impl, new_application_id);
   app_manager_impl_->OnApplicationSwitched(app_impl);

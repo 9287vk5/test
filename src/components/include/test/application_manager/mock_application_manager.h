@@ -62,8 +62,9 @@ using application_manager::plugin_manager::RPCPluginManager;
 
 class MockApplicationManager : public application_manager::ApplicationManager {
  public:
-  MOCK_METHOD2(Init, bool(resumption::LastState& last_state,
-                          media_manager::MediaManager* media_manager));
+  MOCK_METHOD2(Init,
+               bool(resumption::LastState& last_state,
+                    media_manager::MediaManager* media_manager));
   MOCK_METHOD0(Stop, bool());
   MOCK_METHOD1(set_hmi_message_handler,
                void(hmi_message_handler::HMIMessageHandler* handler));
@@ -77,9 +78,10 @@ class MockApplicationManager : public application_manager::ApplicationManager {
       application, application_manager::ApplicationSharedPtr(uint32_t app_id));
   MOCK_CONST_METHOD0(active_application,
                      application_manager::ApplicationSharedPtr());
-  MOCK_CONST_METHOD2(application, application_manager::ApplicationSharedPtr(
-                                      const std::string& device_id,
-                                      const std::string& policy_app_id));
+  MOCK_CONST_METHOD2(application,
+                     application_manager::ApplicationSharedPtr(
+                         const std::string& device_id,
+                         const std::string& policy_app_id));
   MOCK_METHOD2(ChangeAppsHMILevel,
                void(uint32_t app_id, mobile_apis::HMILevel::eType level));
   MOCK_CONST_METHOD1(
@@ -114,7 +116,8 @@ class MockApplicationManager : public application_manager::ApplicationManager {
   MOCK_METHOD2(set_application_id,
                void(const int32_t correlation_id, const uint32_t app_id));
   MOCK_METHOD3(OnHMILevelChanged,
-               void(uint32_t app_id, mobile_apis::HMILevel::eType from,
+               void(uint32_t app_id,
+                    mobile_apis::HMILevel::eType from,
                     mobile_apis::HMILevel::eType to));
   MOCK_METHOD1(
       SendHMIStatusNotification,
@@ -178,28 +181,34 @@ class MockApplicationManager : public application_manager::ApplicationManager {
   MOCK_CONST_METHOD0(IsStopping, bool());
   MOCK_METHOD1(RemoveAppFromTTSGlobalPropertiesList,
                void(const uint32_t app_id));
-  MOCK_METHOD4(SaveBinary,
-               mobile_apis::Result::eType(
-                   const std::vector<uint8_t>& binary_data,
-                   const std::string& file_path, const std::string& file_name,
-                   const uint64_t offset));
+  MOCK_METHOD4(
+      SaveBinary,
+      mobile_apis::Result::eType(const std::vector<uint8_t>& binary_data,
+                                 const std::string& file_path,
+                                 const std::string& file_name,
+                                 const uint64_t offset));
   MOCK_METHOD1(SetAllAppsAllowed, void(const bool allowed));
   MOCK_METHOD1(
       set_driver_distraction_state,
       void(const hmi_apis::Common_DriverDistractionState::eType state));
   MOCK_METHOD6(StartAudioPassThruThread,
-               void(int32_t session_key, int32_t correlation_id,
-                    int32_t max_duration, int32_t sampling_rate,
-                    int32_t bits_per_sample, int32_t audio_type));
+               void(int32_t session_key,
+                    int32_t correlation_id,
+                    int32_t max_duration,
+                    int32_t sampling_rate,
+                    int32_t bits_per_sample,
+                    int32_t audio_type));
   MOCK_METHOD0(StartDevicesDiscovery, void());
   MOCK_METHOD1(StopAudioPassThru, void(int32_t application_key));
   MOCK_METHOD3(TerminateRequest,
-               void(const uint32_t connection_key, const uint32_t corr_id,
+               void(const uint32_t connection_key,
+                    const uint32_t corr_id,
                     const int32_t function_id));
   MOCK_METHOD4(UnregisterApplication,
                void(const uint32_t&, mobile_apis::Result::eType, bool, bool));
   MOCK_METHOD3(updateRequestTimeout,
-               void(uint32_t connection_key, uint32_t mobile_correlation_id,
+               void(uint32_t connection_key,
+                    uint32_t mobile_correlation_id,
                     uint32_t new_timeout_value));
   MOCK_METHOD0(state_controller, application_manager::StateController&());
   MOCK_METHOD1(SetUnregisterAllApplicationsReason,
@@ -224,8 +233,9 @@ class MockApplicationManager : public application_manager::ApplicationManager {
   MOCK_METHOD0(app_launch_ctrl, app_launch::AppLaunchCtrl&());
   MOCK_CONST_METHOD0(SupportedSDLVersion,
                      protocol_handler::MajorProtocolVersion());
-  MOCK_METHOD1(GetDeviceTransportType, hmi_apis::Common_TransportType::eType(
-                                           const std::string& transport_type));
+  MOCK_METHOD1(
+      GetDeviceTransportType,
+      hmi_apis::Common_TransportType::eType(const std::string& transport_type));
   MOCK_METHOD1(AddAppToTTSGlobalPropertiesList, void(const uint32_t app_id));
   MOCK_METHOD0(GenerateGrammarID, uint32_t());
   MOCK_CONST_METHOD1(GetUserConsentForDevice,
@@ -234,7 +244,8 @@ class MockApplicationManager : public application_manager::ApplicationManager {
   MOCK_METHOD1(ActivateApplication,
                bool(application_manager::ApplicationSharedPtr app));
   MOCK_METHOD3(OnAppStreaming,
-               void(uint32_t app_id, protocol_handler::ServiceType service_type,
+               void(uint32_t app_id,
+                    protocol_handler::ServiceType service_type,
                     bool state));
   MOCK_CONST_METHOD5(CreateRegularState,
                      application_manager::HmiStatePtr(
@@ -287,8 +298,10 @@ class MockApplicationManager : public application_manager::ApplicationManager {
   MOCK_METHOD0(OnLowVoltage, void());
   MOCK_METHOD0(OnWakeUp, void());
   MOCK_METHOD4(OnStreamingConfigured,
-               void(uint32_t app_id, protocol_handler::ServiceType service_type,
-                    bool result, std::vector<std::string>& rejected_params));
+               void(uint32_t app_id,
+                    protocol_handler::ServiceType service_type,
+                    bool result,
+                    std::vector<std::string>& rejected_params));
   MOCK_METHOD2(ProcessReconnection,
                void(application_manager::ApplicationSharedPtr application,
                     const uint32_t connection_key));

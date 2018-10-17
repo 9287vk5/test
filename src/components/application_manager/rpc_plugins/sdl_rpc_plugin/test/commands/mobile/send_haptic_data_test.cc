@@ -68,8 +68,8 @@ class SendHapticDataRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   SendHapticDataRequestTest()
-      : msg_(CreateMessage(::smart_objects::SmartType_Map)),
-        mock_app_(CreateMockApp()) {}
+      : msg_(CreateMessage(::smart_objects::SmartType_Map))
+      , mock_app_(CreateMockApp()) {}
 
   void SetUp() OVERRIDE {
     (*msg_)[am::strings::params][am::strings::connection_key] = kConnectionKey;
@@ -100,8 +100,9 @@ TEST_F(SendHapticDataRequestTest, Run_SUCCESS) {
 
   EXPECT_CALL(*mock_app_, is_navi()).WillOnce(Return(true));
 
-  EXPECT_CALL(mock_rpc_service_, ManageHMICommand(HMIResultCodeIs(
-                                     hmi_apis::FunctionID::UI_SendHapticData)))
+  EXPECT_CALL(mock_rpc_service_,
+              ManageHMICommand(
+                  HMIResultCodeIs(hmi_apis::FunctionID::UI_SendHapticData)))
       .WillOnce(Return(true));
 
   SendHapticDataRequestPtr command(CreateCommand<SendHapticDataRequest>(msg_));

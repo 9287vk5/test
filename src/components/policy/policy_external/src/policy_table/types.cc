@@ -23,26 +23,28 @@ std::string PolicyTableTypeToString(const PolicyTableType pt_type) {
 // PolicyBase methods
 PolicyBase::PolicyBase() : CompositeType(kUninitialized) {}
 
-PolicyBase::PolicyBase(const Strings& groups, Priority priority,
-                       HmiLevel default_hmi, bool keep_context,
+PolicyBase::PolicyBase(const Strings& groups,
+                       Priority priority,
+                       HmiLevel default_hmi,
+                       bool keep_context,
                        bool steal_focus)
-    : CompositeType(kUninitialized),
-      groups(groups),
-      priority(priority),
-      default_hmi(default_hmi),
-      keep_context(keep_context),
-      steal_focus(steal_focus) {}
+    : CompositeType(kUninitialized)
+    , groups(groups)
+    , priority(priority)
+    , default_hmi(default_hmi)
+    , keep_context(keep_context)
+    , steal_focus(steal_focus) {}
 
 PolicyBase::~PolicyBase() {}
 
 PolicyBase::PolicyBase(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      groups(impl::ValueMember(value__, "groups")),
-      preconsented_groups(impl::ValueMember(value__, "preconsented_groups")),
-      priority(impl::ValueMember(value__, "priority")),
-      default_hmi(impl::ValueMember(value__, "default_hmi")),
-      keep_context(impl::ValueMember(value__, "keep_context")),
-      steal_focus(impl::ValueMember(value__, "steal_focus")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , groups(impl::ValueMember(value__, "groups"))
+    , preconsented_groups(impl::ValueMember(value__, "preconsented_groups"))
+    , priority(impl::ValueMember(value__, "priority"))
+    , default_hmi(impl::ValueMember(value__, "default_hmi"))
+    , keep_context(impl::ValueMember(value__, "keep_context"))
+    , steal_focus(impl::ValueMember(value__, "steal_focus")) {}
 
 Json::Value PolicyBase::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
@@ -137,8 +139,10 @@ void PolicyBase::SetPolicyTableType(PolicyTableType pt_type) {
 // DevicePolicy methods
 DevicePolicy::DevicePolicy() : PolicyBase() {}
 
-DevicePolicy::DevicePolicy(const Strings& groups, Priority priority,
-                           HmiLevel default_hmi, bool keep_context,
+DevicePolicy::DevicePolicy(const Strings& groups,
+                           Priority priority,
+                           HmiLevel default_hmi,
+                           bool keep_context,
                            bool steal_focus)
     : PolicyBase(groups, priority, default_hmi, keep_context, steal_focus) {}
 
@@ -158,9 +162,9 @@ ApplicationPoliciesSection::~ApplicationPoliciesSection() {}
 
 ApplicationPoliciesSection::ApplicationPoliciesSection(
     const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      apps(value__),
-      device(impl::ValueMember(value__, "device")) {
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , apps(value__)
+    , device(impl::ValueMember(value__, "device")) {
   // Since "device" is moved to separate struct, we have to delete it from
   // parsed apps to avoid validation issues due to possible wrong params in
   // device section
@@ -220,23 +224,24 @@ void ApplicationPoliciesSection::SetPolicyTableType(PolicyTableType pt_type) {
 // ApplicationParams methods
 ApplicationParams::ApplicationParams() : PolicyBase() {}
 
-ApplicationParams::ApplicationParams(const Strings& groups, Priority priority,
-                                     HmiLevel default_hmi, bool keep_context,
+ApplicationParams::ApplicationParams(const Strings& groups,
+                                     Priority priority,
+                                     HmiLevel default_hmi,
+                                     bool keep_context,
                                      bool steal_focus)
     : PolicyBase(groups, priority, default_hmi, keep_context, steal_focus) {}
 
 ApplicationParams::~ApplicationParams() {}
 
 ApplicationParams::ApplicationParams(const Json::Value* value__)
-    : PolicyBase(value__),
-      nicknames(impl::ValueMember(value__, "nicknames")),
-      AppHMIType(impl::ValueMember(value__, "AppHMIType")),
-      RequestType(impl::ValueMember(value__, "RequestType")),
-      RequestSubType(impl::ValueMember(value__, "RequestSubType")),
-      memory_kb(impl::ValueMember(value__, "memory_kb"), 0),
-      heart_beat_timeout_ms(
-          impl::ValueMember(value__, "heart_beat_timeout_ms")),
-      moduleType(impl::ValueMember(value__, "moduleType")) {}
+    : PolicyBase(value__)
+    , nicknames(impl::ValueMember(value__, "nicknames"))
+    , AppHMIType(impl::ValueMember(value__, "AppHMIType"))
+    , RequestType(impl::ValueMember(value__, "RequestType"))
+    , RequestSubType(impl::ValueMember(value__, "RequestSubType"))
+    , memory_kb(impl::ValueMember(value__, "memory_kb"), 0)
+    , heart_beat_timeout_ms(impl::ValueMember(value__, "heart_beat_timeout_ms"))
+    , moduleType(impl::ValueMember(value__, "moduleType")) {}
 
 Json::Value ApplicationParams::ToJsonValue() const {
   Json::Value result__(PolicyBase::ToJsonValue());
@@ -245,8 +250,8 @@ Json::Value ApplicationParams::ToJsonValue() const {
   impl::WriteJsonField("RequestType", RequestType, &result__);
   impl::WriteJsonField("RequestSubType", RequestSubType, &result__);
   impl::WriteJsonField("memory_kb", memory_kb, &result__);
-  impl::WriteJsonField("heart_beat_timeout_ms", heart_beat_timeout_ms,
-                       &result__);
+  impl::WriteJsonField(
+      "heart_beat_timeout_ms", heart_beat_timeout_ms, &result__);
   impl::WriteJsonField("moduleType", moduleType, &result__);
   return result__;
 }
@@ -373,9 +378,9 @@ RpcParameters::RpcParameters(const HmiLevels& hmi_levels)
 RpcParameters::~RpcParameters() {}
 
 RpcParameters::RpcParameters(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      hmi_levels(impl::ValueMember(value__, "hmi_levels")),
-      parameters(impl::ValueMember(value__, "parameters")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , hmi_levels(impl::ValueMember(value__, "hmi_levels"))
+    , parameters(impl::ValueMember(value__, "parameters")) {}
 
 Json::Value RpcParameters::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
@@ -434,12 +439,12 @@ Rpcs::Rpcs(const Rpc& rpcs) : CompositeType(kUninitialized), rpcs(rpcs) {}
 Rpcs::~Rpcs() {}
 
 Rpcs::Rpcs(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      user_consent_prompt(impl::ValueMember(value__, "user_consent_prompt")),
-      rpcs(impl::ValueMember(value__, "rpcs")),
-      disallowed_by_external_consent_entities_on(impl::ValueMember(
-          value__, "disallowed_by_external_consent_entities_on")),
-      disallowed_by_external_consent_entities_off(impl::ValueMember(
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , user_consent_prompt(impl::ValueMember(value__, "user_consent_prompt"))
+    , rpcs(impl::ValueMember(value__, "rpcs"))
+    , disallowed_by_external_consent_entities_on(impl::ValueMember(
+          value__, "disallowed_by_external_consent_entities_on"))
+    , disallowed_by_external_consent_entities_off(impl::ValueMember(
           value__, "disallowed_by_external_consent_entities_off")) {}
 
 Json::Value Rpcs::ToJsonValue() const {
@@ -447,9 +452,11 @@ Json::Value Rpcs::ToJsonValue() const {
   impl::WriteJsonField("user_consent_prompt", user_consent_prompt, &result__);
   impl::WriteJsonField("rpcs", rpcs, &result__);
   impl::WriteJsonField("disallowed_by_external_consent_entities_on",
-                       disallowed_by_external_consent_entities_on, &result__);
+                       disallowed_by_external_consent_entities_on,
+                       &result__);
   impl::WriteJsonField("disallowed_by_external_consent_entities_off",
-                       disallowed_by_external_consent_entities_off, &result__);
+                       disallowed_by_external_consent_entities_off,
+                       &result__);
   return result__;
 }
 
@@ -525,45 +532,45 @@ ModuleConfig::ModuleConfig() : CompositeType(kUninitialized) {}
 
 ModuleConfig::ModuleConfig(
     uint8_t exchange_after_x_ignition_cycles,
-    int64_t exchange_after_x_kilometers, uint8_t exchange_after_x_days,
+    int64_t exchange_after_x_kilometers,
+    uint8_t exchange_after_x_days,
     uint16_t timeout_after_x_seconds,
     const SecondsBetweenRetries& seconds_between_retries,
     const ServiceEndpoints& endpoints,
     const NumberOfNotificationsPerMinute& notifications_per_minute_by_priority)
-    : CompositeType(kUninitialized),
-      exchange_after_x_ignition_cycles(exchange_after_x_ignition_cycles),
-      exchange_after_x_kilometers(exchange_after_x_kilometers),
-      exchange_after_x_days(exchange_after_x_days),
-      timeout_after_x_seconds(timeout_after_x_seconds),
-      seconds_between_retries(seconds_between_retries),
-      endpoints(endpoints),
-      notifications_per_minute_by_priority(
+    : CompositeType(kUninitialized)
+    , exchange_after_x_ignition_cycles(exchange_after_x_ignition_cycles)
+    , exchange_after_x_kilometers(exchange_after_x_kilometers)
+    , exchange_after_x_days(exchange_after_x_days)
+    , timeout_after_x_seconds(timeout_after_x_seconds)
+    , seconds_between_retries(seconds_between_retries)
+    , endpoints(endpoints)
+    , notifications_per_minute_by_priority(
           notifications_per_minute_by_priority) {}
 
 ModuleConfig::~ModuleConfig() {}
 
 ModuleConfig::ModuleConfig(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      exchange_after_x_ignition_cycles(
-          impl::ValueMember(value__, "exchange_after_x_ignition_cycles")),
-      exchange_after_x_kilometers(
-          impl::ValueMember(value__, "exchange_after_x_kilometers")),
-      exchange_after_x_days(
-          impl::ValueMember(value__, "exchange_after_x_days")),
-      timeout_after_x_seconds(
-          impl::ValueMember(value__, "timeout_after_x_seconds")),
-      seconds_between_retries(
-          impl::ValueMember(value__, "seconds_between_retries")),
-      endpoints(impl::ValueMember(value__, "endpoints")),
-      notifications_per_minute_by_priority(
-          impl::ValueMember(value__, "notifications_per_minute_by_priority")),
-      vehicle_make(impl::ValueMember(value__, "vehicle_make")),
-      vehicle_model(impl::ValueMember(value__, "vehicle_model")),
-      vehicle_year(impl::ValueMember(value__, "vehicle_year")),
-      preloaded_date(impl::ValueMember(value__, "preloaded_date")),
-      certificate(impl::ValueMember(value__, "certificate")),
-      preloaded_pt(impl::ValueMember(value__, "preloaded_pt")),
-      full_app_id_supported(
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , exchange_after_x_ignition_cycles(
+          impl::ValueMember(value__, "exchange_after_x_ignition_cycles"))
+    , exchange_after_x_kilometers(
+          impl::ValueMember(value__, "exchange_after_x_kilometers"))
+    , exchange_after_x_days(impl::ValueMember(value__, "exchange_after_x_days"))
+    , timeout_after_x_seconds(
+          impl::ValueMember(value__, "timeout_after_x_seconds"))
+    , seconds_between_retries(
+          impl::ValueMember(value__, "seconds_between_retries"))
+    , endpoints(impl::ValueMember(value__, "endpoints"))
+    , notifications_per_minute_by_priority(
+          impl::ValueMember(value__, "notifications_per_minute_by_priority"))
+    , vehicle_make(impl::ValueMember(value__, "vehicle_make"))
+    , vehicle_model(impl::ValueMember(value__, "vehicle_model"))
+    , vehicle_year(impl::ValueMember(value__, "vehicle_year"))
+    , preloaded_date(impl::ValueMember(value__, "preloaded_date"))
+    , certificate(impl::ValueMember(value__, "certificate"))
+    , preloaded_pt(impl::ValueMember(value__, "preloaded_pt"))
+    , full_app_id_supported(
           impl::ValueMember(value__, "full_app_id_supported")) {}
 
 void ModuleConfig::SafeCopyFrom(const ModuleConfig& from) {
@@ -587,21 +594,23 @@ Json::Value ModuleConfig::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
   impl::WriteJsonField("certificate", certificate, &result__);
   impl::WriteJsonField("preloaded_pt", preloaded_pt, &result__);
-  impl::WriteJsonField("full_app_id_supported", full_app_id_supported,
-                       &result__);
+  impl::WriteJsonField(
+      "full_app_id_supported", full_app_id_supported, &result__);
   impl::WriteJsonField("exchange_after_x_ignition_cycles",
-                       exchange_after_x_ignition_cycles, &result__);
-  impl::WriteJsonField("exchange_after_x_kilometers",
-                       exchange_after_x_kilometers, &result__);
-  impl::WriteJsonField("exchange_after_x_days", exchange_after_x_days,
+                       exchange_after_x_ignition_cycles,
                        &result__);
-  impl::WriteJsonField("timeout_after_x_seconds", timeout_after_x_seconds,
-                       &result__);
-  impl::WriteJsonField("seconds_between_retries", seconds_between_retries,
-                       &result__);
+  impl::WriteJsonField(
+      "exchange_after_x_kilometers", exchange_after_x_kilometers, &result__);
+  impl::WriteJsonField(
+      "exchange_after_x_days", exchange_after_x_days, &result__);
+  impl::WriteJsonField(
+      "timeout_after_x_seconds", timeout_after_x_seconds, &result__);
+  impl::WriteJsonField(
+      "seconds_between_retries", seconds_between_retries, &result__);
   impl::WriteJsonField("endpoints", endpoints, &result__);
   impl::WriteJsonField("notifications_per_minute_by_priority",
-                       notifications_per_minute_by_priority, &result__);
+                       notifications_per_minute_by_priority,
+                       &result__);
   impl::WriteJsonField("vehicle_make", vehicle_make, &result__);
   impl::WriteJsonField("vehicle_model", vehicle_model, &result__);
   impl::WriteJsonField("vehicle_year", vehicle_year, &result__);
@@ -821,12 +830,12 @@ MessageString::MessageString() : CompositeType(kUninitialized) {}
 MessageString::~MessageString() {}
 
 MessageString::MessageString(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      line1(impl::ValueMember(value__, "line1")),
-      line2(impl::ValueMember(value__, "line2")),
-      tts(impl::ValueMember(value__, "tts")),
-      label(impl::ValueMember(value__, "label")),
-      textBody(impl::ValueMember(value__, "textBody")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , line1(impl::ValueMember(value__, "line1"))
+    , line2(impl::ValueMember(value__, "line2"))
+    , tts(impl::ValueMember(value__, "tts"))
+    , label(impl::ValueMember(value__, "label"))
+    , textBody(impl::ValueMember(value__, "textBody")) {}
 
 Json::Value MessageString::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
@@ -926,8 +935,8 @@ MessageLanguages::MessageLanguages(const Languages& languages)
 MessageLanguages::~MessageLanguages() {}
 
 MessageLanguages::MessageLanguages(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      languages(impl::ValueMember(value__, "languages")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , languages(impl::ValueMember(value__, "languages")) {}
 
 Json::Value MessageLanguages::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
@@ -995,9 +1004,9 @@ ConsumerFriendlyMessages::ConsumerFriendlyMessages(const std::string& version)
 ConsumerFriendlyMessages::~ConsumerFriendlyMessages() {}
 
 ConsumerFriendlyMessages::ConsumerFriendlyMessages(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      version(impl::ValueMember(value__, "version")),
-      messages(impl::ValueMember(value__, "messages")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , version(impl::ValueMember(value__, "version"))
+    , messages(impl::ValueMember(value__, "messages")) {}
 
 Json::Value ConsumerFriendlyMessages::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
@@ -1066,29 +1075,31 @@ ModuleMeta::ModuleMeta() : CompositeType(kUninitialized) {}
 ModuleMeta::~ModuleMeta() {}
 
 ModuleMeta::ModuleMeta(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      ccpu_version(impl::ValueMember(value__, "ccpu_version")),
-      language(impl::ValueMember(value__, "language")),
-      wers_country_code(impl::ValueMember(value__, "wers_country_code")),
-      pt_exchanged_at_odometer_x(
-          impl::ValueMember(value__, "pt_exchanged_at_odometer_x")),
-      pt_exchanged_x_days_after_epoch(
-          impl::ValueMember(value__, "pt_exchanged_x_days_after_epoch")),
-      ignition_cycles_since_last_exchange(
-          impl::ValueMember(value__, "ignition_cycles_since_last_exchange")),
-      vin(impl::ValueMember(value__, "vin")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , ccpu_version(impl::ValueMember(value__, "ccpu_version"))
+    , language(impl::ValueMember(value__, "language"))
+    , wers_country_code(impl::ValueMember(value__, "wers_country_code"))
+    , pt_exchanged_at_odometer_x(
+          impl::ValueMember(value__, "pt_exchanged_at_odometer_x"))
+    , pt_exchanged_x_days_after_epoch(
+          impl::ValueMember(value__, "pt_exchanged_x_days_after_epoch"))
+    , ignition_cycles_since_last_exchange(
+          impl::ValueMember(value__, "ignition_cycles_since_last_exchange"))
+    , vin(impl::ValueMember(value__, "vin")) {}
 
 Json::Value ModuleMeta::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
   impl::WriteJsonField("ccpu_version", ccpu_version, &result__);
   impl::WriteJsonField("language", language, &result__);
   impl::WriteJsonField("wers_country_code", wers_country_code, &result__);
-  impl::WriteJsonField("pt_exchanged_at_odometer_x", pt_exchanged_at_odometer_x,
-                       &result__);
+  impl::WriteJsonField(
+      "pt_exchanged_at_odometer_x", pt_exchanged_at_odometer_x, &result__);
   impl::WriteJsonField("pt_exchanged_x_days_after_epoch",
-                       pt_exchanged_x_days_after_epoch, &result__);
+                       pt_exchanged_x_days_after_epoch,
+                       &result__);
   impl::WriteJsonField("ignition_cycles_since_last_exchange",
-                       ignition_cycles_since_last_exchange, &result__);
+                       ignition_cycles_since_last_exchange,
+                       &result__);
   impl::WriteJsonField("vin", vin, &result__);
   return result__;
 }
@@ -1219,87 +1230,95 @@ AppLevel::AppLevel(uint16_t minutes_in_hmi_full,
                    uint16_t count_of_removals_for_bad_behavior,
                    uint16_t count_of_tls_errors,
                    uint16_t count_of_run_attempts_while_revoked)
-    : CompositeType(kUninitialized),
-      minutes_in_hmi_full(minutes_in_hmi_full),
-      app_registration_language_gui(app_registration_language_gui),
-      app_registration_language_vui(app_registration_language_vui),
-      minutes_in_hmi_limited(minutes_in_hmi_limited),
-      minutes_in_hmi_background(minutes_in_hmi_background),
-      minutes_in_hmi_none(minutes_in_hmi_none),
-      count_of_user_selections(count_of_user_selections),
-      count_of_rejections_sync_out_of_memory(
-          count_of_rejections_sync_out_of_memory),
-      count_of_rejections_nickname_mismatch(
-          count_of_rejections_nickname_mismatch),
-      count_of_rejections_duplicate_name(count_of_rejections_duplicate_name),
-      count_of_rejected_rpc_calls(count_of_rejected_rpc_calls),
-      count_of_rpcs_sent_in_hmi_none(count_of_rpcs_sent_in_hmi_none),
-      count_of_removals_for_bad_behavior(count_of_removals_for_bad_behavior),
-      count_of_tls_errors(count_of_tls_errors),
-      count_of_run_attempts_while_revoked(count_of_run_attempts_while_revoked) {
+    : CompositeType(kUninitialized)
+    , minutes_in_hmi_full(minutes_in_hmi_full)
+    , app_registration_language_gui(app_registration_language_gui)
+    , app_registration_language_vui(app_registration_language_vui)
+    , minutes_in_hmi_limited(minutes_in_hmi_limited)
+    , minutes_in_hmi_background(minutes_in_hmi_background)
+    , minutes_in_hmi_none(minutes_in_hmi_none)
+    , count_of_user_selections(count_of_user_selections)
+    , count_of_rejections_sync_out_of_memory(
+          count_of_rejections_sync_out_of_memory)
+    , count_of_rejections_nickname_mismatch(
+          count_of_rejections_nickname_mismatch)
+    , count_of_rejections_duplicate_name(count_of_rejections_duplicate_name)
+    , count_of_rejected_rpc_calls(count_of_rejected_rpc_calls)
+    , count_of_rpcs_sent_in_hmi_none(count_of_rpcs_sent_in_hmi_none)
+    , count_of_removals_for_bad_behavior(count_of_removals_for_bad_behavior)
+    , count_of_tls_errors(count_of_tls_errors)
+    , count_of_run_attempts_while_revoked(count_of_run_attempts_while_revoked) {
 }
 
 AppLevel::~AppLevel() {}
 
 AppLevel::AppLevel(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      minutes_in_hmi_full(impl::ValueMember(value__, "minutes_in_hmi_full")),
-      app_registration_language_gui(
-          impl::ValueMember(value__, "app_registration_language_gui")),
-      app_registration_language_vui(
-          impl::ValueMember(value__, "app_registration_language_vui")),
-      minutes_in_hmi_limited(
-          impl::ValueMember(value__, "minutes_in_hmi_limited")),
-      minutes_in_hmi_background(
-          impl::ValueMember(value__, "minutes_in_hmi_background")),
-      minutes_in_hmi_none(impl::ValueMember(value__, "minutes_in_hmi_none")),
-      count_of_user_selections(
-          impl::ValueMember(value__, "count_of_user_selections")),
-      count_of_rejections_sync_out_of_memory(
-          impl::ValueMember(value__, "count_of_rejections_sync_out_of_memory")),
-      count_of_rejections_nickname_mismatch(
-          impl::ValueMember(value__, "count_of_rejections_nickname_mismatch")),
-      count_of_rejections_duplicate_name(
-          impl::ValueMember(value__, "count_of_rejections_duplicate_name")),
-      count_of_rejected_rpc_calls(
-          impl::ValueMember(value__, "count_of_rejected_rpc_calls")),
-      count_of_rpcs_sent_in_hmi_none(
-          impl::ValueMember(value__, "count_of_rpcs_sent_in_hmi_none")),
-      count_of_removals_for_bad_behavior(
-          impl::ValueMember(value__, "count_of_removals_for_bad_behavior")),
-      count_of_tls_errors(impl::ValueMember(value__, "count_of_tls_errors")),
-      count_of_run_attempts_while_revoked(
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , minutes_in_hmi_full(impl::ValueMember(value__, "minutes_in_hmi_full"))
+    , app_registration_language_gui(
+          impl::ValueMember(value__, "app_registration_language_gui"))
+    , app_registration_language_vui(
+          impl::ValueMember(value__, "app_registration_language_vui"))
+    , minutes_in_hmi_limited(
+          impl::ValueMember(value__, "minutes_in_hmi_limited"))
+    , minutes_in_hmi_background(
+          impl::ValueMember(value__, "minutes_in_hmi_background"))
+    , minutes_in_hmi_none(impl::ValueMember(value__, "minutes_in_hmi_none"))
+    , count_of_user_selections(
+          impl::ValueMember(value__, "count_of_user_selections"))
+    , count_of_rejections_sync_out_of_memory(
+          impl::ValueMember(value__, "count_of_rejections_sync_out_of_memory"))
+    , count_of_rejections_nickname_mismatch(
+          impl::ValueMember(value__, "count_of_rejections_nickname_mismatch"))
+    , count_of_rejections_duplicate_name(
+          impl::ValueMember(value__, "count_of_rejections_duplicate_name"))
+    , count_of_rejected_rpc_calls(
+          impl::ValueMember(value__, "count_of_rejected_rpc_calls"))
+    , count_of_rpcs_sent_in_hmi_none(
+          impl::ValueMember(value__, "count_of_rpcs_sent_in_hmi_none"))
+    , count_of_removals_for_bad_behavior(
+          impl::ValueMember(value__, "count_of_removals_for_bad_behavior"))
+    , count_of_tls_errors(impl::ValueMember(value__, "count_of_tls_errors"))
+    , count_of_run_attempts_while_revoked(
           impl::ValueMember(value__, "count_of_run_attempts_while_revoked")) {}
 
 Json::Value AppLevel::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
   impl::WriteJsonField("minutes_in_hmi_full", minutes_in_hmi_full, &result__);
   impl::WriteJsonField("app_registration_language_gui",
-                       app_registration_language_gui, &result__);
+                       app_registration_language_gui,
+                       &result__);
   impl::WriteJsonField("app_registration_language_vui",
-                       app_registration_language_vui, &result__);
-  impl::WriteJsonField("minutes_in_hmi_limited", minutes_in_hmi_limited,
+                       app_registration_language_vui,
                        &result__);
-  impl::WriteJsonField("minutes_in_hmi_background", minutes_in_hmi_background,
-                       &result__);
+  impl::WriteJsonField(
+      "minutes_in_hmi_limited", minutes_in_hmi_limited, &result__);
+  impl::WriteJsonField(
+      "minutes_in_hmi_background", minutes_in_hmi_background, &result__);
   impl::WriteJsonField("minutes_in_hmi_none", minutes_in_hmi_none, &result__);
-  impl::WriteJsonField("count_of_user_selections", count_of_user_selections,
-                       &result__);
+  impl::WriteJsonField(
+      "count_of_user_selections", count_of_user_selections, &result__);
   impl::WriteJsonField("count_of_rejections_sync_out_of_memory",
-                       count_of_rejections_sync_out_of_memory, &result__);
+                       count_of_rejections_sync_out_of_memory,
+                       &result__);
   impl::WriteJsonField("count_of_rejections_nickname_mismatch",
-                       count_of_rejections_nickname_mismatch, &result__);
+                       count_of_rejections_nickname_mismatch,
+                       &result__);
   impl::WriteJsonField("count_of_rejections_duplicate_name",
-                       count_of_rejections_duplicate_name, &result__);
-  impl::WriteJsonField("count_of_rejected_rpc_calls",
-                       count_of_rejected_rpc_calls, &result__);
+                       count_of_rejections_duplicate_name,
+                       &result__);
+  impl::WriteJsonField(
+      "count_of_rejected_rpc_calls", count_of_rejected_rpc_calls, &result__);
   impl::WriteJsonField("count_of_rpcs_sent_in_hmi_none",
-                       count_of_rpcs_sent_in_hmi_none, &result__);
+                       count_of_rpcs_sent_in_hmi_none,
+                       &result__);
   impl::WriteJsonField("count_of_removals_for_bad_behavior",
-                       count_of_removals_for_bad_behavior, &result__);
+                       count_of_removals_for_bad_behavior,
+                       &result__);
   impl::WriteJsonField("count_of_TLS_errors", count_of_tls_errors, &result__);
   impl::WriteJsonField("count_of_run_attempts_while_revoked",
-                       count_of_run_attempts_while_revoked, &result__);
+                       count_of_run_attempts_while_revoked,
+                       &result__);
   return result__;
 }
 
@@ -1503,23 +1522,22 @@ UsageAndErrorCounts::UsageAndErrorCounts() : CompositeType(kUninitialized) {}
 UsageAndErrorCounts::~UsageAndErrorCounts() {}
 
 UsageAndErrorCounts::UsageAndErrorCounts(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      count_of_iap_buffer_full(
-          impl::ValueMember(value__, "count_of_iap_buffer_full")),
-      count_sync_out_of_memory(
-          impl::ValueMember(value__, "count_sync_out_of_memory")),
-      count_of_sync_reboots(
-          impl::ValueMember(value__, "count_of_sync_reboots")),
-      app_level(impl::ValueMember(value__, "app_level")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , count_of_iap_buffer_full(
+          impl::ValueMember(value__, "count_of_iap_buffer_full"))
+    , count_sync_out_of_memory(
+          impl::ValueMember(value__, "count_sync_out_of_memory"))
+    , count_of_sync_reboots(impl::ValueMember(value__, "count_of_sync_reboots"))
+    , app_level(impl::ValueMember(value__, "app_level")) {}
 
 Json::Value UsageAndErrorCounts::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
-  impl::WriteJsonField("count_of_iap_buffer_full", count_of_iap_buffer_full,
-                       &result__);
-  impl::WriteJsonField("count_sync_out_of_memory", count_sync_out_of_memory,
-                       &result__);
-  impl::WriteJsonField("count_of_sync_reboots", count_of_sync_reboots,
-                       &result__);
+  impl::WriteJsonField(
+      "count_of_iap_buffer_full", count_of_iap_buffer_full, &result__);
+  impl::WriteJsonField(
+      "count_sync_out_of_memory", count_sync_out_of_memory, &result__);
+  impl::WriteJsonField(
+      "count_of_sync_reboots", count_of_sync_reboots, &result__);
   impl::WriteJsonField("app_level", app_level, &result__);
   return result__;
 }
@@ -1602,27 +1620,28 @@ void UsageAndErrorCounts::SetPolicyTableType(PolicyTableType pt_type) {
 
 // ConsentRecords methods
 ConsentRecords::ConsentRecords()
-    : CompositeType(kUninitialized),
-      consent_last_updated(0),
-      ext_consent_last_updated(0) {}
+    : CompositeType(kUninitialized)
+    , consent_last_updated(0)
+    , ext_consent_last_updated(0) {}
 
 ConsentRecords::~ConsentRecords() {}
 
 ConsentRecords::ConsentRecords(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      consent_groups(impl::ValueMember(value__, "consent_groups")),
-      external_consent_status_groups(
-          impl::ValueMember(value__, "external_consent_status_groups")),
-      input(impl::ValueMember(value__, "input")),
-      time_stamp(impl::ValueMember(value__, "time_stamp")),
-      consent_last_updated(0),
-      ext_consent_last_updated(0) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , consent_groups(impl::ValueMember(value__, "consent_groups"))
+    , external_consent_status_groups(
+          impl::ValueMember(value__, "external_consent_status_groups"))
+    , input(impl::ValueMember(value__, "input"))
+    , time_stamp(impl::ValueMember(value__, "time_stamp"))
+    , consent_last_updated(0)
+    , ext_consent_last_updated(0) {}
 
 Json::Value ConsentRecords::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
   impl::WriteJsonField("consent_groups", consent_groups, &result__);
   impl::WriteJsonField("external_consent_status_groups",
-                       external_consent_status_groups, &result__);
+                       external_consent_status_groups,
+                       &result__);
   impl::WriteJsonField("input", input, &result__);
   impl::WriteJsonField("time_stamp", time_stamp, &result__);
   return result__;
@@ -1703,16 +1722,16 @@ DeviceParams::DeviceParams() : CompositeType(kUninitialized) {}
 DeviceParams::~DeviceParams() {}
 
 DeviceParams::DeviceParams(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      hardware(impl::ValueMember(value__, "hardware")),
-      firmware_rev(impl::ValueMember(value__, "firmware_rev")),
-      os(impl::ValueMember(value__, "os")),
-      os_version(impl::ValueMember(value__, "os_version")),
-      carrier(impl::ValueMember(value__, "carrier")),
-      user_consent_records(impl::ValueMember(value__, "user_consent_records")),
-      max_number_rfcom_ports(
-          impl::ValueMember(value__, "max_number_rfcom_ports")),
-      connection_type(impl::ValueMember(value__, "connection_type")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , hardware(impl::ValueMember(value__, "hardware"))
+    , firmware_rev(impl::ValueMember(value__, "firmware_rev"))
+    , os(impl::ValueMember(value__, "os"))
+    , os_version(impl::ValueMember(value__, "os_version"))
+    , carrier(impl::ValueMember(value__, "carrier"))
+    , user_consent_records(impl::ValueMember(value__, "user_consent_records"))
+    , max_number_rfcom_ports(
+          impl::ValueMember(value__, "max_number_rfcom_ports"))
+    , connection_type(impl::ValueMember(value__, "connection_type")) {}
 
 Json::Value DeviceParams::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
@@ -1722,8 +1741,8 @@ Json::Value DeviceParams::ToJsonValue() const {
   impl::WriteJsonField("os_version", os_version, &result__);
   impl::WriteJsonField("carrier", carrier, &result__);
   impl::WriteJsonField("user_consent_records", user_consent_records, &result__);
-  impl::WriteJsonField("max_number_rfcom_ports", max_number_rfcom_ports,
-                       &result__);
+  impl::WriteJsonField(
+      "max_number_rfcom_ports", max_number_rfcom_ports, &result__);
   impl::WriteJsonField("connection_type", connection_type, &result__);
   return result__;
 }
@@ -1847,36 +1866,36 @@ PolicyTable::PolicyTable(
     const FunctionalGroupings& functional_groupings,
     const ConsumerFriendlyMessages& consumer_friendly_messages,
     const ModuleConfig& module_config)
-    : CompositeType(kUninitialized),
-      app_policies_section(app_policies_section),
-      functional_groupings(functional_groupings),
-      consumer_friendly_messages(consumer_friendly_messages),
-      module_config(module_config) {}
+    : CompositeType(kUninitialized)
+    , app_policies_section(app_policies_section)
+    , functional_groupings(functional_groupings)
+    , consumer_friendly_messages(consumer_friendly_messages)
+    , module_config(module_config) {}
 
 PolicyTable::~PolicyTable() {}
 
 PolicyTable::PolicyTable(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      app_policies_section(impl::ValueMember(value__, "app_policies")),
-      functional_groupings(impl::ValueMember(value__, "functional_groupings")),
-      consumer_friendly_messages(
-          impl::ValueMember(value__, "consumer_friendly_messages")),
-      module_config(impl::ValueMember(value__, "module_config")),
-      module_meta(impl::ValueMember(value__, "module_meta")),
-      usage_and_error_counts(
-          impl::ValueMember(value__, "usage_and_error_counts")),
-      device_data(impl::ValueMember(value__, "device_data")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , app_policies_section(impl::ValueMember(value__, "app_policies"))
+    , functional_groupings(impl::ValueMember(value__, "functional_groupings"))
+    , consumer_friendly_messages(
+          impl::ValueMember(value__, "consumer_friendly_messages"))
+    , module_config(impl::ValueMember(value__, "module_config"))
+    , module_meta(impl::ValueMember(value__, "module_meta"))
+    , usage_and_error_counts(
+          impl::ValueMember(value__, "usage_and_error_counts"))
+    , device_data(impl::ValueMember(value__, "device_data")) {}
 
 Json::Value PolicyTable::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
   impl::WriteJsonField("app_policies", app_policies_section, &result__);
   impl::WriteJsonField("functional_groupings", functional_groupings, &result__);
-  impl::WriteJsonField("consumer_friendly_messages", consumer_friendly_messages,
-                       &result__);
+  impl::WriteJsonField(
+      "consumer_friendly_messages", consumer_friendly_messages, &result__);
   impl::WriteJsonField("module_config", module_config, &result__);
   impl::WriteJsonField("module_meta", module_meta, &result__);
-  impl::WriteJsonField("usage_and_error_counts", usage_and_error_counts,
-                       &result__);
+  impl::WriteJsonField(
+      "usage_and_error_counts", usage_and_error_counts, &result__);
   impl::WriteJsonField("device_data", device_data, &result__);
   return result__;
 }
@@ -1999,8 +2018,8 @@ Table::Table(const PolicyTable& policy_table)
 Table::~Table() {}
 
 Table::Table(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      policy_table(impl::ValueMember(value__, "policy_table")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , policy_table(impl::ValueMember(value__, "policy_table")) {}
 
 Json::Value Table::ToJsonValue() const {
   Json::Value result__(Json::objectValue);
@@ -2054,7 +2073,8 @@ void RequestTypes::CleanUp() {
   }
   this->erase(
       std::remove_if(
-          this->begin(), this->end(),
+          this->begin(),
+          this->end(),
           std::not1(std::mem_fun_ref(&RequestTypes::value_type::is_valid))),
       this->end());
 
@@ -2067,7 +2087,8 @@ bool RequestTypes::is_valid() const {
     return false;
   }
   RequestTypes::const_iterator it = std::find_if(
-      this->begin(), this->end(),
+      this->begin(),
+      this->end(),
       std::not1(std::mem_fun_ref(&RequestTypes::value_type::is_valid)));
   if (this->end() != it) {
     return false;
@@ -2083,17 +2104,19 @@ bool RequestTypes::is_empty() const {
   return this->empty() && this->is_initialized();
 }
 
-bool RequestTypes::is_cleaned_up() const { return is_cleaned_up_; }
+bool RequestTypes::is_cleaned_up() const {
+  return is_cleaned_up_;
+}
 
 ExternalConsentEntity::ExternalConsentEntity()
-    : CompositeType(kUninitialized),
-      entity_type(INT32_MAX),
-      entity_id(INT32_MAX) {}
+    : CompositeType(kUninitialized)
+    , entity_type(INT32_MAX)
+    , entity_id(INT32_MAX) {}
 
 ExternalConsentEntity::ExternalConsentEntity(const Json::Value* value__)
-    : CompositeType(InitHelper(value__, &Json::Value::isObject)),
-      entity_type(impl::ValueMember(value__, "entityType")),
-      entity_id(impl::ValueMember(value__, "entityID")) {}
+    : CompositeType(InitHelper(value__, &Json::Value::isObject))
+    , entity_type(impl::ValueMember(value__, "entityType"))
+    , entity_id(impl::ValueMember(value__, "entityID")) {}
 
 ExternalConsentEntity::ExternalConsentEntity(const int32_t type,
                                              const int32_t id)

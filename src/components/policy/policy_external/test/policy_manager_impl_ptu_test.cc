@@ -160,8 +160,8 @@ TEST_F(PolicyManagerImplTest2, IsAppRevoked_SetRevokedAppID_ExpectAppRevoked) {
   ::policy::BinaryMessage msg(json.begin(), json.end());
   ASSERT_TRUE(policy_manager_->LoadPT(kFilePtUpdateJson, msg));
   EXPECT_FALSE(policy_manager_->GetCache()->IsPTPreloaded());
-  CheckRpcPermissions(app_id_1_, "UnregisterAppInterface",
-                      ::policy::kRpcDisallowed);
+  CheckRpcPermissions(
+      app_id_1_, "UnregisterAppInterface", ::policy::kRpcDisallowed);
   EXPECT_TRUE(policy_manager_->IsApplicationRevoked(app_id_1_));
 }
 
@@ -202,8 +202,14 @@ TEST_F(PolicyManagerImplTest2,
   CreateLocalPT(preloaded_pt_filename_);
   policy::CacheManagerInterfaceSPtr cache = policy_manager_->GetCache();
   cache->AddDevice(device_id_1_, "Bluetooth");
-  cache->SetDeviceData(device_id_1_, "hardware IPX", "v.8.0.1", "Android",
-                       "4.4.2", "Life", 2, "Bluetooth");
+  cache->SetDeviceData(device_id_1_,
+                       "hardware IPX",
+                       "v.8.0.1",
+                       "Android",
+                       "4.4.2",
+                       "Life",
+                       2,
+                       "Bluetooth");
   EXPECT_CALL(listener_, OnCurrentDeviceIdUpdateRequired(app_id_1_))
       .WillRepeatedly(Return(device_id_1_));
   policy_manager_->SetUserConsentForDevice(device_id_1_, true);
@@ -220,8 +226,8 @@ TEST_F(PolicyManagerImplTest2,
   ::policy::RPCParams input_params;
   ::policy::CheckPermissionResult output;
 
-  policy_manager_->CheckPermissions(app_id_1_, kHmiLevelFull, "Alert",
-                                    input_params, output);
+  policy_manager_->CheckPermissions(
+      app_id_1_, kHmiLevelFull, "Alert", input_params, output);
 
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
@@ -241,8 +247,8 @@ TEST_F(PolicyManagerImplTest2,
   ASSERT_TRUE(policy_manager_->LoadPT(kFilePtUpdateJson, msg));
   EXPECT_FALSE(cache->IsPTPreloaded());
 
-  policy_manager_->CheckPermissions(app_id_1_, kHmiLevelFull, "Alert",
-                                    input_params, output);
+  policy_manager_->CheckPermissions(
+      app_id_1_, kHmiLevelFull, "Alert", input_params, output);
   // Check RPC is disallowed
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   ASSERT_TRUE(output.list_of_allowed_params.empty());
@@ -255,8 +261,14 @@ TEST_F(PolicyManagerImplTest2,
   policy_manager_->AddDevice(device_id_1_, "Bluetooth");
   policy::CacheManagerInterfaceSPtr cache = policy_manager_->GetCache();
 
-  ASSERT_TRUE(cache->SetDeviceData(device_id_1_, "hardware IPX", "v.8.0.1",
-                                   "Android", "4.4.2", "Life", 2, "Bluetooth"));
+  ASSERT_TRUE(cache->SetDeviceData(device_id_1_,
+                                   "hardware IPX",
+                                   "v.8.0.1",
+                                   "Android",
+                                   "4.4.2",
+                                   "Life",
+                                   2,
+                                   "Bluetooth"));
   EXPECT_CALL(listener_, OnCurrentDeviceIdUpdateRequired(application_id_))
       .WillRepeatedly(Return(device_id_1_));
   policy_manager_->SetUserConsentForDevice(device_id_1_, true);
@@ -314,10 +326,16 @@ TEST_F(PolicyManagerImplTest2,
   EXPECT_CALL(listener_, OnCurrentDeviceIdUpdateRequired(application_id_))
       .WillOnce(Return(device_id_1_));
   cache->AddDevice(device_id_1_, "Bluetooth");
-  cache->SetDeviceData(device_id_1_, "hardware IPX", "v.8.0.1", "Android",
-                       "4.4.2", "Life", 2, "Bluetooth");
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull, "Alert",
-                                    input_params, output);
+  cache->SetDeviceData(device_id_1_,
+                       "hardware IPX",
+                       "v.8.0.1",
+                       "Android",
+                       "4.4.2",
+                       "Life",
+                       2,
+                       "Bluetooth");
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelFull, "Alert", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of parameters empty
@@ -339,8 +357,8 @@ TEST_F(PolicyManagerImplTest2,
   ::policy::RPCParams input_params;
   ::policy::CheckPermissionResult output;
   // Rpc in FULL level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelFull, "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   ASSERT_TRUE(output.list_of_allowed_params.empty());
@@ -349,8 +367,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in LIMITED level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelLimited,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelLimited, "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   ASSERT_TRUE(output.list_of_allowed_params.empty());
@@ -358,8 +376,11 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in BACKGROUND level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelBackground,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_,
+                                    kHmiLevelBackground,
+                                    "SendLocation",
+                                    input_params,
+                                    output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   ASSERT_TRUE(output.list_of_allowed_params.empty());
@@ -367,8 +388,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in NONE level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelNone,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelNone, "SendLocation", input_params, output);
   // Check RPC is disallowed
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   // Check list of parameters is empty
@@ -394,8 +415,8 @@ TEST_F(
 
   ::policy::CheckPermissionResult output;
   // Rpc in FULL level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelFull, "SendLocation", input_params, output);
 
   // Group which has RPC does not require user consent, so its auto-allowed for
   // user. Since RPC 'parameters' section is present, but empty, that means
@@ -410,8 +431,8 @@ TEST_F(
   ResetOutputList(output);
 
   // Rpc in LIMITED level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelLimited,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelLimited, "SendLocation", input_params, output);
 
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
 
@@ -422,8 +443,11 @@ TEST_F(
   ResetOutputList(output);
 
   // Rpc in BACKGROUND level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelBackground,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_,
+                                    kHmiLevelBackground,
+                                    "SendLocation",
+                                    input_params,
+                                    output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
 
@@ -435,8 +459,8 @@ TEST_F(
   ResetOutputList(output);
 
   // Rpc in NONE level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelNone,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelNone, "SendLocation", input_params, output);
 
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
 
@@ -466,8 +490,8 @@ TEST_F(PolicyManagerImplTest2,
 
   ::policy::CheckPermissionResult output;
   // Rpc in FULL level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelFull, "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
 
@@ -496,8 +520,8 @@ TEST_F(PolicyManagerImplTest2,
   output.list_of_undefined_params.clear();
 
   // Rpc in LIMITED level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelLimited,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelLimited, "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
 
@@ -515,8 +539,11 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in BACKGROUND level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelBackground,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_,
+                                    kHmiLevelBackground,
+                                    "SendLocation",
+                                    input_params,
+                                    output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
 
@@ -532,8 +559,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in NONE level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelNone,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelNone, "SendLocation", input_params, output);
   // Check RPC is disallowed
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   // Check lists of parameters are  empty
@@ -605,8 +632,8 @@ TEST_F(PolicyManagerImplTest2,
 
   ::policy::CheckPermissionResult output;
   // Rpc in FULL level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelFull, "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of allowed parameters is not empty
@@ -625,8 +652,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in LIMITED level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelLimited,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelLimited, "SendLocation", input_params, output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of allowed parameters is not empty
@@ -645,8 +672,11 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in BACKGROUND level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelBackground,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_,
+                                    kHmiLevelBackground,
+                                    "SendLocation",
+                                    input_params,
+                                    output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of allowed parameters is not empty
@@ -666,8 +696,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in NONE level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelNone,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelNone, "SendLocation", input_params, output);
   // Check RPC is disallowed
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   // Check lists of parameters are  empty
@@ -687,8 +717,14 @@ TEST_F(PolicyManagerImplTest2,
   CreateLocalPT("json/sdl_preloaded_pt_send_location.json");
   policy_manager_->AddDevice(device_id_1_, "Bluetooth");
   policy::CacheManagerInterfaceSPtr cache = policy_manager_->GetCache();
-  ASSERT_TRUE(cache->SetDeviceData(device_id_1_, "hardware IPX", "v.8.0.1",
-                                   "Android", "4.4.2", "Life", 2, "Bluetooth"));
+  ASSERT_TRUE(cache->SetDeviceData(device_id_1_,
+                                   "hardware IPX",
+                                   "v.8.0.1",
+                                   "Android",
+                                   "4.4.2",
+                                   "Life",
+                                   2,
+                                   "Bluetooth"));
 
   // Add app from consented device. App will be assigned with default policies
   policy_manager_->AddApplication(application_id_,
@@ -718,8 +754,8 @@ TEST_F(PolicyManagerImplTest2,
 
   ::policy::CheckPermissionResult output;
   // Rpc in FULL level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelFull, "SendLocation", input_params, output);
 
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_undefined_params.empty());
@@ -727,8 +763,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in LIMITED level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelLimited,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelLimited, "SendLocation", input_params, output);
 
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_undefined_params.empty());
@@ -736,8 +772,11 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in BACKGROUND level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelBackground,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_,
+                                    kHmiLevelBackground,
+                                    "SendLocation",
+                                    input_params,
+                                    output);
 
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_undefined_params.empty());
@@ -746,8 +785,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in NONE level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelNone,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelNone, "SendLocation", input_params, output);
 
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_allowed_params.empty());
@@ -765,8 +804,14 @@ TEST_F(PolicyManagerImplTest2,
   CreateLocalPT("json/sdl_preloaded_pt_send_location.json");
   policy_manager_->AddDevice(device_id_1_, "Bluetooth");
   policy::CacheManagerInterfaceSPtr cache = policy_manager_->GetCache();
-  ASSERT_TRUE(cache->SetDeviceData(device_id_1_, "hardware IPX", "v.8.0.1",
-                                   "Android", "4.4.2", "Life", 2, "Bluetooth"));
+  ASSERT_TRUE(cache->SetDeviceData(device_id_1_,
+                                   "hardware IPX",
+                                   "v.8.0.1",
+                                   "Android",
+                                   "4.4.2",
+                                   "Life",
+                                   2,
+                                   "Bluetooth"));
 
   // Add app from consented device. App will be assigned with default policies
   policy_manager_->AddApplication(application_id_,
@@ -797,8 +842,8 @@ TEST_F(PolicyManagerImplTest2,
 
   ::policy::CheckPermissionResult output;
   // Rpc in FULL level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelFull,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelFull, "SendLocation", input_params, output);
 
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_undefined_params.empty());
@@ -806,16 +851,19 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in LIMITED level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelLimited,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelLimited, "SendLocation", input_params, output);
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_undefined_params.empty());
   EXPECT_EQ(10u, output.list_of_allowed_params.size());
   ResetOutputList(output);
 
   // Rpc in BACKGROUND level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelBackground,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(application_id_,
+                                    kHmiLevelBackground,
+                                    "SendLocation",
+                                    input_params,
+                                    output);
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_undefined_params.empty());
   EXPECT_EQ(10u, output.list_of_allowed_params.size());
@@ -823,8 +871,8 @@ TEST_F(PolicyManagerImplTest2,
   ResetOutputList(output);
 
   // Rpc in NONE level
-  policy_manager_->CheckPermissions(application_id_, kHmiLevelNone,
-                                    "SendLocation", input_params, output);
+  policy_manager_->CheckPermissions(
+      application_id_, kHmiLevelNone, "SendLocation", input_params, output);
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   EXPECT_TRUE(output.list_of_allowed_params.empty());
   EXPECT_TRUE(output.list_of_disallowed_params.empty());
@@ -957,16 +1005,22 @@ TEST_F(PolicyManagerImplTest2,
   ASSERT_TRUE(
       (policy_manager_->GetCache())->AddDevice(device_id_2_, "Bluetooth"));
   ASSERT_TRUE((policy_manager_->GetCache())
-                  ->SetDeviceData(device_id_2_, "hardware IPX", "v.8.0.1",
-                                  "Android", "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(device_id_2_,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
 
   ::policy::StringArray consented_groups;
   ::policy::StringArray disallowed_groups;
   consented_groups.push_back(std::string("Notifications"));
   consented_groups.push_back(std::string("Notifications"));
   (policy_manager_->GetCache())
-      ->SetUserPermissionsForDevice(device_id_2_, consented_groups,
-                                    disallowed_groups);
+      ->SetUserPermissionsForDevice(
+          device_id_2_, consented_groups, disallowed_groups);
   policy_manager_->SetUserConsentForDevice(device_id_2_, true);
   EXPECT_CALL(listener_, OnCurrentDeviceIdUpdateRequired(app_id_2_))
       .WillRepeatedly(Return(device_id_2_));
@@ -994,8 +1048,8 @@ TEST_F(PolicyManagerImplTest2,
   policy_manager_->SendNotificationOnPermissionsUpdated(app_id_2_);
   std::vector< ::policy::FunctionalGroupPermission> actual_groups_permissions;
   std::vector< ::policy::FunctionalGroupPermission>::iterator it;
-  policy_manager_->GetUserConsentForApp(device_id_2_, app_id_2_,
-                                        actual_groups_permissions);
+  policy_manager_->GetUserConsentForApp(
+      device_id_2_, app_id_2_, actual_groups_permissions);
   uint32_t index = 0;
   for (; index < actual_groups_permissions.size(); ++index) {
     if (actual_groups_permissions[index].group_id == group1_perm.group_id) {
@@ -1060,15 +1114,21 @@ TEST_F(
   ASSERT_TRUE(
       (policy_manager_->GetCache())->AddDevice(device_id_2_, "Bluetooth"));
   ASSERT_TRUE((policy_manager_->GetCache())
-                  ->SetDeviceData(device_id_2_, "hardware IPX", "v.8.0.1",
-                                  "Android", "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(device_id_2_,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
 
   ::policy::StringArray consented_groups;
   ::policy::StringArray disallowed_groups;
   consented_groups.push_back(std::string("Notifications"));
   (policy_manager_->GetCache())
-      ->SetUserPermissionsForDevice(device_id_2_, consented_groups,
-                                    disallowed_groups);
+      ->SetUserPermissionsForDevice(
+          device_id_2_, consented_groups, disallowed_groups);
   policy_manager_->SetUserConsentForDevice(device_id_2_, true);
   EXPECT_CALL(listener_, OnCurrentDeviceIdUpdateRequired(app_id_2_))
       .WillRepeatedly(Return(device_id_2_));
@@ -1096,8 +1156,8 @@ TEST_F(
   policy_manager_->SendNotificationOnPermissionsUpdated(app_id_2_);
   std::vector< ::policy::FunctionalGroupPermission> actual_groups_permissions;
   std::vector< ::policy::FunctionalGroupPermission>::iterator it;
-  policy_manager_->GetPermissionsForApp(device_id_2_, app_id_2_,
-                                        actual_groups_permissions);
+  policy_manager_->GetPermissionsForApp(
+      device_id_2_, app_id_2_, actual_groups_permissions);
   uint32_t index = 0;
   for (; index < actual_groups_permissions.size(); ++index) {
     if (actual_groups_permissions[index].group_id == group1_perm.group_id) {
@@ -1185,15 +1245,21 @@ TEST_F(PolicyManagerImplTest2,
   ASSERT_TRUE(
       (policy_manager_->GetCache())->AddDevice(device_id_2_, "Bluetooth"));
   ASSERT_TRUE((policy_manager_->GetCache())
-                  ->SetDeviceData(device_id_2_, "hardware IPX", "v.8.0.1",
-                                  "Android", "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(device_id_2_,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
 
   ::policy::StringArray consented_groups;
   ::policy::StringArray disallowed_groups;
   consented_groups.push_back(std::string("Notifications"));
   (policy_manager_->GetCache())
-      ->SetUserPermissionsForDevice(device_id_2_, consented_groups,
-                                    disallowed_groups);
+      ->SetUserPermissionsForDevice(
+          device_id_2_, consented_groups, disallowed_groups);
   policy_manager_->SetUserConsentForDevice(device_id_2_, true);
   EXPECT_CALL(listener_, OnCurrentDeviceIdUpdateRequired(app_id_2_))
       .WillRepeatedly(Return(device_id_2_));
@@ -1221,8 +1287,8 @@ TEST_F(PolicyManagerImplTest2,
   policy_manager_->SendNotificationOnPermissionsUpdated(app_id_2_);
   std::vector< ::policy::FunctionalGroupPermission> actual_groups_permissions;
   std::vector< ::policy::FunctionalGroupPermission>::iterator it;
-  policy_manager_->GetPermissionsForApp(device_id_2_, app_id_2_,
-                                        actual_groups_permissions);
+  policy_manager_->GetPermissionsForApp(
+      device_id_2_, app_id_2_, actual_groups_permissions);
   uint32_t index = 0;
   for (; index < actual_groups_permissions.size(); ++index) {
     if (actual_groups_permissions[index].group_id == group1_perm.group_id) {

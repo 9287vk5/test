@@ -83,7 +83,8 @@ class CArraySchemaItem : public ISchemaItem {
    * @param RemoveFakeParameters contains true if need to remove fake parameters
    * from smart object otherwise contains false.
    **/
-  void applySchema(SmartObject& Object, const bool RemoveFakeParameters,
+  void applySchema(SmartObject& Object,
+                   const bool RemoveFakeParameters,
                    const utils::SemanticVersion& MessageVersion =
                        utils::SemanticVersion()) OVERRIDE;
 

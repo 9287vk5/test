@@ -36,16 +36,16 @@ namespace hmi_message_handler {
 
 WebsocketSession::WebsocketSession(boost::asio::ip::tcp::socket socket,
                                    CMessageBrokerController* controller)
-    : ws_(std::move(socket)),
-      strand_(ws_.get_executor()),
-      controller_(controller),
-      stop(false),
-      m_receivingBuffer(""),
-      mControllersIdStart(-1),
-      mControllersIdCurrent(0),
-      shutdown_(false),
-      thread_delegate_(new LoopThreadDelegate(&message_queue_, this)),
-      thread_(threads::CreateThread("WS Async Send", thread_delegate_)) {
+    : ws_(std::move(socket))
+    , strand_(ws_.get_executor())
+    , controller_(controller)
+    , stop(false)
+    , m_receivingBuffer("")
+    , mControllersIdStart(-1)
+    , mControllersIdCurrent(0)
+    , shutdown_(false)
+    , thread_delegate_(new LoopThreadDelegate(&message_queue_, this))
+    , thread_(threads::CreateThread("WS Async Send", thread_delegate_)) {
   thread_->start(threads::ThreadOptions());
 }
 
@@ -53,8 +53,9 @@ WebsocketSession::~WebsocketSession() {}
 
 void WebsocketSession::Accept() {
   ws_.async_accept(boost::asio::bind_executor(
-      strand_, std::bind(&WebsocketSession::Recv, shared_from_this(),
-                         std::placeholders::_1)));
+      strand_,
+      std::bind(
+          &WebsocketSession::Recv, shared_from_this(), std::placeholders::_1)));
 }
 
 void WebsocketSession::Shutdown() {
@@ -65,7 +66,9 @@ void WebsocketSession::Shutdown() {
   threads::DeleteThread(thread_);
 }
 
-bool WebsocketSession::IsShuttingDown() { return shutdown_; }
+bool WebsocketSession::IsShuttingDown() {
+  return shutdown_;
+}
 
 void WebsocketSession::Recv(boost::system::error_code ec) {
   if (shutdown_) {
@@ -81,11 +84,12 @@ void WebsocketSession::Recv(boost::system::error_code ec) {
     return;
   }
 
-  ws_.async_read(
-      buffer_,
-      boost::asio::bind_executor(
-          strand_, std::bind(&WebsocketSession::Read, shared_from_this(),
-                             std::placeholders::_1, std::placeholders::_2)));
+  ws_.async_read(buffer_,
+                 boost::asio::bind_executor(strand_,
+                                            std::bind(&WebsocketSession::Read,
+                                                      shared_from_this(),
+                                                      std::placeholders::_1,
+                                                      std::placeholders::_2)));
 }
 
 void WebsocketSession::Send(std::string& message, Json::Value& json_message) {

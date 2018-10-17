@@ -47,7 +47,9 @@ class AppExtension {
  public:
   explicit AppExtension(AppExtensionUID uid) : kUid_(uid) {}
   virtual ~AppExtension() {}
-  AppExtensionUID uid() const { return kUid_; }
+  AppExtensionUID uid() const {
+    return kUid_;
+  }
 
   /**
    * @brief SaveResumptionData method called by SDL when it saves resumption

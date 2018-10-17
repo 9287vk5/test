@@ -123,8 +123,11 @@ bool TNumberSchemaItem<NumberType>::isValidNumberType(SmartType type) {
     return true;
   } else if (((SmartType_Integer == type) || (SmartType_UInteger == type)) &&
              helpers::Compare<const std::type_info&, helpers::EQ, helpers::ONE>(
-                 typeid(value), typeid(int32_t), typeid(uint32_t),
-                 typeid(int64_t), typeid(double))) {
+                 typeid(value),
+                 typeid(int32_t),
+                 typeid(uint32_t),
+                 typeid(int64_t),
+                 typeid(double))) {
     return true;
   }
   return false;
@@ -132,7 +135,8 @@ bool TNumberSchemaItem<NumberType>::isValidNumberType(SmartType type) {
 
 template <typename NumberType>
 errors::eType TNumberSchemaItem<NumberType>::validate(
-    const SmartObject& Object, rpc::ValidationReport* report__,
+    const SmartObject& Object,
+    rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   if (!isValidNumberType(Object.getType())) {
     SmartType expectedType = (typeid(double) == typeid(Object.getType()))
@@ -185,9 +189,9 @@ TNumberSchemaItem<NumberType>::TNumberSchemaItem(
     const TSchemaItemParameter<NumberType>& MinValue,
     const TSchemaItemParameter<NumberType>& MaxValue,
     const TSchemaItemParameter<NumberType>& DefaultValue)
-    : CDefaultSchemaItem<NumberType>(DefaultValue),
-      mMinValue(MinValue),
-      mMaxValue(MaxValue) {}
+    : CDefaultSchemaItem<NumberType>(DefaultValue)
+    , mMinValue(MinValue)
+    , mMaxValue(MaxValue) {}
 
 template <typename NumberType>
 NumberType TNumberSchemaItem<NumberType>::getDefaultValue() const {

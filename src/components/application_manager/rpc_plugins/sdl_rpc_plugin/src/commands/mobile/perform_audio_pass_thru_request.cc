@@ -51,10 +51,13 @@ PerformAudioPassThruRequest::PerformAudioPassThruRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler),
-      result_tts_speak_(hmi_apis::Common_Result::INVALID_ENUM),
-      result_ui_(hmi_apis::Common_Result::INVALID_ENUM) {
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler)
+    , result_tts_speak_(hmi_apis::Common_Result::INVALID_ENUM)
+    , result_ui_(hmi_apis::Common_Result::INVALID_ENUM) {
   subscribe_on_event(hmi_apis::FunctionID::TTS_OnResetTimeout);
 }
 
@@ -106,14 +109,16 @@ void PerformAudioPassThruRequest::Run() {
     smart_objects::SmartObject& initial_prompt =
         (*message_)[strings::msg_params][strings::initial_prompt];
     mobile_apis::Result::eType verification_result =
-        MessageHelper::VerifyTtsFiles(initial_prompt, app,
-                                      application_manager_);
+        MessageHelper::VerifyTtsFiles(
+            initial_prompt, app, application_manager_);
 
     if (mobile_apis::Result::FILE_NOT_FOUND == verification_result) {
-      LOG4CXX_ERROR(logger_, "MessageHelper::VerifyTtsFiles return "
-                                 << verification_result);
+      LOG4CXX_ERROR(logger_,
+                    "MessageHelper::VerifyTtsFiles return "
+                        << verification_result);
       SendResponse(
-          false, mobile_apis::Result::FILE_NOT_FOUND,
+          false,
+          mobile_apis::Result::FILE_NOT_FOUND,
           "One or more files needed for initial_prompt are not present");
       return;
     }
@@ -146,7 +151,9 @@ void PerformAudioPassThruRequest::on_event(const event_engine::Event& event) {
       // in case perform audio is started by other request skip stopping
       if (hmi_apis::Common_Result::REJECTED == result_ui_) {
         LOG4CXX_ERROR(logger_, "Request was rejected");
-        SendResponse(false, MessageHelper::HMIToMobileResult(result_ui_), NULL,
+        SendResponse(false,
+                     MessageHelper::HMIToMobileResult(result_ui_),
+                     NULL,
                      &(message[strings::msg_params]));
         return;
       }
@@ -161,10 +168,12 @@ void PerformAudioPassThruRequest::on_event(const event_engine::Event& event) {
       EndAwaitForInterface(HmiInterfaces::HMI_INTERFACE_TTS);
       const bool is_tts_speak_success_unsuported =
           Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-              result_tts_speak_, hmi_apis::Common_Result::SUCCESS,
+              result_tts_speak_,
+              hmi_apis::Common_Result::SUCCESS,
               hmi_apis::Common_Result::WARNINGS,
               hmi_apis::Common_Result::WRONG_LANGUAGE,
-              hmi_apis::Common_Result::RETRY, hmi_apis::Common_Result::SAVED,
+              hmi_apis::Common_Result::RETRY,
+              hmi_apis::Common_Result::SAVED,
               hmi_apis::Common_Result::UNSUPPORTED_RESOURCE);
 
       if (is_tts_speak_success_unsuported) {
@@ -196,7 +205,8 @@ void PerformAudioPassThruRequest::on_event(const event_engine::Event& event) {
   const ResponseParams response_params = PrepareResponseParameters();
 
   SendResponse(
-      response_params.success, response_params.result_code,
+      response_params.success,
+      response_params.result_code,
       response_params.info.empty() ? NULL : response_params.info.c_str(),
       &(message[strings::msg_params]));
 }
@@ -208,7 +218,8 @@ PerformAudioPassThruRequest::PrepareResponseParameters() {
   app_mngr::commands::ResponseInfo ui_perform_info(
       result_ui_, HmiInterfaces::HMI_INTERFACE_UI, application_manager_);
   app_mngr::commands::ResponseInfo tts_perform_info(
-      result_tts_speak_, HmiInterfaces::HMI_INTERFACE_TTS,
+      result_tts_speak_,
+      HmiInterfaces::HMI_INTERFACE_TTS,
       application_manager_);
 
   // Note(dtrunov): According to requirment "WARNINGS, success:true on getting
@@ -247,7 +258,8 @@ void PerformAudioPassThruRequest::SendSpeakRequest() {
 
   SmartObject msg_params = smart_objects::SmartObject(SmartType_Map);
   for (uint32_t i = 0;
-       i < (*message_)[str::msg_params][str::initial_prompt].length(); ++i) {
+       i < (*message_)[str::msg_params][str::initial_prompt].length();
+       ++i) {
     msg_params[hmi_request::tts_chunks][i][str::text] =
         (*message_)[str::msg_params][str::initial_prompt][i][str::text];
     msg_params[hmi_request::tts_chunks][i][str::type] =
@@ -301,8 +313,8 @@ void PerformAudioPassThruRequest::SendPerformAudioPassThruRequest() {
   }
 
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_UI);
-  SendHMIRequest(hmi_apis::FunctionID::UI_PerformAudioPassThru, &msg_params,
-                 true);
+  SendHMIRequest(
+      hmi_apis::FunctionID::UI_PerformAudioPassThru, &msg_params, true);
 }
 
 void PerformAudioPassThruRequest::SendRecordStartNotification() {
@@ -322,7 +334,8 @@ void PerformAudioPassThruRequest::StartMicrophoneRecording() {
   application_manager_.BeginAudioPassThru(app_id);
 
   application_manager_.StartAudioPassThruThread(
-      connection_key(), correlation_id(),
+      connection_key(),
+      correlation_id(),
       (*message_)[str::msg_params][str::max_duration].asInt(),
       (*message_)[str::msg_params][str::sampling_rate].asInt(),
       (*message_)[str::msg_params][str::bits_per_sample].asInt(),

@@ -42,9 +42,9 @@ unsigned VehicleInfoAppExtension::VehicleInfoAppExtensionUID = 146;
 VehicleInfoAppExtension::VehicleInfoAppExtension(
     VehicleInfoPlugin& plugin, application_manager::Application& app)
     : app_mngr::AppExtension(
-          VehicleInfoAppExtension::VehicleInfoAppExtensionUID),
-      plugin_(plugin),
-      app_(app) {
+          VehicleInfoAppExtension::VehicleInfoAppExtensionUID)
+    , plugin_(plugin)
+    , app_(app) {
   LOG4CXX_AUTO_TRACE(logger_);
 }
 

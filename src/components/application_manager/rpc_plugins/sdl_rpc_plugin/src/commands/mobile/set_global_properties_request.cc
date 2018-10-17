@@ -51,14 +51,17 @@ SetGlobalPropertiesRequest::SetGlobalPropertiesRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler),
-      is_ui_send_(false),
-      is_tts_send_(false),
-      is_ui_received_(false),
-      is_tts_received_(false),
-      ui_result_(hmi_apis::Common_Result::INVALID_ENUM),
-      tts_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler)
+    , is_ui_send_(false)
+    , is_tts_send_(false)
+    , is_ui_received_(false)
+    , is_tts_received_(false)
+    , ui_result_(hmi_apis::Common_Result::INVALID_ENUM)
+    , tts_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
 
 SetGlobalPropertiesRequest::~SetGlobalPropertiesRequest() {}
 
@@ -71,14 +74,16 @@ void SetGlobalPropertiesRequest::Run() {
   ApplicationSharedPtr app = application_manager_.application(connection_key());
 
   if (!app) {
-    LOG4CXX_ERROR(logger_, "No application associated with connection key "
-                               << connection_key());
+    LOG4CXX_ERROR(logger_,
+                  "No application associated with connection key "
+                      << connection_key());
     SendResponse(false, mobile_apis::Result::APPLICATION_NOT_REGISTERED);
     return;
   }
 
   if (!ValidateConditionalMandatoryParameters(msg_params)) {
-    SendResponse(false, mobile_apis::Result::INVALID_DATA,
+    SendResponse(false,
+                 mobile_apis::Result::INVALID_DATA,
                  "There are no parameters present in request.");
     return;
   }
@@ -87,11 +92,12 @@ void SetGlobalPropertiesRequest::Run() {
 
   if ((*message_)[strings::msg_params].keyExists(strings::menu_icon)) {
     verification_result = MessageHelper::VerifyImage(
-        (*message_)[strings::msg_params][strings::menu_icon], app,
+        (*message_)[strings::msg_params][strings::menu_icon],
+        app,
         application_manager_);
     if (mobile_apis::Result::INVALID_DATA == verification_result) {
-      LOG4CXX_ERROR(logger_, "MessageHelper::VerifyImage return "
-                                 << verification_result);
+      LOG4CXX_ERROR(
+          logger_, "MessageHelper::VerifyImage return " << verification_result);
       SendResponse(false, verification_result);
       return;
     }
@@ -100,7 +106,8 @@ void SetGlobalPropertiesRequest::Run() {
   if ((*message_)[strings::msg_params].keyExists(strings::vr_help)) {
     if (mobile_apis::Result::INVALID_DATA ==
         MessageHelper::VerifyImageVrHelpItems(
-            (*message_)[strings::msg_params][strings::vr_help], app,
+            (*message_)[strings::msg_params][strings::vr_help],
+            app,
             application_manager_)) {
       LOG4CXX_ERROR(logger_, "MessageHelper::VerifyImage return INVALID_DATA!");
       SendResponse(false, mobile_apis::Result::INVALID_DATA);
@@ -140,8 +147,9 @@ void SetGlobalPropertiesRequest::Run() {
     LOG4CXX_DEBUG(logger_, "VRHelp params presents");
 
     if (!CheckVrHelpItemsOrder(msg_params[strings::vr_help])) {
-      LOG4CXX_ERROR(logger_, "VR Help Items contains nonsequential positions"
-                                 << " (e.g. [1,2,4]) or not started from 1");
+      LOG4CXX_ERROR(logger_,
+                    "VR Help Items contains nonsequential positions"
+                        << " (e.g. [1,2,4]) or not started from 1");
       SendResponse(false, mobile_apis::Result::REJECTED);
       return;
     }
@@ -189,8 +197,9 @@ void SetGlobalPropertiesRequest::Run() {
           MessageHelper::VerifyTtsFiles(help_prompt, app, application_manager_);
 
       if (mobile_apis::Result::FILE_NOT_FOUND == verification_result) {
-        LOG4CXX_ERROR(logger_, "MessageHelper::VerifyTtsFiles return "
-                                   << verification_result);
+        LOG4CXX_ERROR(logger_,
+                      "MessageHelper::VerifyTtsFiles return "
+                          << verification_result);
         invalid_params.push_back("help_prompt");
       } else {
         app->set_help_prompt(help_prompt);
@@ -202,12 +211,13 @@ void SetGlobalPropertiesRequest::Run() {
       smart_objects::SmartObject& timeout_prompt =
           (*message_)[strings::msg_params][strings::timeout_prompt];
       mobile_apis::Result::eType verification_result =
-          MessageHelper::VerifyTtsFiles(timeout_prompt, app,
-                                        application_manager_);
+          MessageHelper::VerifyTtsFiles(
+              timeout_prompt, app, application_manager_);
 
       if (mobile_apis::Result::FILE_NOT_FOUND == verification_result) {
-        LOG4CXX_ERROR(logger_, "MessageHelper::VerifyTtsFiles return "
-                                   << verification_result);
+        LOG4CXX_ERROR(logger_,
+                      "MessageHelper::VerifyTtsFiles return "
+                          << verification_result);
         invalid_params.push_back("timeout_prompt");
       } else {
         app->set_timeout_prompt(timeout_prompt);
@@ -217,7 +227,9 @@ void SetGlobalPropertiesRequest::Run() {
 
     if (!invalid_params.empty()) {
       std::string params_list = std::accumulate(
-          std::begin(invalid_params), std::end(invalid_params), std::string(""),
+          std::begin(invalid_params),
+          std::end(invalid_params),
+          std::string(""),
           [](std::string& first, std::string& second) {
             return first.empty() ? second : first + ", " + second;
           });
@@ -247,9 +259,9 @@ bool SetGlobalPropertiesRequest::CheckVrHelpItemsOrder(
         vr_help.getElement(j).getElement(strings::position).asUInt();
     // Elements shall start from 1 and increment one by one
     if (position != (j + 1)) {
-      LOG4CXX_ERROR(logger_, "VR help items order is wrong"
-                                 << " at " << j
-                                 << ", position value:" << position);
+      LOG4CXX_ERROR(logger_,
+                    "VR help items order is wrong"
+                        << " at " << j << ", position value:" << position);
       return false;
     }
   }
@@ -305,7 +317,8 @@ void SetGlobalPropertiesRequest::on_event(const event_engine::Event& event) {
   std::string response_info;
   const bool result = PrepareResponseParameters(result_code, response_info);
 
-  SendResponse(result, result_code,
+  SendResponse(result,
+               result_code,
                response_info.empty() ? NULL : response_info.c_str(),
                &(message[strings::msg_params]));
 }
@@ -332,15 +345,18 @@ bool SetGlobalPropertiesRequest::PrepareResponseParameters(
       (tts_properties_info.is_unsupported_resource)) {
     result_code = mobile_apis::Result::WARNINGS;
     tts_response_info_ = "Unsupported phoneme type sent in a prompt";
-    info =
-        app_mngr::commands::MergeInfos(tts_properties_info, tts_response_info_,
-                                       ui_properties_info, ui_response_info_);
+    info = app_mngr::commands::MergeInfos(tts_properties_info,
+                                          tts_response_info_,
+                                          ui_properties_info,
+                                          ui_response_info_);
     return result;
   }
   result_code =
       PrepareResultCodeForResponse(ui_properties_info, tts_properties_info);
-  info = app_mngr::commands::MergeInfos(tts_properties_info, tts_response_info_,
-                                        ui_properties_info, ui_response_info_);
+  info = app_mngr::commands::MergeInfos(tts_properties_info,
+                                        tts_response_info_,
+                                        ui_properties_info,
+                                        ui_response_info_);
   return result;
 }
 
@@ -393,8 +409,8 @@ void SetGlobalPropertiesRequest::SendTTSRequest(
   LOG4CXX_AUTO_TRACE(logger_);
   is_tts_send_ = true;
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_TTS);
-  SendHMIRequest(hmi_apis::FunctionID::TTS_SetGlobalProperties, &params,
-                 use_events);
+  SendHMIRequest(
+      hmi_apis::FunctionID::TTS_SetGlobalProperties, &params, use_events);
 }
 
 void SetGlobalPropertiesRequest::SendUIRequest(
@@ -402,8 +418,8 @@ void SetGlobalPropertiesRequest::SendUIRequest(
   LOG4CXX_AUTO_TRACE(logger_);
   is_ui_send_ = true;
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_UI);
-  SendHMIRequest(hmi_apis::FunctionID::UI_SetGlobalProperties, &params,
-                 use_events);
+  SendHMIRequest(
+      hmi_apis::FunctionID::UI_SetGlobalProperties, &params, use_events);
 }
 
 bool SetGlobalPropertiesRequest::IsPendingResponseExist() {

@@ -84,7 +84,9 @@ class AsyncRunnerTest : public ::testing::Test {
     CreateThreadsArray();
   }
 
-  ~AsyncRunnerTest() { DeleteThreadsArray(); }
+  ~AsyncRunnerTest() {
+    DeleteThreadsArray();
+  }
 
  protected:
   ThreadDelegate** delegates_;
@@ -94,7 +96,9 @@ class AsyncRunnerTest : public ::testing::Test {
     delegates_ = new ThreadDelegate* [kDelegatesAmount];
   }
 
-  void DeleteThreadsArray() { delete[] delegates_; }
+  void DeleteThreadsArray() {
+    delete[] delegates_;
+  }
 
   void CreateAsyncRunner() {
     async_runner_ = std::make_shared<AsyncRunner>("test");

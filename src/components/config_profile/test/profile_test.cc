@@ -573,8 +573,8 @@ TEST_F(ProfileTest, CheckReadStringValue) {
   EXPECT_EQ("smartDeviceLink_test.ini", profile_.config_file_name());
 
   std::string app_storage_folder_;
-  profile_.ReadStringValue(&app_storage_folder_, "", "MAIN",
-                           "AppStorageFolder");
+  profile_.ReadStringValue(
+      &app_storage_folder_, "", "MAIN", "AppStorageFolder");
   // Get default value
   EXPECT_EQ("storage", app_storage_folder_);
 
@@ -655,7 +655,8 @@ TEST_F(ProfileTest, CheckVectorContainer) {
   std::vector<int>::iterator iter = diagmodes_list.begin();
 
   for (std::vector<uint32_t>::const_iterator it = diag_modes.begin();
-       it != diag_modes.end(); it++) {
+       it != diag_modes.end();
+       it++) {
     if ((uint32_t)(*iter) != (*it)) {
       isEqual = false;
       break;
@@ -738,8 +739,8 @@ TEST_F(ProfileTest, CheckIntContainerInSecurityData) {
   EXPECT_EQ(res_protect, force_protected_list.end());
 
   // Both lists include 0
-  res_unprotect = std::find(force_unprotected_list.begin(),
-                            force_unprotected_list.end(), 0);
+  res_unprotect = std::find(
+      force_unprotected_list.begin(), force_unprotected_list.end(), 0);
   res_protect =
       std::find(force_protected_list.begin(), force_protected_list.end(), 0);
   EXPECT_EQ(res_unprotect, force_unprotected_list.begin());

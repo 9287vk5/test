@@ -185,7 +185,8 @@ class ApplicationManagerImpl
 
   void set_current_audio_source(const uint32_t source) OVERRIDE;
 
-  void OnHMILevelChanged(uint32_t app_id, mobile_apis::HMILevel::eType from,
+  void OnHMILevelChanged(uint32_t app_id,
+                         mobile_apis::HMILevel::eType from,
                          mobile_apis::HMILevel::eType to) OVERRIDE;
 
   void SendHMIStatusNotification(
@@ -420,7 +421,8 @@ class ApplicationManagerImpl
    * @return new regular HMI state
    */
   HmiStatePtr CreateRegularState(
-      std::shared_ptr<Application> app, mobile_apis::HMILevel::eType hmi_level,
+      std::shared_ptr<Application> app,
+      mobile_apis::HMILevel::eType hmi_level,
       mobile_apis::AudioStreamingState::eType audio_state,
       mobile_apis::VideoStreamingState::eType video_state,
       mobile_apis::SystemContext::eType system_context) const OVERRIDE;
@@ -436,7 +438,8 @@ class ApplicationManagerImpl
    * @return SUCCESS, if allowed, otherwise result code of check
    */
   mobile_apis::Result::eType CheckPolicyPermissions(
-      const ApplicationSharedPtr app, const std::string& function_id,
+      const ApplicationSharedPtr app,
+      const std::string& function_id,
       const RPCParams& rpc_params,
       CommandParametersPermissions* params_permissions = NULL) OVERRIDE;
 
@@ -516,8 +519,10 @@ class ApplicationManagerImpl
    * @param bits_per_sample The quality the audio is recorded.
    * @param audio_type      Type of audio data
    */
-  void StartAudioPassThruThread(int32_t session_key, int32_t correlation_id,
-                                int32_t max_duration, int32_t sampling_rate,
+  void StartAudioPassThruThread(int32_t session_key,
+                                int32_t correlation_id,
+                                int32_t max_duration,
+                                int32_t sampling_rate,
                                 int32_t bits_per_sample,
                                 int32_t audio_type) OVERRIDE;
 
@@ -556,7 +561,8 @@ class ApplicationManagerImpl
    * @param corr_id correlation id of request
    * @param function_id function id of request
    */
-  void TerminateRequest(const uint32_t connection_key, const uint32_t corr_id,
+  void TerminateRequest(const uint32_t connection_key,
+                        const uint32_t corr_id,
                         const int32_t function_id) OVERRIDE;
 
   // Overriden ConnectionHandlerObserver method
@@ -587,10 +593,12 @@ class ApplicationManagerImpl
 
   void OnServiceStartedCallback(
       const connection_handler::DeviceHandle& device_handle,
-      const int32_t& session_key, const protocol_handler::ServiceType& type,
+      const int32_t& session_key,
+      const protocol_handler::ServiceType& type,
       const BsonObject* params) OVERRIDE;
   void OnServiceEndedCallback(
-      const int32_t& session_key, const protocol_handler::ServiceType& type,
+      const int32_t& session_key,
+      const protocol_handler::ServiceType& type,
       const connection_handler::CloseSessionReason& close_reason) OVERRIDE;
   void OnSecondaryTransportStartedCallback(
       const connection_handler::DeviceHandle device_handle,
@@ -724,7 +732,9 @@ class ApplicationManagerImpl
    *                        only when result is false.
    */
   void OnStreamingConfigured(
-      uint32_t app_id, protocol_handler::ServiceType service_type, bool result,
+      uint32_t app_id,
+      protocol_handler::ServiceType service_type,
+      bool result,
       std::vector<std::string>& rejected_params) OVERRIDE;
 
   /**
@@ -760,7 +770,9 @@ class ApplicationManagerImpl
     return *resume_ctrl_.get();
   }
 
-  HmiInterfaces& hmi_interfaces() OVERRIDE { return hmi_interfaces_; }
+  HmiInterfaces& hmi_interfaces() OVERRIDE {
+    return hmi_interfaces_;
+  }
 
   /**
    * Generate grammar ID
@@ -986,7 +998,9 @@ class ApplicationManagerImpl
    */
   bool IsAppInReconnectMode(const std::string& policy_app_id) const FINAL;
 
-  bool IsStopping() const OVERRIDE { return is_stopping_; }
+  bool IsStopping() const OVERRIDE {
+    return is_stopping_;
+  }
 
   /**
      * @brief ProcessReconnection handles reconnection flow for application on
@@ -1083,9 +1097,11 @@ class ApplicationManagerImpl
       smart_objects::SmartObject hmi_application(smart_objects::SmartType_Map);
       const protocol_handler::SessionObserver& session_observer =
           connection_handler().get_session_observer();
-      if (MessageHelper::CreateHMIApplicationStruct(
-              *it, session_observer, GetPolicyHandler(), &hmi_application,
-              app_mngr)) {
+      if (MessageHelper::CreateHMIApplicationStruct(*it,
+                                                    session_observer,
+                                                    GetPolicyHandler(),
+                                                    &hmi_application,
+                                                    app_mngr)) {
         applications[app_count++] = hmi_application;
       } else {
         LOG4CXX_DEBUG(logger_, "Can't CreateHMIApplicationStruct ");
@@ -1283,7 +1299,8 @@ class ApplicationManagerImpl
    * @param mac_address New device mac address
    */
   void SwitchApplication(ApplicationSharedPtr app,
-                         const uint32_t connection_key, const size_t device_id,
+                         const uint32_t connection_key,
+                         const size_t device_id,
                          const std::string& mac_address);
 
   /**
@@ -1374,9 +1391,9 @@ class ApplicationManagerImpl
     AppState(const mobile_apis::HMILevel::eType& level,
              const mobile_apis::AudioStreamingState::eType& streaming_state,
              const mobile_apis::SystemContext::eType& context)
-        : hmi_level(level),
-          audio_streaming_state(streaming_state),
-          system_context(context) {}
+        : hmi_level(level)
+        , audio_streaming_state(streaming_state)
+        , system_context(context) {}
 
     mobile_apis::HMILevel::eType hmi_level;
     mobile_apis::AudioStreamingState::eType audio_streaming_state;

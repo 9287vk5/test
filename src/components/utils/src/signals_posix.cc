@@ -78,9 +78,13 @@ void Signals::SendSignal(const int signo, const pid_t pid) {
   }
 }
 
-pid_t Signals::Fork() { return fork(); }
+pid_t Signals::Fork() {
+  return fork();
+}
 
-void Signals::ExitProcess(const int status) { exit(status); }
+void Signals::ExitProcess(const int status) {
+  exit(status);
+}
 
 void Signals::WaitPid(pid_t cpid, int* status, int options) {
   waitpid(cpid, status, options);

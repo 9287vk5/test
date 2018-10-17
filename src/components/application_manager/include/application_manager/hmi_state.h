@@ -90,7 +90,8 @@ class HmiState {
    * @param app_mngr Application manager
    * @param state_id HMI state to assign
    */
-  HmiState(std::shared_ptr<Application> app, const ApplicationManager& app_mngr,
+  HmiState(std::shared_ptr<Application> app,
+           const ApplicationManager& app_mngr,
            StateID state_id);
 
   virtual ~HmiState() {}
@@ -105,7 +106,9 @@ class HmiState {
    * @brief parent get parent state
    * @return parent state
    */
-  const HmiStatePtr parent() const { return parent_; }
+  const HmiStatePtr parent() const {
+    return parent_;
+  }
 
   /**
    * @brief hmi_level
@@ -191,13 +194,17 @@ class HmiState {
    * @brief state_id state type
    * @return return state type
    */
-  StateID state_id() const { return state_id_; }
+  StateID state_id() const {
+    return state_id_;
+  }
 
   /**
    * @brief set_state_id sets state id
    * @param state_id state id to setup
    */
-  void set_state_id(StateID state_id) { state_id_ = state_id; }
+  void set_state_id(StateID state_id) {
+    state_id_ = state_id;
+  }
 
  protected:
   std::shared_ptr<Application> app_;

@@ -42,22 +42,28 @@ namespace access_remote_test {
 class MockAccessRemote : public policy::AccessRemote {
  public:
   MOCK_CONST_METHOD3(
-      FindGroup, policy::PTString(const policy::ApplicationOnDevice& who,
-                                  const policy::PTString& rpc,
-                                  const policy::RemoteControlParams& params));
-  MOCK_METHOD2(SetDefaultHmiTypes, void(const policy::ApplicationOnDevice& who,
-                                        const std::vector<int>& hmi_types));
-  MOCK_METHOD1(GetGroups, const policy_table::Strings&(
-                              const policy::ApplicationOnDevice& who));
+      FindGroup,
+      policy::PTString(const policy::ApplicationOnDevice& who,
+                       const policy::PTString& rpc,
+                       const policy::RemoteControlParams& params));
+  MOCK_METHOD2(SetDefaultHmiTypes,
+               void(const policy::ApplicationOnDevice& who,
+                    const std::vector<int>& hmi_types));
+  MOCK_METHOD1(
+      GetGroups,
+      const policy_table::Strings&(const policy::ApplicationOnDevice& who));
   MOCK_METHOD3(GetPermissionsForApp,
-               bool(const std::string& device_id, const std::string& app_id,
+               bool(const std::string& device_id,
+                    const std::string& app_id,
                     policy::FunctionalIdType& group_types));
-  MOCK_CONST_METHOD2(CheckModuleType, bool(const policy::PTString& app_id,
-                                           policy_table::ModuleType module));
+  MOCK_CONST_METHOD2(CheckModuleType,
+                     bool(const policy::PTString& app_id,
+                          policy_table::ModuleType module));
   MOCK_METHOD1(IsAppRemoteControl,
                bool(const policy::ApplicationOnDevice& who));
-  MOCK_METHOD2(GetModuleTypes, bool(const std::string& application_id,
-                                    std::vector<std::string>* modules));
+  MOCK_METHOD2(GetModuleTypes,
+               bool(const std::string& application_id,
+                    std::vector<std::string>* modules));
 };
 
 }  // namespace access_remote_test

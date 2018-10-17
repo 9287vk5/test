@@ -41,11 +41,13 @@
 namespace application_manager {
 class StateController {
  public:
-  virtual void SetRegularState(ApplicationSharedPtr app, HmiStatePtr state,
+  virtual void SetRegularState(ApplicationSharedPtr app,
+                               HmiStatePtr state,
                                const bool SendActivateApp) = 0;
 
   virtual void SetRegularState(
-      ApplicationSharedPtr app, const mobile_apis::HMILevel::eType hmi_level,
+      ApplicationSharedPtr app,
+      const mobile_apis::HMILevel::eType hmi_level,
       const mobile_apis::AudioStreamingState::eType audio_state,
       const mobile_apis::VideoStreamingState::eType video_state,
       const bool SendActivateApp) = 0;
@@ -54,7 +56,8 @@ class StateController {
                                const mobile_apis::HMILevel::eType hmi_level,
                                const bool SendActivateApp) = 0;
   virtual void SetRegularState(
-      ApplicationSharedPtr app, const mobile_apis::HMILevel::eType hmi_level,
+      ApplicationSharedPtr app,
+      const mobile_apis::HMILevel::eType hmi_level,
       const mobile_apis::AudioStreamingState::eType audio_state,
       const mobile_apis::VideoStreamingState::eType video_state,
       const mobile_apis::SystemContext::eType system_context,
@@ -93,7 +96,8 @@ class StateController {
    * @param app projection or navigation application stopping streaming
    */
   virtual void OnVideoStreamingStopped(ApplicationConstSharedPtr app) = 0;
-  virtual void OnStateChanged(ApplicationSharedPtr app, HmiStatePtr old_state,
+  virtual void OnStateChanged(ApplicationSharedPtr app,
+                              HmiStatePtr old_state,
                               HmiStatePtr new_state) = 0;
 
   virtual bool IsStateActive(HmiState::StateID state_id) const = 0;

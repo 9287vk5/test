@@ -39,11 +39,11 @@ namespace policy {
 CREATE_LOGGERPTR_GLOBAL(logger_, "Policy")
 
 UpdateStatusManager::UpdateStatusManager()
-    : listener_(NULL),
-      current_status_(std::make_shared<UpToDateStatus>()),
-      last_processed_event_(kNoEvent),
-      apps_search_in_progress_(false),
-      app_registered_from_non_consented_device_(true) {
+    : listener_(NULL)
+    , current_status_(std::make_shared<UpToDateStatus>())
+    , last_processed_event_(kNoEvent)
+    , apps_search_in_progress_(false)
+    , app_registered_from_non_consented_device_(true) {
   update_status_thread_delegate_ = new UpdateThreadDelegate(this);
   thread_ = threads::CreateThread("UpdateStatusThread",
                                   update_status_thread_delegate_);
@@ -151,7 +151,9 @@ bool UpdateStatusManager::IsUpdatePending() const {
   return current_status_->IsUpdatePending();
 }
 
-void UpdateStatusManager::ScheduleUpdate() { ProcessEvent(kScheduleUpdate); }
+void UpdateStatusManager::ScheduleUpdate() {
+  ProcessEvent(kScheduleUpdate);
+}
 
 void UpdateStatusManager::ScheduleManualUpdate() {
   ProcessEvent(kScheduleManualUpdate);
@@ -205,9 +207,9 @@ void UpdateStatusManager::DoTransition() {
 
 UpdateStatusManager::UpdateThreadDelegate::UpdateThreadDelegate(
     UpdateStatusManager* update_status_manager)
-    : timeout_(0),
-      stop_flag_(false),
-      update_status_manager_(update_status_manager) {
+    : timeout_(0)
+    , stop_flag_(false)
+    , update_status_manager_(update_status_manager) {
   LOG4CXX_AUTO_TRACE(logger_);
   LOG4CXX_DEBUG(logger_, "Create UpdateThreadDelegate");
 }

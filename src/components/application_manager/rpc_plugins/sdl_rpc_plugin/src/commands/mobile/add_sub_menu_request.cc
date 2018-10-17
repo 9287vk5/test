@@ -45,10 +45,14 @@ namespace commands {
 AddSubMenuRequest::AddSubMenuRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 AddSubMenuRequest::~AddSubMenuRequest() {}
 
@@ -73,8 +77,8 @@ void AddSubMenuRequest::Run() {
         received_msg_params[strings::menu_icon], app, application_manager_);
 
     if (mobile_apis::Result::INVALID_DATA == verification_result) {
-      LOG4CXX_ERROR(logger_, "MessageHelper::VerifyImage return "
-                                 << verification_result);
+      LOG4CXX_ERROR(
+          logger_, "MessageHelper::VerifyImage return " << verification_result);
       SendResponse(false, verification_result);
       return;
     }
@@ -147,7 +151,8 @@ void AddSubMenuRequest::on_event(const event_engine::Event& event) {
             (*message_)[strings::msg_params][strings::menu_id].asInt(),
             (*message_)[strings::msg_params]);
       }
-      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result,
+                   MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

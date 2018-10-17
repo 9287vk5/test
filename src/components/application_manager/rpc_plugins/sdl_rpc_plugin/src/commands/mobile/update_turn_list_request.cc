@@ -54,8 +54,11 @@ UpdateTurnListRequest::UpdateTurnListRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 UpdateTurnListRequest::~UpdateTurnListRequest() {}
 
@@ -81,8 +84,10 @@ void UpdateTurnListRequest::Run() {
   // ProcessSoftButtons checks strings on the contents incorrect character
 
   mobile_apis::Result::eType processing_result =
-      MessageHelper::ProcessSoftButtons((*message_)[strings::msg_params], app,
-                                        policy_handler_, application_manager_);
+      MessageHelper::ProcessSoftButtons((*message_)[strings::msg_params],
+                                        app,
+                                        policy_handler_,
+                                        application_manager_);
 
   if (mobile_apis::Result::SUCCESS != processing_result) {
     LOG4CXX_ERROR(logger_, "INVALID_DATA!");
@@ -97,7 +102,8 @@ void UpdateTurnListRequest::Run() {
       if ((turn_list_array[i].keyExists(strings::turn_icon)) &&
           (mobile_apis::Result::INVALID_DATA ==
            MessageHelper::VerifyImage(turn_list_array[i][strings::turn_icon],
-                                      app, application_manager_))) {
+                                      app,
+                                      application_manager_))) {
         LOG4CXX_ERROR(logger_,
                       "MessageHelper::VerifyImage return INVALID_DATA");
         SendResponse(false, mobile_apis::Result::INVALID_DATA);
@@ -142,8 +148,8 @@ void UpdateTurnListRequest::Run() {
   if ((*message_)[strings::msg_params].keyExists(strings::turn_list) ||
       (*message_)[strings::msg_params].keyExists(strings::soft_buttons)) {
     StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_Navigation);
-    SendHMIRequest(hmi_apis::FunctionID::Navigation_UpdateTurnList, &msg_params,
-                   true);
+    SendHMIRequest(
+        hmi_apis::FunctionID::Navigation_UpdateTurnList, &msg_params, true);
   } else {
     // conditional mandatory
     LOG4CXX_ERROR(logger_, "INVALID_DATA!");
@@ -166,7 +172,8 @@ void UpdateTurnListRequest::on_event(const event_engine::Event& event) {
       GetInfo(message, response_info);
       const bool result = PrepareResultForMobileResponse(
           result_code, HmiInterfaces::HMI_INTERFACE_Navigation);
-      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result,
+                   MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

@@ -70,9 +70,10 @@ int debug_callback(int preverify_ok, X509_STORE_CTX* ctx) {
       // and expiration cert dates will be checked by SDL
       return 1;
     }
-    LOG4CXX_WARN(logger_, "Certificate verification failed with error "
-                              << error << " \""
-                              << X509_verify_cert_error_string(error) << '"');
+    LOG4CXX_WARN(logger_,
+                 "Certificate verification failed with error "
+                     << error << " \"" << X509_verify_cert_error_string(error)
+                     << '"');
   }
   return preverify_ok;
 }
@@ -155,8 +156,9 @@ bool CryptoManagerImpl::Init() {
   LOG4CXX_DEBUG(logger_,
                 "Peer verification "
                     << (get_settings().verify_peer() ? "enabled" : "disabled"));
-  LOG4CXX_DEBUG(logger_, "CA certificate file is \""
-                             << get_settings().ca_cert_path() << '"');
+  LOG4CXX_DEBUG(logger_,
+                "CA certificate file is \"" << get_settings().ca_cert_path()
+                                            << '"');
 
 #if OPENSSL_VERSION_NUMBER < CONST_SSL_METHOD_MINIMAL_VERSION
   SSL_METHOD* method;
@@ -227,8 +229,9 @@ bool CryptoManagerImpl::Init() {
     LOG4CXX_DEBUG(logger_, "Cipher list: " << get_settings().ciphers_list());
     if (!SSL_CTX_set_cipher_list(context_,
                                  get_settings().ciphers_list().c_str())) {
-      LOG4CXX_ERROR(logger_, "Could not set cipher list: "
-                                 << get_settings().ciphers_list());
+      LOG4CXX_ERROR(
+          logger_,
+          "Could not set cipher list: " << get_settings().ciphers_list());
       return false;
     }
   }
@@ -244,10 +247,11 @@ bool CryptoManagerImpl::Init() {
   if (!result) {
     const unsigned long error = ERR_get_error();
     UNUSED(error);
-    LOG4CXX_WARN(logger_, "Wrong certificate file '"
-                              << get_settings().ca_cert_path() << "', err 0x"
-                              << std::hex << error << " \""
-                              << ERR_reason_error_string(error) << '"');
+    LOG4CXX_WARN(logger_,
+                 "Wrong certificate file '"
+                     << get_settings().ca_cert_path() << "', err 0x" << std::hex
+                     << error << " \"" << ERR_reason_error_string(error)
+                     << '"');
   }
 
   LOG4CXX_DEBUG(logger_, "Setting up module certificate and private key");
@@ -317,7 +321,8 @@ SSLContext* CryptoManagerImpl::CreateSSLContext() {
   } else {
     SSL_set_connect_state(conn);
   }
-  return new SSLContextImpl(conn, get_settings().security_manager_mode(),
+  return new SSLContextImpl(conn,
+                            get_settings().security_manager_mode(),
                             get_settings().maximum_payload_size());
 }
 
@@ -382,8 +387,9 @@ bool CryptoManagerImpl::SaveCertificateData(
   UNUSED(cert_guard);
 
   if (1 != BIO_reset(bio_cert)) {
-    LOG4CXX_WARN(logger_, "Unabled to reset BIO in order to read private key, "
-                              << LastError());
+    LOG4CXX_WARN(logger_,
+                 "Unabled to reset BIO in order to read private key, "
+                     << LastError());
   }
 
   EVP_PKEY* pkey = NULL;
@@ -430,8 +436,8 @@ X509* CryptoManagerImpl::LoadModuleCertificateFromFile() {
   const std::string cert_path = get_settings().module_cert_path();
   BIO* bio_cert = BIO_new_file(cert_path.c_str(), "r");
   if (!bio_cert) {
-    LOG4CXX_WARN(logger_, "Failed to open " << cert_path
-                                            << " file: " << LastError());
+    LOG4CXX_WARN(logger_,
+                 "Failed to open " << cert_path << " file: " << LastError());
     return NULL;
   }
 
@@ -456,8 +462,8 @@ EVP_PKEY* CryptoManagerImpl::LoadModulePrivateKeyFromFile() {
   const std::string key_path = get_settings().module_key_path();
   BIO* bio_key = BIO_new_file(key_path.c_str(), "r");
   if (!bio_key) {
-    LOG4CXX_WARN(logger_, "Failed to open " << key_path
-                                            << " file: " << LastError());
+    LOG4CXX_WARN(logger_,
+                 "Failed to open " << key_path << " file: " << LastError());
     return NULL;
   }
 
@@ -486,8 +492,8 @@ bool CryptoManagerImpl::SaveModuleCertificateToFile(X509* certificate) const {
   const std::string cert_path = get_settings().module_cert_path();
   BIO* bio_cert = BIO_new_file(cert_path.c_str(), "w");
   if (!bio_cert) {
-    LOG4CXX_ERROR(logger_, "Failed to open " << cert_path
-                                             << " file: " << LastError());
+    LOG4CXX_ERROR(logger_,
+                  "Failed to open " << cert_path << " file: " << LastError());
     return false;
   }
 
@@ -514,8 +520,8 @@ bool CryptoManagerImpl::SaveModuleKeyToFile(EVP_PKEY* key) const {
   const std::string key_path = get_settings().module_key_path();
   BIO* bio_key = BIO_new_file(key_path.c_str(), "w");
   if (!bio_key) {
-    LOG4CXX_ERROR(logger_, "Failed to open " << key_path
-                                             << " file: " << LastError());
+    LOG4CXX_ERROR(logger_,
+                  "Failed to open " << key_path << " file: " << LastError());
     return false;
   }
 

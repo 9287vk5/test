@@ -88,8 +88,8 @@ void ApplicationState::RemoveState(HmiState::StateID state) {
   switch (state) {
     case HmiState::StateID::STATE_ID_CURRENT:
     case HmiState::StateID::STATE_ID_REGULAR:
-      LOG4CXX_ERROR(logger_, "State of type '" << state
-                                               << "'can't be removed.");
+      LOG4CXX_ERROR(logger_,
+                    "State of type '" << state << "'can't be removed.");
       break;
     case HmiState::StateID::STATE_ID_POSTPONED:
       RemovePostponedState();
@@ -118,7 +118,8 @@ void ApplicationState::AddHMIState(HmiStatePtr state) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN_VOID(state);
   sync_primitives::AutoLock auto_lock(hmi_states_lock_);
-  HmiStates::iterator it = std::find_if(hmi_states_.begin(), hmi_states_.end(),
+  HmiStates::iterator it = std::find_if(hmi_states_.begin(),
+                                        hmi_states_.end(),
                                         StateIDComparator(state->state_id()));
   if (hmi_states_.end() != it) {
     LOG4CXX_WARN(
@@ -135,8 +136,8 @@ void ApplicationState::AddHMIState(HmiStatePtr state) {
 void ApplicationState::RemoveHMIState(HmiState::StateID state_id) {
   LOG4CXX_AUTO_TRACE(logger_);
   sync_primitives::AutoLock auto_lock(hmi_states_lock_);
-  HmiStates::iterator it = std::find_if(hmi_states_.begin(), hmi_states_.end(),
-                                        StateIDComparator(state_id));
+  HmiStates::iterator it = std::find_if(
+      hmi_states_.begin(), hmi_states_.end(), StateIDComparator(state_id));
   if (it == hmi_states_.end()) {
     LOG4CXX_ERROR(logger_, "Unsuccesful remove HmiState: " << state_id);
     return;

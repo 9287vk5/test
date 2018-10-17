@@ -210,9 +210,10 @@ TEST(test_int_correct_default_value, test_NumberSchemaItemTest) {
 
   SmartObject obj;
 
-  ISchemaItemPtr item = TNumberSchemaItem<int>::create(
-      TSchemaItemParameter<int>(-12000), TSchemaItemParameter<int>(100),
-      TSchemaItemParameter<int>(-38));
+  ISchemaItemPtr item =
+      TNumberSchemaItem<int>::create(TSchemaItemParameter<int>(-12000),
+                                     TSchemaItemParameter<int>(100),
+                                     TSchemaItemParameter<int>(-38));
 
   // Object int correct
   obj = -12000;
@@ -270,7 +271,8 @@ TEST(test_int_default_value_out_of_range, test_NumberSchemaItemTest) {
   SmartObject obj;
 
   ISchemaItemPtr item = TNumberSchemaItem<int>::create(
-      TSchemaItemParameter<int>(90), TSchemaItemParameter<int>(100),
+      TSchemaItemParameter<int>(90),
+      TSchemaItemParameter<int>(100),
       TSchemaItemParameter<int>(50));  // Default value out of range
 
   // Object int correct
@@ -325,9 +327,10 @@ TEST(test_int_map_validate, test_NumberSchemaItemTest) {
 
   SmartObject obj;
 
-  ISchemaItemPtr item = TNumberSchemaItem<int>::create(
-      TSchemaItemParameter<int>(-120), TSchemaItemParameter<int>(100),
-      TSchemaItemParameter<int>(-38));
+  ISchemaItemPtr item =
+      TNumberSchemaItem<int>::create(TSchemaItemParameter<int>(-120),
+                                     TSchemaItemParameter<int>(100),
+                                     TSchemaItemParameter<int>(-38));
 
   obj["min"] = -120;
   obj["out_of_min"] = -121;
@@ -370,9 +373,10 @@ TEST(test_int_array_validate, test_NumberSchemaItemTest) {
 
   SmartObject obj;
 
-  ISchemaItemPtr item = TNumberSchemaItem<int>::create(
-      TSchemaItemParameter<int>(-120), TSchemaItemParameter<int>(100),
-      TSchemaItemParameter<int>(-38));
+  ISchemaItemPtr item =
+      TNumberSchemaItem<int>::create(TSchemaItemParameter<int>(-120),
+                                     TSchemaItemParameter<int>(100),
+                                     TSchemaItemParameter<int>(-38));
 
   obj[0] = -121;
   obj[1] = -120;
@@ -588,9 +592,10 @@ TEST(test_double_correct_default_value, test_NumberSchemaItemTest) {
 
   SmartObject obj;
 
-  ISchemaItemPtr item = TNumberSchemaItem<double>::create(
-      TSchemaItemParameter<double>(-12000.0),
-      TSchemaItemParameter<double>(100.0), TSchemaItemParameter<double>(-38.0));
+  ISchemaItemPtr item =
+      TNumberSchemaItem<double>::create(TSchemaItemParameter<double>(-12000.0),
+                                        TSchemaItemParameter<double>(100.0),
+                                        TSchemaItemParameter<double>(-38.0));
 
   // Object double correct
   obj = -12000.0;
@@ -648,7 +653,8 @@ TEST(test_double_default_value_out_of_range, test_NumberSchemaItemTest) {
   SmartObject obj;
 
   ISchemaItemPtr item = TNumberSchemaItem<double>::create(
-      TSchemaItemParameter<double>(90.0), TSchemaItemParameter<double>(100.0),
+      TSchemaItemParameter<double>(90.0),
+      TSchemaItemParameter<double>(100.0),
       TSchemaItemParameter<double>(50.0));  // Default value out of range
 
   // Object double correct
@@ -703,9 +709,10 @@ TEST(test_double_map_validate, test_NumberSchemaItemTest) {
 
   SmartObject obj;
 
-  ISchemaItemPtr item = TNumberSchemaItem<double>::create(
-      TSchemaItemParameter<double>(-120.0), TSchemaItemParameter<double>(100.0),
-      TSchemaItemParameter<double>(-38.0));
+  ISchemaItemPtr item =
+      TNumberSchemaItem<double>::create(TSchemaItemParameter<double>(-120.0),
+                                        TSchemaItemParameter<double>(100.0),
+                                        TSchemaItemParameter<double>(-38.0));
 
   obj["min"] = -120.0;
   obj["out_of_min"] = -120.001;
@@ -747,9 +754,10 @@ TEST(test_double_array_validate, test_NumberSchemaItemTest) {
 
   SmartObject obj;
 
-  ISchemaItemPtr item = TNumberSchemaItem<double>::create(
-      TSchemaItemParameter<double>(-120.0), TSchemaItemParameter<double>(100.0),
-      TSchemaItemParameter<double>(-38.0));
+  ISchemaItemPtr item =
+      TNumberSchemaItem<double>::create(TSchemaItemParameter<double>(-120.0),
+                                        TSchemaItemParameter<double>(100.0),
+                                        TSchemaItemParameter<double>(-38.0));
 
   obj[0] = -120.001;
   obj[1] = -120.0;

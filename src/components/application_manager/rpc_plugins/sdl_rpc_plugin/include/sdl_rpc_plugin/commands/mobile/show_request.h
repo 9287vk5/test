@@ -86,7 +86,8 @@ class ShowRequest : public app_mngr::commands::CommandRequestImpl {
    * @brief Handle the conversion of metadata information from the incoming
    * mobile json message format to the outgoing hmi json message format
    */
-  void HandleMetadata(const char* field_id, int32_t field_index,
+  void HandleMetadata(const char* field_id,
+                      int32_t field_index,
                       smart_objects::SmartObject& msg_params);
 
   mobile_apis::Result::eType core_result_code_;

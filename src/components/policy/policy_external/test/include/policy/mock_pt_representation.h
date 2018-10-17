@@ -49,10 +49,11 @@ namespace policy_test {
 
 class MockPTRepresentation : virtual public ::policy::PTRepresentation {
  public:
-  MOCK_METHOD4(CheckPermissions, void(const ::policy::PTString& app_id,
-                                      const ::policy::PTString& hmi_level,
-                                      const ::policy::PTString& rpc,
-                                      ::policy::CheckPermissionResult& result));
+  MOCK_METHOD4(CheckPermissions,
+               void(const ::policy::PTString& app_id,
+                    const ::policy::PTString& hmi_level,
+                    const ::policy::PTString& rpc,
+                    ::policy::CheckPermissionResult& result));
   MOCK_METHOD0(IsPTPreloaded, bool());
   MOCK_METHOD0(IgnitionCyclesBeforeExchange, int());
   MOCK_METHOD1(KilometersBeforeExchange, int(int current));
@@ -67,9 +68,10 @@ class MockPTRepresentation : virtual public ::policy::PTRepresentation {
                bool(const std::string& app_id, std::string* priority));
   MOCK_CONST_METHOD0(GetVehicleInfo, const ::policy::VehicleInfo());
   MOCK_METHOD1(SetVINValue, bool(const std::string& value));
-  MOCK_METHOD2(GetUserFriendlyMsg, std::vector< ::policy::UserFriendlyMessage>(
-                                       const std::vector<std::string>& msg_code,
-                                       const std::string& language));
+  MOCK_METHOD2(GetUserFriendlyMsg,
+               std::vector< ::policy::UserFriendlyMessage>(
+                   const std::vector<std::string>& msg_code,
+                   const std::string& language));
   MOCK_METHOD2(GetUpdateUrls, void(int service_type, ::policy::EndpointUrls&));
   MOCK_METHOD1(GetNotificationsNumber, int(const std::string& priority));
   MOCK_METHOD0(Init, ::policy::InitResult());
@@ -81,11 +83,14 @@ class MockPTRepresentation : virtual public ::policy::PTRepresentation {
   MOCK_CONST_METHOD0(UpdateRequired, bool());
   MOCK_METHOD1(SaveUpdateRequired, void(bool value));
   MOCK_METHOD3(GetInitialAppData,
-               bool(const std::string& app_id, ::policy::StringArray* nicknames,
+               bool(const std::string& app_id,
+                    ::policy::StringArray* nicknames,
                     ::policy::StringArray* app_types));
 
   MOCK_METHOD4(SaveApplicationCustomData,
-               bool(const std::string& app_id, bool is_revoked, bool is_default,
+               bool(const std::string& app_id,
+                    bool is_revoked,
+                    bool is_default,
                     bool is_predata));
 
   MOCK_CONST_METHOD1(IsApplicationRevoked, bool(const std::string& app_id));

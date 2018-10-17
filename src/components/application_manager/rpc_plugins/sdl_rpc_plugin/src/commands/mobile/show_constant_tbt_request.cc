@@ -52,8 +52,11 @@ ShowConstantTBTRequest::ShowConstantTBTRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 ShowConstantTBTRequest::~ShowConstantTBTRequest() {}
 
@@ -89,8 +92,8 @@ void ShowConstantTBTRequest::Run() {
   // ProcessSoftButtons checks strings on the contents incorrect character
 
   mobile_apis::Result::eType processing_result =
-      MessageHelper::ProcessSoftButtons(msg_params, app, policy_handler_,
-                                        application_manager_);
+      MessageHelper::ProcessSoftButtons(
+          msg_params, app, policy_handler_, application_manager_);
 
   if (mobile_apis::Result::SUCCESS != processing_result) {
     LOG4CXX_ERROR(logger_, "INVALID_DATA!");
@@ -171,14 +174,14 @@ void ShowConstantTBTRequest::Run() {
   }
 
   if (msg_params.keyExists(strings::soft_buttons)) {
-    MessageHelper::SubscribeApplicationToSoftButton(msg_params, app,
-                                                    function_id());
+    MessageHelper::SubscribeApplicationToSoftButton(
+        msg_params, app, function_id());
   }
 
   app->set_tbt_show_command(msg_params);
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_Navigation);
-  SendHMIRequest(hmi_apis::FunctionID::Navigation_ShowConstantTBT, &msg_params,
-                 true);
+  SendHMIRequest(
+      hmi_apis::FunctionID::Navigation_ShowConstantTBT, &msg_params, true);
 }
 
 void ShowConstantTBTRequest::on_event(const event_engine::Event& event) {
@@ -197,7 +200,8 @@ void ShowConstantTBTRequest::on_event(const event_engine::Event& event) {
       GetInfo(message, response_info);
       const bool result = PrepareResultForMobileResponse(
           result_code, HmiInterfaces::HMI_INTERFACE_Navigation);
-      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result,
+                   MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

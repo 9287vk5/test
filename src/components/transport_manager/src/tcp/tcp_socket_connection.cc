@@ -46,9 +46,13 @@ TcpSocketConnection::TcpSocketConnection(const DeviceUID& device_uid,
                                          TransportAdapterController* controller)
     : ThreadedSocketConnection(device_uid, app_handle, controller) {}
 
-TcpSocketConnection::~TcpSocketConnection() { StopAndJoinThread(); }
+TcpSocketConnection::~TcpSocketConnection() {
+  StopAndJoinThread();
+}
 
-bool TcpSocketConnection::Establish(ConnectError** error) { return true; }
+bool TcpSocketConnection::Establish(ConnectError** error) {
+  return true;
+}
 
 }  // namespace transport_adapter
 }  // namespace transport_manager

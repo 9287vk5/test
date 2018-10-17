@@ -79,8 +79,8 @@ class UpdateTurnListRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   UpdateTurnListRequestTest()
-      : command_msg_(CreateMessage(smart_objects::SmartType_Map)),
-        command_(CreateCommand<UpdateTurnListRequest>(command_msg_)) {
+      : command_msg_(CreateMessage(smart_objects::SmartType_Map))
+      , command_(CreateCommand<UpdateTurnListRequest>(command_msg_)) {
     (*command_msg_)[am::strings::params][am::strings::connection_key] =
         kConnectionKey;
     (*command_msg_)[am::strings::params][am::strings::function_id] =
@@ -149,10 +149,11 @@ TEST_F(UpdateTurnListRequestTest,
       .WillOnce(Return(mock_app));
 
   const mobile_result::eType kExpectedResult = mobile_result::INVALID_ENUM;
-  EXPECT_CALL(
-      mock_message_helper_,
-      ProcessSoftButtons((*command_msg_)[am::strings::msg_params], Eq(mock_app),
-                         Ref(mock_policy_handler_), Ref(app_mngr_)))
+  EXPECT_CALL(mock_message_helper_,
+              ProcessSoftButtons((*command_msg_)[am::strings::msg_params],
+                                 Eq(mock_app),
+                                 Ref(mock_policy_handler_),
+                                 Ref(app_mngr_)))
       .WillOnce(Return(kExpectedResult));
 
   EXPECT_CALL(mock_rpc_service_,
@@ -166,10 +167,11 @@ TEST_F(UpdateTurnListRequestTest, Run_NoTurnList_UNSUCCESS) {
   EXPECT_CALL(app_mngr_, application(kConnectionKey))
       .WillOnce(Return(mock_app));
 
-  EXPECT_CALL(
-      mock_message_helper_,
-      ProcessSoftButtons((*command_msg_)[am::strings::msg_params], Eq(mock_app),
-                         Ref(mock_policy_handler_), Ref(app_mngr_)))
+  EXPECT_CALL(mock_message_helper_,
+              ProcessSoftButtons((*command_msg_)[am::strings::msg_params],
+                                 Eq(mock_app),
+                                 Ref(mock_policy_handler_),
+                                 Ref(app_mngr_)))
       .WillOnce(Return(mobile_result::SUCCESS));
 
   EXPECT_CALL(
@@ -193,10 +195,11 @@ TEST_F(UpdateTurnListRequestTest, Run_ValidTurnList_SUCCESS) {
   EXPECT_CALL(app_mngr_, application(kConnectionKey))
       .WillOnce(Return(mock_app));
 
-  EXPECT_CALL(
-      mock_message_helper_,
-      ProcessSoftButtons((*command_msg_)[am::strings::msg_params], Eq(mock_app),
-                         Ref(mock_policy_handler_), Ref(app_mngr_)))
+  EXPECT_CALL(mock_message_helper_,
+              ProcessSoftButtons((*command_msg_)[am::strings::msg_params],
+                                 Eq(mock_app),
+                                 Ref(mock_policy_handler_),
+                                 Ref(app_mngr_)))
       .WillOnce(Return(mobile_result::SUCCESS));
 
   EXPECT_CALL(
@@ -204,8 +207,8 @@ TEST_F(UpdateTurnListRequestTest, Run_ValidTurnList_SUCCESS) {
       VerifyImage(
           (*command_msg_)[am::strings::msg_params][am::strings::turn_list][0]
                          [am::strings::turn_icon],
-          Eq(mock_app), Ref(app_mngr_)))
-      .WillOnce(Return(mobile_result::SUCCESS));
+          Eq(mock_app),
+          Ref(app_mngr_))).WillOnce(Return(mobile_result::SUCCESS));
 
   EXPECT_CALL(mock_message_helper_,
               SubscribeApplicationToSoftButton(_, _, kFunctionId));
@@ -252,10 +255,11 @@ TEST_F(UpdateTurnListRequestTest, Run_ValidTurnList_WARNINGS) {
   EXPECT_CALL(app_mngr_, application(kConnectionKey))
       .WillOnce(Return(mock_app));
 
-  EXPECT_CALL(
-      mock_message_helper_,
-      ProcessSoftButtons((*command_msg_)[am::strings::msg_params], Eq(mock_app),
-                         Ref(mock_policy_handler_), Ref(app_mngr_)))
+  EXPECT_CALL(mock_message_helper_,
+              ProcessSoftButtons((*command_msg_)[am::strings::msg_params],
+                                 Eq(mock_app),
+                                 Ref(mock_policy_handler_),
+                                 Ref(app_mngr_)))
       .WillOnce(Return(mobile_result::SUCCESS));
 
   EXPECT_CALL(
@@ -263,8 +267,8 @@ TEST_F(UpdateTurnListRequestTest, Run_ValidTurnList_WARNINGS) {
       VerifyImage(
           (*command_msg_)[am::strings::msg_params][am::strings::turn_list][0]
                          [am::strings::turn_icon],
-          Eq(mock_app), Ref(app_mngr_)))
-      .WillOnce(Return(mobile_result::WARNINGS));
+          Eq(mock_app),
+          Ref(app_mngr_))).WillOnce(Return(mobile_result::WARNINGS));
 
   EXPECT_CALL(mock_message_helper_,
               SubscribeApplicationToSoftButton(_, _, kFunctionId));

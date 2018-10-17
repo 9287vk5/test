@@ -90,8 +90,11 @@ MATCHER_P2(CheckMsgParams, result, corr_id, "") {
       corr_id == ((*arg)[strings::params][strings::correlation_id].asUInt());
 
   using namespace helpers;
-  return Compare<bool, EQ, ALL>(true, is_func_id_valid, is_result_code_valid,
-                                is_result_valid, is_corr_id_valid);
+  return Compare<bool, EQ, ALL>(true,
+                                is_func_id_valid,
+                                is_result_code_valid,
+                                is_result_valid,
+                                is_corr_id_valid);
 }
 
 class SDLActivateAppRequestTest

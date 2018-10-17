@@ -59,7 +59,8 @@ class StateControllerImpl : public event_engine::EventObserver,
    * @param state state of new regular state
    */
 
-  virtual void SetRegularState(ApplicationSharedPtr app, HmiStatePtr state,
+  virtual void SetRegularState(ApplicationSharedPtr app,
+                               HmiStatePtr state,
                                const bool SendActivateApp);
 
   /**
@@ -71,7 +72,8 @@ class StateControllerImpl : public event_engine::EventObserver,
    * @param SendActivateApp: if true, ActivateAppRequest will be sent on HMI */
 
   virtual void SetRegularState(
-      ApplicationSharedPtr app, const mobile_apis::HMILevel::eType hmi_level,
+      ApplicationSharedPtr app,
+      const mobile_apis::HMILevel::eType hmi_level,
       const mobile_apis::AudioStreamingState::eType audio_state,
       const mobile_apis::VideoStreamingState::eType video_state,
       const bool SendActivateApp);
@@ -97,7 +99,8 @@ class StateControllerImpl : public event_engine::EventObserver,
    * @param SendActivateApp: if true, ActivateAppRequest will be sent on HMI */
 
   virtual void SetRegularState(
-      ApplicationSharedPtr app, const mobile_apis::HMILevel::eType hmi_level,
+      ApplicationSharedPtr app,
+      const mobile_apis::HMILevel::eType hmi_level,
       const mobile_apis::AudioStreamingState::eType audio_state,
       const mobile_apis::VideoStreamingState::eType video_state,
       const mobile_apis::SystemContext::eType system_context,
@@ -170,7 +173,8 @@ class StateControllerImpl : public event_engine::EventObserver,
    * @param old_state state before change
    * @param new_state state after change
    */
-  virtual void OnStateChanged(ApplicationSharedPtr app, HmiStatePtr old_state,
+  virtual void OnStateChanged(ApplicationSharedPtr app,
+                              HmiStatePtr old_state,
                               HmiStatePtr new_state);
 
   /**
@@ -367,7 +371,8 @@ class StateControllerImpl : public event_engine::EventObserver,
    * @param video_state of new regular state
    */
   void SetupRegularHmiState(
-      ApplicationSharedPtr app, const mobile_apis::HMILevel::eType hmi_level,
+      ApplicationSharedPtr app,
+      const mobile_apis::HMILevel::eType hmi_level,
       const mobile_apis::AudioStreamingState::eType audio_state,
       const mobile_apis::VideoStreamingState::eType video_state);
 

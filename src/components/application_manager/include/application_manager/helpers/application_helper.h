@@ -48,8 +48,8 @@ namespace application_manager {
 template <class UnaryPredicate>
 ApplicationSharedPtr FindApp(DataAccessor<ApplicationSet> accessor,
                              UnaryPredicate finder) {
-  ApplicationSet::iterator it = std::find_if(accessor.GetData().begin(),
-                                             accessor.GetData().end(), finder);
+  ApplicationSet::iterator it = std::find_if(
+      accessor.GetData().begin(), accessor.GetData().end(), finder);
   if (accessor.GetData().end() == it) {
     return ApplicationSharedPtr();
   }
@@ -65,8 +65,8 @@ template <class UnaryPredicate>
 std::vector<ApplicationSharedPtr> FindAllApps(
     DataAccessor<ApplicationSet> accessor, UnaryPredicate finder) {
   std::vector<ApplicationSharedPtr> result;
-  ApplicationSetConstIt it = std::find_if(accessor.GetData().begin(),
-                                          accessor.GetData().end(), finder);
+  ApplicationSetConstIt it = std::find_if(
+      accessor.GetData().begin(), accessor.GetData().end(), finder);
   while (it != accessor.GetData().end()) {
     result.push_back(*it);
     it = std::find_if(++it, accessor.GetData().end(), finder);

@@ -121,7 +121,8 @@ class PolicyManager : public usage_statistics::StatisticsManager {
    */
   virtual void CheckPermissions(const PTString& device_id,
                                 const PTString& app_id,
-                                const PTString& hmi_level, const PTString& rpc,
+                                const PTString& hmi_level,
+                                const PTString& rpc,
                                 const RPCParams& rpc_params,
                                 CheckPermissionResult& result) = 0;
 
@@ -216,7 +217,8 @@ class PolicyManager : public usage_statistics::StatisticsManager {
    * @param permissions Array of functional groups permissions
    */
   virtual void GetUserConsentForApp(
-      const std::string& device_id, const std::string& policy_app_id,
+      const std::string& device_id,
+      const std::string& policy_app_id,
       std::vector<FunctionalGroupPermission>& permissions) = 0;
 
   /**
@@ -323,7 +325,8 @@ class PolicyManager : public usage_statistics::StatisticsManager {
    * @param permissions Array of functional groups permissions
    */
   virtual void GetPermissionsForApp(
-      const std::string& device_id, const std::string& policy_app_id,
+      const std::string& device_id,
+      const std::string& policy_app_id,
       std::vector<FunctionalGroupPermission>& permissions) = 0;
 
   /**

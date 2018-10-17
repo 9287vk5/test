@@ -103,7 +103,8 @@ CDefaultSchemaItem<Type>::CDefaultSchemaItem(const ParameterType& DefaultValue)
 
 template <typename Type>
 errors::eType CDefaultSchemaItem<Type>::validate(
-    const SmartObject& Object, rpc::ValidationReport* report__,
+    const SmartObject& Object,
+    rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   if (getSmartType() != Object.getType()) {
     std::string validation_info = "Incorrect type, expected: " +

@@ -75,11 +75,18 @@ class ProtocolPacketTest : public ::testing::Test {
     some_connection_id_ = 10;
   }
 
-  RawMessagePtr GetRawMessage(uint8_t version, uint8_t frame_type,
+  RawMessagePtr GetRawMessage(uint8_t version,
+                              uint8_t frame_type,
                               uint8_t service_type) {
-    ProtocolPacket prot_packet(some_connection_id_, version, PROTECTION_OFF,
-                               frame_type, service_type, FRAME_DATA_HEART_BEAT,
-                               some_session_id_, 0u, some_message_id_);
+    ProtocolPacket prot_packet(some_connection_id_,
+                               version,
+                               PROTECTION_OFF,
+                               frame_type,
+                               service_type,
+                               FRAME_DATA_HEART_BEAT,
+                               some_session_id_,
+                               0u,
+                               some_message_id_);
     EXPECT_EQ(frame_type, prot_packet.frame_type());
     return prot_packet.serializePacket();
   }
@@ -163,8 +170,8 @@ TEST_F(ProtocolPacketTest, SetPacketWithDiffFrameType) {
 TEST_F(ProtocolPacketTest, AppendDataToEmptyPacket) {
   // Set version, serviceType, frameData, sessionId
   const uint8_t session_id = 1u;
-  uint8_t some_data[] = {zero_test_data_element_, kRpc,
-                         FRAME_DATA_START_SERVICE_ACK, session_id};
+  uint8_t some_data[] = {
+      zero_test_data_element_, kRpc, FRAME_DATA_START_SERVICE_ACK, session_id};
   ProtocolPacket protocol_packet;
   RESULT_CODE res = protocol_packet.appendData(some_data, sizeof(some_data));
   EXPECT_EQ(RESULT_FAIL, res);
@@ -180,8 +187,8 @@ TEST_F(ProtocolPacketTest, SetTotalDataBytes) {
 TEST_F(ProtocolPacketTest, AppendDataToPacketWithNonZeroSize) {
   // Set version, serviceType, frameData, sessionId
   const uint8_t session_id = 1u;
-  uint8_t some_data[] = {zero_test_data_element_, kRpc,
-                         FRAME_DATA_LAST_CONSECUTIVE, session_id};
+  uint8_t some_data[] = {
+      zero_test_data_element_, kRpc, FRAME_DATA_LAST_CONSECUTIVE, session_id};
   ProtocolPacket protocol_packet;
   protocol_packet.set_total_data_bytes(sizeof(some_data) + 1);
   RESULT_CODE res = protocol_packet.appendData(some_data, sizeof(some_data));
@@ -194,8 +201,8 @@ TEST_F(ProtocolPacketTest, AppendDataToPacketWithNonZeroSize) {
 
 TEST_F(ProtocolPacketTest, SetData) {
   const uint8_t session_id = 1u;
-  uint8_t some_data[] = {zero_test_data_element_, kRpc, FRAME_DATA_HEART_BEAT,
-                         session_id};
+  uint8_t some_data[] = {
+      zero_test_data_element_, kRpc, FRAME_DATA_HEART_BEAT, session_id};
   ProtocolPacket protocol_packet;
   protocol_packet.set_data(some_data, sizeof(some_data));
   EXPECT_EQ(zero_test_data_element_, protocol_packet.data()[0]);
@@ -215,8 +222,8 @@ TEST_F(ProtocolPacketTest, DeserializeNonZeroPacket) {
   // Set header, serviceType, frameData, sessionId
   const uint8_t session_id = 1u;
   const uint8_t version_frame_type = 0x21;
-  uint8_t some_message[] = {version_frame_type, kRpc,
-                            FRAME_DATA_START_SERVICE_ACK, session_id};
+  uint8_t some_message[] = {
+      version_frame_type, kRpc, FRAME_DATA_START_SERVICE_ACK, session_id};
   ProtocolPacket protocol_packet;
   RESULT_CODE res =
       protocol_packet.deserializePacket(some_message, PROTOCOL_HEADER_V2_SIZE);
@@ -229,13 +236,23 @@ TEST_F(ProtocolPacketTest, DeserializePacket_FrameTypeFirst_ResultOK) {
   const uint8_t data_size = 1u;
   const uint8_t version_frame_type = 0x22;
   // Set protol version - 2 and frame type - first
-  uint8_t message[] = {
-      version_frame_type, kRpc, FRAME_DATA_FIRST, session_id,
-      zero_test_data_element_, zero_test_data_element_, zero_test_data_element_,
-      zero_test_data_element_, zero_test_data_element_, zero_test_data_element_,
-      zero_test_data_element_, zero_test_data_element_, zero_test_data_element_,
-      zero_test_data_element_, zero_test_data_element_, data_size,
-      zero_test_data_element_};
+  uint8_t message[] = {version_frame_type,
+                       kRpc,
+                       FRAME_DATA_FIRST,
+                       session_id,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       zero_test_data_element_,
+                       data_size,
+                       zero_test_data_element_};
   ProtocolPacket protocol_packet;
   // Act
   RESULT_CODE res =

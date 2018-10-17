@@ -45,10 +45,11 @@ namespace app_launch {
  */
 struct ApplicationData {
   ApplicationData(const std::string& mobile_app_id,
-                  const std::string& bundle_id, const std::string& device_id)
-      : mobile_app_id_(mobile_app_id),
-        bundle_id_(bundle_id),
-        device_mac_(device_id) {}
+                  const std::string& bundle_id,
+                  const std::string& device_id)
+      : mobile_app_id_(mobile_app_id)
+      , bundle_id_(bundle_id)
+      , device_mac_(device_id) {}
 
   std::string mobile_app_id_;
   std::string bundle_id_;

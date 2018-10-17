@@ -65,7 +65,9 @@ class ThreadDelegate {
 
   virtual ~ThreadDelegate();
 
-  Thread* thread() const { return thread_; }
+  Thread* thread() const {
+    return thread_;
+  }
 
   void set_thread(Thread* thread);
 
@@ -78,7 +80,9 @@ class ThreadDelegate {
     return state_ == to;
   }
 
-  unsigned int state() const { return state_; }
+  unsigned int state() const {
+    return state_;
+  }
 
  private:
   volatile unsigned int state_;

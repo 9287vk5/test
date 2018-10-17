@@ -59,7 +59,8 @@ class IAP2BluetoothEmulationTransportAdapter : public TcpTransportAdapter {
    * @param settings Settings reference
    */
   IAP2BluetoothEmulationTransportAdapter(
-      const uint16_t port, resumption::LastState& last_state,
+      const uint16_t port,
+      resumption::LastState& last_state,
       const TransportManagerSettings& settings);
 
   /**

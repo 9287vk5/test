@@ -48,7 +48,8 @@ namespace am = application_manager;
 class MockStateController : public am::StateController {
  public:
   MOCK_METHOD3(SetRegularState,
-               void(am::ApplicationSharedPtr app, am::HmiStatePtr state,
+               void(am::ApplicationSharedPtr app,
+                    am::HmiStatePtr state,
                     const bool SendActivateApp));
   MOCK_METHOD5(SetRegularState,
                void(am::ApplicationSharedPtr app,
@@ -91,7 +92,8 @@ class MockStateController : public am::StateController {
   MOCK_METHOD1(OnVideoStreamingStopped,
                void(am::ApplicationConstSharedPtr app));
   MOCK_METHOD3(OnStateChanged,
-               void(am::ApplicationSharedPtr app, am::HmiStatePtr old_state,
+               void(am::ApplicationSharedPtr app,
+                    am::HmiStatePtr old_state,
                     am::HmiStatePtr new_state));
   MOCK_CONST_METHOD1(IsStateActive, bool(am::HmiState::StateID state_id));
 };

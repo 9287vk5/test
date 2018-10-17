@@ -50,16 +50,20 @@ namespace custom_str = utils::custom_string;
 AddCommandRequest::AddCommandRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler),
-      send_ui_(false),
-      send_vr_(false),
-      is_ui_received_(false),
-      is_vr_received_(false),
-      ui_result_(hmi_apis::Common_Result::INVALID_ENUM),
-      vr_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler)
+    , send_ui_(false)
+    , send_vr_(false)
+    , is_ui_received_(false)
+    , is_vr_received_(false)
+    , ui_result_(hmi_apis::Common_Result::INVALID_ENUM)
+    , vr_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
 
 AddCommandRequest::~AddCommandRequest() {}
 
@@ -88,12 +92,13 @@ void AddCommandRequest::Run() {
 
   if ((*message_)[strings::msg_params].keyExists(strings::cmd_icon)) {
     mobile_apis::Result::eType verification_result = MessageHelper::VerifyImage(
-        (*message_)[strings::msg_params][strings::cmd_icon], app,
+        (*message_)[strings::msg_params][strings::cmd_icon],
+        app,
         application_manager_);
 
     if (mobile_apis::Result::INVALID_DATA == verification_result) {
-      LOG4CXX_ERROR(logger_, "MessageHelper::VerifyImage return "
-                                 << verification_result);
+      LOG4CXX_ERROR(
+          logger_, "MessageHelper::VerifyImage return " << verification_result);
       SendResponse(false, verification_result);
       return;
     }
@@ -125,8 +130,8 @@ void AddCommandRequest::Run() {
          (*message_)[strings::msg_params][strings::menu_params]
                     [hmi_request::parent_id].asUInt())) {
       if (!CheckCommandParentId(app)) {
-        SendResponse(false, mobile_apis::Result::INVALID_ID,
-                     "Parent ID doesn't exist");
+        SendResponse(
+            false, mobile_apis::Result::INVALID_ID, "Parent ID doesn't exist");
         return;
       }
     }
@@ -365,12 +370,14 @@ void AddCommandRequest::on_event(const event_engine::Event& event) {
 
   const bool is_vr_invalid_unsupported =
       Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-          vr_result_, hmi_apis::Common_Result::INVALID_ENUM,
+          vr_result_,
+          hmi_apis::Common_Result::INVALID_ENUM,
           hmi_apis::Common_Result::UNSUPPORTED_RESOURCE);
 
   const bool is_ui_invalid_unsupported =
       Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-          ui_result_, hmi_apis::Common_Result::INVALID_ENUM,
+          ui_result_,
+          hmi_apis::Common_Result::INVALID_ENUM,
           hmi_apis::Common_Result::UNSUPPORTED_RESOURCE);
   const bool is_vr_unsupported =
       vr_result_ == hmi_apis::Common_Result::UNSUPPORTED_RESOURCE;
@@ -378,16 +385,20 @@ void AddCommandRequest::on_event(const event_engine::Event& event) {
       ui_result_ == hmi_apis::Common_Result::UNSUPPORTED_RESOURCE;
 
   const bool is_no_ui_error = Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-      ui_result_, hmi_apis::Common_Result::SUCCESS,
+      ui_result_,
+      hmi_apis::Common_Result::SUCCESS,
       hmi_apis::Common_Result::WARNINGS,
-      hmi_apis::Common_Result::WRONG_LANGUAGE, hmi_apis::Common_Result::RETRY,
+      hmi_apis::Common_Result::WRONG_LANGUAGE,
+      hmi_apis::Common_Result::RETRY,
       hmi_apis::Common_Result::SAVED,
       hmi_apis::Common_Result::UNSUPPORTED_RESOURCE);
 
   const bool is_no_vr_error = Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-      vr_result_, hmi_apis::Common_Result::SUCCESS,
+      vr_result_,
+      hmi_apis::Common_Result::SUCCESS,
       hmi_apis::Common_Result::WARNINGS,
-      hmi_apis::Common_Result::WRONG_LANGUAGE, hmi_apis::Common_Result::RETRY,
+      hmi_apis::Common_Result::WRONG_LANGUAGE,
+      hmi_apis::Common_Result::RETRY,
       hmi_apis::Common_Result::SAVED,
       hmi_apis::Common_Result::UNSUPPORTED_RESOURCE);
 
@@ -395,21 +406,23 @@ void AddCommandRequest::on_event(const event_engine::Event& event) {
                 (is_no_ui_error && is_vr_invalid_unsupported) ||
                 (is_no_vr_error && is_ui_invalid_unsupported);
 
-  LOG4CXX_DEBUG(logger_, "calculated result " << ui_result_ << " "
-                                              << is_no_ui_error << " "
-                                              << is_no_vr_error);
+  LOG4CXX_DEBUG(logger_,
+                "calculated result " << ui_result_ << " " << is_no_ui_error
+                                     << " " << is_no_vr_error);
   const bool is_vr_or_ui_warning =
       Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
           hmi_apis::Common_Result::WARNINGS, ui_result_, vr_result_);
 
   const bool is_vr_or_ui_unsupported =
       Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
-          hmi_apis::Common_Result::UNSUPPORTED_RESOURCE, ui_result_,
+          hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
+          ui_result_,
           vr_result_);
 
   const bool is_vr_and_ui_unsupported =
       Compare<hmi_apis::Common_Result::eType, EQ, ALL>(
-          hmi_apis::Common_Result::UNSUPPORTED_RESOURCE, ui_result_,
+          hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
+          ui_result_,
           vr_result_);
 
   if (!result && hmi_apis::Common_Result::REJECTED == ui_result_) {
@@ -432,7 +445,8 @@ void AddCommandRequest::on_event(const event_engine::Event& event) {
 
   if (BothSend() && hmi_apis::Common_Result::SUCCESS == vr_result_) {
     const bool is_ui_not_ok = Compare<hmi_apis::Common_Result::eType, NEQ, ALL>(
-        ui_result_, hmi_apis::Common_Result::SUCCESS,
+        ui_result_,
+        hmi_apis::Common_Result::SUCCESS,
         hmi_apis::Common_Result::WARNINGS,
         hmi_apis::Common_Result::UNSUPPORTED_RESOURCE);
 
@@ -494,7 +508,9 @@ void AddCommandRequest::on_event(const event_engine::Event& event) {
   }
 
   const std::string info = GenerateMobileResponseInfo();
-  SendResponse(result, result_code, info.empty() ? NULL : info.c_str(),
+  SendResponse(result,
+               result_code,
+               info.empty() ? NULL : info.c_str(),
                &(message[strings::msg_params]));
 }
 
@@ -540,7 +556,9 @@ bool AddCommandRequest::IsWhiteSpaceExist() {
   return false;
 }
 
-bool AddCommandRequest::BothSend() const { return send_vr_ && send_ui_; }
+bool AddCommandRequest::BothSend() const {
+  return send_vr_ && send_ui_;
+}
 
 const std::string AddCommandRequest::GenerateMobileResponseInfo() {
   // In case if vr_result_ is UNSUPPORTED_RESOURCE vr_info should be on the

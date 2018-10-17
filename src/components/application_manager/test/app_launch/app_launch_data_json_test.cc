@@ -79,7 +79,9 @@ class AppLaunchDataJsonTest : public ::testing::Test {
   }
 
  public:
-  void TearDown() OVERRIDE { res_json_.get()->Clear(); }
+  void TearDown() OVERRIDE {
+    res_json_.get()->Clear();
+  }
 
   static void SetUpTestCase() {}
 
@@ -88,7 +90,9 @@ class AppLaunchDataJsonTest : public ::testing::Test {
     ::file_system::RemoveDirectory(kAppStorageFolder);
   }
 
-  AppLaunchDataJson* res_json() { return res_json_.get(); }
+  AppLaunchDataJson* res_json() {
+    return res_json_.get();
+  }
 
   void AddApplicationDataWithIncreaseTable(const ApplicationData& data);
   void AddApplicationDataWithoutIncreaseTable(const ApplicationData& data);
@@ -239,7 +243,8 @@ TEST_F(AppLaunchDataJsonTest, MaxCount) {
   const uint32_t max_ios_devs = res_json()->get_max_number_iOS_devs();
   for (uint32_t i = 0; i < max_ios_devs; i++) {
     ApplicationData data(AddCounter("mobile_app_id_", i),
-                         AddCounter("bundle_id_", i), "device_mac");
+                         AddCounter("bundle_id_", i),
+                         "device_mac");
     AddApplicationDataWithIncreaseTable(data);
   }
 
@@ -260,7 +265,8 @@ TEST_F(AppLaunchDataJsonTest, MaxCount) {
 TEST_F(AppLaunchDataJsonTest, DeleteAllJsonDataTwice) {
   for (uint32_t i = 0; i < res_json()->get_max_number_iOS_devs(); i++) {
     ApplicationData data(AddCounter("mobile_app_id_", i),
-                         AddCounter("bundle_id_", i), "device_mac");
+                         AddCounter("bundle_id_", i),
+                         "device_mac");
     AddApplicationDataWithIncreaseTable(data);
   }
 
@@ -317,10 +323,10 @@ TEST_F(AppLaunchDataJsonTest, SelectMultipleData) {
   EXPECT_EQ(half_part, output_data1.size());
   EXPECT_EQ(half_part, output_data2.size());
 
-  std::sort(output_data1.begin(), output_data1.end(),
-            ApplicationDataComporator);
-  std::sort(output_data2.begin(), output_data2.end(),
-            ApplicationDataComporator);
+  std::sort(
+      output_data1.begin(), output_data1.end(), ApplicationDataComporator);
+  std::sort(
+      output_data2.begin(), output_data2.end(), ApplicationDataComporator);
   std::sort(input_data1.begin(), input_data1.end(), ApplicationDataComporator);
   std::sort(input_data2.begin(), input_data2.end(), ApplicationDataComporator);
 

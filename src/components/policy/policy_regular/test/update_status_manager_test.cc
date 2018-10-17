@@ -50,8 +50,8 @@ class UpdateStatusManagerTest : public ::testing::Test {
 
  public:
   UpdateStatusManagerTest()
-      : manager_(std::make_shared<UpdateStatusManager>()),
-        listener_(std::make_shared<MockPolicyListener>()) {}
+      : manager_(std::make_shared<UpdateStatusManager>())
+      , listener_(std::make_shared<MockPolicyListener>()) {}
 
   void SetUp() OVERRIDE {
     manager_->set_listener(listener_.get());

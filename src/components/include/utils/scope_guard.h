@@ -92,7 +92,9 @@ class ScopeGuardImplBase {
   /**
    * @brief Dismiss function which allows to dismiss releasing of stored object.
    */
-  void Dismiss() const { dismissed_ = true; }
+  void Dismiss() const {
+    dismissed_ = true;
+  }
 
  protected:
   /**
@@ -154,13 +156,17 @@ class ScopeGuardImpl1 : public ScopeGuardImplBase {
   /**
     Execute the SafeExecute function in destructor.
    */
-  ~ScopeGuardImpl1() { SafeExecute(*this); }
+  ~ScopeGuardImpl1() {
+    SafeExecute(*this);
+  }
 
  protected:
   /**
    * @brief Execute allows to execute certain function with certain parameter.
    */
-  void Execute() { fun_(p1_); }
+  void Execute() {
+    fun_(p1_);
+  }
 
   /**
    * @brief ScopeGuardImpl1 create ScopeGuard object.
@@ -209,13 +215,17 @@ class ObjScopeGuardImpl0 : public ScopeGuardImplBase {
   /**
     Execute the SafeExecute function in destructor.
    */
-  ~ObjScopeGuardImpl0() { SafeExecute(*this); }
+  ~ObjScopeGuardImpl0() {
+    SafeExecute(*this);
+  }
 
  protected:
   /**
    * @brief Execute allows to execute certain function with certain parameter.
    */
-  void Execute() { (obj_.*memFun_)(); }
+  void Execute() {
+    (obj_.*memFun_)();
+  }
 
   /**
    * @brief ObjScopeGuardImpl0 Create ScopeGuard object.
@@ -261,13 +271,17 @@ class ObjScopeGuardImpl1 : public ScopeGuardImplBase {
   /**
     Execute the SafeExecute function in destructor.
    */
-  ~ObjScopeGuardImpl1() { SafeExecute(*this); }
+  ~ObjScopeGuardImpl1() {
+    SafeExecute(*this);
+  }
 
  protected:
   /**
    * @brief Execute allows to execute certain function with certain parameter.
    */
-  void Execute() { (obj_.*memFun_)(p1_); }
+  void Execute() {
+    (obj_.*memFun_)(p1_);
+  }
 
   /**
    * @brief MakeObjGuard creates ScopeGuard object.
@@ -303,7 +317,8 @@ ObjScopeGuardImpl0<Obj, MemFun> MakeObjGuard(Obj& obj, MemFun memFun) {
 }
 
 template <typename Obj, typename MemFun, typename P1>
-ObjScopeGuardImpl1<Obj, MemFun, P1> MakeObjGuard(Obj& obj, MemFun memFun,
+ObjScopeGuardImpl1<Obj, MemFun, P1> MakeObjGuard(Obj& obj,
+                                                 MemFun memFun,
                                                  const P1& p1) {
   return ObjScopeGuardImpl1<Obj, MemFun, P1>::MakeObjGuard(obj, memFun, p1);
 }

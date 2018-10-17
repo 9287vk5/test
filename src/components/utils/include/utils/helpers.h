@@ -77,34 +77,39 @@ bool ONE(U what, U to) {
   return what || to;
 }
 
-template <typename T, bool (*CompareType)(T, T),
+template <typename T,
+          bool (*CompareType)(T, T),
           bool (*CmpStrategy)(bool, bool)>
 bool Compare(T what, T to) {
   return CompareType(what, to);
 }
 
-template <typename T, bool (*CompareType)(T, T),
+template <typename T,
+          bool (*CompareType)(T, T),
           bool (*CmpStrategy)(bool, bool)>
 bool Compare(T what, T to, T to1) {
   return CmpStrategy(Compare<T, CompareType, CmpStrategy>(what, to),
                      Compare<T, CompareType, CmpStrategy>(what, to1));
 }
 
-template <typename T, bool (*CompareType)(T, T),
+template <typename T,
+          bool (*CompareType)(T, T),
           bool (*CmpStrategy)(bool, bool)>
 bool Compare(T what, T to, T to1, T to2) {
   return CmpStrategy(Compare<T, CompareType, CmpStrategy>(what, to, to1),
                      Compare<T, CompareType, CmpStrategy>(what, to2));
 }
 
-template <typename T, bool (*CompareType)(T, T),
+template <typename T,
+          bool (*CompareType)(T, T),
           bool (*CmpStrategy)(bool, bool)>
 bool Compare(T what, T to, T to1, T to2, T to3) {
   return CmpStrategy(Compare<T, CompareType, CmpStrategy>(what, to, to1, to2),
                      Compare<T, CompareType, CmpStrategy>(what, to3));
 }
 
-template <typename T, bool (*CompareType)(T, T),
+template <typename T,
+          bool (*CompareType)(T, T),
           bool (*CmpStrategy)(bool, bool)>
 bool Compare(T what, T to, T to1, T to2, T to3, T to4) {
   return CmpStrategy(
@@ -112,7 +117,8 @@ bool Compare(T what, T to, T to1, T to2, T to3, T to4) {
       Compare<T, CompareType, CmpStrategy>(what, to4));
 }
 
-template <typename T, bool (*CompareType)(T, T),
+template <typename T,
+          bool (*CompareType)(T, T),
           bool (*CmpStrategy)(bool, bool)>
 bool Compare(T what, T to, T to1, T to2, T to3, T to4, T to5) {
   return CmpStrategy(

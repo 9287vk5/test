@@ -47,10 +47,14 @@ namespace commands {
 OnExitApplicationNotification::OnExitApplicationNotification(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : NotificationFromHMI(message, application_manager, rpc_service,
-                          hmi_capabilities, policy_handle) {}
+    : NotificationFromHMI(message,
+                          application_manager,
+                          rpc_service,
+                          hmi_capabilities,
+                          policy_handle) {}
 
 OnExitApplicationNotification::~OnExitApplicationNotification() {}
 
@@ -109,8 +113,11 @@ void OnExitApplicationNotification::Run() {
   }
 
   application_manager_.state_controller().SetRegularState(
-      app_impl, HMILevel::HMI_NONE, AudioStreamingState::NOT_AUDIBLE,
-      VideoStreamingState::NOT_STREAMABLE, false);
+      app_impl,
+      HMILevel::HMI_NONE,
+      AudioStreamingState::NOT_AUDIBLE,
+      VideoStreamingState::NOT_STREAMABLE,
+      false);
 }
 
 }  // namespace commands

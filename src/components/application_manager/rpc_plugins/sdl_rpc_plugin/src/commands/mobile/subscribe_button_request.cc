@@ -47,8 +47,11 @@ SubscribeButtonRequest::SubscribeButtonRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 SubscribeButtonRequest::~SubscribeButtonRequest() {}
 
@@ -68,8 +71,8 @@ void SubscribeButtonRequest::Run() {
           (*message_)[str::msg_params][str::button_name].asInt());
 
   if (!IsSubscriptionAllowed(app, btn_id)) {
-    LOG4CXX_ERROR(logger_, "Subscribe on button " << btn_id
-                                                  << " isn't allowed");
+    LOG4CXX_ERROR(logger_,
+                  "Subscribe on button " << btn_id << " isn't allowed");
     SendResponse(false, mobile_apis::Result::REJECTED);
     return;
   }
@@ -88,9 +91,9 @@ void SubscribeButtonRequest::Run() {
       SendResponse(false, mobile_apis::Result::UNSUPPORTED_RESOURCE);
     }
   } else if (!CheckHMICapabilities(btn_id)) {
-    LOG4CXX_ERROR(logger_, "Subscribe on button "
-                               << btn_id
-                               << " isn't allowed by HMI capabilities");
+    LOG4CXX_ERROR(logger_,
+                  "Subscribe on button "
+                      << btn_id << " isn't allowed by HMI capabilities");
     SendResponse(false, mobile_apis::Result::UNSUPPORTED_RESOURCE);
     return;
   }

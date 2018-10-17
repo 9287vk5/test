@@ -51,8 +51,11 @@ OnVehicleDataNotification::OnVehicleDataNotification(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandNotificationImpl(message, application_manager, rpc_service,
-                              hmi_capabilities, policy_handler) {}
+    : CommandNotificationImpl(message,
+                              application_manager,
+                              rpc_service,
+                              hmi_capabilities,
+                              policy_handler) {}
 
 OnVehicleDataNotification::~OnVehicleDataNotification() {}
 
@@ -112,14 +115,15 @@ void OnVehicleDataNotification::Run() {
     }
   }
 
-  LOG4CXX_DEBUG(logger_, "Number of Notifications to be send: "
-                             << appNotification.size());
+  LOG4CXX_DEBUG(
+      logger_,
+      "Number of Notifications to be send: " << appNotification.size());
 
   for (size_t idx = 0; idx < appNotification.size(); idx++) {
-    LOG4CXX_INFO(logger_, "Send OnVehicleData PRNDL notification to "
-                              << appNotification[idx]->name().c_str()
-                              << " application id "
-                              << appNotification[idx]->app_id());
+    LOG4CXX_INFO(logger_,
+                 "Send OnVehicleData PRNDL notification to "
+                     << appNotification[idx]->name().c_str()
+                     << " application id " << appNotification[idx]->app_id());
     (*message_)[strings::params][strings::connection_key] =
         appNotification[idx]->app_id();
     (*message_)[strings::msg_params] = appSO[idx];

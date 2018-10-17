@@ -51,10 +51,10 @@ struct OnDriverDistractionProcessor {
       OnDriverDistractionNotification& command,
       smart_objects::SmartObjectSPtr on_driver_distraction_so,
       ApplicationManager& application_manager)
-      : command_(command),
-        on_driver_distraction_so_(on_driver_distraction_so),
-        application_manager_(application_manager),
-        stringified_function_id_(MessageHelper::StringifiedFunctionID(
+      : command_(command)
+      , on_driver_distraction_so_(on_driver_distraction_so)
+      , application_manager_(application_manager)
+      , stringified_function_id_(MessageHelper::StringifiedFunctionID(
             mobile_api::FunctionID::OnDriverDistractionID)) {}
 
   void operator()(ApplicationSharedPtr application) {
@@ -70,7 +70,8 @@ struct OnDriverDistractionProcessor {
         application->SwapMobileMessageQueue(messages);
         messages.erase(
             std::remove_if(
-                messages.begin(), messages.end(),
+                messages.begin(),
+                messages.end(),
                 [this](smart_objects::SmartObjectSPtr message) {
                   return (*message)[strings::params][strings::function_id]
                              .asString() == stringified_function_id_;
@@ -94,10 +95,14 @@ struct OnDriverDistractionProcessor {
 OnDriverDistractionNotification::OnDriverDistractionNotification(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : NotificationFromHMI(message, application_manager, rpc_service,
-                          hmi_capabilities, policy_handle) {}
+    : NotificationFromHMI(message,
+                          application_manager,
+                          rpc_service,
+                          hmi_capabilities,
+                          policy_handle) {}
 
 OnDriverDistractionNotification::~OnDriverDistractionNotification() {}
 
@@ -125,8 +130,8 @@ void OnDriverDistractionNotification::Run() {
   const ApplicationSet applications =
       application_manager_.applications().GetData();
 
-  OnDriverDistractionProcessor processor(*this, on_driver_distraction,
-                                         application_manager_);
+  OnDriverDistractionProcessor processor(
+      *this, on_driver_distraction, application_manager_);
   std::for_each(applications.begin(), applications.end(), processor);
 }
 

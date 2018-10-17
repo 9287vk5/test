@@ -66,8 +66,8 @@ struct CheckGroupName {
 struct CopyAttributes {
   CopyAttributes(const FunctionalGroupNames& groups_attributes,
                  std::vector<FunctionalGroupPermission>& groups_permissions)
-      : groups_attributes_(groups_attributes),
-        groups_permissions_(groups_permissions) {}
+      : groups_attributes_(groups_attributes)
+      , groups_permissions_(groups_permissions) {}
 
   bool operator()(const policy::StringsValueType& value) {
     CheckGroupName checker(value);
@@ -120,7 +120,8 @@ bool operator!=(const policy_table::ApplicationParams& first,
 }
 
 CheckAppPolicy::CheckAppPolicy(
-    PolicyManagerImpl* pm, const std::shared_ptr<policy_table::Table> update,
+    PolicyManagerImpl* pm,
+    const std::shared_ptr<policy_table::Table> update,
     const std::shared_ptr<policy_table::Table> snapshot)
     : pm_(pm), update_(update), snapshot_(snapshot) {}
 
@@ -143,8 +144,11 @@ bool policy::CheckAppPolicy::HasRevokedGroups(
   StringsConstItr it_groups_curr_end = groups_curr.end();
 
   policy_table::Strings revoked_group_list;
-  std::set_difference(it_groups_curr, it_groups_curr_end, it_groups_new,
-                      it_groups_new_end, std::back_inserter(revoked_group_list),
+  std::set_difference(it_groups_curr,
+                      it_groups_curr_end,
+                      it_groups_new,
+                      it_groups_new_end,
+                      std::back_inserter(revoked_group_list),
                       Compare);
 
   // Remove groups which are not required user consent
@@ -184,8 +188,11 @@ bool policy::CheckAppPolicy::HasNewGroups(
   StringsConstItr it_groups_curr_end = groups_curr.end();
 
   policy_table::Strings new_group_list;
-  std::set_difference(it_groups_new, it_groups_new_end, it_groups_curr,
-                      it_groups_curr_end, std::back_inserter(new_group_list),
+  std::set_difference(it_groups_new,
+                      it_groups_new_end,
+                      it_groups_curr,
+                      it_groups_curr_end,
+                      std::back_inserter(new_group_list),
                       Compare);
 
   if (new_groups) {
@@ -228,8 +235,8 @@ std::vector<FunctionalGroupPermission> policy::CheckAppPolicy::GetRevokedGroups(
 
   std::vector<FunctionalGroupPermission> revoked_groups_permissions;
   CopyAttributes copier(groups_attributes, revoked_groups_permissions);
-  std::for_each(revoked_groups_names.begin(), revoked_groups_names.end(),
-                copier);
+  std::for_each(
+      revoked_groups_names.begin(), revoked_groups_names.end(), copier);
 
   return revoked_groups_permissions;
 }
@@ -272,7 +279,9 @@ void CheckAppPolicy::SendPermissionsToApp(
 
   Permissions notification_data;
   pm_->PrepareNotificationData(update_->policy_table.functional_groupings,
-                               groups, group_permissons, notification_data);
+                               groups,
+                               group_permissons,
+                               notification_data);
 
   LOG4CXX_INFO(logger_, "Send notification for application_id: " << app_id);
   // Default_hmi is Ford-specific and should not be used with basic policy
@@ -296,7 +305,8 @@ bool CheckAppPolicy::NicknamesMatch(
       !app_policy.second.nicknames->empty()) {
     for (policy_table::Strings::const_iterator it =
              app_policy.second.nicknames->begin();
-         app_policy.second.nicknames->end() != it; ++it) {
+         app_policy.second.nicknames->end() != it;
+         ++it) {
       std::string temp = *it;
       if (app_name.CompareIgnoreCase(temp.c_str())) {
         return true;
@@ -311,8 +321,8 @@ bool CheckAppPolicy::operator()(const AppPoliciesValueType& app_policy) {
   const std::string app_id = app_policy.first;
 
   if (!IsKnownAppication(app_id)) {
-    LOG4CXX_WARN(logger_, "Application:" << app_id
-                                         << " is not present in snapshot.");
+    LOG4CXX_WARN(logger_,
+                 "Application:" << app_id << " is not present in snapshot.");
     return true;
   }
 
@@ -345,13 +355,15 @@ bool CheckAppPolicy::operator()(const AppPoliciesValueType& app_policy) {
     }
   }
   if (RESULT_NO_CHANGES == result) {
-    LOG4CXX_INFO(logger_, "Permissions for application:" << app_id
-                                                         << " wasn't changed.");
+    LOG4CXX_INFO(logger_,
+                 "Permissions for application:" << app_id
+                                                << " wasn't changed.");
     return true;
   }
 
-  LOG4CXX_INFO(logger_, "Permissions for application:"
-                            << app_id << " have been changed.");
+  LOG4CXX_INFO(logger_,
+               "Permissions for application:" << app_id
+                                              << " have been changed.");
 
   if (IsPredefinedApp(app_policy)) {
     for (const policy_table::ApplicationPolicies::value_type& app :
@@ -484,10 +496,11 @@ bool CheckAppPolicy::IsRequestTypeChanged(
     return true;
   }
   policy_table::RequestTypes diff;
-  std::set_difference(
-      it->second.RequestType->begin(), it->second.RequestType->end(),
-      app_policy.second.RequestType->begin(),
-      app_policy.second.RequestType->end(), std::back_inserter(diff));
+  std::set_difference(it->second.RequestType->begin(),
+                      it->second.RequestType->end(),
+                      app_policy.second.RequestType->begin(),
+                      app_policy.second.RequestType->end(),
+                      std::back_inserter(diff));
   return diff.size();
 }
 
@@ -509,10 +522,11 @@ bool CheckAppPolicy::IsRequestSubTypeChanged(
   }
 
   policy_table::RequestSubTypes diff;
-  std::set_difference(
-      it->second.RequestSubType->begin(), it->second.RequestSubType->end(),
-      app_policy.second.RequestSubType->begin(),
-      app_policy.second.RequestSubType->end(), std::back_inserter(diff));
+  std::set_difference(it->second.RequestSubType->begin(),
+                      it->second.RequestSubType->end(),
+                      app_policy.second.RequestSubType->begin(),
+                      app_policy.second.RequestSubType->end(),
+                      std::back_inserter(diff));
   return diff.size();
 }
 
@@ -651,8 +665,11 @@ void FillNotificationData::ExcludeSameHMILevels(
     std::set<HMILevel>& source, const std::set<HMILevel>& target) {
   std::set<HMILevel> diff_hmi;
 
-  std::set_difference(source.begin(), source.end(), target.begin(),
-                      target.end(), std::inserter(diff_hmi, diff_hmi.begin()));
+  std::set_difference(source.begin(),
+                      source.end(),
+                      target.begin(),
+                      target.end(),
+                      std::inserter(diff_hmi, diff_hmi.begin()));
 
   source = diff_hmi;
 }
@@ -661,7 +678,9 @@ void FillNotificationData::ExcludeSameParameters(
     std::set<Parameter>& source, const std::set<Parameter>& target) {
   std::set<Parameter> diff_parameter;
 
-  std::set_difference(source.begin(), source.end(), target.begin(),
+  std::set_difference(source.begin(),
+                      source.end(),
+                      target.begin(),
                       target.end(),
                       std::inserter(diff_parameter, diff_parameter.begin()));
 
@@ -678,11 +697,12 @@ void FillNotificationData::InitRpcKeys(const std::string& rpc_name) {
 ProcessFunctionalGroup::ProcessFunctionalGroup(
     const policy_table::FunctionalGroupings& fg,
     const std::vector<FunctionalGroupPermission>& group_permissions,
-    Permissions& data, GroupConsent undefined_group_consent)
-    : fg_(fg),
-      group_permissions_(group_permissions),
-      data_(data),
-      undefined_group_consent_(undefined_group_consent) {}
+    Permissions& data,
+    GroupConsent undefined_group_consent)
+    : fg_(fg)
+    , group_permissions_(group_permissions)
+    , data_(data)
+    , undefined_group_consent_(undefined_group_consent) {}
 
 bool ProcessFunctionalGroup::operator()(const StringsValueType& group_name) {
   const std::string group_name_str = group_name;
@@ -690,8 +710,8 @@ bool ProcessFunctionalGroup::operator()(const StringsValueType& group_name) {
 
   if (fg_.end() != it) {
     const policy_table::Rpc& rpcs = (*it).second.rpcs;
-    FillNotificationData filler(data_, GetGroupState(group_name_str),
-                                undefined_group_consent_);
+    FillNotificationData filler(
+        data_, GetGroupState(group_name_str), undefined_group_consent_);
     std::for_each(rpcs.begin(), rpcs.end(), filler);
   }
   return true;
@@ -724,7 +744,9 @@ void FunctionalGroupInserter::operator()(const StringsValueType& group_name) {
 }
 
 void FillFunctionalGroupPermissions(
-    FunctionalGroupIDs& ids, FunctionalGroupNames& names, GroupConsent state,
+    FunctionalGroupIDs& ids,
+    FunctionalGroupNames& names,
+    GroupConsent state,
     std::vector<FunctionalGroupPermission>& permissions) {
   LOG4CXX_AUTO_TRACE(logger_);
   FunctionalGroupIDs::const_iterator it = ids.begin();
@@ -754,8 +776,11 @@ FunctionalGroupIDs ExcludeSame(const FunctionalGroupIDs& from,
   std::sort(what_copy.begin(), what_copy.end());
 
   FunctionalGroupIDs no_same;
-  std::set_difference(from_copy.begin(), from_copy.end(), what_copy.begin(),
-                      what_copy.end(), std::back_inserter(no_same));
+  std::set_difference(from_copy.begin(),
+                      from_copy.end(),
+                      what_copy.begin(),
+                      what_copy.end(),
+                      std::back_inserter(no_same));
 
   no_same.resize(std::distance(no_same.begin(),
                                std::unique(no_same.begin(), no_same.end())));
@@ -773,8 +798,11 @@ FunctionalGroupIDs Merge(const FunctionalGroupIDs& first,
   std::sort(second_copy.begin(), second_copy.end());
 
   FunctionalGroupIDs merged;
-  std::set_union(first_copy.begin(), first_copy.end(), second_copy.begin(),
-                 second_copy.end(), std::back_inserter(merged));
+  std::set_union(first_copy.begin(),
+                 first_copy.end(),
+                 second_copy.begin(),
+                 second_copy.end(),
+                 std::back_inserter(merged));
 
   merged.resize(
       std::distance(merged.begin(), std::unique(merged.begin(), merged.end())));
@@ -792,8 +820,10 @@ FunctionalGroupIDs FindSame(const FunctionalGroupIDs& first,
   std::sort(second_copy.begin(), second_copy.end());
 
   FunctionalGroupIDs same;
-  std::set_intersection(first_copy.begin(), first_copy.end(),
-                        second_copy.begin(), second_copy.end(),
+  std::set_intersection(first_copy.begin(),
+                        first_copy.end(),
+                        second_copy.begin(),
+                        second_copy.end(),
                         std::back_inserter(same));
 
   same.resize(

@@ -51,8 +51,8 @@ struct ToHMIType {
       LOG4CXX_WARN(logger_, "HMI type isn't known " << item);
       type = policy_table::AHT_DEFAULT;
     }
-    LOG4CXX_DEBUG(logger_, "HMI type: " << item << " - "
-                                        << EnumToJsonString(type));
+    LOG4CXX_DEBUG(logger_,
+                  "HMI type: " << item << " - " << EnumToJsonString(type));
     return policy_table::AppHMITypes::value_type(type);
   }
 };
@@ -159,7 +159,9 @@ void AccessRemoteImpl::SetDefaultHmiTypes(const ApplicationOnDevice& who,
                                           const std::vector<int>& hmi_types) {
   LOG4CXX_AUTO_TRACE(logger_);
   HMIList::mapped_type types;
-  std::transform(hmi_types.begin(), hmi_types.end(), std::back_inserter(types),
+  std::transform(hmi_types.begin(),
+                 hmi_types.end(),
+                 std::back_inserter(types),
                  ToHMIType());
   hmi_types_[who] = types;
 }
@@ -185,7 +187,8 @@ const policy_table::Strings& AccessRemoteImpl::GetGroups(
 bool AccessRemoteImpl::IsAppRemoteControl(const ApplicationOnDevice& who) {
   LOG4CXX_AUTO_TRACE(logger_);
   const policy_table::AppHMITypes& hmi_types = HmiTypes(who);
-  return std::find(hmi_types.begin(), hmi_types.end(),
+  return std::find(hmi_types.begin(),
+                   hmi_types.end(),
                    policy_table::AHT_REMOTE_CONTROL) != hmi_types.end();
 }
 
@@ -195,14 +198,15 @@ bool AccessRemoteImpl::GetPermissionsForApp(const std::string& device_id,
   LOG4CXX_AUTO_TRACE(logger_);
   GetGroupsIds(device_id, app_id, group_types[kTypeGeneral]);
   GetGroupsIds(device_id, kDefaultId, group_types[kTypeDefault]);
-  GetGroupsIds(device_id, kPreDataConsentId,
-               group_types[kTypePreDataConsented]);
+  GetGroupsIds(
+      device_id, kPreDataConsentId, group_types[kTypePreDataConsented]);
   return true;
 }
 
 std::ostream& operator<<(std::ostream& output,
                          const FunctionalGroupIDs& types) {
-  std::copy(types.begin(), types.end(),
+  std::copy(types.begin(),
+            types.end(),
             std::ostream_iterator<FunctionalGroupIDs::value_type>(output, " "));
   return output;
 }
@@ -213,7 +217,9 @@ void AccessRemoteImpl::GetGroupsIds(const std::string& device_id,
   ApplicationOnDevice who = {device_id, app_id};
   const policy_table::Strings& groups = GetGroups(who);
   groups_ids.resize(groups.size());
-  std::transform(groups.begin(), groups.end(), groups_ids.begin(),
+  std::transform(groups.begin(),
+                 groups.end(),
+                 groups_ids.begin(),
                  &CacheManager::GenerateHash);
   LOG4CXX_DEBUG(logger_, "Groups Ids: " << groups_ids);
 }
@@ -231,8 +237,10 @@ bool AccessRemoteImpl::GetModuleTypes(const std::string& application_id,
   if (!moduleTypes.is_initialized()) {
     return false;
   }
-  std::transform(moduleTypes->begin(), moduleTypes->end(),
-                 std::back_inserter(*modules), ToModuleType());
+  std::transform(moduleTypes->begin(),
+                 moduleTypes->end(),
+                 std::back_inserter(*modules),
+                 ToModuleType());
   return true;
 }
 

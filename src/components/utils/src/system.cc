@@ -71,11 +71,17 @@ System& System::Add(const std::string& arg) {
   return *this;
 }
 
-std::string System::command() const { return command_; }
+std::string System::command() const {
+  return command_;
+}
 
-std::vector<std::string> System::argv() const { return argv_; }
+std::vector<std::string> System::argv() const {
+  return argv_;
+}
 
-bool System::Execute() { return Execute(false); }
+bool System::Execute() {
+  return Execute(false);
+}
 
 #ifdef __QNX__
 
@@ -90,9 +96,9 @@ bool System::Execute(bool wait) {
   delete[] argv;
 
   if (ret == -1) {
-    LOG4CXX_ERROR(logger_, "Can't execute command: " << command_
-                                                     << " Errno is: "
-                                                     << std::strerror(errno));
+    LOG4CXX_ERROR(logger_,
+                  "Can't execute command: " << command_ << " Errno is: "
+                                            << std::strerror(errno));
     return false;
   }
 

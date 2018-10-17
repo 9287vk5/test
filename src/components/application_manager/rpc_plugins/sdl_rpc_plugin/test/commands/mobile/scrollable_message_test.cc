@@ -203,9 +203,10 @@ TEST_F(ScrollableMessageRequestTest,
   const mobile_apis::Result::eType processing_result =
       mobile_apis::Result::ABORTED;
   smart_objects::SmartObject& msg_params = (*msg_)[am::strings::msg_params];
-  EXPECT_CALL(mock_message_helper_,
-              ProcessSoftButtons(msg_params, Eq(mock_app_),
-                                 Ref(mock_policy_handler_), Ref(app_mngr_)))
+  EXPECT_CALL(
+      mock_message_helper_,
+      ProcessSoftButtons(
+          msg_params, Eq(mock_app_), Ref(mock_policy_handler_), Ref(app_mngr_)))
       .WillOnce(Return(processing_result));
   MessageSharedPtr result_msg(CatchMobileCommandResult(CallRun(*command_)));
   EXPECT_EQ(processing_result,
@@ -219,9 +220,10 @@ TEST_F(ScrollableMessageRequestTest, Run_SoftButtonProcessingResult_SUCCESS) {
   (*msg_)[am::strings::params][am::strings::function_id] = kFunctionID;
   (*msg_)[am::strings::msg_params][am::strings::soft_buttons][0]
          [am::strings::soft_button_id] = 0;
-  EXPECT_CALL(mock_message_helper_,
-              ProcessSoftButtons(msg_params, Eq(mock_app_),
-                                 Ref(mock_policy_handler_), Ref(app_mngr_)))
+  EXPECT_CALL(
+      mock_message_helper_,
+      ProcessSoftButtons(
+          msg_params, Eq(mock_app_), Ref(mock_policy_handler_), Ref(app_mngr_)))
       .WillOnce(Return(mobile_apis::Result::SUCCESS));
   EXPECT_CALL(*mock_app_, app_id()).WillOnce(Return(kAppId));
   EXPECT_CALL(mock_message_helper_, SubscribeApplicationToSoftButton(_, _, _));
@@ -242,8 +244,9 @@ TEST_F(ScrollableMessageRequestTest,
        OnEvent_ReceivedUIOnResetTimeoutEvent_SUCCESS) {
   (*msg_)[params][connection_key] = kConnectionKey;
   (*msg_)[params][correlation_id] = kCorrelationId;
-  EXPECT_CALL(app_mngr_, updateRequestTimeout(kConnectionKey, kCorrelationId,
-                                              kDefaultTimeout_));
+  EXPECT_CALL(
+      app_mngr_,
+      updateRequestTimeout(kConnectionKey, kCorrelationId, kDefaultTimeout_));
   Event event(hmi_apis::FunctionID::UI_OnResetTimeout);
   event.set_smart_object(*msg_);
   command_->on_event(event);

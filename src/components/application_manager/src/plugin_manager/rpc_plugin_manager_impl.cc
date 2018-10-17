@@ -9,13 +9,14 @@ namespace plugin_manager {
 CREATE_LOGGERPTR_GLOBAL(logger_, "PluginManager")
 
 RPCPluginManagerImpl::RPCPluginManagerImpl(
-    ApplicationManager& app_manager, rpc_service::RPCService& rpc_service,
+    ApplicationManager& app_manager,
+    rpc_service::RPCService& rpc_service,
     HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : app_manager_(app_manager),
-      rpc_service_(rpc_service),
-      hmi_capabilities_(hmi_capabilities),
-      policy_handler_(policy_handler) {}
+    : app_manager_(app_manager)
+    , rpc_service_(rpc_service)
+    , hmi_capabilities_(hmi_capabilities)
+    , policy_handler_(policy_handler) {}
 
 bool IsLibraryFile(const std::string& file_path) {
   size_t pos = file_path.find_last_of(".");
@@ -36,8 +37,9 @@ RPCPluginPtr LoadPlugin(const std::string& full_plugin_path) {
 
   void* plugin_dll = dlopen(full_plugin_path.c_str(), RTLD_LAZY);
   if (nullptr == plugin_dll) {
-    LOG4CXX_ERROR(logger_, "Failed to open dll " << full_plugin_path << " : "
-                                                 << dlerror());
+    LOG4CXX_ERROR(logger_,
+                  "Failed to open dll " << full_plugin_path << " : "
+                                        << dlerror());
     return RPCPluginPtr();
   }
 
@@ -45,9 +47,9 @@ RPCPluginPtr LoadPlugin(const std::string& full_plugin_path) {
   Create create_plugin = reinterpret_cast<Create>(dlsym(plugin_dll, "Create"));
   char* error_string = dlerror();
   if (nullptr != error_string) {
-    LOG4CXX_ERROR(logger_, "Failed to export dll's "
-                               << full_plugin_path
-                               << " symbols : " << error_string);
+    LOG4CXX_ERROR(logger_,
+                  "Failed to export dll's " << full_plugin_path
+                                            << " symbols : " << error_string);
     dlclose(plugin_dll);
     return RPCPluginPtr();
   }
@@ -64,15 +66,17 @@ uint32_t RPCPluginManagerImpl::LoadPlugins(const std::string& plugins_path) {
     if (!plugin) {
       continue;
     }
-    LOG4CXX_DEBUG(logger_, "Loaded " << plugin->PluginName() << " plugin from "
-                                     << full_name);
-    if (plugin->Init(app_manager_, rpc_service_, hmi_capabilities_,
-                     policy_handler_)) {
+    LOG4CXX_DEBUG(logger_,
+                  "Loaded " << plugin->PluginName() << " plugin from "
+                            << full_name);
+    if (plugin->Init(
+            app_manager_, rpc_service_, hmi_capabilities_, policy_handler_)) {
       loaded_plugins_.push_back(std::move(plugin));
     } else {
-      LOG4CXX_ERROR(logger_, "Initialisation of " << plugin->PluginName()
-                                                  << " plugin from "
-                                                  << full_name << " failed");
+      LOG4CXX_ERROR(logger_,
+                    "Initialisation of " << plugin->PluginName()
+                                         << " plugin from " << full_name
+                                         << " failed");
     }
   }
   return loaded_plugins_.size();

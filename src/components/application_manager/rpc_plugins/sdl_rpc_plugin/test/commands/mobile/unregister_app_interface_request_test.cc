@@ -100,8 +100,8 @@ TEST_F(UnregisterAppInterfaceRequestTest, Run_SUCCESS) {
     EXPECT_CALL(mock_rpc_service_, ManageMobileCommand(dummy_msg, _));
 
     EXPECT_CALL(app_mngr_,
-                UnregisterApplication(kConnectionKey,
-                                      mobile_apis::Result::SUCCESS, _, _));
+                UnregisterApplication(
+                    kConnectionKey, mobile_apis::Result::SUCCESS, _, _));
 
     EXPECT_CALL(mock_rpc_service_,
                 ManageMobileCommand(

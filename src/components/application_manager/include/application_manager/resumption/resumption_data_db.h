@@ -256,7 +256,8 @@ class ResumptionDataDB : public ResumptionData {
    * otherwise returns false
    */
   bool SelectHMILevel(const std::string& policy_app_id,
-                      const std::string& device_id, int& hmi_level) const;
+                      const std::string& device_id,
+                      int& hmi_level) const;
   /**
    * @brief Checks existence HMI id in DB
    * @param hmi_app_id - HMI id
@@ -271,7 +272,8 @@ class ResumptionDataDB : public ResumptionData {
    * @param hmi_id - will contains hmi id from saved application
    */
   void SelectHMIId(const std::string& policy_app_id,
-                   const std::string& device_id, uint32_t& hmi_id) const;
+                   const std::string& device_id,
+                   uint32_t& hmi_id) const;
 
   /**
    * @brief Select hash id from saved application
@@ -280,7 +282,8 @@ class ResumptionDataDB : public ResumptionData {
    * @param hash_id - will contains hash id from saved application
    */
   bool SelectHashId(const std::string& policy_app_id,
-                    const std::string& device_id, std::string& hash_id) const;
+                    const std::string& device_id,
+                    std::string& hash_id) const;
 
   /**
    * @brief Select Ign off time
@@ -773,7 +776,8 @@ class ResumptionDataDB : public ResumptionData {
    * @return true if query was run successfully otherwise returns
    * false
    */
-  bool SelectCountFromArray(uint32_t& count_item, const std::string& text_query,
+  bool SelectCountFromArray(uint32_t& count_item,
+                            const std::string& text_query,
                             const std::string& policy_app_id,
                             const std::string& device_id) const;
 
@@ -784,8 +788,10 @@ class ResumptionDataDB : public ResumptionData {
    * @param query object of query for DB
    * @param pos contains position for binding query
    */
-  void CustomBind(const std::string& key, const smart_objects::SmartObject& so,
-                  utils::dbms::SQLQuery& query, const int pos) const;
+  void CustomBind(const std::string& key,
+                  const smart_objects::SmartObject& so,
+                  utils::dbms::SQLQuery& query,
+                  const int pos) const;
 
   /**
    * @brief prepare and bind the same type query
@@ -826,7 +832,8 @@ class ResumptionDataDB : public ResumptionData {
    * @return true if succedeed, otherwise - false
    */
   bool UpdateGrammarID(const std::string& policy_app_id,
-                       const std::string& device_id, const uint32_t grammar_id);
+                       const std::string& device_id,
+                       const uint32_t grammar_id);
 
   DISALLOW_COPY_AND_ASSIGN(ResumptionDataDB);
 

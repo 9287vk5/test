@@ -72,8 +72,10 @@ class WebsocketSession;
 class CMessageBrokerController
     : public std::enable_shared_from_this<CMessageBrokerController> {
  public:
-  CMessageBrokerController(const std::string& address, uint16_t port,
-                           std::string name, int num_ports);
+  CMessageBrokerController(const std::string& address,
+                           uint16_t port,
+                           std::string name,
+                           int num_ports);
 
   ~CMessageBrokerController();
 

@@ -137,16 +137,19 @@ std::basic_ostream<_CharT>& operator<<(
     return stream;
   }
   for (MultiFrameMap::const_iterator connection_it = map.begin();
-       connection_it != map.end(); ++connection_it) {
+       connection_it != map.end();
+       ++connection_it) {
     const SessionToFrameMap& session_map = connection_it->second;
 
     for (SessionToFrameMap::const_iterator session_it = session_map.begin();
-         session_it != session_map.end(); ++session_it) {
+         session_it != session_map.end();
+         ++session_it) {
       const MessageIDToFrameMap& messageId_map = session_it->second;
 
       for (MessageIDToFrameMap::const_iterator messageId_it =
                messageId_map.begin();
-           messageId_it != messageId_map.end(); ++messageId_it) {
+           messageId_it != messageId_map.end();
+           ++messageId_it) {
         const ProtocolFrameData& frame_data = messageId_it->second;
 
         stream << "ConnectionID: " << connection_it->first

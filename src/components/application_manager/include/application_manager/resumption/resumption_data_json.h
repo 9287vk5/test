@@ -175,7 +175,9 @@ class ResumptionDataJson : public ResumptionData {
    */
   void Persist() OVERRIDE;
 
-  resumption::LastState& last_state() const { return last_state_; }
+  resumption::LastState& last_state() const {
+    return last_state_;
+  }
 
  private:
   /**

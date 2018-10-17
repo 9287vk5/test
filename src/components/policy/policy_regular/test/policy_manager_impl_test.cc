@@ -156,7 +156,9 @@ class PolicyManagerImplTest : public ::testing::Test {
     manager->set_access_remote(access_remote);
   }
 
-  void TearDown() OVERRIDE { delete manager; }
+  void TearDown() OVERRIDE {
+    delete manager;
+  }
 
   ::testing::AssertionResult IsValid(const policy_table::Table& table) {
     if (table.is_valid()) {
@@ -172,11 +174,11 @@ class PolicyManagerImplTest : public ::testing::Test {
 class PolicyManagerImplTest2 : public ::testing::Test {
  public:
   PolicyManagerImplTest2()
-      : app_id1("123456789"),
-        app_id2("1010101010"),
-        dev_id1("XXX123456789ZZZ"),
-        dev_id2("08-00-27-CE-76-FE"),
-        PTU_request_types(Json::arrayValue) {}
+      : app_id1("123456789")
+      , app_id2("1010101010")
+      , dev_id1("XXX123456789ZZZ")
+      , dev_id2("08-00-27-CE-76-FE")
+      , PTU_request_types(Json::arrayValue) {}
 
  protected:
   PolicyManagerImpl* manager;
@@ -242,7 +244,8 @@ class PolicyManagerImplTest2 : public ::testing::Test {
   }
 
   void AddRTtoPT(const std::string& update_file_name,
-                 const std::string& section_name, const uint32_t rt_number,
+                 const std::string& section_name,
+                 const uint32_t rt_number,
                  const uint32_t invalid_rt_number) {
     // Arrange
     CreateLocalPT("sdl_preloaded_pt.json");
@@ -527,8 +530,14 @@ TEST_F(PolicyManagerImplTest2,
   CreateLocalPT("sdl_preloaded_pt.json");
   (manager->GetCache())->AddDevice(dev_id1, "Bluetooth");
   (manager->GetCache())
-      ->SetDeviceData(dev_id1, "hardware IPX", "v.8.0.1", "Android", "4.4.2",
-                      "Life", 2, "Bluetooth");
+      ->SetDeviceData(dev_id1,
+                      "hardware IPX",
+                      "v.8.0.1",
+                      "Android",
+                      "4.4.2",
+                      "Life",
+                      2,
+                      "Bluetooth");
   EXPECT_CALL(listener, OnCurrentDeviceIdUpdateRequired(app_id1))
       .WillRepeatedly(Return(dev_id1));
   manager->SetUserConsentForDevice(dev_id1, true);
@@ -544,8 +553,8 @@ TEST_F(PolicyManagerImplTest2,
   ::policy::RPCParams input_params;
   ::policy::CheckPermissionResult output;
 
-  manager->CheckPermissions(dev_id1, app_id1, std::string("FULL"), "Alert",
-                            input_params, output);
+  manager->CheckPermissions(
+      dev_id1, app_id1, std::string("FULL"), "Alert", input_params, output);
 
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
@@ -564,8 +573,8 @@ TEST_F(PolicyManagerImplTest2,
   ::policy::BinaryMessage msg(json.begin(), json.end());
   ASSERT_TRUE(manager->LoadPT("file_pt_update.json", msg));
 
-  manager->CheckPermissions(dev_id1, app_id1, std::string("FULL"), "Alert",
-                            input_params, output);
+  manager->CheckPermissions(
+      dev_id1, app_id1, std::string("FULL"), "Alert", input_params, output);
   // Check RPC is disallowed
   EXPECT_EQ(::policy::kRpcDisallowed, output.hmi_level_permitted);
   ASSERT_TRUE(output.list_of_allowed_params.empty());
@@ -578,8 +587,14 @@ TEST_F(PolicyManagerImplTest2,
   manager->AddDevice(dev_id1, "Bluetooth");
 
   ASSERT_TRUE((manager->GetCache())
-                  ->SetDeviceData(dev_id1, "hardware IPX", "v.8.0.1", "Android",
-                                  "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(dev_id1,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
   EXPECT_CALL(listener, OnCurrentDeviceIdUpdateRequired("1234"))
       .WillRepeatedly(Return(dev_id1));
   manager->SetUserConsentForDevice(dev_id1, true);
@@ -633,10 +648,20 @@ TEST_F(PolicyManagerImplTest2,
 
   (manager->GetCache())->AddDevice(dev_id1, "Bluetooth");
   (manager->GetCache())
-      ->SetDeviceData(dev_id1, "hardware IPX", "v.8.0.1", "Android", "4.4.2",
-                      "Life", 2, "Bluetooth");
-  manager->CheckPermissions(dev_id1, std::string("1234"), std::string("FULL"),
-                            "Alert", input_params, output);
+      ->SetDeviceData(dev_id1,
+                      "hardware IPX",
+                      "v.8.0.1",
+                      "Android",
+                      "4.4.2",
+                      "Life",
+                      2,
+                      "Bluetooth");
+  manager->CheckPermissions(dev_id1,
+                            std::string("1234"),
+                            std::string("FULL"),
+                            "Alert",
+                            input_params,
+                            output);
   // Check RPC is allowed
   EXPECT_EQ(::policy::kRpcAllowed, output.hmi_level_permitted);
   // Check list of parameters empty
@@ -1015,8 +1040,14 @@ TEST_F(PolicyManagerImplTest2,
   ASSERT_TRUE((manager->GetCache())->AddDevice(dev_id2, "Bluetooth"));
 
   ASSERT_TRUE((manager->GetCache())
-                  ->SetDeviceData(dev_id2, "hardware IPX", "v.8.0.1", "Android",
-                                  "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(dev_id2,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
 
   manager->SetUserConsentForDevice(dev_id2, true);
   ::policy::DeviceConsent consent = manager->GetUserConsentForDevice(dev_id2);
@@ -1036,8 +1067,14 @@ TEST_F(PolicyManagerImplTest2,
   EXPECT_EQ("", default_hmi1);
   ASSERT_TRUE((manager->GetCache())->AddDevice(dev_id2, "Bluetooth"));
   ASSERT_TRUE((manager->GetCache())
-                  ->SetDeviceData(dev_id2, "hardware IPX", "v.8.0.1", "Android",
-                                  "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(dev_id2,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
   manager->SetUserConsentForDevice(dev_id2, true);
   ::policy::DeviceConsent consent = manager->GetUserConsentForDevice(dev_id2);
   // Check
@@ -1063,8 +1100,14 @@ TEST_F(PolicyManagerImplTest2,
   EXPECT_EQ("EMERGENCY", priority1);
   ASSERT_TRUE((manager->GetCache())->AddDevice(dev_id2, "Bluetooth"));
   ASSERT_TRUE((manager->GetCache())
-                  ->SetDeviceData(dev_id2, "hardware IPX", "v.8.0.1", "Android",
-                                  "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(dev_id2,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
   manager->SetUserConsentForDevice(dev_id2, true);
   ::policy::DeviceConsent consent = manager->GetUserConsentForDevice(dev_id2);
   // Check
@@ -1137,8 +1180,14 @@ TEST_F(PolicyManagerImplTest2,
   ASSERT_TRUE((manager->GetCache())->AddDevice(dev_id2, "Bluetooth"));
   manager->AddApplication(app_id2, HmiTypes(policy_table::AHT_DEFAULT));
   ASSERT_TRUE((manager->GetCache())
-                  ->SetDeviceData(dev_id2, "hardware IPX", "v.8.0.1", "Android",
-                                  "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(dev_id2,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
   manager->SetUserConsentForDevice(dev_id2, true);
   ::policy::DeviceConsent consent = manager->GetUserConsentForDevice(dev_id2);
   EXPECT_EQ(::policy::DeviceConsent::kDeviceAllowed, consent);
@@ -1167,8 +1216,14 @@ TEST_F(PolicyManagerImplTest2,
   ASSERT_TRUE((manager->GetCache())->AddDevice(dev_id2, "Bluetooth"));
   manager->AddApplication(app_id2, HmiTypes(policy_table::AHT_DEFAULT));
   ASSERT_TRUE((manager->GetCache())
-                  ->SetDeviceData(dev_id2, "hardware IPX", "v.8.0.1", "Android",
-                                  "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(dev_id2,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
   manager->SetUserConsentForDevice(dev_id2, true);
   ::policy::DeviceConsent consent = manager->GetUserConsentForDevice(dev_id2);
   EXPECT_EQ(::policy::DeviceConsent::kDeviceAllowed, consent);
@@ -1222,15 +1277,21 @@ TEST_F(
 
   ASSERT_TRUE((manager->GetCache())->AddDevice(dev_id2, "Bluetooth"));
   ASSERT_TRUE((manager->GetCache())
-                  ->SetDeviceData(dev_id2, "hardware IPX", "v.8.0.1", "Android",
-                                  "4.4.2", "Life", 2, "Bluetooth"));
+                  ->SetDeviceData(dev_id2,
+                                  "hardware IPX",
+                                  "v.8.0.1",
+                                  "Android",
+                                  "4.4.2",
+                                  "Life",
+                                  2,
+                                  "Bluetooth"));
 
   ::policy::StringArray consented_groups;
   ::policy::StringArray disallowed_groups;
   consented_groups.push_back(std::string("Notifications"));
   (manager->GetCache())
-      ->SetUserPermissionsForDevice(dev_id2, consented_groups,
-                                    disallowed_groups);
+      ->SetUserPermissionsForDevice(
+          dev_id2, consented_groups, disallowed_groups);
   manager->SetUserConsentForDevice(dev_id2, true);
   EXPECT_CALL(listener, OnCurrentDeviceIdUpdateRequired(app_id2))
       .WillRepeatedly(Return(dev_id2));

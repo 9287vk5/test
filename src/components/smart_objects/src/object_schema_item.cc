@@ -48,8 +48,11 @@ CObjectSchemaItem::SMember::SMember()
     : mSchemaItem(CAlwaysFalseSchemaItem::create()), mIsMandatory(true) {}
 
 CObjectSchemaItem::SMember::SMember(
-    const ISchemaItemPtr SchemaItem, const bool IsMandatory,
-    const std::string& Since, const std::string& Until, const bool IsDeprecated,
+    const ISchemaItemPtr SchemaItem,
+    const bool IsMandatory,
+    const std::string& Since,
+    const std::string& Until,
+    const bool IsDeprecated,
     const bool IsRemoved,
     const std::vector<CObjectSchemaItem::SMember>& history_vector)
     : mSchemaItem(SchemaItem), mIsMandatory(IsMandatory) {
@@ -102,7 +105,8 @@ std::shared_ptr<CObjectSchemaItem> CObjectSchemaItem::create(
 }
 
 errors::eType CObjectSchemaItem::validate(
-    const SmartObject& object, rpc::ValidationReport* report__,
+    const SmartObject& object,
+    rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   if (SmartType_Map != object.getType()) {
     std::string validation_info = "Incorrect type, expected: " +
@@ -146,7 +150,8 @@ errors::eType CObjectSchemaItem::validate(
 }
 
 void CObjectSchemaItem::applySchema(
-    SmartObject& Object, const bool RemoveFakeParameters,
+    SmartObject& Object,
+    const bool RemoveFakeParameters,
     const utils::SemanticVersion& MessageVersion) {
   if (SmartType_Map != Object.getType()) {
     return;
@@ -164,12 +169,12 @@ void CObjectSchemaItem::applySchema(
     if (!Object.keyExists(key)) {
       if (member.mSchemaItem->setDefaultValue(default_value)) {
         Object[key] = default_value;
-        member.mSchemaItem->applySchema(Object[key], RemoveFakeParameters,
-                                        MessageVersion);
+        member.mSchemaItem->applySchema(
+            Object[key], RemoveFakeParameters, MessageVersion);
       }
     } else {
-      member.mSchemaItem->applySchema(Object[key], RemoveFakeParameters,
-                                      MessageVersion);
+      member.mSchemaItem->applySchema(
+          Object[key], RemoveFakeParameters, MessageVersion);
     }
   }
 }
@@ -215,7 +220,9 @@ void CObjectSchemaItem::BuildObjectBySchema(const SmartObject& pattern_object,
   }
 }
 
-size_t CObjectSchemaItem::GetMemberSize() { return mMembers.size(); }
+size_t CObjectSchemaItem::GetMemberSize() {
+  return mMembers.size();
+}
 
 CObjectSchemaItem::CObjectSchemaItem(const Members& members)
     : mMembers(members) {}

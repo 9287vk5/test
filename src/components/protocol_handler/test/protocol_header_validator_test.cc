@@ -157,14 +157,21 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_Version) {
   std::vector<uint8_t> malformed_versions;
   malformed_versions.push_back(0);
   for (uint8_t version = PROTOCOL_VERSION_5 + 1;
-       version <= PROTOCOL_VERSION_MAX; ++version) {
+       version <= PROTOCOL_VERSION_MAX;
+       ++version) {
     malformed_versions.push_back(version);
   }
 
   for (size_t i = 0; i < malformed_versions.size(); ++i) {
     const ProtocolPacket::ProtocolHeader malformed_message_header(
-        malformed_versions[i], PROTECTION_OFF, FRAME_TYPE_CONTROL, kControl,
-        FRAME_DATA_HEART_BEAT, some_session_id, 0u, some_message_id);
+        malformed_versions[i],
+        PROTECTION_OFF,
+        FRAME_TYPE_CONTROL,
+        kControl,
+        FRAME_DATA_HEART_BEAT,
+        some_session_id,
+        0u,
+        some_message_id);
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(malformed_message_header))
         << "Malformed version " << malformed_message_header.version;
   }
@@ -186,8 +193,13 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_ServiceType) {
 
   for (size_t i = 0; i < malformed_serv_types.size(); ++i) {
     const ProtocolPacket::ProtocolHeader malformed_message_header(
-        PROTOCOL_VERSION_3, PROTECTION_OFF, FRAME_TYPE_CONTROL,
-        malformed_serv_types[i], FRAME_DATA_HEART_BEAT, some_session_id, 0u,
+        PROTOCOL_VERSION_3,
+        PROTECTION_OFF,
+        FRAME_TYPE_CONTROL,
+        malformed_serv_types[i],
+        FRAME_DATA_HEART_BEAT,
+        some_session_id,
+        0u,
         some_message_id);
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(malformed_message_header))
         << "Malformed service type " << malformed_message_header.serviceType;
@@ -199,13 +211,20 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_ServiceType) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_FrameType) {
   std::vector<uint8_t> malformed_frame_types;
   for (uint8_t frame_type = FRAME_TYPE_CONSECUTIVE + 1;
-       frame_type <= FRAME_TYPE_MAX_VALUE; ++frame_type) {
+       frame_type <= FRAME_TYPE_MAX_VALUE;
+       ++frame_type) {
     malformed_frame_types.push_back(frame_type);
   }
   for (size_t i = 0; i < malformed_frame_types.size(); ++i) {
     const ProtocolPacket::ProtocolHeader malformed_message_header(
-        PROTOCOL_VERSION_3, PROTECTION_OFF, malformed_frame_types[i], kControl,
-        FRAME_DATA_HEART_BEAT, some_session_id, 0u, some_message_id);
+        PROTOCOL_VERSION_3,
+        PROTECTION_OFF,
+        malformed_frame_types[i],
+        kControl,
+        FRAME_DATA_HEART_BEAT,
+        some_session_id,
+        0u,
+        some_message_id);
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(malformed_message_header))
         << "Malformed frame type " << malformed_message_header.frameType;
   }
@@ -216,13 +235,20 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_FrameType) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_ControlFrame) {
   std::vector<uint8_t> malformed_frame_data;
   for (uint8_t frame_type = FRAME_DATA_REGISTER_SECONDARY_TRANSPORT_NACK + 1;
-       frame_type < FRAME_DATA_TRANSPORT_EVENT_UPDATE; ++frame_type) {
+       frame_type < FRAME_DATA_TRANSPORT_EVENT_UPDATE;
+       ++frame_type) {
     malformed_frame_data.push_back(frame_type);
   }
   for (size_t i = 0; i < malformed_frame_data.size(); ++i) {
     const ProtocolPacket::ProtocolHeader malformed_message_header(
-        PROTOCOL_VERSION_3, PROTECTION_OFF, FRAME_TYPE_CONTROL, kControl,
-        malformed_frame_data[i], some_session_id, 0u, some_message_id);
+        PROTOCOL_VERSION_3,
+        PROTECTION_OFF,
+        FRAME_TYPE_CONTROL,
+        kControl,
+        malformed_frame_data[i],
+        some_session_id,
+        0u,
+        some_message_id);
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(malformed_message_header))
         << "Malformed Control frame with data "
         << malformed_message_header.frameData;
@@ -232,14 +258,21 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_ControlFrame) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_SingleFrame) {
   std::vector<uint8_t> malformed_frame_data;
   for (uint8_t frame_type = FRAME_DATA_SINGLE + 1;
-       frame_type < FRAME_DATA_MAX_VALUE; ++frame_type) {
+       frame_type < FRAME_DATA_MAX_VALUE;
+       ++frame_type) {
     malformed_frame_data.push_back(frame_type);
   }
   malformed_frame_data.push_back(FRAME_DATA_MAX_VALUE);
   for (size_t i = 0; i < malformed_frame_data.size(); ++i) {
     const ProtocolPacket::ProtocolHeader malformed_message_header(
-        PROTOCOL_VERSION_3, PROTECTION_OFF, FRAME_TYPE_SINGLE, kControl,
-        malformed_frame_data[i], some_session_id, 0u, some_message_id);
+        PROTOCOL_VERSION_3,
+        PROTECTION_OFF,
+        FRAME_TYPE_SINGLE,
+        kControl,
+        malformed_frame_data[i],
+        some_session_id,
+        0u,
+        some_message_id);
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(malformed_message_header))
         << "Malformed Single frame with data "
         << malformed_message_header.frameData;
@@ -251,14 +284,21 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_SingleFrame) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_FirstFrame) {
   std::vector<uint8_t> malformed_frame_data;
   for (uint8_t frame_type = FRAME_DATA_FIRST + 1;
-       frame_type < FRAME_DATA_MAX_VALUE; ++frame_type) {
+       frame_type < FRAME_DATA_MAX_VALUE;
+       ++frame_type) {
     malformed_frame_data.push_back(frame_type);
   }
   malformed_frame_data.push_back(FRAME_DATA_MAX_VALUE);
   for (size_t i = 0; i < malformed_frame_data.size(); ++i) {
     const ProtocolPacket::ProtocolHeader malformed_message_header(
-        PROTOCOL_VERSION_3, PROTECTION_OFF, FRAME_TYPE_SINGLE, kControl,
-        malformed_frame_data[i], some_session_id, 0u, some_message_id);
+        PROTOCOL_VERSION_3,
+        PROTECTION_OFF,
+        FRAME_TYPE_SINGLE,
+        kControl,
+        malformed_frame_data[i],
+        some_session_id,
+        0u,
+        some_message_id);
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(malformed_message_header))
         << "Malformed First frame with data "
         << malformed_message_header.frameData;
@@ -268,18 +308,35 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_FirstFrame) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_ControlFrame_EmptyPayload) {
   const size_t payload_size = 0u;
   const ProtocolPacket::ProtocolHeader control_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_CONTROL, kControl,
-      FRAME_DATA_HEART_BEAT, some_session_id, payload_size, some_message_id);
-  const ProtocolPacket::ProtocolHeader single_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_SINGLE, kControl,
-      FRAME_DATA_SINGLE, some_session_id, payload_size, some_message_id);
+      PROTOCOL_VERSION_3,
+      PROTECTION_ON,
+      FRAME_TYPE_CONTROL,
+      kControl,
+      FRAME_DATA_HEART_BEAT,
+      some_session_id,
+      payload_size,
+      some_message_id);
+  const ProtocolPacket::ProtocolHeader single_message_header(PROTOCOL_VERSION_3,
+                                                             PROTECTION_ON,
+                                                             FRAME_TYPE_SINGLE,
+                                                             kControl,
+                                                             FRAME_DATA_SINGLE,
+                                                             some_session_id,
+                                                             payload_size,
+                                                             some_message_id);
   const ProtocolPacket::ProtocolHeader consecutive_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_CONSECUTIVE, kControl,
-      FRAME_DATA_LAST_CONSECUTIVE, some_session_id, payload_size,
+      PROTOCOL_VERSION_3,
+      PROTECTION_ON,
+      FRAME_TYPE_CONSECUTIVE,
+      kControl,
+      FRAME_DATA_LAST_CONSECUTIVE,
+      some_session_id,
+      payload_size,
       some_message_id);
 
   for (size_t max_payload_size = 0;
-       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2; ++max_payload_size) {
+       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2;
+       ++max_payload_size) {
     header_validator.set_max_payload_size(MAXIMUM_FRAME_DATA_V3_SIZE +
                                           max_payload_size);
 
@@ -296,18 +353,35 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_ControlFrame_EmptyPayload) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_Payload_V2) {
   const size_t payload_size = MAXIMUM_FRAME_DATA_V2_SIZE;
   const ProtocolPacket::ProtocolHeader control_message_header(
-      PROTOCOL_VERSION_2, PROTECTION_ON, FRAME_TYPE_CONTROL, kControl,
-      FRAME_DATA_HEART_BEAT, some_session_id, payload_size, some_message_id);
-  const ProtocolPacket::ProtocolHeader single_message_header(
-      PROTOCOL_VERSION_2, PROTECTION_ON, FRAME_TYPE_SINGLE, kControl,
-      FRAME_DATA_SINGLE, some_session_id, payload_size, some_message_id);
+      PROTOCOL_VERSION_2,
+      PROTECTION_ON,
+      FRAME_TYPE_CONTROL,
+      kControl,
+      FRAME_DATA_HEART_BEAT,
+      some_session_id,
+      payload_size,
+      some_message_id);
+  const ProtocolPacket::ProtocolHeader single_message_header(PROTOCOL_VERSION_2,
+                                                             PROTECTION_ON,
+                                                             FRAME_TYPE_SINGLE,
+                                                             kControl,
+                                                             FRAME_DATA_SINGLE,
+                                                             some_session_id,
+                                                             payload_size,
+                                                             some_message_id);
   const ProtocolPacket::ProtocolHeader consecutive_message_header(
-      PROTOCOL_VERSION_2, PROTECTION_ON, FRAME_TYPE_CONSECUTIVE, kControl,
-      FRAME_DATA_LAST_CONSECUTIVE, some_session_id, payload_size,
+      PROTOCOL_VERSION_2,
+      PROTECTION_ON,
+      FRAME_TYPE_CONSECUTIVE,
+      kControl,
+      FRAME_DATA_LAST_CONSECUTIVE,
+      some_session_id,
+      payload_size,
       some_message_id);
 
   for (size_t max_payload_size = 0;
-       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2; ++max_payload_size) {
+       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2;
+       ++max_payload_size) {
     header_validator.set_max_payload_size(max_payload_size);
     EXPECT_EQ(RESULT_OK, header_validator.validate(control_message_header));
     EXPECT_EQ(RESULT_OK, header_validator.validate(single_message_header));
@@ -318,18 +392,35 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_Payload_V2) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_Payload_V3) {
   const size_t payload_size = MAXIMUM_FRAME_DATA_V3_SIZE;
   const ProtocolPacket::ProtocolHeader control_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_CONTROL, kControl,
-      FRAME_DATA_HEART_BEAT, some_session_id, payload_size, some_message_id);
-  const ProtocolPacket::ProtocolHeader single_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_SINGLE, kControl,
-      FRAME_DATA_SINGLE, some_session_id, payload_size, some_message_id);
+      PROTOCOL_VERSION_3,
+      PROTECTION_ON,
+      FRAME_TYPE_CONTROL,
+      kControl,
+      FRAME_DATA_HEART_BEAT,
+      some_session_id,
+      payload_size,
+      some_message_id);
+  const ProtocolPacket::ProtocolHeader single_message_header(PROTOCOL_VERSION_3,
+                                                             PROTECTION_ON,
+                                                             FRAME_TYPE_SINGLE,
+                                                             kControl,
+                                                             FRAME_DATA_SINGLE,
+                                                             some_session_id,
+                                                             payload_size,
+                                                             some_message_id);
   const ProtocolPacket::ProtocolHeader consecutive_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_CONSECUTIVE, kControl,
-      FRAME_DATA_LAST_CONSECUTIVE, some_session_id, payload_size,
+      PROTOCOL_VERSION_3,
+      PROTECTION_ON,
+      FRAME_TYPE_CONSECUTIVE,
+      kControl,
+      FRAME_DATA_LAST_CONSECUTIVE,
+      some_session_id,
+      payload_size,
       some_message_id);
 
   for (size_t max_payload_size = 0;
-       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE; ++max_payload_size) {
+       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE;
+       ++max_payload_size) {
     header_validator.set_max_payload_size(max_payload_size);
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(control_message_header));
     EXPECT_EQ(RESULT_FAIL, header_validator.validate(single_message_header));
@@ -338,7 +429,8 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_Payload_V3) {
   }
 
   for (size_t max_payload_size = MAXIMUM_FRAME_DATA_V3_SIZE;
-       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2; ++max_payload_size) {
+       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2;
+       ++max_payload_size) {
     header_validator.set_max_payload_size(max_payload_size);
     EXPECT_EQ(RESULT_OK, header_validator.validate(control_message_header));
     EXPECT_EQ(RESULT_OK, header_validator.validate(single_message_header));
@@ -349,18 +441,35 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_Payload_V3) {
 TEST_F(ProtocolHeaderValidatorTest, Malformed_Payload_V3_with_V2_size) {
   const size_t payload_size = MAXIMUM_FRAME_DATA_V2_SIZE;
   const ProtocolPacket::ProtocolHeader control_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_CONTROL, kControl,
-      FRAME_DATA_HEART_BEAT, some_session_id, payload_size, some_message_id);
-  const ProtocolPacket::ProtocolHeader single_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_SINGLE, kControl,
-      FRAME_DATA_SINGLE, some_session_id, payload_size, some_message_id);
+      PROTOCOL_VERSION_3,
+      PROTECTION_ON,
+      FRAME_TYPE_CONTROL,
+      kControl,
+      FRAME_DATA_HEART_BEAT,
+      some_session_id,
+      payload_size,
+      some_message_id);
+  const ProtocolPacket::ProtocolHeader single_message_header(PROTOCOL_VERSION_3,
+                                                             PROTECTION_ON,
+                                                             FRAME_TYPE_SINGLE,
+                                                             kControl,
+                                                             FRAME_DATA_SINGLE,
+                                                             some_session_id,
+                                                             payload_size,
+                                                             some_message_id);
   const ProtocolPacket::ProtocolHeader consecutive_message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_CONSECUTIVE, kControl,
-      FRAME_DATA_LAST_CONSECUTIVE, some_session_id, payload_size,
+      PROTOCOL_VERSION_3,
+      PROTECTION_ON,
+      FRAME_TYPE_CONSECUTIVE,
+      kControl,
+      FRAME_DATA_LAST_CONSECUTIVE,
+      some_session_id,
+      payload_size,
       some_message_id);
 
   for (size_t max_payload_size = 0;
-       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2; ++max_payload_size) {
+       max_payload_size < MAXIMUM_FRAME_DATA_V3_SIZE * 2;
+       ++max_payload_size) {
     header_validator.set_max_payload_size(max_payload_size);
     EXPECT_EQ(RESULT_OK, header_validator.validate(control_message_header));
     EXPECT_EQ(RESULT_OK, header_validator.validate(single_message_header));
@@ -371,9 +480,14 @@ TEST_F(ProtocolHeaderValidatorTest, Malformed_Payload_V3_with_V2_size) {
 // Message ID be equal or greater than 0x01
 TEST_F(ProtocolHeaderValidatorTest, Malformed_MessageID) {
   const uint32_t malformed_message_id = 0x0u;
-  ProtocolPacket::ProtocolHeader message_header(
-      PROTOCOL_VERSION_3, PROTECTION_ON, FRAME_TYPE_FIRST, kControl,
-      FRAME_DATA_HEART_BEAT, some_session_id, 0u, malformed_message_id);
+  ProtocolPacket::ProtocolHeader message_header(PROTOCOL_VERSION_3,
+                                                PROTECTION_ON,
+                                                FRAME_TYPE_FIRST,
+                                                kControl,
+                                                FRAME_DATA_HEART_BEAT,
+                                                some_session_id,
+                                                0u,
+                                                malformed_message_id);
 
   message_header.frameType = FRAME_TYPE_FIRST;
   message_header.version = PROTOCOL_VERSION_1;

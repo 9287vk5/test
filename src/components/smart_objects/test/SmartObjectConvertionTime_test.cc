@@ -116,8 +116,11 @@ class SmartObjectConvertionTimeTest : public ::testing::Test {
     // JSON --> SmartObjects
     ns_smart_device_link::ns_json_handler::formatters::CFormatterJsonSDLRPCv2::
         fromString<FunctionIdTest::eType, MessageTypeTest::eType>(
-            jsonString, dstObj, FunctionIdTest::RegisterAppInterface,
-            MessageTypeTest::request, 13);
+            jsonString,
+            dstObj,
+            FunctionIdTest::RegisterAppInterface,
+            MessageTypeTest::request,
+            13);
 
     clock_gettime(CLOCK_REALTIME, &convertionEndTime);
     return static_cast<double>(convertionEndTime.tv_sec -
@@ -176,7 +179,8 @@ class SmartObjectConvertionTimeTest : public ::testing::Test {
     }
     printf(
         "Format V1. Convertion TO time = %.8f, Convertion FROM time = %.8f\n",
-        convertionToTime / cycles, convertionFromTime / cycles);
+        convertionToTime / cycles,
+        convertionFromTime / cycles);
 
     srcObj[S_PARAMS][S_PROTOCOL_VERSION] = 1;  // adjust protocol version
 
@@ -193,7 +197,8 @@ class SmartObjectConvertionTimeTest : public ::testing::Test {
     }
     printf(
         "Format V2. Convertion TO time = %.8f, Convertion FROM time = %.8f\n",
-        convertionToTime / cycles, convertionFromTime / cycles);
+        convertionToTime / cycles,
+        convertionFromTime / cycles);
 
     srcObj[S_PARAMS][S_PROTOCOL_VERSION] = 2;  // adjust protocol version
 
@@ -212,14 +217,16 @@ class SmartObjectConvertionTimeTest : public ::testing::Test {
     printf("\nJSON string V1 = %s", jsonString.c_str());
     printf(
         "\nFormat V1. Convertion TO time = %.8f, Convertion FROM time = %.8f\n",
-        convertionToTime, convertionFromTime);
+        convertionToTime,
+        convertionFromTime);
 
     convertionToTime = getConvertionTimeToJsonV2Format(srcObj, jsonString);
     convertionFromTime = getConvertionTimeFromJsonV2Format(jsonString, dstObj);
     printf("\nJSON string V2 = %s", jsonString.c_str());
     printf(
         "\nFormat V2. Convertion TO time = %.8f, Convertion FROM time = %.8f\n",
-        convertionToTime, convertionFromTime);
+        convertionToTime,
+        convertionFromTime);
   }
 
   // The basic Schema just for enum conversion (FunctionId and MessageType)
@@ -301,13 +308,15 @@ class SmartObjectConvertionTimeTest : public ::testing::Test {
             resultCode_allowedEnumSubsetValues,
             TSchemaItemParameter<TestType::eType>());
 
-    ISchemaItemPtr info_SchemaItem = CStringSchemaItem::create(
-        TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-        TSchemaItemParameter<std::string>());
+    ISchemaItemPtr info_SchemaItem =
+        CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                  TSchemaItemParameter<size_t>(1000),
+                                  TSchemaItemParameter<std::string>());
 
-    ISchemaItemPtr tryAgainTime_SchemaItem = TNumberSchemaItem<int>::create(
-        TSchemaItemParameter<int>(0), TSchemaItemParameter<int>(2000000000),
-        TSchemaItemParameter<int>());
+    ISchemaItemPtr tryAgainTime_SchemaItem =
+        TNumberSchemaItem<int>::create(TSchemaItemParameter<int>(0),
+                                       TSchemaItemParameter<int>(2000000000),
+                                       TSchemaItemParameter<int>());
 
     std::map<std::string, CObjectSchemaItem::SMember> schemaMembersMap;
 
@@ -544,8 +553,11 @@ TEST_F(SmartObjectConvertionTimeTest, test_array_convertion) {
   calculateConvertionTime(srcObj, dstObj);
 
   // Fourth iteration
-  printf("\n Array object [%d x %d x %d x %d].\n", arraySize, arraySize,
-         arraySize, arraySize);
+  printf("\n Array object [%d x %d x %d x %d].\n",
+         arraySize,
+         arraySize,
+         arraySize,
+         arraySize);
   innerObj = arrayObj;
   for (int i = 0; i < arraySize; i++) {
     arrayObj[i] = innerObj;
@@ -561,8 +573,12 @@ TEST_F(SmartObjectConvertionTimeTest, test_array_convertion) {
   calculateConvertionTime(srcObj, dstObj);
 
   // Last iteration
-  printf("\n Array object [%d x %d x %d x %d x %d].\n", arraySize, arraySize,
-         arraySize, arraySize, arraySize);
+  printf("\n Array object [%d x %d x %d x %d x %d].\n",
+         arraySize,
+         arraySize,
+         arraySize,
+         arraySize,
+         arraySize);
   innerObj = arrayObj;
   for (int i = 0; i < arraySize; i++) {
     arrayObj[i] = innerObj;
@@ -651,10 +667,16 @@ const EnumConversionHelper<test::components::SmartObjects::
 template <>
 const char* const EnumConversionHelper<
     test::components::SmartObjects::SmartObjectConvertionTimeTest::TestType::
-        eType>::cstring_values_[] = {
-    "APPLICATION_NOT_REGISTERED", "SUCCESS", "TOO_MANY_PENDING_REQUESTS",
-    "REJECTED", "INVALID_DATA", "OUT_OF_MEMORY", "ABORTED", "USER_DISALLOWED",
-    "GENERIC_ERROR", "DISALLOWED"};
+        eType>::cstring_values_[] = {"APPLICATION_NOT_REGISTERED",
+                                     "SUCCESS",
+                                     "TOO_MANY_PENDING_REQUESTS",
+                                     "REJECTED",
+                                     "INVALID_DATA",
+                                     "OUT_OF_MEMORY",
+                                     "ABORTED",
+                                     "USER_DISALLOWED",
+                                     "GENERIC_ERROR",
+                                     "DISALLOWED"};
 
 template <>
 const test::components::SmartObjects::SmartObjectConvertionTimeTest::TestType::
@@ -747,8 +769,8 @@ const EnumConversionHelper<
 template <>
 const char* const EnumConversionHelper<
     test::components::SmartObjects::SmartObjectConvertionTimeTest::
-        MessageTypeTest::eType>::cstring_values_[] = {"request", "response",
-                                                      "notification"};
+        MessageTypeTest::eType>::cstring_values_[] = {
+    "request", "response", "notification"};
 
 template <>
 const test::components::SmartObjects::SmartObjectConvertionTimeTest::

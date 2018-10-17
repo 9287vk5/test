@@ -52,7 +52,8 @@ class UsbConnection : public Connection {
   UsbConnection(const DeviceUID& device_uid,
                 const ApplicationHandle& app_handle,
                 TransportAdapterController* controller,
-                const UsbHandlerSptr libusb_handler, PlatformUsbDevice* device);
+                const UsbHandlerSptr libusb_handler,
+                PlatformUsbDevice* device);
 
   bool Init();
 

@@ -41,10 +41,14 @@ namespace commands {
 SDLGetUserFriendlyMessageRequest::SDLGetUserFriendlyMessageRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : RequestFromHMI(message, application_manager, rpc_service,
-                     hmi_capabilities, policy_handle) {}
+    : RequestFromHMI(message,
+                     application_manager,
+                     rpc_service,
+                     hmi_capabilities,
+                     policy_handle) {}
 
 SDLGetUserFriendlyMessageRequest::~SDLGetUserFriendlyMessageRequest() {}
 
@@ -83,7 +87,8 @@ void SDLGetUserFriendlyMessageRequest::Run() {
   }
 
   policy_handler_.OnGetUserFriendlyMessage(
-      msg_codes, required_language,
+      msg_codes,
+      required_language,
       (*message_)[strings::params][strings::correlation_id].asInt());
 }
 

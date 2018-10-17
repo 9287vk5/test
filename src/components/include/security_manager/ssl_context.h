@@ -94,10 +94,12 @@ class SSLContext {
                                           size_t in_data_size,
                                           const uint8_t** const out_data,
                                           size_t* out_data_size) = 0;
-  virtual bool Encrypt(const uint8_t* const in_data, size_t in_data_size,
+  virtual bool Encrypt(const uint8_t* const in_data,
+                       size_t in_data_size,
                        const uint8_t** const out_data,
                        size_t* out_data_size) = 0;
-  virtual bool Decrypt(const uint8_t* const in_data, size_t in_data_size,
+  virtual bool Decrypt(const uint8_t* const in_data,
+                       size_t in_data_size,
                        const uint8_t** const out_data,
                        size_t* out_data_size) = 0;
   virtual bool IsInitCompleted() const = 0;

@@ -53,7 +53,9 @@ bool SDLRPCPlugin::IsAbleToProcess(
   return command_factory_->IsAbleToProcess(function_id, message_source);
 }
 
-std::string SDLRPCPlugin::PluginName() { return "SDL RPC Plugin"; }
+std::string SDLRPCPlugin::PluginName() {
+  return "SDL RPC Plugin";
+}
 
 application_manager::CommandFactory& SDLRPCPlugin::GetCommandFactory() {
   return *command_factory_;

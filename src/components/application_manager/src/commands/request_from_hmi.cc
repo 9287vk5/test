@@ -43,25 +43,33 @@ RequestFromHMI::RequestFromHMI(const MessageSharedPtr& message,
                                rpc_service::RPCService& rpc_service,
                                HMICapabilities& hmi_capabilities,
                                policy::PolicyHandlerInterface& policy_handler)
-    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
-                  policy_handler),
-      EventObserver(application_manager.event_dispatcher()) {
+    : CommandImpl(message,
+                  application_manager,
+                  rpc_service,
+                  hmi_capabilities,
+                  policy_handler)
+    , EventObserver(application_manager.event_dispatcher()) {
   // Replace HMI app id with Mobile connection id
   ReplaceHMIWithMobileAppId(*message);
 }
 
 RequestFromHMI::~RequestFromHMI() {}
 
-bool RequestFromHMI::Init() { return true; }
+bool RequestFromHMI::Init() {
+  return true;
+}
 
-bool RequestFromHMI::CleanUp() { return true; }
+bool RequestFromHMI::CleanUp() {
+  return true;
+}
 
 void RequestFromHMI::Run() {}
 
 void RequestFromHMI::on_event(const event_engine::Event& event) {}
 
 void RequestFromHMI::SendResponse(
-    const bool success, const uint32_t correlation_id,
+    const bool success,
+    const uint32_t correlation_id,
     const hmi_apis::FunctionID::eType function_id,
     const hmi_apis::Common_Result::eType result_code) {
   smart_objects::SmartObjectSPtr message =
@@ -94,7 +102,8 @@ void RequestFromHMI::SendErrorResponse(
 }
 
 void RequestFromHMI::FillCommonParametersOfSO(
-    smart_objects::SmartObject& message, const uint32_t correlation_id,
+    smart_objects::SmartObject& message,
+    const uint32_t correlation_id,
     const hmi_apis::FunctionID::eType function_id) {
   (message)[strings::params][strings::function_id] = function_id;
   (message)[strings::params][strings::protocol_type] = hmi_protocol_type_;

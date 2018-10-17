@@ -82,11 +82,11 @@ class RAManagerTest : public ::testing::Test {
  public:
   RAManagerTest()
       : message_(std::make_shared<Message>(MessagePriority::FromServiceType(
-            protocol_handler::ServiceType::kRpc))),
-        mock_app_1_(std::make_shared<NiceMock<MockApplication> >()),
-        mock_app_2_(std::make_shared<NiceMock<MockApplication> >()),
-        apps_lock_ptr_(std::make_shared<sync_primitives::Lock>()),
-        apps_da_(apps_, apps_lock_ptr_) {
+            protocol_handler::ServiceType::kRpc)))
+      , mock_app_1_(std::make_shared<NiceMock<MockApplication> >())
+      , mock_app_2_(std::make_shared<NiceMock<MockApplication> >())
+      , apps_lock_ptr_(std::make_shared<sync_primitives::Lock>())
+      , apps_da_(apps_, apps_lock_ptr_) {
     ON_CALL(mock_app_mngr_, GetPolicyHandler())
         .WillByDefault(ReturnRef(mock_policy_handler_));
     auto plugin_id = rc_rpc_plugin::RCRPCPlugin::kRCPluginID;
@@ -194,8 +194,8 @@ TEST_F(
   const Common_RCAccessMode::eType access_mode =
       Common_RCAccessMode::eType::AUTO_ALLOW;
   ResourceAllocationManagerImpl ra_manager(mock_app_mngr_, mock_rpc_service_);
-  CheckResultWithHMILevelAndAccessMode(ra_manager, app_level, expected_result,
-                                       access_mode);
+  CheckResultWithHMILevelAndAccessMode(
+      ra_manager, app_level, expected_result, access_mode);
 }
 
 TEST_F(
@@ -209,8 +209,8 @@ TEST_F(
   const Common_RCAccessMode::eType access_mode =
       Common_RCAccessMode::eType::AUTO_DENY;
   ResourceAllocationManagerImpl ra_manager(mock_app_mngr_, mock_rpc_service_);
-  CheckResultWithHMILevelAndAccessMode(ra_manager, app_level, expected_result,
-                                       access_mode);
+  CheckResultWithHMILevelAndAccessMode(
+      ra_manager, app_level, expected_result, access_mode);
 }
 
 TEST_F(
@@ -224,8 +224,8 @@ TEST_F(
   const Common_RCAccessMode::eType access_mode =
       Common_RCAccessMode::eType::AUTO_ALLOW;
   ResourceAllocationManagerImpl ra_manager(mock_app_mngr_, mock_rpc_service_);
-  CheckResultWithHMILevelAndAccessMode(ra_manager, app_level, expected_result,
-                                       access_mode);
+  CheckResultWithHMILevelAndAccessMode(
+      ra_manager, app_level, expected_result, access_mode);
 }
 
 TEST_F(
@@ -239,8 +239,8 @@ TEST_F(
   const Common_RCAccessMode::eType access_mode =
       Common_RCAccessMode::eType::ASK_DRIVER;
   ResourceAllocationManagerImpl ra_manager(mock_app_mngr_, mock_rpc_service_);
-  CheckResultWithHMILevelAndAccessMode(ra_manager, app_level, expected_result,
-                                       access_mode);
+  CheckResultWithHMILevelAndAccessMode(
+      ra_manager, app_level, expected_result, access_mode);
 }
 
 TEST_F(RAManagerTest,

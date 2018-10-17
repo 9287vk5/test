@@ -41,8 +41,8 @@ RawMessageMatcher::RawMessageMatcher(RawMessagePtr ptr) : ptr_(ptr) {}
 bool RawMessageMatcher::MatchAndExplain(const RawMessagePtr msg,
                                         MatchResultListener* listener) const {
   if (msg->data_size() != ptr_->data_size()) {
-    return ::std::equal(msg->data(), msg->data() + msg->data_size(),
-                        ptr_->data());
+    return ::std::equal(
+        msg->data(), msg->data() + msg->data_size(), ptr_->data());
   } else
     return false;
 }

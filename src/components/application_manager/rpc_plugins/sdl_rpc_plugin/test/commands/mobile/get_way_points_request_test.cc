@@ -94,7 +94,8 @@ class GetWayPointsRequestOnEventTest
   GetWayPointsRequestOnEventTest() : app_(CreateMockApp()) {}
 
   void CheckOnEventResponse(const std::string& wayPointsParam,
-                            const HmiResult ResultCode, const bool success) {
+                            const HmiResult ResultCode,
+                            const bool success) {
     Event event(Event::EventID::Navigation_GetWayPoints);
     CommandPtr command(CreateCommand<GetWayPointsRequest>());
     MessageSharedPtr event_msg(CreateMessage(smart_objects::SmartType_Map));

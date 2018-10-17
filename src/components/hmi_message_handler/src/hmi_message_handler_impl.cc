@@ -39,13 +39,15 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "HMIMessageHandler")
 
 HMIMessageHandlerImpl::HMIMessageHandlerImpl(
     const HMIMessageHandlerSettings& settings)
-    : settings_(settings),
-      observer_(NULL),
-      messages_to_hmi_(
-          "HMH ToHMI", this,
-          threads::ThreadOptions(get_settings().thread_min_stack_size())),
-      messages_from_hmi_(
-          "HMH FromHMI", this,
+    : settings_(settings)
+    , observer_(NULL)
+    , messages_to_hmi_(
+          "HMH ToHMI",
+          this,
+          threads::ThreadOptions(get_settings().thread_min_stack_size()))
+    , messages_from_hmi_(
+          "HMH FromHMI",
+          this,
           threads::ThreadOptions(get_settings().thread_min_stack_size())) {}
 
 HMIMessageHandlerImpl::~HMIMessageHandlerImpl() {
@@ -125,7 +127,8 @@ void HMIMessageHandlerImpl::Handle(const impl::MessageFromHmi message) {
 void HMIMessageHandlerImpl::Handle(const impl::MessageToHmi message) {
   sync_primitives::AutoLock lock(message_adapters_locker_);
   for (std::set<HMIMessageAdapter*>::iterator it = message_adapters_.begin();
-       it != message_adapters_.end(); ++it) {
+       it != message_adapters_.end();
+       ++it) {
     (*it)->SendMessageToHMI(message);
   }
 }

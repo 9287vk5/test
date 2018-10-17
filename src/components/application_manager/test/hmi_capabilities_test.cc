@@ -68,8 +68,8 @@ using namespace application_manager;
 class HMICapabilitiesTest : public ::testing::Test {
  protected:
   HMICapabilitiesTest()
-      : last_state_("app_storage_folder", "app_info_data"),
-        file_name_("hmi_capabilities.json") {}
+      : last_state_("app_storage_folder", "app_info_data")
+      , file_name_("hmi_capabilities.json") {}
   virtual void SetUp() OVERRIDE {
     EXPECT_CALL(app_mngr_, event_dispatcher())
         .WillOnce(ReturnRef(mock_event_dispatcher));
@@ -86,7 +86,9 @@ class HMICapabilitiesTest : public ::testing::Test {
     hmi_capabilities_test->Init(&last_state_);
   }
 
-  void TearDown() OVERRIDE { hmi_capabilities_test.reset(); }
+  void TearDown() OVERRIDE {
+    hmi_capabilities_test.reset();
+  }
   static void TearDownTestCase() {
     if (file_system::FileExists("./app_info_data")) {
       EXPECT_TRUE(::file_system::DeleteFile("./app_info_data"));
@@ -133,10 +135,13 @@ const hmi_apis::Common_Language::eType enum_values_[] = {
     hmi_apis::Common_Language::HI_IN};
 
 struct CStringComparator {
-  bool operator()(const char* a, const char* b) { return strcmp(a, b) < 0; }
+  bool operator()(const char* a, const char* b) {
+    return strcmp(a, b) < 0;
+  }
 };
 
-typedef std::map<const char*, hmi_apis::Common_Language::eType,
+typedef std::map<const char*,
+                 hmi_apis::Common_Language::eType,
                  CStringComparator> CStringToEnumMap;
 
 CStringToEnumMap InitCStringToEnumMap() {
@@ -400,8 +405,9 @@ TEST_F(HMICapabilitiesTest, LoadCapabilitiesFromFile) {
       800,
       vs_capability_so[strings::preferred_resolution][strings::resolution_width]
           .asInt());
-  EXPECT_EQ(350, vs_capability_so[strings::preferred_resolution]
-                                 [strings::resolution_height].asInt());
+  EXPECT_EQ(350,
+            vs_capability_so[strings::preferred_resolution]
+                            [strings::resolution_height].asInt());
   EXPECT_TRUE(vs_capability_so.keyExists(strings::max_bitrate));
   EXPECT_EQ(10000, vs_capability_so[strings::max_bitrate].asInt());
   EXPECT_TRUE(vs_capability_so.keyExists(strings::supported_formats));

@@ -115,7 +115,8 @@ class WebsocketSession : public std::enable_shared_from_this<WebsocketSession> {
 
   void sendJsonMessage(Json::Value& message);
 
-  void OnWrite(boost::system::error_code ec, std::size_t bytes_transferred,
+  void OnWrite(boost::system::error_code ec,
+               std::size_t bytes_transferred,
                std::shared_ptr<std::string> message);
 
   void Read(boost::system::error_code ec, std::size_t bytes_transferred);
@@ -124,7 +125,8 @@ class WebsocketSession : public std::enable_shared_from_this<WebsocketSession> {
 
   void prepareMessage(Json::Value& root);
 
-  void prepareErrorMessage(int errCode, std::string errMessage,
+  void prepareErrorMessage(int errCode,
+                           std::string errMessage,
                            Json::Value& error);
 
   std::string getDestinationComponentName(Json::Value& root);

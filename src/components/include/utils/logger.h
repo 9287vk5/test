@@ -81,7 +81,10 @@ log4cxx_time_t time_now();
           std::stringstream accumulator;                             \
           accumulator << logEvent;                                   \
           logger::push_log(                                          \
-              loggerPtr, logLevel, accumulator.str(), time_now(),    \
+              loggerPtr,                                             \
+              logLevel,                                              \
+              accumulator.str(),                                     \
+              time_now(),                                            \
               LOG4CXX_LOCATION,                                      \
               ::log4cxx::spi::LoggingEvent::getCurrentThreadName()); \
         }                                                            \
@@ -118,13 +121,15 @@ log4cxx_time_t time_now();
 #define LOG4CXX_FATAL(loggerPtr, logEvent) \
   LOG_WITH_LEVEL(loggerPtr, ::log4cxx::Level::getFatal(), logEvent)
 
-#define LOG4CXX_ERROR_WITH_ERRNO(loggerPtr, message)                   \
-  LOG4CXX_ERROR(loggerPtr, message << ", error code " << errno << " (" \
-                                   << strerror(errno) << ")")
+#define LOG4CXX_ERROR_WITH_ERRNO(loggerPtr, message)                           \
+  LOG4CXX_ERROR(loggerPtr,                                                     \
+                message << ", error code " << errno << " (" << strerror(errno) \
+                        << ")")
 
-#define LOG4CXX_WARN_WITH_ERRNO(loggerPtr, message)                   \
-  LOG4CXX_WARN(loggerPtr, message << ", error code " << errno << " (" \
-                                  << strerror(errno) << ")")
+#define LOG4CXX_WARN_WITH_ERRNO(loggerPtr, message)                           \
+  LOG4CXX_WARN(loggerPtr,                                                     \
+               message << ", error code " << errno << " (" << strerror(errno) \
+                       << ")")
 
 #else  // ENABLE_LOG is OFF
 

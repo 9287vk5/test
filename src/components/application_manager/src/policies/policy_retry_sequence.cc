@@ -44,7 +44,9 @@ RetrySequence::RetrySequence(PolicyHandler* const policy_handler)
     // TODO (Risk copy of PolicyHandler Pointer)
     : policy_handler_(policy_handler) {}
 
-void RetrySequence::threadMain() { StartNextRetry(); }
+void RetrySequence::threadMain() {
+  StartNextRetry();
+}
 
 void RetrySequence::StartNextRetry() {
   LOG4CXX_TRACE(logger_, "Start next retry of exchanging PT");
@@ -57,8 +59,8 @@ void RetrySequence::StartNextRetry() {
 
     const uint32_t timeout = policy_handler_->TimeoutExchangeSec();
     const int seconds = policy_handler_->NextRetryTimeout();
-    LOG4CXX_DEBUG(logger_, "Timeout response: " << timeout
-                                                << " Next try: " << seconds);
+    LOG4CXX_DEBUG(logger_,
+                  "Timeout response: " << timeout << " Next try: " << seconds);
     if (timeout > 0) {
       sleep(timeout);
       policy_handler_->OnExceededTimeout();

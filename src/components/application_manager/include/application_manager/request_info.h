@@ -58,16 +58,17 @@ struct RequestInfo {
   enum RequestType { RequestNone, MobileRequest, HMIRequest };
 
   RequestInfo()
-      : timeout_msec_(0),
-        app_id_(0),
-        requst_type_(RequestNone),
-        correlation_id_(0) {
+      : timeout_msec_(0)
+      , app_id_(0)
+      , requst_type_(RequestNone)
+      , correlation_id_(0) {
     start_time_ = date_time::getCurrentTime();
     updateEndTime();
   }
   virtual ~RequestInfo() {}
 
-  RequestInfo(RequestPtr request, const RequestType requst_type,
+  RequestInfo(RequestPtr request,
+              const RequestType requst_type,
               const uint64_t timeout_msec)
       : request_(request), timeout_msec_(timeout_msec), correlation_id_(0) {
     start_time_ = date_time::getCurrentTime();
@@ -75,7 +76,8 @@ struct RequestInfo {
     requst_type_ = requst_type;
   }
 
-  RequestInfo(RequestPtr request, const RequestType requst_type,
+  RequestInfo(RequestPtr request,
+              const RequestType requst_type,
               const date_time::TimeDuration& start_time,
               const uint64_t timeout_msec);
 
@@ -85,25 +87,41 @@ struct RequestInfo {
 
   bool isExpired();
 
-  date_time::TimeDuration start_time() { return start_time_; }
+  date_time::TimeDuration start_time() {
+    return start_time_;
+  }
 
   void update_start_time(date_time::TimeDuration start_time) {
     start_time_ = start_time;
   }
 
-  uint64_t timeout_msec() { return timeout_msec_; }
+  uint64_t timeout_msec() {
+    return timeout_msec_;
+  }
 
-  void set_timeout_msec(uint64_t timeout) { timeout_msec_ = timeout; }
+  void set_timeout_msec(uint64_t timeout) {
+    timeout_msec_ = timeout;
+  }
 
-  date_time::TimeDuration end_time() { return end_time_; }
+  date_time::TimeDuration end_time() {
+    return end_time_;
+  }
 
-  uint32_t app_id() { return app_id_; }
+  uint32_t app_id() {
+    return app_id_;
+  }
 
-  RequestType requst_type() const { return requst_type_; }
+  RequestType requst_type() const {
+    return requst_type_;
+  }
 
-  uint32_t requestId() { return correlation_id_; }
+  uint32_t requestId() {
+    return correlation_id_;
+  }
 
-  commands::Command* request() { return request_.get(); }
+  commands::Command* request() {
+    return request_.get();
+  }
   uint64_t hash();
   static uint64_t GenerateHash(uint32_t var1, uint32_t var2);
   static uint32_t HmiConnectoinKey;
@@ -129,7 +147,8 @@ struct MobileRequestInfo : public RequestInfo {
 
 struct HMIRequestInfo : public RequestInfo {
   HMIRequestInfo(RequestPtr request, const uint64_t timeout_msec);
-  HMIRequestInfo(RequestPtr request, const date_time::TimeDuration& start_time,
+  HMIRequestInfo(RequestPtr request,
+                 const date_time::TimeDuration& start_time,
                  const uint64_t timeout_msec);
 };
 
@@ -252,7 +271,8 @@ class RequestInfoSet {
 */
 struct TimeScale {
   TimeScale(const date_time::TimeDuration& start,
-            const date_time::TimeDuration& end, const uint32_t& app_id)
+            const date_time::TimeDuration& end,
+            const uint32_t& app_id)
       : start_(start), end_(end), app_id_(app_id) {}
 
   bool operator()(RequestInfoPtr setEntry) {

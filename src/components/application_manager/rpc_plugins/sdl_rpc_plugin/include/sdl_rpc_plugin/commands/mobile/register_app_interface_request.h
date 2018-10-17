@@ -111,7 +111,8 @@ class RegisterAppInterfaceRequest
    * @param app_id application to change registration
    */
   void SendChangeRegistration(const hmi_apis::FunctionID::eType function_id,
-                              const int32_t language, const uint32_t app_id);
+                              const int32_t language,
+                              const uint32_t app_id);
 
   /**
    * @brief SendChangeRegistrationOnHMI send required SendChangeRegistration
@@ -127,7 +128,8 @@ class RegisterAppInterfaceRequest
    *
    **/
   void SendOnAppRegisteredNotificationToHMI(
-      const app_mngr::Application& application_impl, bool resumption = false,
+      const app_mngr::Application& application_impl,
+      bool resumption = false,
       bool need_restore_vr = false);
   /*
    * @brief Check new ID along with known mobile application ID

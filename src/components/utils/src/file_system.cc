@@ -118,9 +118,9 @@ bool file_system::CreateDirectoryRecursively(const std::string& path) {
   fs::create_directories(path, ec);
 
   if (ec) {
-    LOG4CXX_WARN_WITH_ERRNO(logger_, "Unable to create directory recursively: "
-                                         << path
-                                         << " reason: " << ec.message());
+    LOG4CXX_WARN_WITH_ERRNO(logger_,
+                            "Unable to create directory recursively: "
+                                << path << " reason: " << ec.message());
 
     return false;
   }
@@ -169,7 +169,8 @@ std::ofstream* file_system::Open(const std::string& file_name,
   return NULL;
 }
 
-bool file_system::Write(std::ofstream* const file_stream, const uint8_t* data,
+bool file_system::Write(std::ofstream* const file_stream,
+                        const uint8_t* data,
                         uint32_t data_size) {
   bool result = false;
   if (file_stream) {

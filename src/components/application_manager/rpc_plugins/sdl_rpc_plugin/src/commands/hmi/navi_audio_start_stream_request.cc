@@ -43,12 +43,16 @@ namespace commands {
 AudioStartStreamRequest::AudioStartStreamRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : RequestToHMI(message, application_manager, rpc_service, hmi_capabilities,
-                   policy_handle),
-      EventObserver(application_manager.event_dispatcher()),
-      retry_number_(0) {
+    : RequestToHMI(message,
+                   application_manager,
+                   rpc_service,
+                   hmi_capabilities,
+                   policy_handle)
+    , EventObserver(application_manager.event_dispatcher())
+    , retry_number_(0) {
   LOG4CXX_AUTO_TRACE(logger_);
   std::pair<uint32_t, int32_t> stream_retry =
       application_manager_.get_settings().start_stream_retry_amount();
@@ -74,8 +78,9 @@ void AudioStartStreamRequest::Run() {
   ApplicationSharedPtr app =
       application_manager_.application_by_hmi_app(application_id());
   if (!app) {
-    LOG4CXX_ERROR(logger_, "Applcation with hmi_app_id " << application_id()
-                                                         << " does not exist");
+    LOG4CXX_ERROR(logger_,
+                  "Applcation with hmi_app_id " << application_id()
+                                                << " does not exist");
     return;
   }
   SetAllowedToTerminate(false);
@@ -116,8 +121,8 @@ void AudioStartStreamRequest::on_event(const event_engine::Event& event) {
               logger_,
               "StartAudioStreamRequest aborted. Application can not stream");
         }
-        application_manager_.TerminateRequest(connection_key(),
-                                              correlation_id(), function_id());
+        application_manager_.TerminateRequest(
+            connection_key(), correlation_id(), function_id());
         break;
       }
       if (hmi_apis::Common_Result::REJECTED == code) {
@@ -141,8 +146,8 @@ void AudioStartStreamRequest::onTimeOut() {
 void AudioStartStreamRequest::RetryStartSession() {
   LOG4CXX_AUTO_TRACE(logger_);
 
-  application_manager_.TerminateRequest(connection_key(), correlation_id(),
-                                        function_id());
+  application_manager_.TerminateRequest(
+      connection_key(), correlation_id(), function_id());
 
   ApplicationSharedPtr app =
       application_manager_.application_by_hmi_app(application_id());
@@ -158,23 +163,25 @@ void AudioStartStreamRequest::RetryStartSession() {
   }
 
   if (app->audio_streaming_approved()) {
-    LOG4CXX_INFO(logger_, "AudioStartStream retry sequence stopped. "
-                              << "SUCCESS received");
+    LOG4CXX_INFO(logger_,
+                 "AudioStartStream retry sequence stopped. "
+                     << "SUCCESS received");
     app->set_audio_stream_retry_number(0);
     return;
   }
 
   uint32_t curr_retry_number = app->audio_stream_retry_number();
-  LOG4CXX_DEBUG(logger_, "Retry number " << curr_retry_number << " of "
-                                         << retry_number_);
+  LOG4CXX_DEBUG(
+      logger_, "Retry number " << curr_retry_number << " of " << retry_number_);
 
   if (curr_retry_number < retry_number_) {
     LOG4CXX_DEBUG(logger_, "Send AudioStartStream retry");
     MessageHelper::SendAudioStartStream(app->app_id(), application_manager_);
     app->set_audio_stream_retry_number(++curr_retry_number);
   } else {
-    LOG4CXX_DEBUG(logger_, "Audio start stream retry sequence stopped. "
-                               << "Attempts expired.");
+    LOG4CXX_DEBUG(logger_,
+                  "Audio start stream retry sequence stopped. "
+                      << "Attempts expired.");
 
     application_manager_.EndNaviServices(app->app_id());
   }

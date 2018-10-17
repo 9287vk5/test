@@ -56,7 +56,8 @@ const EnumConversionHelper<FunctionIDTest::eType>::CStringToEnumMap
 template <>
 const char* const
     EnumConversionHelper<FunctionIDTest::eType>::cstring_values_[] = {
-        "RegisterAppInterface", "UnregisterAppInterface",
+        "RegisterAppInterface",
+        "UnregisterAppInterface",
         "SetGlobalProperties"};
 
 template <>
@@ -177,13 +178,15 @@ CSmartSchema initObjectSchema() {
           TSchemaItemParameter<TestType::eType>());
 
   // Create info value with min 0 length and max 1000
-  ISchemaItemPtr info_SchemaItem = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-      TSchemaItemParameter<std::string>());
+  ISchemaItemPtr info_SchemaItem =
+      CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                TSchemaItemParameter<size_t>(1000),
+                                TSchemaItemParameter<std::string>());
 
-  ISchemaItemPtr tryAgainTime_SchemaItem = TNumberSchemaItem<int>::create(
-      TSchemaItemParameter<int>(0), TSchemaItemParameter<int>(2000000000),
-      TSchemaItemParameter<int>());
+  ISchemaItemPtr tryAgainTime_SchemaItem =
+      TNumberSchemaItem<int>::create(TSchemaItemParameter<int>(0),
+                                     TSchemaItemParameter<int>(2000000000),
+                                     TSchemaItemParameter<int>());
 
   // Map of parameters
   std::map<std::string, CObjectSchemaItem::SMember> schemaMembersMap;
@@ -266,21 +269,25 @@ CSmartSchema initSchemaForMetaFormatter() {
   messageType_allowedEnumSubsetValues.insert(MessageTypeTest::notification);
 
   // Create param items
-  ISchemaItemPtr appID_SchemaItem = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-      TSchemaItemParameter<std::string>());
-  ISchemaItemPtr appName_SchemaItem = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-      TSchemaItemParameter<std::string>());
+  ISchemaItemPtr appID_SchemaItem =
+      CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                TSchemaItemParameter<size_t>(1000),
+                                TSchemaItemParameter<std::string>());
+  ISchemaItemPtr appName_SchemaItem =
+      CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                TSchemaItemParameter<size_t>(1000),
+                                TSchemaItemParameter<std::string>());
   ISchemaItemPtr isMediaApplication_SchemaItem =
       CBoolSchemaItem::create(TSchemaItemParameter<bool>());
-  ISchemaItemPtr ngnMediaScreenAppName_SchemaItem = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-      TSchemaItemParameter<std::string>());
+  ISchemaItemPtr ngnMediaScreenAppName_SchemaItem =
+      CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                TSchemaItemParameter<size_t>(1000),
+                                TSchemaItemParameter<std::string>());
 
-  ISchemaItemPtr ttsNameItem_SchemaItem = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-      TSchemaItemParameter<std::string>());
+  ISchemaItemPtr ttsNameItem_SchemaItem =
+      CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                TSchemaItemParameter<size_t>(1000),
+                                TSchemaItemParameter<std::string>());
 
   ISchemaItemPtr ttstype_SchemaItem =
       TEnumSchemaItem<SpeechCapabilities::eType>::create(
@@ -302,9 +309,10 @@ CSmartSchema initSchemaForMetaFormatter() {
           languageDesired_allowedEnumSubsetValues,
           TSchemaItemParameter<Language::eType>());
 
-  ISchemaItemPtr vrElementSchemaItem = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-      TSchemaItemParameter<std::string>());
+  ISchemaItemPtr vrElementSchemaItem =
+      CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                TSchemaItemParameter<size_t>(1000),
+                                TSchemaItemParameter<std::string>());
 
   ISchemaItemPtr appTypeElementSchemaItem =
       TEnumSchemaItem<AppTypeTest::eType>::create(
@@ -313,28 +321,33 @@ CSmartSchema initSchemaForMetaFormatter() {
 
   ISchemaItemPtr ttsElementSchemaItem = CObjectSchemaItem::create(ttsMap);
 
-  ISchemaItemPtr ttsName_SchemaItem = CArraySchemaItem::create(
-      ttsElementSchemaItem, TSchemaItemParameter<size_t>(0),
-      TSchemaItemParameter<size_t>(1000));
+  ISchemaItemPtr ttsName_SchemaItem =
+      CArraySchemaItem::create(ttsElementSchemaItem,
+                               TSchemaItemParameter<size_t>(0),
+                               TSchemaItemParameter<size_t>(1000));
 
-  ISchemaItemPtr vrSynonyms_SchemaItem = CArraySchemaItem::create(
-      vrElementSchemaItem, TSchemaItemParameter<size_t>(0),
-      TSchemaItemParameter<size_t>(1000));
+  ISchemaItemPtr vrSynonyms_SchemaItem =
+      CArraySchemaItem::create(vrElementSchemaItem,
+                               TSchemaItemParameter<size_t>(0),
+                               TSchemaItemParameter<size_t>(1000));
 
-  ISchemaItemPtr appType_SchemaItem = CArraySchemaItem::create(
-      appTypeElementSchemaItem, TSchemaItemParameter<size_t>(0),
-      TSchemaItemParameter<size_t>(1000));
+  ISchemaItemPtr appType_SchemaItem =
+      CArraySchemaItem::create(appTypeElementSchemaItem,
+                               TSchemaItemParameter<size_t>(0),
+                               TSchemaItemParameter<size_t>(1000));
 
   ISchemaItemPtr majorVersion_SchemaItem = TNumberSchemaItem<int>::create();
   ISchemaItemPtr minorVersion_SchemaItem = TNumberSchemaItem<int>::create();
   ISchemaItemPtr patchVersion_SchemaItem = TNumberSchemaItem<int>::create();
-  ISchemaItemPtr syncMsg_SchemaItem = CStringSchemaItem::create(
-      TSchemaItemParameter<size_t>(0), TSchemaItemParameter<size_t>(1000),
-      TSchemaItemParameter<std::string>());
+  ISchemaItemPtr syncMsg_SchemaItem =
+      CStringSchemaItem::create(TSchemaItemParameter<size_t>(0),
+                                TSchemaItemParameter<size_t>(1000),
+                                TSchemaItemParameter<std::string>());
 
-  ISchemaItemPtr syncMsgVersion_SchemaItem = CArraySchemaItem::create(
-      syncMsg_SchemaItem, TSchemaItemParameter<size_t>(0),
-      TSchemaItemParameter<size_t>(1000));
+  ISchemaItemPtr syncMsgVersion_SchemaItem =
+      CArraySchemaItem::create(syncMsg_SchemaItem,
+                               TSchemaItemParameter<size_t>(0),
+                               TSchemaItemParameter<size_t>(1000));
 
   // Creation map for syncMsgVersion
   std::map<std::string, CObjectSchemaItem::SMember> schemaSyncMsgVersionMap;

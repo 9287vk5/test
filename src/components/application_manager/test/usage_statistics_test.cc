@@ -67,12 +67,11 @@ const std::string kAppId = "SPT";
 class UsageStatisticsTest : public testing::Test {
  public:
   UsageStatisticsTest()
-      : mock_statistics_manager_sptr_(
-            std::make_shared<MockStatisticsManager>()),
-        usage_statistics_test_object1_sptr_(
+      : mock_statistics_manager_sptr_(std::make_shared<MockStatisticsManager>())
+      , usage_statistics_test_object1_sptr_(
             new application_manager::UsageStatistics(
-                kAppId, mock_statistics_manager_sptr_)),
-        language_(LanguageIdToString(kTestLanguageId)) {}
+                kAppId, mock_statistics_manager_sptr_))
+      , language_(LanguageIdToString(kTestLanguageId)) {}
 
  protected:
   std::shared_ptr<MockStatisticsManager> mock_statistics_manager_sptr_;
@@ -94,7 +93,8 @@ TEST_F(UsageStatisticsTest, RecordHmiStateChanged_CallMethod_ExpectMethodCall) {
   std::unique_ptr<application_manager::UsageStatistics>
       usage_statistics_test_object2_sptr_(
           new application_manager::UsageStatistics(
-              kAppId, mock_statistics_manager_sptr_,
+              kAppId,
+              mock_statistics_manager_sptr_,
               mock_app_stopwatch_object.release()));
   usage_statistics_test_object2_sptr_->RecordHmiStateChanged(
       HMILevel::eType::HMI_NONE);

@@ -101,12 +101,12 @@ const std::string kAppName = "appName";
 class ApplicationManagerImplTest : public ::testing::Test {
  public:
   ApplicationManagerImplTest()
-      : app_id_(0u),
-        mock_storage_(
+      : app_id_(0u)
+      , mock_storage_(
             std::make_shared<NiceMock<resumption_test::MockResumptionData> >(
-                mock_app_mngr_)),
-        mock_rpc_service_(new MockRPCService),
-        mock_message_helper_(
+                mock_app_mngr_))
+      , mock_rpc_service_(new MockRPCService)
+      , mock_message_helper_(
             application_manager::MockMessageHelper::message_helper_mock())
 
   {
@@ -165,10 +165,13 @@ class ApplicationManagerImplTest : public ::testing::Test {
 
   void SetCommonExpectationOnAppReconnection(
       const connection_handler::DeviceHandle new_device_id,
-      const uint32_t new_application_id, const std::string& mac_address) {
+      const uint32_t new_application_id,
+      const std::string& mac_address) {
     EXPECT_CALL(
         mock_session_observer_,
-        GetDataOnSessionKey(new_application_id, _, _,
+        GetDataOnSessionKey(new_application_id,
+                            _,
+                            _,
                             testing::An<connection_handler::DeviceHandle*>()))
         .WillOnce(DoAll(SetArgPointee<3u>(new_device_id), Return(0)));
 
@@ -177,9 +180,13 @@ class ApplicationManagerImplTest : public ::testing::Test {
         mock_session_observer_,
         GetDataOnDeviceID(
             ::testing::Matcher<connection_handler::DeviceHandle>(new_device_id),
-            _, _, _, _))
+            _,
+            _,
+            _,
+            _))
         .WillOnce(DoAll(SetArgPointee<3u>(mac_address),
-                        SetArgPointee<4u>(connection_type), Return(0)));
+                        SetArgPointee<4u>(connection_type),
+                        Return(0)));
   }
 
   bool CheckResumptionRequiredTransportAvailableTest(
@@ -276,8 +283,8 @@ TEST_F(ApplicationManagerImplTest, OnServiceStartedCallback_RpcService) {
   EXPECT_CALL(mock_connection_handler_, NotifyServiceStartedResult(_, _, _))
       .WillOnce(DoAll(SaveArg<1>(&result), SaveArg<2>(&rejected_params)));
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, NULL);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, NULL);
 
   // check: return value is true and list is empty
   EXPECT_TRUE(result);
@@ -298,8 +305,8 @@ TEST_F(ApplicationManagerImplTest, OnServiceStartedCallback_UnknownApp) {
   EXPECT_CALL(mock_connection_handler_, NotifyServiceStartedResult(_, _, _))
       .WillOnce(DoAll(SaveArg<1>(&result), SaveArg<2>(&rejected_params)));
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, NULL);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, NULL);
 
   // check: return value is false and list is empty
   EXPECT_FALSE(result);
@@ -320,8 +327,8 @@ TEST_F(ApplicationManagerImplTest, OnServiceStartedCallback_UnknownService) {
   EXPECT_CALL(mock_connection_handler_, NotifyServiceStartedResult(_, _, _))
       .WillOnce(DoAll(SaveArg<1>(&result), SaveArg<2>(&rejected_params)));
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, NULL);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, NULL);
 
   // check: return value is false and list is empty
   EXPECT_FALSE(result);
@@ -349,8 +356,8 @@ TEST_F(ApplicationManagerImplTest, OnServiceStartedCallback_VideoServiceStart) {
   EXPECT_CALL(*mock_app_ptr_, SetVideoConfig(_, _)).Times(0);
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).WillOnce(Return());
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, NULL);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, NULL);
 
   // check: return value is true and list is empty
   EXPECT_TRUE(result);
@@ -380,8 +387,8 @@ TEST_F(ApplicationManagerImplTest,
   EXPECT_CALL(*mock_app_ptr_, SetVideoConfig(_, _)).Times(0);
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).Times(0);
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, NULL);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, NULL);
 
   // check: return value is false and list is empty
   EXPECT_FALSE(result);
@@ -411,8 +418,8 @@ TEST_F(ApplicationManagerImplTest,
   EXPECT_CALL(*mock_app_ptr_, SetVideoConfig(_, _)).Times(0);
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).Times(0);
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, NULL);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, NULL);
 
   // check: return value is false and list is empty
   EXPECT_FALSE(result);
@@ -448,8 +455,8 @@ TEST_F(ApplicationManagerImplTest,
   bson_object_put_string(
       &input_params, protocol_handler::strings::video_protocol, protocol_name);
   char codec_name[] = "VP9";
-  bson_object_put_string(&input_params, protocol_handler::strings::video_codec,
-                         codec_name);
+  bson_object_put_string(
+      &input_params, protocol_handler::strings::video_codec, codec_name);
   bson_object_put_int32(&input_params, protocol_handler::strings::height, 640);
   bson_object_put_int32(&input_params, protocol_handler::strings::width, 480);
 
@@ -467,12 +474,15 @@ TEST_F(ApplicationManagerImplTest,
       .WillOnce(DoAll(InvokeMemberFuncWithArg4(
                           app_manager_impl_.get(),
                           &ApplicationManagerImpl::OnStreamingConfigured,
-                          session_key, service_type, true, ByRef(empty)),
+                          session_key,
+                          service_type,
+                          true,
+                          ByRef(empty)),
                       Return(true)));
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).WillOnce(Return());
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, &input_params);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, &input_params);
 
   // check: return value is true and list is empty
   EXPECT_TRUE(result);
@@ -529,8 +539,8 @@ TEST_F(ApplicationManagerImplTest,
   bson_object_put_string(
       &input_params, protocol_handler::strings::video_protocol, protocol_name);
   char codec_name[] = "VP9";
-  bson_object_put_string(&input_params, protocol_handler::strings::video_codec,
-                         codec_name);
+  bson_object_put_string(
+      &input_params, protocol_handler::strings::video_codec, codec_name);
   bson_object_put_int32(&input_params, protocol_handler::strings::height, 640);
   bson_object_put_int32(&input_params, protocol_handler::strings::width, 480);
 
@@ -547,18 +557,20 @@ TEST_F(ApplicationManagerImplTest,
 
   // simulate HMI returning negative response
   EXPECT_CALL(*mock_app_ptr_, SetVideoConfig(service_type, converted_params))
-      .WillOnce(
-          DoAll(InvokeMemberFuncWithArg4(
-                    app_manager_impl_.get(),
-                    &ApplicationManagerImpl::OnStreamingConfigured, session_key,
-                    service_type, false, ByRef(rejected_list)),
-                Return(true)));
+      .WillOnce(DoAll(InvokeMemberFuncWithArg4(
+                          app_manager_impl_.get(),
+                          &ApplicationManagerImpl::OnStreamingConfigured,
+                          session_key,
+                          service_type,
+                          false,
+                          ByRef(rejected_list)),
+                      Return(true)));
 
   // check: StartStreaming() should not be called
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).Times(0);
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, &input_params);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, &input_params);
 
   // check: return value is false
   EXPECT_FALSE(result);
@@ -600,8 +612,8 @@ TEST_F(ApplicationManagerImplTest,
   EXPECT_CALL(*mock_app_ptr_, SetVideoConfig(_, _)).Times(0);
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).WillOnce(Return());
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, &input_params);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, &input_params);
 
   // check: return value is true and list is empty
   EXPECT_TRUE(result);
@@ -629,8 +641,8 @@ TEST_F(ApplicationManagerImplTest, OnServiceStartedCallback_AudioServiceStart) {
   EXPECT_CALL(*mock_app_ptr_, SetVideoConfig(_, _)).Times(0);
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).WillOnce(Return());
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, NULL);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, NULL);
 
   // check: return value is true and list is empty
   EXPECT_TRUE(result);
@@ -666,8 +678,8 @@ TEST_F(ApplicationManagerImplTest,
   bson_object_put_string(
       &input_params, protocol_handler::strings::video_protocol, protocol_name);
   char codec_name[] = "VP9";
-  bson_object_put_string(&input_params, protocol_handler::strings::video_codec,
-                         codec_name);
+  bson_object_put_string(
+      &input_params, protocol_handler::strings::video_codec, codec_name);
   bson_object_put_int32(&input_params, protocol_handler::strings::height, 640);
   bson_object_put_int32(&input_params, protocol_handler::strings::width, 480);
 
@@ -675,8 +687,8 @@ TEST_F(ApplicationManagerImplTest,
   EXPECT_CALL(*mock_app_ptr_, SetVideoConfig(_, _)).Times(0);
   EXPECT_CALL(*mock_app_ptr_, StartStreaming(service_type)).WillOnce(Return());
 
-  app_manager_impl_->OnServiceStartedCallback(device_handle, session_key,
-                                              service_type, &input_params);
+  app_manager_impl_->OnServiceStartedCallback(
+      device_handle, session_key, service_type, &input_params);
 
   // check: return value is true and list is empty
   EXPECT_TRUE(result);
@@ -807,9 +819,10 @@ TEST_F(ApplicationManagerImplTest,
       switching_handle, "switching_device", switching_device_id, "BLUETOOTH");
 
   const connection_handler::DeviceHandle non_switching_handle = 2;
-  const connection_handler::Device non_switching_device(
-      non_switching_handle, "non_switching_device", nonswitching_device_id,
-      "USB");
+  const connection_handler::Device non_switching_device(non_switching_handle,
+                                                        "non_switching_device",
+                                                        nonswitching_device_id,
+                                                        "USB");
 
   EXPECT_CALL(*mock_message_helper_, CreateDeviceListSO(_, _, _))
       .WillOnce(Return(smart_objects::SmartObjectSPtr()));
@@ -870,9 +883,10 @@ TEST_F(ApplicationManagerImplTest,
       switching_handle, "switching_device", switching_device_id, "BLUETOOTH");
 
   const connection_handler::DeviceHandle non_switching_handle = 2;
-  const connection_handler::Device non_switching_device(
-      non_switching_handle, "non_switching_device", nonswitching_device_id,
-      "USB");
+  const connection_handler::Device non_switching_device(non_switching_handle,
+                                                        "non_switching_device",
+                                                        nonswitching_device_id,
+                                                        "USB");
 
   EXPECT_CALL(*mock_message_helper_, CreateDeviceListSO(_, _, _))
       .WillOnce(Return(smart_objects::SmartObjectSPtr()));
@@ -895,7 +909,11 @@ TEST_F(ApplicationManagerImplTest,
   const custom_str::CustomString app_name("");
 
   std::shared_ptr<ApplicationImpl> app_impl = std::make_shared<ApplicationImpl>(
-      application_id, policy_app_id, mac_address, device_id, app_name,
+      application_id,
+      policy_app_id,
+      mac_address,
+      device_id,
+      app_name,
       std::shared_ptr<usage_statistics::StatisticsManager>(
           new usage_statistics_test::MockStatisticsManager()),
       *app_manager_impl_);
@@ -904,8 +922,8 @@ TEST_F(ApplicationManagerImplTest,
 
   const connection_handler::DeviceHandle new_device_id = 2;
   const uint32_t new_application_id = 2;
-  SetCommonExpectationOnAppReconnection(new_device_id, new_application_id,
-                                        mac_address);
+  SetCommonExpectationOnAppReconnection(
+      new_device_id, new_application_id, mac_address);
 
   // Act
   app_manager_impl_->ProcessReconnection(app_impl, new_application_id);
@@ -939,9 +957,12 @@ TEST_F(ApplicationManagerImplTest, StartStopAudioPassThru) {
   bool result = app_manager_impl_->BeginAudioPassThru(app_id);
   EXPECT_TRUE(result);
   if (result) {
-    app_manager_impl_->StartAudioPassThruThread(app_id, correlation_id,
-                                                max_duration, sampling_rate,
-                                                bits_per_sample, audio_type);
+    app_manager_impl_->StartAudioPassThruThread(app_id,
+                                                correlation_id,
+                                                max_duration,
+                                                sampling_rate,
+                                                bits_per_sample,
+                                                audio_type);
   }
 
   result = app_manager_impl_->EndAudioPassThru(app_id);
@@ -1010,9 +1031,12 @@ TEST_F(ApplicationManagerImplTest, UnregisterAnotherAppDuringAudioPassThru) {
   bool result = app_manager_impl_->BeginAudioPassThru(app_id_2);
   EXPECT_TRUE(result);
   if (result) {
-    app_manager_impl_->StartAudioPassThruThread(app_id_2, correlation_id,
-                                                max_duration, sampling_rate,
-                                                bits_per_sample, audio_type);
+    app_manager_impl_->StartAudioPassThruThread(app_id_2,
+                                                correlation_id,
+                                                max_duration,
+                                                sampling_rate,
+                                                bits_per_sample,
+                                                audio_type);
   }
 
   // while running APT, app 1 is unregistered
@@ -1124,8 +1148,11 @@ TEST_F(ApplicationManagerImplTest,
   // - We have SPP_BLUETOOTH for primary transport.
   //   -> Conclusion: the app has required transport.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_TRUE(result);
 }
 
@@ -1146,8 +1173,11 @@ TEST_F(ApplicationManagerImplTest,
   // - We do not have an entry in .ini file for SOCIAL apps.
   //   -> In this case, resumption is always enabled for backward compatibility.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_TRUE(result);
 }
 
@@ -1168,8 +1198,11 @@ TEST_F(ApplicationManagerImplTest,
   // - We do not have any transports allowed for TESTING apps.
   //   -> In this case, resumption is always disabled.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_FALSE(result);
 }
 
@@ -1190,8 +1223,11 @@ TEST_F(ApplicationManagerImplTest,
   // - .ini file specifies TCP_WIFI for EMPTY_APP entry.
   //   -> The app does not have required transport.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_FALSE(result);
 }
 
@@ -1209,8 +1245,11 @@ TEST_F(ApplicationManagerImplTest,
   // - .ini file specifies TCP_WIFI for EMPTY_APP entry.
   //   -> The app does not have required transport.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      NULL, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      NULL,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_FALSE(result);
 }
 
@@ -1234,8 +1273,11 @@ TEST_F(ApplicationManagerImplTest,
   // - We have TCP_WIFI for secondary transport.
   //   -> Conclusion: the app has required transport.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_TRUE(result);
 }
 
@@ -1259,8 +1301,11 @@ TEST_F(ApplicationManagerImplTest,
   // - We have IAP_USB for primary and TCP_WIFI for secondary transport.
   //   -> Conclusion: the app does not have required transport.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_FALSE(result);
 }
 
@@ -1286,8 +1331,11 @@ TEST_F(ApplicationManagerImplTest,
   // - We have IAP_USB for primary and TCP_WIFI is secondary
   //   -> Conclusion: the app does NOT have required transport.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_FALSE(result);
 }
 
@@ -1313,8 +1361,11 @@ TEST_F(ApplicationManagerImplTest,
   // - We have SPP_BLUETOOTH for primary and TCP_WIFI is secondary
   //   -> Conclusion: the app does NOT have required transport.
   bool result = CheckResumptionRequiredTransportAvailableTest(
-      &app_types_array, primary_device_handle, primary_transport_device_string,
-      secondary_device_handle, secondary_transport_device_string);
+      &app_types_array,
+      primary_device_handle,
+      primary_transport_device_string,
+      secondary_device_handle,
+      secondary_transport_device_string);
   EXPECT_FALSE(result);
 }
 

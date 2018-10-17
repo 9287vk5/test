@@ -69,5 +69,7 @@ void MetricWrapper::Clear() {
   }
 }
 
-MetricWrapper::~MetricWrapper() { Clear(); }
+MetricWrapper::~MetricWrapper() {
+  Clear();
+}
 }

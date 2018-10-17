@@ -145,20 +145,27 @@ class ObjectSchemaItemTest : public ::testing::Test {
             CStringSchemaItem::create(TSchemaItemParameter<size_t>(1),
                                       TSchemaItemParameter<size_t>(99),
                                       TSchemaItemParameter<std::string>()),
-            TSchemaItemParameter<size_t>(1), TSchemaItemParameter<size_t>(100));
+            TSchemaItemParameter<size_t>(1),
+            TSchemaItemParameter<size_t>(100));
 
     std::shared_ptr<ISchemaItem> fake_param_history_v1_SchemaItem =
         CArraySchemaItem::create(
             CStringSchemaItem::create(TSchemaItemParameter<size_t>(1),
                                       TSchemaItemParameter<size_t>(99),
                                       TSchemaItemParameter<std::string>()),
-            TSchemaItemParameter<size_t>(1), TSchemaItemParameter<size_t>(100));
+            TSchemaItemParameter<size_t>(1),
+            TSchemaItemParameter<size_t>(100));
 
     fake_param_history_vector.push_back(CObjectSchemaItem::SMember(
         fake_param_history_v1_SchemaItem, true, "", "4.5.0", false, false));
     schemaMembersMap["fakeParam"] =
-        CObjectSchemaItem::SMember(fake_param_SchemaItem, false, "4.5.0", "",
-                                   false, false, fake_param_history_vector);
+        CObjectSchemaItem::SMember(fake_param_SchemaItem,
+                                   false,
+                                   "4.5.0",
+                                   "",
+                                   false,
+                                   false,
+                                   fake_param_history_vector);
 
     CObjectSchemaItem::Members rootMembersMap;
     rootMembersMap[S_PARAMS] = CObjectSchemaItem::SMember(
@@ -475,9 +482,11 @@ TEST_F(ObjectSchemaItemTest, test_strings_to_enum_conversion) {
       EnumConversionHelper<FunctionID::eType>::cstring_to_enum_map();
 
   for (Results::const_iterator res_it = results.begin();
-       res_it != results.end(); ++res_it) {
+       res_it != results.end();
+       ++res_it) {
     for (Functions::const_iterator func_it = functions.begin();
-         func_it != functions.end(); ++func_it) {
+         func_it != functions.end();
+         ++func_it) {
       const char* const function_str = func_it->first;
       const char* const result_type_str = res_it->first;
       const FunctionID::eType function_type = func_it->second;
@@ -535,14 +544,22 @@ const FunctionConvertor::CStringToEnumMap
         FunctionConvertor::InitCStringToEnumMap();
 
 template <>
-const char* const FunctionConvertor::cstring_values_[] = {
-    "Function0", "Function1", "Function2", "Function3",
-    "Function4", "Function5", "Function6"};
+const char* const FunctionConvertor::cstring_values_[] = {"Function0",
+                                                          "Function1",
+                                                          "Function2",
+                                                          "Function3",
+                                                          "Function4",
+                                                          "Function5",
+                                                          "Function6"};
 
 template <>
 const FunctionID::eType FunctionConvertor::enum_values_[] = {
-    FunctionID::Function0, FunctionID::Function1, FunctionID::Function2,
-    FunctionID::Function3, FunctionID::Function4, FunctionID::Function5,
+    FunctionID::Function0,
+    FunctionID::Function1,
+    FunctionID::Function2,
+    FunctionID::Function3,
+    FunctionID::Function4,
+    FunctionID::Function5,
     FunctionID::Function6};
 
 // ----------------------------------------------------------------------------
@@ -562,16 +579,28 @@ const ResultTypeConvertor::CStringToEnumMap
 
 template <>
 const char* const ResultTypeConvertor::cstring_values_[] = {
-    "APPLICATION_NOT_REGISTERED", "SUCCESS", "TOO_MANY_PENDING_REQUESTS",
-    "REJECTED", "INVALID_DATA", "OUT_OF_MEMORY", "ABORTED", "USER_DISALLOWED",
-    "GENERIC_ERROR", "DISALLOWED"};
+    "APPLICATION_NOT_REGISTERED",
+    "SUCCESS",
+    "TOO_MANY_PENDING_REQUESTS",
+    "REJECTED",
+    "INVALID_DATA",
+    "OUT_OF_MEMORY",
+    "ABORTED",
+    "USER_DISALLOWED",
+    "GENERIC_ERROR",
+    "DISALLOWED"};
 
 template <>
 const ResultType::eType ResultTypeConvertor::enum_values_[] = {
-    ResultType::APPLICATION_NOT_REGISTERED, ResultType::SUCCESS,
-    ResultType::TOO_MANY_PENDING_REQUESTS, ResultType::REJECTED,
-    ResultType::INVALID_DATA, ResultType::OUT_OF_MEMORY, ResultType::ABORTED,
-    ResultType::USER_DISALLOWED, ResultType::GENERIC_ERROR,
+    ResultType::APPLICATION_NOT_REGISTERED,
+    ResultType::SUCCESS,
+    ResultType::TOO_MANY_PENDING_REQUESTS,
+    ResultType::REJECTED,
+    ResultType::INVALID_DATA,
+    ResultType::OUT_OF_MEMORY,
+    ResultType::ABORTED,
+    ResultType::USER_DISALLOWED,
+    ResultType::GENERIC_ERROR,
     ResultType::DISALLOWED};
 }  // namespace ns_smart_objects
 }  // namespace ns_smart_device_link

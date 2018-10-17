@@ -46,10 +46,14 @@ namespace commands {
 DeleteInteractionChoiceSetRequest::DeleteInteractionChoiceSetRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 DeleteInteractionChoiceSetRequest::~DeleteInteractionChoiceSetRequest() {}
 
@@ -59,8 +63,9 @@ void DeleteInteractionChoiceSetRequest::Run() {
   ApplicationSharedPtr app = application_manager_.application(connection_key());
 
   if (!app) {
-    LOG4CXX_ERROR(logger_, "No application associated with connection key "
-                               << connection_key());
+    LOG4CXX_ERROR(logger_,
+                  "No application associated with connection key "
+                      << connection_key());
     SendResponse(false, mobile_apis::Result::APPLICATION_NOT_REGISTERED);
     return;
   }
@@ -70,8 +75,8 @@ void DeleteInteractionChoiceSetRequest::Run() {
           .asInt();
 
   if (!app->FindChoiceSet(choice_set_id)) {
-    LOG4CXX_ERROR(logger_, "Choice set with id " << choice_set_id
-                                                 << " is not found.");
+    LOG4CXX_ERROR(logger_,
+                  "Choice set with id " << choice_set_id << " is not found.");
     SendResponse(false, mobile_apis::Result::INVALID_ID);
     return;
   }
@@ -121,8 +126,8 @@ bool DeleteInteractionChoiceSetRequest::ChoiceSetInUse(
     PerformChoice::const_iterator choice_it = choice.begin();
     for (; choice.end() != choice_it; ++choice_it) {
       if (choice_it->first == choice_set_id) {
-        LOG4CXX_ERROR(logger_, "Choice set with id " << choice_set_id
-                                                     << " is in use.");
+        LOG4CXX_ERROR(logger_,
+                      "Choice set with id " << choice_set_id << " is in use.");
         return true;
       }
     }
@@ -141,8 +146,8 @@ void DeleteInteractionChoiceSetRequest::SendVrDeleteCommand(
   smart_objects::SmartObject* choice_set = app->FindChoiceSet(choice_set_id);
 
   if (!choice_set) {
-    LOG4CXX_ERROR(logger_, "Choice set with id " << choice_set_id
-                                                 << " is not found.");
+    LOG4CXX_ERROR(logger_,
+                  "Choice set with id " << choice_set_id << " is not found.");
     return;
   }
 

@@ -118,10 +118,10 @@ TEST(ApplicationManagerMetricWrapper, GetJsonMetricWithGrabResources) {
   EXPECT_EQ(date_time::getuSecs(end_time),
             jvalue[telemetry_monitor::strings::end].asInt64());
 
-  EXPECT_NEAR(resources->stime,
-              jvalue[telemetry_monitor::strings::stime].asInt(), 1);
-  EXPECT_NEAR(resources->utime,
-              jvalue[telemetry_monitor::strings::utime].asInt(), 1);
+  EXPECT_NEAR(
+      resources->stime, jvalue[telemetry_monitor::strings::stime].asInt(), 1);
+  EXPECT_NEAR(
+      resources->utime, jvalue[telemetry_monitor::strings::utime].asInt(), 1);
   EXPECT_EQ(resources->memory,
             jvalue[telemetry_monitor::strings::memory].asInt());
 

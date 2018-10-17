@@ -31,9 +31,13 @@ bool InterfaceStatus::IsAvailable() const {
   return ((flags_ & IFF_UP) > 0) && ((flags_ & IFF_RUNNING) > 0);
 }
 
-bool InterfaceStatus::IsLoopback() const { return flags_ & IFF_LOOPBACK; }
+bool InterfaceStatus::IsLoopback() const {
+  return flags_ & IFF_LOOPBACK;
+}
 
-bool InterfaceStatus::HasIPAddress() const { return has_ipv4_ || has_ipv6_; }
+bool InterfaceStatus::HasIPAddress() const {
+  return has_ipv4_ || has_ipv6_;
+}
 
 std::string InterfaceStatus::GetIPv4Address() const {
   char buf[INET_ADDRSTRLEN] = "";
@@ -73,15 +77,14 @@ PlatformSpecificNetworkInterfaceListener::
     PlatformSpecificNetworkInterfaceListener(
         TcpClientListener* tcp_client_listener,
         const std::string designated_interface)
-    : tcp_client_listener_(tcp_client_listener),
-      designated_interface_(designated_interface),
-      selected_interface_(""),
-      notified_ipv4_addr_(""),
-      notified_ipv6_addr_(""),
-      socket_(-1)
+    : tcp_client_listener_(tcp_client_listener)
+    , designated_interface_(designated_interface)
+    , selected_interface_("")
+    , notified_ipv4_addr_("")
+    , notified_ipv6_addr_("")
+    , socket_(-1)
 #ifdef BUILD_TESTS
-      ,
-      testing_(false)
+    , testing_(false)
 #endif  // BUILD_TESTS
 {
   pipe_fds_[0] = pipe_fds_[1] = -1;
@@ -407,7 +410,8 @@ bool PlatformSpecificNetworkInterfaceListener::UpdateStatus(
   LOG4CXX_AUTO_TRACE(logger_);
 
   for (std::vector<EventParam>::iterator it = params.begin();
-       it != params.end(); ++it) {
+       it != params.end();
+       ++it) {
     std::string ifname = GetInterfaceName(it->if_index);
     if (ifname.empty()) {
       continue;
@@ -417,14 +421,15 @@ bool PlatformSpecificNetworkInterfaceListener::UpdateStatus(
 
     switch (type) {
       case RTM_NEWLINK: {
-        LOG4CXX_DEBUG(logger_, "netlink event: interface "
-                                   << ifname << " created or updated");
+        LOG4CXX_DEBUG(logger_,
+                      "netlink event: interface " << ifname
+                                                  << " created or updated");
         status.SetFlags(it->flags);
         break;
       }
       case RTM_DELLINK:
-        LOG4CXX_DEBUG(logger_, "netlink event: interface " << ifname
-                                                           << " removed");
+        LOG4CXX_DEBUG(logger_,
+                      "netlink event: interface " << ifname << " removed");
         status_table_.erase(ifname);
         break;
       case RTM_NEWADDR: {
@@ -432,27 +437,31 @@ bool PlatformSpecificNetworkInterfaceListener::UpdateStatus(
         if (addr->sa_family == AF_INET) {
           sockaddr_in* addr_in = reinterpret_cast<sockaddr_in*>(addr);
           status.SetIPv4Address(&addr_in->sin_addr);
-          LOG4CXX_DEBUG(logger_, "netlink event: IPv4 address of interface "
-                                     << ifname << " updated to "
-                                     << status.GetIPv4Address());
+          LOG4CXX_DEBUG(logger_,
+                        "netlink event: IPv4 address of interface "
+                            << ifname << " updated to "
+                            << status.GetIPv4Address());
         } else if (addr->sa_family == AF_INET6) {
           sockaddr_in6* addr_in6 = reinterpret_cast<sockaddr_in6*>(addr);
           status.SetIPv6Address(&addr_in6->sin6_addr);
-          LOG4CXX_DEBUG(logger_, "netlink event: IPv6 address of interface "
-                                     << ifname << " updated to "
-                                     << status.GetIPv6Address());
+          LOG4CXX_DEBUG(logger_,
+                        "netlink event: IPv6 address of interface "
+                            << ifname << " updated to "
+                            << status.GetIPv6Address());
         }
         break;
       }
       case RTM_DELADDR: {
         sockaddr* addr = reinterpret_cast<sockaddr*>(&it->address);
         if (addr->sa_family == AF_INET) {
-          LOG4CXX_DEBUG(logger_, "netlink event: IPv4 address of interface "
-                                     << ifname << " removed");
+          LOG4CXX_DEBUG(logger_,
+                        "netlink event: IPv4 address of interface "
+                            << ifname << " removed");
           status.SetIPv4Address(NULL);
         } else if (addr->sa_family == AF_INET6) {
-          LOG4CXX_DEBUG(logger_, "netlink event: IPv6 address of interface "
-                                     << ifname << " removed");
+          LOG4CXX_DEBUG(logger_,
+                        "netlink event: IPv6 address of interface "
+                            << ifname << " removed");
           status.SetIPv6Address(NULL);
         }
         break;
@@ -484,10 +493,11 @@ void PlatformSpecificNetworkInterfaceListener::NotifyIPAddresses() {
   }
 
   if (notified_ipv4_addr_ != ipv4_addr || notified_ipv6_addr_ != ipv6_addr) {
-    LOG4CXX_INFO(logger_, "IP address updated: \""
-                              << notified_ipv4_addr_ << "\" -> \"" << ipv4_addr
-                              << "\", \"" << notified_ipv6_addr_ << "\" -> \""
-                              << ipv6_addr << "\"");
+    LOG4CXX_INFO(logger_,
+                 "IP address updated: \"" << notified_ipv4_addr_ << "\" -> \""
+                                          << ipv4_addr << "\", \""
+                                          << notified_ipv6_addr_ << "\" -> \""
+                                          << ipv6_addr << "\"");
 
     notified_ipv4_addr_ = ipv4_addr;
     notified_ipv6_addr_ = ipv6_addr;
@@ -592,8 +602,8 @@ PlatformSpecificNetworkInterfaceListener::ParseIFAddrMessage(
       sockaddr->sin6_addr = *ipv6_addr;
 
     } else {
-      LOG4CXX_WARN(logger_, "Unsupported family (" << message->ifa_family
-                                                   << ")");
+      LOG4CXX_WARN(logger_,
+                   "Unsupported family (" << message->ifa_family << ")");
       continue;
     }
 
@@ -612,12 +622,13 @@ void PlatformSpecificNetworkInterfaceListener::DumpTable() const {
     const InterfaceStatus& status = it->second;
     UNUSED(status);
 
-    LOG4CXX_DEBUG(logger_, "  " << ifname << " : flags=" << status.GetFlags()
-                                << " : available: "
-                                << (status.IsAvailable() ? "yes" : "no")
-                                << " IPv4: " << status.GetIPv4Address()
-                                << " IPv6: " << status.GetIPv6Address()
-                                << (status.IsLoopback() ? " (loopback)" : ""));
+    LOG4CXX_DEBUG(
+        logger_,
+        "  " << ifname << " : flags=" << status.GetFlags()
+             << " : available: " << (status.IsAvailable() ? "yes" : "no")
+             << " IPv4: " << status.GetIPv4Address()
+             << " IPv6: " << status.GetIPv6Address()
+             << (status.IsLoopback() ? " (loopback)" : ""));
   }
 }
 

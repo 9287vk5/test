@@ -72,8 +72,9 @@ class MockApplication : public ::application_manager::Application {
   MOCK_CONST_METHOD0(audio_streaming_allowed, bool());
   MOCK_METHOD1(set_audio_streaming_allowed, void(bool state));
   MOCK_CONST_METHOD0(is_audio, bool());
-  MOCK_METHOD2(SetVideoConfig, bool(protocol_handler::ServiceType service_type,
-                                    const smart_objects::SmartObject& params));
+  MOCK_METHOD2(SetVideoConfig,
+               bool(protocol_handler::ServiceType service_type,
+                    const smart_objects::SmartObject& params));
   MOCK_METHOD1(StartStreaming,
                void(protocol_handler::ServiceType service_type));
   MOCK_METHOD1(StopStreaming, void(protocol_handler::ServiceType service_type));
@@ -146,8 +147,9 @@ class MockApplication : public ::application_manager::Application {
   MOCK_CONST_METHOD0(getAppFiles, const ::application_manager::AppFilesMap&());
   MOCK_METHOD1(UpdateFile, bool(const ::application_manager::AppFile& file));
   MOCK_METHOD1(DeleteFile, bool(const std::string& file_name));
-  MOCK_METHOD1(GetFile, const ::application_manager::AppFile*(
-                            const std::string& file_name));
+  MOCK_METHOD1(
+      GetFile,
+      const ::application_manager::AppFile*(const std::string& file_name));
   MOCK_METHOD1(SubscribeToButton,
                bool(mobile_apis::ButtonName::eType btn_name));
   MOCK_METHOD1(IsSubscribedToButton,
@@ -253,8 +255,9 @@ class MockApplication : public ::application_manager::Application {
   MOCK_CONST_METHOD0(video_stream_retry_number, uint32_t());
   MOCK_METHOD1(set_video_stream_retry_number,
                void(const uint32_t& video_stream_retry_number));
-  MOCK_METHOD2(AddCommand, void(uint32_t cmd_id,
-                                const smart_objects::SmartObject& command));
+  MOCK_METHOD2(AddCommand,
+               void(uint32_t cmd_id,
+                    const smart_objects::SmartObject& command));
   MOCK_METHOD1(RemoveCommand, void(uint32_t cmd_id));
   MOCK_METHOD1(FindCommand, smart_objects::SmartObject*(uint32_t cmd_id));
   MOCK_METHOD2(AddSubMenu,
@@ -270,7 +273,8 @@ class MockApplication : public ::application_manager::Application {
   MOCK_METHOD1(FindChoiceSet,
                smart_objects::SmartObject*(uint32_t choice_set_id));
   MOCK_METHOD3(AddPerformInteractionChoiceSet,
-               void(uint32_t correlation_id, uint32_t choice_set_id,
+               void(uint32_t correlation_id,
+                    uint32_t choice_set_id,
                     const smart_objects::SmartObject& choice_set));
   MOCK_METHOD1(DeletePerformInteractionChoiceSet,
                void(uint32_t correlation_id));
@@ -326,8 +330,9 @@ class MockApplication : public ::application_manager::Application {
   MOCK_METHOD1(
       set_hmi_level,
       void(const application_manager::mobile_api::HMILevel::eType& hmi_level));
-  MOCK_METHOD1(QueryInterface, application_manager::AppExtensionPtr(
-                                   application_manager::AppExtensionUID uid));
+  MOCK_METHOD1(QueryInterface,
+               application_manager::AppExtensionPtr(
+                   application_manager::AppExtensionUID uid));
   MOCK_METHOD1(AddExtension,
                bool(application_manager::AppExtensionPtr extention));
   MOCK_METHOD1(RemoveExtension, bool(application_manager::AppExtensionUID uid));

@@ -48,8 +48,8 @@ using ::testing::InSequence;
 class LowVoltageSignalsHandlerTest : public ::testing::Test {
  protected:
   LowVoltageSignalsHandlerTest()
-      : mock_life_cycle_(std::make_shared<main_namespace::MockLifeCycle>()),
-        mock_signals_posix_(*utils::MockSignalsPosix::signals_posix_mock()) {}
+      : mock_life_cycle_(std::make_shared<main_namespace::MockLifeCycle>())
+      , mock_signals_posix_(*utils::MockSignalsPosix::signals_posix_mock()) {}
 
   void SetUp() OVERRIDE {
     profile_.set_config_file_name("smartDeviceLink.ini");

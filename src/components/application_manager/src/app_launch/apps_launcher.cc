@@ -10,13 +10,15 @@ struct LauncherGenerator {
                     connection_handler::ConnectionHandler& connection_handler,
                     const uint16_t app_launch_max_retry_attempt,
                     const uint16_t app_launch_retry_wait_time)
-      : apps_laucnher_(apps_laucnher),
-        connection_handler_(connection_handler),
-        app_launch_max_retry_attempt_(app_launch_max_retry_attempt),
-        app_launch_retry_wait_time_(app_launch_retry_wait_time) {}
+      : apps_laucnher_(apps_laucnher)
+      , connection_handler_(connection_handler)
+      , app_launch_max_retry_attempt_(app_launch_max_retry_attempt)
+      , app_launch_retry_wait_time_(app_launch_retry_wait_time) {}
   AppsLauncher::LauncherPtr operator()() {
     return std::make_shared<AppsLauncher::Launcher>(
-        apps_laucnher_, connection_handler_, app_launch_max_retry_attempt_,
+        apps_laucnher_,
+        connection_handler_,
+        app_launch_max_retry_attempt_,
         app_launch_retry_wait_time_);
   }
 
@@ -34,10 +36,12 @@ AppsLauncher::AppsLauncher(
     const uint16_t app_launch_retry_wait_time) {
   sync_primitives::AutoLock lock(launchers_lock_);
   free_launchers_.resize(max_number_of_ios_device);
-  std::generate(
-      free_launchers_.begin(), free_launchers_.end(),
-      LauncherGenerator(*this, connection_handler, app_launch_max_retry_attempt,
-                        app_launch_retry_wait_time));
+  std::generate(free_launchers_.begin(),
+                free_launchers_.end(),
+                LauncherGenerator(*this,
+                                  connection_handler,
+                                  app_launch_max_retry_attempt,
+                                  app_launch_retry_wait_time));
 }
 
 void AppsLauncher::StartLaunching(ApplicationDataPtr app_data) {
@@ -62,17 +66,17 @@ struct AppLauncherFinder {
 
 void AppsLauncher::StopLaunching(ApplicationDataPtr app_data) {
   sync_primitives::AutoLock lock(launchers_lock_);
-  const AppLaunchers::iterator it =
-      std::find_if(works_launchers_.begin(), works_launchers_.end(),
-                   AppLauncherFinder(app_data));
+  const AppLaunchers::iterator it = std::find_if(works_launchers_.begin(),
+                                                 works_launchers_.end(),
+                                                 AppLauncherFinder(app_data));
   if (it != works_launchers_.end()) {
     LauncherPtr launcher = *it;
     launcher->Clear();
     free_launchers_.push_back(launcher);
     works_launchers_.erase(it);
   } else {
-    LOG4CXX_DEBUG(logger_, "Unable to StopLaunching"
-                               << app_data->mobile_app_id_);
+    LOG4CXX_DEBUG(logger_,
+                  "Unable to StopLaunching" << app_data->mobile_app_id_);
   }
 }
 
@@ -91,13 +95,14 @@ AppsLauncher::Launcher::Launcher(
     connection_handler::ConnectionHandler& connection_handler,
     const uint16_t app_launch_max_retry_attempt,
     const uint16_t app_launch_retry_wait_time)
-    : retry_index_(0),
-      retry_timer_("AppsLauncherTimer", new timer::TimerTaskImpl<Launcher>(
-                                            this, &Launcher::LaunchNow)),
-      app_launch_max_retry_attempt_(app_launch_max_retry_attempt),
-      app_launch_retry_wait_time_(app_launch_retry_wait_time),
-      connection_handler_(connection_handler),
-      parent_(parent) {}
+    : retry_index_(0)
+    , retry_timer_(
+          "AppsLauncherTimer",
+          new timer::TimerTaskImpl<Launcher>(this, &Launcher::LaunchNow))
+    , app_launch_max_retry_attempt_(app_launch_max_retry_attempt)
+    , app_launch_retry_wait_time_(app_launch_retry_wait_time)
+    , connection_handler_(connection_handler)
+    , parent_(parent) {}
 
 void AppsLauncher::Launcher::PosponedLaunch(
     const app_launch::ApplicationDataPtr& app_data) {
@@ -105,10 +110,11 @@ void AppsLauncher::Launcher::PosponedLaunch(
   app_data_ = app_data;
   retry_index_ = 0;
   retry_timer_.Start(app_launch_retry_wait_time_, timer::kPeriodic);
-  LOG4CXX_DEBUG(logger_, "Applicaiton "
-                             << app_data->mobile_app_id_ << " on device "
-                             << app_data->device_mac_ << " will be launched in "
-                             << app_launch_retry_wait_time_ << " ms");
+  LOG4CXX_DEBUG(logger_,
+                "Applicaiton " << app_data->mobile_app_id_ << " on device "
+                               << app_data->device_mac_
+                               << " will be launched in "
+                               << app_launch_retry_wait_time_ << " ms");
 }
 
 void AppsLauncher::Launcher::Clear() {
@@ -119,10 +125,10 @@ void AppsLauncher::Launcher::Clear() {
 
 void AppsLauncher::Launcher::LaunchNow() {
   if (retry_index_++ < app_launch_max_retry_attempt_) {
-    LOG4CXX_DEBUG(logger_, "Run App " << app_data_->mobile_app_id_
-                                      << "with bundle " << app_data_->bundle_id_
-                                      << " On Device "
-                                      << app_data_->device_mac_);
+    LOG4CXX_DEBUG(logger_,
+                  "Run App " << app_data_->mobile_app_id_ << "with bundle "
+                             << app_data_->bundle_id_ << " On Device "
+                             << app_data_->device_mac_);
 
     connection_handler_.RunAppOnDevice(app_data_->device_mac_,
                                        app_data_->bundle_id_);

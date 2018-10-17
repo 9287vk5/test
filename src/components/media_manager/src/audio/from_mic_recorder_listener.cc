@@ -42,10 +42,10 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "MediaManager")
 FromMicRecorderListener::FromMicRecorderListener(
     const std::string& file_name,
     application_manager::ApplicationManager& app_mngr)
-    : reader_(NULL),
-      file_name_(file_name),
-      current_application_(0),
-      application_manager_(app_mngr) {}
+    : reader_(NULL)
+    , file_name_(file_name)
+    , current_application_(0)
+    , application_manager_(app_mngr) {}
 
 FromMicRecorderListener::~FromMicRecorderListener() {
   LOG4CXX_AUTO_TRACE(logger_);
@@ -63,8 +63,9 @@ void FromMicRecorderListener::OnErrorReceived(int32_t application_key,
                                               const DataForListener& data) {}
 
 void FromMicRecorderListener::OnActivityStarted(int32_t application_key) {
-  LOG4CXX_INFO(logger_, "FromMicRecorderListener::OnActivityStarted "
-                            << application_key);
+  LOG4CXX_INFO(logger_,
+               "FromMicRecorderListener::OnActivityStarted "
+                   << application_key);
   if (application_key == current_application_) {
     return;
   }
@@ -80,12 +81,12 @@ void FromMicRecorderListener::OnActivityStarted(int32_t application_key) {
 }
 
 void FromMicRecorderListener::OnActivityEnded(int32_t application_key) {
-  LOG4CXX_INFO(logger_, "FromMicRecorderListener::OnActivityEnded "
-                            << application_key);
+  LOG4CXX_INFO(logger_,
+               "FromMicRecorderListener::OnActivityEnded " << application_key);
   if (application_key != current_application_) {
-    LOG4CXX_WARN(logger_, "Not performing activity on "
-                              << application_key << " but on "
-                              << current_application_);
+    LOG4CXX_WARN(logger_,
+                 "Not performing activity on " << application_key << " but on "
+                                               << current_application_);
     return;
   }
   if (reader_) {

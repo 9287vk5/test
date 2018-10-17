@@ -41,15 +41,18 @@ namespace media_manager {
 
 class SocketStreamerAdapter : public StreamerAdapter {
  public:
-  SocketStreamerAdapter(const std::string& ip, uint16_t port,
+  SocketStreamerAdapter(const std::string& ip,
+                        uint16_t port,
                         const std::string& header);
   virtual ~SocketStreamerAdapter();
 
  protected:
   class SocketStreamer : public StreamerAdapter::Streamer {
    public:
-    SocketStreamer(SocketStreamerAdapter* const adapter, const std::string& ip,
-                   uint16_t port, const std::string& header);
+    SocketStreamer(SocketStreamerAdapter* const adapter,
+                   const std::string& ip,
+                   uint16_t port,
+                   const std::string& header);
     virtual ~SocketStreamer();
 
     virtual void Close();

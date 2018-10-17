@@ -148,10 +148,16 @@ typedef NiceMock<
 #define NAVI true
 #define NOT_NAVI false
 
-ACTION_P(GetEventId, event_id) { *event_id = arg0.id(); }
-ACTION_P(GetArg, arg) { *arg = arg0; }
+ACTION_P(GetEventId, event_id) {
+  *event_id = arg0.id();
+}
+ACTION_P(GetArg, arg) {
+  *arg = arg0;
+}
 
-ACTION_P(GetArg3, result) { arg3 = *result; }
+ACTION_P(GetArg3, result) {
+  arg3 = *result;
+}
 
 ACTION_P2(GetConnectIdPermissionConsent, connect_id, consent) {
   *connect_id = arg0;
@@ -193,9 +199,9 @@ class HMICommandsNotificationsTest
           CommandsTestMocks::kIsNice> {
  public:
   HMICommandsNotificationsTest()
-      : applications_lock_(std::make_shared<sync_primitives::Lock>()),
-        applications_(application_set_, applications_lock_),
-        app_ptr_(NULL) {}
+      : applications_lock_(std::make_shared<sync_primitives::Lock>())
+      , applications_(application_set_, applications_lock_)
+      , app_ptr_(NULL) {}
 
   ~HMICommandsNotificationsTest() {
     // Fix DataAccessor release and WinQt crash
@@ -237,7 +243,9 @@ class HMICommandsNotificationsTest
   }
 
   am::ApplicationSharedPtr ConfigureApp(NiceMock<MockApplication>** app_mock,
-                                        uint32_t app_id, bool media, bool navi,
+                                        uint32_t app_id,
+                                        bool media,
+                                        bool navi,
                                         bool vc) {
     *app_mock = new NiceMock<MockApplication>;
 
@@ -302,10 +310,14 @@ class HMIOnNotificationsEventDispatcher
 
 typedef Types<OnAppPermissionChangedNotification,
               OnAudioDataStreamingNotification,
-              hmi::OnButtonSubscriptionNotification, OnFileRemovedNotification,
-              OnPutFileNotification, OnResumeAudioSourceNotification,
-              OnSDLCloseNotification, OnSDLConsentNeededNotification,
-              OnSDLPersistenceCompleteNotification, OnStatusUpdateNotification,
+              hmi::OnButtonSubscriptionNotification,
+              OnFileRemovedNotification,
+              OnPutFileNotification,
+              OnResumeAudioSourceNotification,
+              OnSDLCloseNotification,
+              OnSDLConsentNeededNotification,
+              OnSDLPersistenceCompleteNotification,
+              OnStatusUpdateNotification,
               OnVideoDataStreamingNotification,
               OnRecordStartdNotification> HMIOnNotificationsListToHMITypes;
 
@@ -1015,8 +1027,8 @@ TEST_F(HMICommandsNotificationsTest,
     EXPECT_CALL(mock_rpc_service_,
                 ManageMobileCommand(notification, Command::SOURCE_SDL));
     EXPECT_CALL(app_mngr_,
-                UnregisterApplication(kAppId_, mobile_apis::Result::SUCCESS,
-                                      false, false));
+                UnregisterApplication(
+                    kAppId_, mobile_apis::Result::SUCCESS, false, false));
     command->Run();
   }
 }
@@ -1074,11 +1086,12 @@ TEST_F(HMICommandsNotificationsTest,
 
   EXPECT_CALL(app_mngr_, state_controller())
       .WillOnce(ReturnRef(mock_state_controller_));
-  EXPECT_CALL(
-      mock_state_controller_,
-      SetRegularState(app_, mobile_apis::HMILevel::HMI_NONE,
-                      mobile_apis::AudioStreamingState::NOT_AUDIBLE,
-                      mobile_apis::VideoStreamingState::NOT_STREAMABLE, false));
+  EXPECT_CALL(mock_state_controller_,
+              SetRegularState(app_,
+                              mobile_apis::HMILevel::HMI_NONE,
+                              mobile_apis::AudioStreamingState::NOT_AUDIBLE,
+                              mobile_apis::VideoStreamingState::NOT_STREAMABLE,
+                              false));
   command->Run();
 }
 
@@ -1099,11 +1112,12 @@ TEST_F(HMICommandsNotificationsTest,
   EXPECT_CALL(app_mngr_, UnregisterApplication(_, _, _, _)).Times(0);
   EXPECT_CALL(app_mngr_, state_controller())
       .WillOnce(ReturnRef(mock_state_controller_));
-  EXPECT_CALL(
-      mock_state_controller_,
-      SetRegularState(app_, mobile_apis::HMILevel::HMI_NONE,
-                      mobile_apis::AudioStreamingState::NOT_AUDIBLE,
-                      mobile_apis::VideoStreamingState::NOT_STREAMABLE, false));
+  EXPECT_CALL(mock_state_controller_,
+              SetRegularState(app_,
+                              mobile_apis::HMILevel::HMI_NONE,
+                              mobile_apis::AudioStreamingState::NOT_AUDIBLE,
+                              mobile_apis::VideoStreamingState::NOT_STREAMABLE,
+                              false));
   command->Run();
 }
 
@@ -1332,8 +1346,8 @@ TEST_F(HMICommandsNotificationsTest,
   EXPECT_CALL(mock_rpc_service_,
               ManageMobileCommand(notification, Command::SOURCE_SDL));
   EXPECT_CALL(app_mngr_,
-              UnregisterApplication(kAppId_, mobile_apis::Result::SUCCESS,
-                                    false, false));
+              UnregisterApplication(
+                  kAppId_, mobile_apis::Result::SUCCESS, false, false));
   command->Run();
   EXPECT_EQ(static_cast<int32_t>(mobile_apis::FunctionID::OnLanguageChangeID),
             (*message)[am::strings::params][am::strings::function_id].asInt());
@@ -1478,9 +1492,10 @@ TEST_F(HMICommandsNotificationsTest,
   ON_CALL(mock_connection_handler_, get_session_observer())
       .WillByDefault(ReturnRef(mock_session_observer_));
   const int32_t device_id = 1;
-  ON_CALL(mock_session_observer_,
-          GetDataOnDeviceID(testing::An<transport_manager::DeviceHandle>(),
-                            NULL, NULL, _, NULL))
+  ON_CALL(
+      mock_session_observer_,
+      GetDataOnDeviceID(
+          testing::An<transport_manager::DeviceHandle>(), NULL, NULL, _, NULL))
       .WillByDefault(Return(device_id));
 
   EXPECT_CALL(mock_policy_handler_, GetUserConsentForDevice(_))
@@ -1528,9 +1543,10 @@ TEST_F(HMICommandsNotificationsTest,
   ON_CALL(mock_connection_handler_, get_session_observer())
       .WillByDefault(ReturnRef(mock_session_observer_));
   const int32_t device_id = 1;
-  ON_CALL(mock_session_observer_,
-          GetDataOnDeviceID(testing::An<transport_manager::DeviceHandle>(),
-                            NULL, NULL, _, NULL))
+  ON_CALL(
+      mock_session_observer_,
+      GetDataOnDeviceID(
+          testing::An<transport_manager::DeviceHandle>(), NULL, NULL, _, NULL))
       .WillByDefault(Return(device_id));
 
   EXPECT_CALL(mock_policy_handler_, GetUserConsentForDevice(_))
@@ -1651,8 +1667,8 @@ TEST_F(HMICommandsNotificationsTest,
   EXPECT_CALL(mock_rpc_service_,
               ManageMobileCommand(notification, Command::SOURCE_SDL));
   EXPECT_CALL(app_mngr_,
-              UnregisterApplication(kAppId_, mobile_apis::Result::SUCCESS,
-                                    false, false));
+              UnregisterApplication(
+                  kAppId_, mobile_apis::Result::SUCCESS, false, false));
   command->Run();
   EXPECT_EQ(static_cast<int32_t>(mobile_apis::FunctionID::OnLanguageChangeID),
             (*message)[am::strings::params][am::strings::function_id].asInt());
@@ -1753,8 +1769,8 @@ TEST_F(HMICommandsNotificationsTest,
   EXPECT_CALL(mock_rpc_service_,
               ManageMobileCommand(notification, Command::SOURCE_SDL));
   EXPECT_CALL(app_mngr_,
-              UnregisterApplication(kAppId_, mobile_apis::Result::SUCCESS,
-                                    false, false));
+              UnregisterApplication(
+                  kAppId_, mobile_apis::Result::SUCCESS, false, false));
   command->Run();
   EXPECT_EQ(static_cast<int32_t>(mobile_apis::FunctionID::OnLanguageChangeID),
             (*message)[am::strings::params][am::strings::function_id].asInt());

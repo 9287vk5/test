@@ -59,7 +59,9 @@ class MockTransportManagerImpl
     Handle(test_event);
   }
 
-  void TestHandle(::protocol_handler::RawMessagePtr msg) { Handle(msg); }
+  void TestHandle(::protocol_handler::RawMessagePtr msg) {
+    Handle(msg);
+  }
 };
 
 }  // namespace transport_manager_test

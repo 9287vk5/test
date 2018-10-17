@@ -78,22 +78,24 @@ struct Version {
   APIVersion max_supported_api_version;
 
   Version()
-      : min_supported_api_version(APIVersion::kUnknownAPI),
-        max_supported_api_version(APIVersion::kUnknownAPI) {}
+      : min_supported_api_version(APIVersion::kUnknownAPI)
+      , max_supported_api_version(APIVersion::kUnknownAPI) {}
 };
 
 struct AppFile {
   // need to use in std::map;
   AppFile()
-      : is_persistent(false),
-        is_download_complete(false),
-        file_type(mobile_apis::FileType::INVALID_ENUM) {}
-  AppFile(const std::string& name, bool persistent, bool download_complete,
+      : is_persistent(false)
+      , is_download_complete(false)
+      , file_type(mobile_apis::FileType::INVALID_ENUM) {}
+  AppFile(const std::string& name,
+          bool persistent,
+          bool download_complete,
           mobile_apis::FileType::eType type)
-      : file_name(name),
-        is_persistent(persistent),
-        is_download_complete(download_complete),
-        file_type(type) {}
+      : file_name(name)
+      , is_persistent(persistent)
+      , is_download_complete(download_complete)
+      , file_type(type) {}
   std::string file_name;
   bool is_persistent;
   bool is_download_complete;
@@ -302,7 +304,8 @@ class DynamicApplicationData {
    * @param choice_set SmartObject that represents choice set
    */
   virtual void AddPerformInteractionChoiceSet(
-      uint32_t correlation_id, uint32_t choice_set_id,
+      uint32_t correlation_id,
+      uint32_t choice_set_id,
       const smart_objects::SmartObject& choice_set) = 0;
 
   /*
@@ -795,33 +798,43 @@ class Application : public virtual InitialApplicationData,
   /**
    * @brief MarkRegistered allows to mark application as registered.
    */
-  void MarkRegistered() { app_state_ = kRegistered; }
+  void MarkRegistered() {
+    app_state_ = kRegistered;
+  }
 
   /**
    * @brief MarkUnregistered allows to mark application as unregistered.
    */
-  void MarkUnregistered() { app_state_ = kWaitingForRegistration; }
+  void MarkUnregistered() {
+    app_state_ = kWaitingForRegistration;
+  }
 
   /**
    * @brief schemaUrl contains application's url (for 4th protocol version)
    *
    * @return application's url.
    */
-  std::string SchemaUrl() const { return url_; }
+  std::string SchemaUrl() const {
+    return url_;
+  }
 
   /**
    * @brief SetShemaUrl allows to store schema url for application.
    *
    * @param url url to store.
    */
-  void SetShemaUrl(const std::string& url) { url_ = url; }
+  void SetShemaUrl(const std::string& url) {
+    url_ = url;
+  }
 
   /**
    * @brief packagName allows to obtain application's package name.
    *
    * @return pakage name.
    */
-  std::string PackageName() const { return package_name_; }
+  std::string PackageName() const {
+    return package_name_;
+  }
 
   /**
    * @brief SetPackageName allows to store package name for application.
@@ -835,14 +848,18 @@ class Application : public virtual InitialApplicationData,
   /**
    * @brief Returns is application should be greyed out on HMI
    */
-  bool is_greyed_out() const { return is_greyed_out_; }
+  bool is_greyed_out() const {
+    return is_greyed_out_;
+  }
 
   /**
    * @brief Sets application as should be greyed out on HMI
    * @param is_greyed_out True, if should be greyed out on HMI,
    * otherwise - false
    */
-  void set_greyed_out(bool is_greyed_out) { is_greyed_out_ = is_greyed_out; }
+  void set_greyed_out(bool is_greyed_out) {
+    is_greyed_out_ = is_greyed_out;
+  }
   /**
    * @brief Load persistent files from application folder.
    */

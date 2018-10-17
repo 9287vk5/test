@@ -57,10 +57,10 @@ using ::testing::Return;
 class HeartBeatMonitorTest : public testing::Test {
  public:
   HeartBeatMonitorTest()
-      : connection_(NULL),
-        timeout_(100u),
-        time_allowance_multiplier_(1.5),
-        expiration_timeout_(timeout_ * 2u) {}
+      : connection_(NULL)
+      , timeout_(100u)
+      , time_allowance_multiplier_(1.5)
+      , expiration_timeout_(timeout_ * 2u) {}
 
  protected:
   testing::NiceMock<MockConnectionHandler> connection_handler_mock_;
@@ -78,10 +78,14 @@ class HeartBeatMonitorTest : public testing::Test {
         connection_handle_, 0, &connection_handler_mock_, timeout_);
   }
 
-  void TearDown() OVERRIDE { delete connection_; }
+  void TearDown() OVERRIDE {
+    delete connection_;
+  }
 };
 
-ACTION_P2(RemoveSession, conn, session_id) { conn->RemoveSession(session_id); }
+ACTION_P2(RemoveSession, conn, session_id) {
+  conn->RemoveSession(session_id);
+}
 
 TEST_F(HeartBeatMonitorTest, TimerNotStarted) {
   EXPECT_CALL(connection_handler_mock_, AddSession(_))

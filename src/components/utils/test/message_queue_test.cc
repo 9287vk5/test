@@ -43,11 +43,11 @@ using ::utils::MessageQueue;
 class MessageQueueTest : public testing::Test {
  public:
   MessageQueueTest()
-      : test_val_1("Hello,"),
-        test_val_2("Beautiful "),
-        test_val_3("World!"),
-        test_line(""),
-        check_value(false) {}
+      : test_val_1("Hello,")
+      , test_val_2("Beautiful ")
+      , test_val_3("World!")
+      , test_line("")
+      , check_value(false) {}
   void add_one_element_to_queue();
   void extract_from_queue();
   void add_three_elements_to_queue();
@@ -121,8 +121,10 @@ TEST_F(MessageQueueTest, DefaultCtorTest_ExpectEmptyQueueCreated) {
 TEST_F(MessageQueueTest,
        MessageQueuePushThreeElementsTest_ExpectThreeElementsAdded) {
   pthread_t thread1;
-  pthread_create(&thread1, NULL,
-                 &MessageQueueTest::add_three_elements_to_queue_helper, this);
+  pthread_create(&thread1,
+                 NULL,
+                 &MessageQueueTest::add_three_elements_to_queue_helper,
+                 this);
   pthread_join(thread1, NULL);
   // check if 3 elements were added successfully
   ASSERT_EQ(3u, test_queue.size());
@@ -146,10 +148,10 @@ TEST_F(MessageQueueTest,
   pthread_t thread1;
   pthread_t thread2;
   // Creating threads with thread function mentioned above
-  pthread_create(&thread1, NULL,
-                 &MessageQueueTest::add_one_element_to_queue_helper, this);
-  pthread_create(&thread2, NULL, &MessageQueueTest::extract_from_queue_helper,
-                 this);
+  pthread_create(
+      &thread1, NULL, &MessageQueueTest::add_one_element_to_queue_helper, this);
+  pthread_create(
+      &thread2, NULL, &MessageQueueTest::extract_from_queue_helper, this);
   // Primary thread waits until thread 2 to be finished
   pthread_join(thread2, NULL);
   // Check if first element was removed successfully

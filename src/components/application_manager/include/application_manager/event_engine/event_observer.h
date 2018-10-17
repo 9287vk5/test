@@ -103,7 +103,9 @@ class EventObserver {
   DISALLOW_COPY_AND_ASSIGN(EventObserver);
 };
 
-const EventObserver::ObserverID& EventObserver::id() const { return id_; }
+const EventObserver::ObserverID& EventObserver::id() const {
+  return id_;
+}
 
 }  // namespace event_engine
 }  // namespace application_manager

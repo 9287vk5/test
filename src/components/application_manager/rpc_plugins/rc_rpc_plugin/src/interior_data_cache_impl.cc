@@ -83,8 +83,8 @@ smart_objects::SmartObject InteriorDataCacheImpl::Retrieve(
   sync_primitives::AutoLock autolock(cached_data_lock_);
   auto it = cached_data_.find(module_type);
   if (it == cached_data_.end()) {
-    LOG4CXX_WARN(logger_, "Module type " << module_type
-                                         << " was not found in cache");
+    LOG4CXX_WARN(logger_,
+                 "Module type " << module_type << " was not found in cache");
     return smart_objects::SmartObject(smart_objects::SmartType_Null);
   }
   LOG4CXX_TRACE(logger_, "module_type : " << module_type);
@@ -96,8 +96,9 @@ bool InteriorDataCacheImpl::Contains(const std::string& module_type) const {
   sync_primitives::AutoLock autolock(cached_data_lock_);
   auto it = cached_data_.find(module_type);
   const bool contains = it != cached_data_.end();
-  LOG4CXX_TRACE(logger_, "module_type : " << module_type << " "
-                                          << (contains ? "true" : "false"));
+  LOG4CXX_TRACE(logger_,
+                "module_type : " << module_type << " "
+                                 << (contains ? "true" : "false"));
   return contains;
 }
 

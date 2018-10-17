@@ -51,12 +51,12 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "TelemetryMonitor")
 
 TelemetryMonitor::TelemetryMonitor(const std::string& server_address,
                                    uint16_t port)
-    : server_address_(server_address),
-      port_(port),
-      thread_(NULL),
-      app_observer(this),
-      tm_observer(this),
-      ph_observer(this) {}
+    : server_address_(server_address)
+    , port_(port)
+    , thread_(NULL)
+    , app_observer(this)
+    , tm_observer(this)
+    , ph_observer(this) {}
 
 void TelemetryMonitor::Start() {
   streamer_ = streamer_ ? streamer_ : std::make_shared<Streamer>(this);
@@ -73,11 +73,17 @@ void TelemetryMonitor::set_streamer(std::shared_ptr<Streamer> streamer) {
   }
 }
 
-const std::string& TelemetryMonitor::ip() const { return server_address_; }
+const std::string& TelemetryMonitor::ip() const {
+  return server_address_;
+}
 
-int16_t TelemetryMonitor::port() const { return port_; }
+int16_t TelemetryMonitor::port() const {
+  return port_;
+}
 
-TelemetryMonitor::~TelemetryMonitor() { Stop(); }
+TelemetryMonitor::~TelemetryMonitor() {
+  Stop();
+}
 
 void TelemetryMonitor::Init(
     TelemetryObservable<protocol_handler::PHTelemetryObserver>*
@@ -113,13 +119,15 @@ void TelemetryMonitor::SendMetric(std::shared_ptr<MetricWrapper> metric) {
 }
 
 Streamer::Streamer(TelemetryMonitor* const server)
-    : is_client_connected_(false),
-      kserver_(server),
-      server_socket_fd_(0),
-      client_socket_fd_(0),
-      stop_flag_(false) {}
+    : is_client_connected_(false)
+    , kserver_(server)
+    , server_socket_fd_(0)
+    , client_socket_fd_(0)
+    , stop_flag_(false) {}
 
-Streamer::~Streamer() { Stop(); }
+Streamer::~Streamer() {
+  Stop();
+}
 
 void Streamer::threadMain() {
   LOG4CXX_AUTO_TRACE(logger_);
@@ -174,7 +182,10 @@ void Streamer::Start() {
   }
 
   int32_t optval = 1;
-  if (-1 == setsockopt(server_socket_fd_, SOL_SOCKET, SO_REUSEADDR, &optval,
+  if (-1 == setsockopt(server_socket_fd_,
+                       SOL_SOCKET,
+                       SO_REUSEADDR,
+                       &optval,
                        sizeof optval)) {
     LOG4CXX_ERROR(logger_, "Unable to set sockopt");
     return;
@@ -188,8 +199,9 @@ void Streamer::Start() {
   if (-1 == bind(server_socket_fd_,
                  reinterpret_cast<struct sockaddr*>(&serv_addr_),
                  sizeof(serv_addr_))) {
-    LOG4CXX_ERROR(logger_, "Unable to bind server " << kserver_->ip().c_str()
-                                                    << ':' << kserver_->port());
+    LOG4CXX_ERROR(logger_,
+                  "Unable to bind server " << kserver_->ip().c_str() << ':'
+                                           << kserver_->port());
     return;
   }
   if (-1 == listen(server_socket_fd_, 1)) {

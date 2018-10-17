@@ -51,8 +51,7 @@ GetInteriorVehicleDataRequest::GetInteriorVehicleDataRequest(
     const RCCommandParams& params)
     : RCCommandRequest(message, params)
 
-      ,
-      excessive_subscription_occured_(false) {}
+    , excessive_subscription_occured_(false) {}
 
 bool CheckIfModuleTypeExistInCapabilities(
     const smart_objects::SmartObject& rc_capabilities,
@@ -82,7 +81,8 @@ bool GetInteriorVehicleDataRequest::ProcessCapabilities() {
       !CheckIfModuleTypeExistInCapabilities(*rc_capabilities, module_type)) {
     LOG4CXX_WARN(logger_, "Accessing not supported module data");
     SetResourceState(ModuleType(), ResourceState::FREE);
-    SendResponse(false, mobile_apis::Result::UNSUPPORTED_RESOURCE,
+    SendResponse(false,
+                 mobile_apis::Result::UNSUPPORTED_RESOURCE,
                  "Accessing not supported module data");
     return false;
   }
@@ -102,8 +102,9 @@ void GetInteriorVehicleDataRequest::ProcessResponseToMobileFromCache(
                      [message_params::kModuleType] = ModuleType();
 
   const auto& request_msg_params = (*message_)[app_mngr::strings::msg_params];
-  LOG4CXX_DEBUG(logger_, "kSubscribe exist" << request_msg_params.keyExists(
-                             message_params::kSubscribe));
+  LOG4CXX_DEBUG(logger_,
+                "kSubscribe exist" << request_msg_params.keyExists(
+                    message_params::kSubscribe));
   if (request_msg_params.keyExists(message_params::kSubscribe)) {
     response_msg_params[message_params::kIsSubscribed] =
         request_msg_params[message_params::kSubscribe].asBool();
@@ -113,8 +114,8 @@ void GetInteriorVehicleDataRequest::ProcessResponseToMobileFromCache(
       extension->SubscribeToInteriorVehicleData(ModuleType());
     }
   }
-  SendResponse(true, mobile_apis::Result::SUCCESS, nullptr,
-               &response_msg_params);
+  SendResponse(
+      true, mobile_apis::Result::SUCCESS, nullptr, &response_msg_params);
   if (AppShouldBeUnsubscribed()) {
     auto extension = RCHelpers::GetRCExtension(*app);
     DCHECK(extension);
@@ -145,8 +146,8 @@ bool GetInteriorVehicleDataRequest::TheLastAppShouldBeUnsubscribed(
                                               ModuleType());
     if (subscribed_to_module_type.size() == 1 &&
         subscribed_to_module_type.front() == app) {
-      LOG4CXX_DEBUG(logger_, "The last application unsubscribes from "
-                                 << ModuleType());
+      LOG4CXX_DEBUG(logger_,
+                    "The last application unsubscribes from " << ModuleType());
       return true;
     }
   }
@@ -179,7 +180,8 @@ void GetInteriorVehicleDataRequest::Execute() {
     }
     interior_data_manager_.StoreRequestToHMITime(ModuleType());
     SendHMIRequest(hmi_apis::FunctionID::RC_GetInteriorVehicleData,
-                   &(*message_)[app_mngr::strings::msg_params], true);
+                   &(*message_)[app_mngr::strings::msg_params],
+                   true);
     return;
   }
   ProcessResponseToMobileFromCache(app);
@@ -204,7 +206,8 @@ void GetInteriorVehicleDataRequest::on_event(
 
   bool result =
       helpers::Compare<mobile_apis::Result::eType, helpers::EQ, helpers::ONE>(
-          result_code, mobile_apis::Result::SUCCESS,
+          result_code,
+          mobile_apis::Result::SUCCESS,
           mobile_apis::Result::WARNINGS);
 
   if (mobile_apis::Result::READ_ONLY == result_code) {
@@ -236,7 +239,9 @@ void GetInteriorVehicleDataRequest::on_event(
   GetInfo(hmi_response, response_info);
   SetResourceState(ModuleType(), ResourceState::FREE);
 
-  SendResponse(result, result_code, response_info.c_str(),
+  SendResponse(result,
+               result_code,
+               response_info.c_str(),
                &hmi_response[app_mngr::strings::msg_params]);
 }
 
@@ -280,9 +285,10 @@ void GetInteriorVehicleDataRequest::ProccessSubscription(
   }
 
   if (is_subscribe_present_in_request && !isSubscribed_present_in_response) {
-    LOG4CXX_WARN(logger_, "conditional mandatory parameter "
-                              << message_params::kIsSubscribed
-                              << " missed in hmi response");
+    LOG4CXX_WARN(logger_,
+                 "conditional mandatory parameter "
+                     << message_params::kIsSubscribed
+                     << " missed in hmi response");
 
     is_subscribed = extension->IsSubscibedToInteriorVehicleData(module_type);
     temp_hmi_response[app_mngr::strings::msg_params]
@@ -291,10 +297,11 @@ void GetInteriorVehicleDataRequest::ProccessSubscription(
   }
 
   if (!is_subscribe_present_in_request && isSubscribed_present_in_response) {
-    LOG4CXX_WARN(logger_, "Parameter " << message_params::kIsSubscribed
-                                       << " is ignored due to absence '"
-                                       << message_params::kSubscribe
-                                       << "' parameter in request");
+    LOG4CXX_WARN(logger_,
+                 "Parameter " << message_params::kIsSubscribed
+                              << " is ignored due to absence '"
+                              << message_params::kSubscribe
+                              << "' parameter in request");
     smart_objects::SmartObject& temp_hmi_response =
         const_cast<smart_objects::SmartObject&>(hmi_response);
     temp_hmi_response[app_mngr::strings::msg_params].erase(
@@ -315,12 +322,14 @@ void GetInteriorVehicleDataRequest::ProccessSubscription(
   if (request_subscribe == response_subscribe) {
     const std::string module_type = ModuleType();
     if (response_subscribe) {
-      LOG4CXX_DEBUG(logger_, "SubscribeToInteriorVehicleData "
-                                 << app->app_id() << " " << module_type);
+      LOG4CXX_DEBUG(logger_,
+                    "SubscribeToInteriorVehicleData " << app->app_id() << " "
+                                                      << module_type);
       extension->SubscribeToInteriorVehicleData(module_type);
     } else {
-      LOG4CXX_DEBUG(logger_, "UnsubscribeFromInteriorVehicleData "
-                                 << app->app_id() << " " << module_type);
+      LOG4CXX_DEBUG(logger_,
+                    "UnsubscribeFromInteriorVehicleData "
+                        << app->app_id() << " " << module_type);
       extension->UnsubscribeFromInteriorVehicleData(module_type);
     }
   }

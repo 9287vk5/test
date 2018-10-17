@@ -51,14 +51,17 @@ class StatisticsDelegate : public threads::ThreadDelegate {
   StatisticsDelegate(PolicyHandler& policy_handler,
                      usage_statistics::GlobalCounterId type);
 
-  StatisticsDelegate(PolicyHandler& policy_handler, const std::string& app_id,
+  StatisticsDelegate(PolicyHandler& policy_handler,
+                     const std::string& app_id,
                      usage_statistics::AppCounterId type);
 
-  StatisticsDelegate(PolicyHandler& policy_handler, const std::string& app_id,
+  StatisticsDelegate(PolicyHandler& policy_handler,
+                     const std::string& app_id,
                      usage_statistics::AppInfoId type,
                      const std::string& value);
 
-  StatisticsDelegate(PolicyHandler& policy_handler, const std::string& app_id,
+  StatisticsDelegate(PolicyHandler& policy_handler,
+                     const std::string& app_id,
                      usage_statistics::AppStopwatchId type,
                      int32_t timespan_seconds);
 

@@ -55,7 +55,9 @@ class ValidationReportTest : public testing::Test {
     report_ = new ValidationReport(object_name_);
     report_2 = new ValidationReport(object_name_2);
   }
-  virtual void TearDown() { ClearReports(); }
+  virtual void TearDown() {
+    ClearReports();
+  }
 
   void ClearReports() {
     ValidationReports& temp =
@@ -147,11 +149,11 @@ TEST_F(ValidationReportTest, PrettyFormat_ExpectDataCorrect) {
   impl::PrettyFormat(*report_, parent_object_name_, &result1);
   impl::PrettyFormat(*report_2, parent_object_name_, &result2);
   std::string temp1;
-  GeneratePrettyFormatResult(temp1, parent_object_name_, object_name_,
-                             test_validation_info_);
+  GeneratePrettyFormatResult(
+      temp1, parent_object_name_, object_name_, test_validation_info_);
   std::string temp2;
-  GeneratePrettyFormatResult(temp2, parent_object_name_, object_name_2,
-                             test_validation_info_);
+  GeneratePrettyFormatResult(
+      temp2, parent_object_name_, object_name_2, test_validation_info_);
   // Checks
   EXPECT_EQ(temp1, result1);
   EXPECT_EQ(temp2, result2);

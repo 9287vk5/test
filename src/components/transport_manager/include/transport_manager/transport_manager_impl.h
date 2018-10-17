@@ -101,7 +101,8 @@ class TransportManagerImpl
 
     ConnectionInternal(TransportManagerImpl* transport_manager,
                        TransportAdapter* transport_adapter,
-                       const ConnectionUID id, const DeviceUID& dev_id,
+                       const ConnectionUID id,
+                       const DeviceUID& dev_id,
                        const ApplicationHandle& app_id,
                        const DeviceHandle device_handle);
 
@@ -271,7 +272,8 @@ class TransportManagerImpl
   void RaiseEvent(Proc proc, Args... args) {
     for (TransportManagerListenerList::iterator it =
              transport_manager_listener_.begin();
-         it != transport_manager_listener_.end(); ++it) {
+         it != transport_manager_listener_.end();
+         ++it) {
       ((*it)->*proc)(args...);
     }
   }
@@ -367,7 +369,9 @@ class TransportManagerImpl
 
 #ifdef BUILD_TESTS
  public:
-  Handle2GUIDConverter& get_converter() { return converter_; }
+  Handle2GUIDConverter& get_converter() {
+    return converter_;
+  }
 
  private:
 #endif  // BUILD_TESTS
@@ -459,12 +463,15 @@ class TransportManagerImpl
       ConnectionUID id,
       std::map<ConnectionUID, std::pair<unsigned int, unsigned char*> >&
           container,
-      unsigned char* data, unsigned int data_size);
-  bool GetFrameSize(unsigned char* data, unsigned int data_size,
+      unsigned char* data,
+      unsigned int data_size);
+  bool GetFrameSize(unsigned char* data,
+                    unsigned int data_size,
                     unsigned int& frame_size);
   bool GetFrame(std::map<ConnectionUID,
                          std::pair<unsigned int, unsigned char*> >& container,
-                ConnectionUID id, unsigned int frame_size,
+                ConnectionUID id,
+                unsigned int frame_size,
                 unsigned char** frame);
 
   void DisconnectAllDevices();

@@ -51,9 +51,13 @@ ConditionalVariable::ConditionalVariable() {}
 
 ConditionalVariable::~ConditionalVariable() {}
 
-void ConditionalVariable::NotifyOne() { cond_var_.notify_one(); }
+void ConditionalVariable::NotifyOne() {
+  cond_var_.notify_one();
+}
 
-void ConditionalVariable::Broadcast() { cond_var_.notify_all(); }
+void ConditionalVariable::Broadcast() {
+  cond_var_.notify_all();
+}
 
 bool ConditionalVariable::Wait(BaseLock& lock) {
   // NOTE this grossness is due to boost mutex and recursive mutex not sharing a

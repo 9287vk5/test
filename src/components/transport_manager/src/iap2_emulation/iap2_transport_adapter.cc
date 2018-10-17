@@ -53,7 +53,8 @@ namespace transport_adapter {
 CREATE_LOGGERPTR_GLOBAL(logger_, "IAP2Emulation");
 
 IAP2BluetoothEmulationTransportAdapter::IAP2BluetoothEmulationTransportAdapter(
-    const uint16_t port, resumption::LastState& last_state,
+    const uint16_t port,
+    resumption::LastState& last_state,
     const TransportManagerSettings& settings)
     : TcpTransportAdapter(port, last_state, settings) {}
 
@@ -69,7 +70,8 @@ DeviceType IAP2BluetoothEmulationTransportAdapter::GetDeviceType() const {
 }
 
 IAP2USBEmulationTransportAdapter::IAP2USBEmulationTransportAdapter(
-    const uint16_t port, resumption::LastState& last_state,
+    const uint16_t port,
+    resumption::LastState& last_state,
     const TransportManagerSettings& settings)
     : TcpTransportAdapter(port, last_state, settings), out_(0) {
   auto delegate = new IAPSignalHandlerDelegate(*this);

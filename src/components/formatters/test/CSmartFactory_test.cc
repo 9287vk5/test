@@ -430,16 +430,16 @@ TEST(
 TEST(CSmartFactoryTest, GetSchemaWithSmartFactory_ExpectReceivedSchema) {
   CSmartFactoryTest test_factory;
   CSmartSchema schema;
-  EXPECT_TRUE(test_factory.GetSchema(FunctionIdTest::Function1,
-                                     MessageTypeTest::request, schema));
+  EXPECT_TRUE(test_factory.GetSchema(
+      FunctionIdTest::Function1, MessageTypeTest::request, schema));
 }
 
 TEST(CSmartFactoryTest,
      GetNotExistedSchemaWithSmartFactory_ExpectNotReceivedSchema) {
   CSmartFactoryTest test_factory;
   CSmartSchema schema;
-  EXPECT_FALSE(test_factory.GetSchema(FunctionIdTest::Function1,
-                                      MessageTypeTest::INVALID_ENUM, schema));
+  EXPECT_FALSE(test_factory.GetSchema(
+      FunctionIdTest::Function1, MessageTypeTest::INVALID_ENUM, schema));
 }
 
 TEST(CSmartFactoryTest,

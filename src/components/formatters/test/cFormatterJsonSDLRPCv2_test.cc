@@ -263,7 +263,9 @@ TEST(CFormatterJsonSDLRPCv2Test, StringRequestWithoutCorIdToSmObj) {
 
   bool result = CFormatterJsonSDLRPCv2::fromString<FunctionIDTest::eType,
                                                    MessageTypeTest::eType>(
-      inputJsonString, obj, FunctionIDTest::RegisterAppInterface,
+      inputJsonString,
+      obj,
+      FunctionIDTest::RegisterAppInterface,
       MessageTypeTest::request);
 
   EXPECT_EQ(true, result);
@@ -307,8 +309,11 @@ TEST(CFormatterJsonSDLRPCv2Test, StringRequestWithCorIdToSmObj) {
   int32_t corId = 10;
   bool result = CFormatterJsonSDLRPCv2::fromString<FunctionIDTest::eType,
                                                    MessageTypeTest::eType>(
-      inputJsonString, obj, FunctionIDTest::RegisterAppInterface,
-      MessageTypeTest::request, corId);
+      inputJsonString,
+      obj,
+      FunctionIDTest::RegisterAppInterface,
+      MessageTypeTest::request,
+      corId);
 
   EXPECT_EQ(true, result);
   rpc::ValidationReport report("RPC");
@@ -343,8 +348,11 @@ TEST(CFormatterJsonSDLRPCv2Test, StringResponceWithCorIdToSmartObject) {
   int32_t corId = 10;
   bool result = CFormatterJsonSDLRPCv2::fromString<FunctionIDTest::eType,
                                                    MessageTypeTest::eType>(
-      inputJsonString, obj, FunctionIDTest::RegisterAppInterface,
-      MessageTypeTest::response, corId);
+      inputJsonString,
+      obj,
+      FunctionIDTest::RegisterAppInterface,
+      MessageTypeTest::response,
+      corId);
   EXPECT_EQ(true, result);
 
   EXPECT_EQ(obj[S_PARAMS][S_MESSAGE_TYPE], MessageTypeTest::response);
@@ -369,8 +377,11 @@ TEST(CFormatterJsonSDLRPCv2Test, StringNotificationToSmartObject) {
   int32_t corId = 10;
   bool result = CFormatterJsonSDLRPCv2::fromString<FunctionIDTest::eType,
                                                    MessageTypeTest::eType>(
-      inputJsonString, obj, FunctionIDTest::SetGlobalProperties,
-      MessageTypeTest::notification, corId);
+      inputJsonString,
+      obj,
+      FunctionIDTest::SetGlobalProperties,
+      MessageTypeTest::notification,
+      corId);
   EXPECT_EQ(true, result);
   rpc::ValidationReport report("RPC");
   EXPECT_EQ(errors::eType::OK, obj.validate(&report));

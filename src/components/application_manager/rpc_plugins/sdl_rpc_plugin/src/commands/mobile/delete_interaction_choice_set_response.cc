@@ -45,10 +45,14 @@ namespace commands {
 DeleteInteractionChoiceSetResponse::DeleteInteractionChoiceSetResponse(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandResponseImpl(message, application_manager, rpc_service,
-                          hmi_capabilities, policy_handler) {}
+    : CommandResponseImpl(message,
+                          application_manager,
+                          rpc_service,
+                          hmi_capabilities,
+                          policy_handler) {}
 
 DeleteInteractionChoiceSetResponse::~DeleteInteractionChoiceSetResponse() {}
 

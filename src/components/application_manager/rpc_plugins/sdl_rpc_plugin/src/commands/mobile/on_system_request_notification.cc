@@ -53,8 +53,11 @@ OnSystemRequestNotification::OnSystemRequestNotification(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandNotificationImpl(message, application_manager, rpc_service,
-                              hmi_capabilities, policy_handler) {}
+    : CommandNotificationImpl(message,
+                              application_manager,
+                              rpc_service,
+                              hmi_capabilities,
+                              policy_handler) {}
 
 OnSystemRequestNotification::~OnSystemRequestNotification() {}
 
@@ -66,8 +69,9 @@ void OnSystemRequestNotification::Run() {
   ApplicationSharedPtr app = application_manager_.application(connection_key());
 
   if (app.use_count() == 0) {
-    LOG4CXX_ERROR(logger_, "Application with connection key "
-                               << connection_key() << " is not registered.");
+    LOG4CXX_ERROR(logger_,
+                  "Application with connection key " << connection_key()
+                                                     << " is not registered.");
     return;
   }
 
@@ -82,8 +86,9 @@ void OnSystemRequestNotification::Run() {
 
   if (!policy_handler.IsRequestTypeAllowed(app->policy_app_id(),
                                            request_type)) {
-    LOG4CXX_WARN(logger_, "Request type " << stringified_request_type
-                                          << " is not allowed by policies");
+    LOG4CXX_WARN(logger_,
+                 "Request type " << stringified_request_type
+                                 << " is not allowed by policies");
     return;
   }
 

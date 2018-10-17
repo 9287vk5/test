@@ -58,12 +58,12 @@ class UpdateStatusManagerTest : public ::testing::Test {
 
  public:
   UpdateStatusManagerTest()
-      : manager_(std::make_shared<UpdateStatusManager>()),
-        k_timeout_(1000),
-        listener_(),
-        up_to_date_status_("UP_TO_DATE"),
-        update_needed_status_("UPDATE_NEEDED"),
-        updating_status_("UPDATING") {}
+      : manager_(std::make_shared<UpdateStatusManager>())
+      , k_timeout_(1000)
+      , listener_()
+      , up_to_date_status_("UP_TO_DATE")
+      , update_needed_status_("UPDATE_NEEDED")
+      , updating_status_("UPDATING") {}
 
   void SetUp() OVERRIDE {
     manager_->set_listener(&listener_);
@@ -107,7 +107,9 @@ class WaitAsync {
 };
 }
 
-ACTION_P(NotifyAsync, waiter) { waiter->Notify(); }
+ACTION_P(NotifyAsync, waiter) {
+  waiter->Notify();
+}
 
 TEST_F(UpdateStatusManagerTest,
        OnUpdateSentOut_WaitForTimeoutExpired_ExpectStatusUpdateNeeded) {

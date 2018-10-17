@@ -79,8 +79,11 @@ class UnwrappedGetVehicleDataRequest : public GetVehicleDataRequest {
                                  app_mngr::rpc_service::RPCService& rpc_service,
                                  app_mngr::HMICapabilities& hmi_capabilities,
                                  policy::PolicyHandlerInterface& policy_handler)
-      : GetVehicleDataRequest(message, application_manager, rpc_service,
-                              hmi_capabilities, policy_handler) {}
+      : GetVehicleDataRequest(message,
+                              application_manager,
+                              rpc_service,
+                              hmi_capabilities,
+                              policy_handler) {}
 
   policy::RPCParams& get_disallowed_params() {
     return removed_parameters_permissions_.disallowed_params;
@@ -117,8 +120,9 @@ TEST_F(GetVehicleDataRequestTest, Run_TooHighFrequency_UNSUCCESS) {
   MockAppPtr app(CreateMockApp());
   EXPECT_CALL(app_mngr_, application(kConnectionKey)).WillOnce(Return(app));
 
-  EXPECT_CALL(*app, AreCommandLimitsExceeded(kFunctionId,
-                                             am::TLimitSource::CONFIG_FILE))
+  EXPECT_CALL(
+      *app,
+      AreCommandLimitsExceeded(kFunctionId, am::TLimitSource::CONFIG_FILE))
       .WillOnce(Return(true));
 
   EXPECT_CALL(

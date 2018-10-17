@@ -81,8 +81,11 @@ class SQLPTExtRepresentation : public SQLPTRepresentation,
   std::vector<UserFriendlyMessage> GetUserFriendlyMsg(
       const std::vector<std::string>& msg_codes, const std::string& language);
 
-  bool IncreaseStatisticsData(StatisticsType type) { return true; }
-  bool SetAppRegistrationLanguage(const std::string& app_id, LanguageType type,
+  bool IncreaseStatisticsData(StatisticsType type) {
+    return true;
+  }
+  bool SetAppRegistrationLanguage(const std::string& app_id,
+                                  LanguageType type,
                                   const std::string& language) {
     return true;
   }
@@ -95,18 +98,26 @@ class SQLPTExtRepresentation : public SQLPTRepresentation,
 
   bool SetSystemLanguage(const std::string& language);
 
-  int GetKmFromSuccessfulExchange() { return true; }
-  int GetDayFromScsExchange() { return true; }
-  int GetIgnitionsFromScsExchange() { return true; }
+  int GetKmFromSuccessfulExchange() {
+    return true;
+  }
+  int GetDayFromScsExchange() {
+    return true;
+  }
+  int GetIgnitionsFromScsExchange() {
+    return true;
+  }
 
   bool GetFunctionalGroupNames(FunctionalGroupNames& names);
   bool CleanupUnpairedDevices(const DeviceIds& device_ids) const;
 
   void Increment(const std::string& type) const;
   void Increment(const std::string& app_id, const std::string& type) const;
-  void Set(const std::string& app_id, const std::string& type,
+  void Set(const std::string& app_id,
+           const std::string& type,
            const std::string& value) const;
-  void Add(const std::string& app_id, const std::string& type,
+  void Add(const std::string& app_id,
+           const std::string& type,
            int seconds) const;
   bool SetDefaultPolicy(const std::string& app_id);
   bool SetPredataPolicy(const std::string& app_id);
@@ -145,7 +156,8 @@ class SQLPTExtRepresentation : public SQLPTRepresentation,
   bool SaveDevicePolicy(const policy_table::DevicePolicy& device);
   bool SavePreconsentedGroup(const std::string& app_id,
                              const policy_table::Strings& groups);
-  bool SaveMessageString(const std::string& type, const std::string& lang,
+  bool SaveMessageString(const std::string& type,
+                         const std::string& lang,
                          const policy_table::MessageString& strings);
 
   virtual bool SaveUsageAndErrorCounts(
@@ -171,10 +183,13 @@ class SQLPTExtRepresentation : public SQLPTRepresentation,
                              FunctionalGroupIDs& preconsented_groups);
 
   void FillFunctionalGroupPermissions(
-      FunctionalGroupIDs& ids, FunctionalGroupNames& names, GroupConsent state,
+      FunctionalGroupIDs& ids,
+      FunctionalGroupNames& names,
+      GroupConsent state,
       std::vector<FunctionalGroupPermission>& permissions);
   bool CountUnconsentedGroups(const std::string& policy_app_id,
-                              const std::string& device_id, int* result) const;
+                              const std::string& device_id,
+                              int* result) const;
 
   /**
    * @brief Checks, if there is message present with requested language in PT

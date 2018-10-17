@@ -24,8 +24,8 @@ using ::testing::SaveArg;
 class NetworkInterfaceListenerTest : public ::testing::Test {
  public:
   NetworkInterfaceListenerTest()
-      : interface_listener_impl_(NULL),
-        mock_tcp_client_listener_(NULL, 0, false, "") {}
+      : interface_listener_impl_(NULL)
+      , mock_tcp_client_listener_(NULL, 0, false, "") {}
 
   virtual ~NetworkInterfaceListenerTest() {}
 
@@ -44,7 +44,9 @@ class NetworkInterfaceListenerTest : public ::testing::Test {
     interface_listener_impl_->SetTesting(true);
   }
 
-  void Deinit() { delete interface_listener_impl_; }
+  void Deinit() {
+    delete interface_listener_impl_;
+  }
 
   void SetDummyInterfaceTable(struct InterfaceEntry* entries) {
     InterfaceStatusTable dummy_table;
@@ -514,7 +516,9 @@ TEST_F(NetworkInterfaceListenerTest, AutoSelectInterface_SwitchInterface) {
   EXPECT_TRUE(interface_listener_impl_->Init());
 
   struct InterfaceEntry entries[] = {
-      {"dummy_int1", "10.10.10.12", "fd53:ba79:241d:30c1::78",
+      {"dummy_int1",
+       "10.10.10.12",
+       "fd53:ba79:241d:30c1::78",
        IFF_UP | IFF_RUNNING},
       {"net_dummy2", "192.168.2.3", "fdc2:12af:327a::22", IFF_UP | IFF_RUNNING},
       {NULL, NULL, NULL, 0}};

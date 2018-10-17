@@ -63,21 +63,21 @@ static mobile_api::HMILevel::eType ConvertHmiLevelString(const std::string str);
 CREATE_LOGGERPTR_GLOBAL(logger_, "Resumption")
 
 ResumeCtrlImpl::ResumeCtrlImpl(ApplicationManager& application_manager)
-    : event_engine::EventObserver(application_manager.event_dispatcher()),
-      restore_hmi_level_timer_(
+    : event_engine::EventObserver(application_manager.event_dispatcher())
+    , restore_hmi_level_timer_(
           "RsmCtrlRstore",
           new timer::TimerTaskImpl<ResumeCtrlImpl>(
-              this, &ResumeCtrlImpl::ApplicationResumptiOnTimer)),
-      save_persistent_data_timer_("RsmCtrlPercist",
+              this, &ResumeCtrlImpl::ApplicationResumptiOnTimer))
+    , save_persistent_data_timer_("RsmCtrlPercist",
                                   new timer::TimerTaskImpl<ResumeCtrlImpl>(
-                                      this, &ResumeCtrlImpl::SaveDataOnTimer)),
-      is_resumption_active_(false),
-      is_data_saved_(false),
-      is_suspended_(false),
-      launch_time_(time(nullptr)),
-      low_voltage_time_(0),
-      wake_up_time_(0),
-      application_manager_(application_manager) {}
+                                      this, &ResumeCtrlImpl::SaveDataOnTimer))
+    , is_resumption_active_(false)
+    , is_data_saved_(false)
+    , is_suspended_(false)
+    , launch_time_(time(nullptr))
+    , low_voltage_time_(0)
+    , wake_up_time_(0)
+    , application_manager_(application_manager) {}
 #ifdef BUILD_TESTS
 void ResumeCtrlImpl::set_resumption_storage(
     std::shared_ptr<ResumptionData> mock_storage) {
@@ -140,7 +140,8 @@ ResumeCtrlImpl::~ResumeCtrlImpl() {}
 void ResumeCtrlImpl::SaveAllApplications() {
   DataAccessor<ApplicationSet> accessor(application_manager_.applications());
   std::for_each(
-      accessor.GetData().begin(), accessor.GetData().end(),
+      accessor.GetData().begin(),
+      accessor.GetData().end(),
       std::bind1st(std::mem_fun(&ResumeCtrlImpl::SaveApplication), this));
 }
 
@@ -151,8 +152,9 @@ void ResumeCtrlImpl::SaveApplication(ApplicationSharedPtr application) {
     LOG4CXX_DEBUG(logger_, "Low Voltage state is active");
     return;
   }
-  LOG4CXX_DEBUG(logger_, "application with appID " << application->app_id()
-                                                   << " will be saved");
+  LOG4CXX_DEBUG(logger_,
+                "application with appID " << application->app_id()
+                                          << " will be saved");
   resumption_storage_->SaveApplication(application);
 }
 
@@ -164,9 +166,9 @@ bool ResumeCtrlImpl::RestoreAppHMIState(ApplicationSharedPtr application) {
   using namespace mobile_apis;
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN(application, false);
-  LOG4CXX_DEBUG(logger_, "app_id : " << application->app_id()
-                                     << "; policy_app_id : "
-                                     << application->policy_app_id());
+  LOG4CXX_DEBUG(logger_,
+                "app_id : " << application->app_id() << "; policy_app_id : "
+                            << application->policy_app_id());
   const std::string& device_mac = application->mac_address();
   smart_objects::SmartObject saved_app(smart_objects::SmartType_Map);
   bool result = resumption_storage_->GetSavedApplication(
@@ -272,13 +274,15 @@ void ResumeCtrlImpl::RemoveFromResumption(uint32_t app_id) {
 
 bool ResumeCtrlImpl::SetAppHMIState(
     ApplicationSharedPtr application,
-    const mobile_apis::HMILevel::eType hmi_level, bool check_policy) {
+    const mobile_apis::HMILevel::eType hmi_level,
+    bool check_policy) {
   using namespace mobile_apis;
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN(application, false);
-  LOG4CXX_TRACE(logger_, " app_id : " << application->app_id()
-                                      << ", hmi_level : " << hmi_level
-                                      << ", check_policy : " << check_policy);
+  LOG4CXX_TRACE(logger_,
+                " app_id : " << application->app_id()
+                             << ", hmi_level : " << hmi_level
+                             << ", check_policy : " << check_policy);
   const std::string& device_mac = application->mac_address();
   if (check_policy &&
       application_manager_.GetUserConsentForDevice(device_mac) !=
@@ -290,9 +294,9 @@ bool ResumeCtrlImpl::SetAppHMIState(
   application->set_is_resuming(true);
   application_manager_.state_controller().SetRegularState(application,
                                                           hmi_level);
-  LOG4CXX_INFO(logger_, "Application with policy id "
-                            << application->policy_app_id() << " got HMI level "
-                            << hmi_level);
+  LOG4CXX_INFO(logger_,
+               "Application with policy id " << application->policy_app_id()
+                                             << " got HMI level " << hmi_level);
   return true;
 }
 
@@ -347,8 +351,8 @@ void ResumeCtrlImpl::OnAwake() {
 
 void ResumeCtrlImpl::SaveLowVoltageTime() {
   low_voltage_time_ = time(nullptr);
-  LOG4CXX_DEBUG(logger_, "Low Voltage timestamp : " << low_voltage_time_
-                                                    << " saved");
+  LOG4CXX_DEBUG(logger_,
+                "Low Voltage timestamp : " << low_voltage_time_ << " saved");
 }
 
 void ResumeCtrlImpl::SaveWakeUpTime() {
@@ -356,11 +360,17 @@ void ResumeCtrlImpl::SaveWakeUpTime() {
   LOG4CXX_DEBUG(logger_, "Wake Up timestamp : " << wake_up_time_ << " saved");
 }
 
-time_t ResumeCtrlImpl::LowVoltageTime() const { return low_voltage_time_; }
+time_t ResumeCtrlImpl::LowVoltageTime() const {
+  return low_voltage_time_;
+}
 
-time_t ResumeCtrlImpl::WakeUpTime() const { return wake_up_time_; }
+time_t ResumeCtrlImpl::WakeUpTime() const {
+  return wake_up_time_;
+}
 
-bool ResumeCtrlImpl::is_suspended() const { return is_suspended_; }
+bool ResumeCtrlImpl::is_suspended() const {
+  return is_suspended_;
+}
 
 void ResumeCtrlImpl::StartSavePersistentDataTimer() {
   LOG4CXX_AUTO_TRACE(logger_);
@@ -383,11 +393,12 @@ bool ResumeCtrlImpl::StartResumption(ApplicationSharedPtr application,
                                      const std::string& hash) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN(application, false);
-  LOG4CXX_DEBUG(logger_, " Resume app_id = "
-                             << application->app_id()
-                             << " hmi_app_id = " << application->hmi_app_id()
-                             << " policy_id = " << application->policy_app_id()
-                             << " received hash = " << hash);
+  LOG4CXX_DEBUG(
+      logger_,
+      " Resume app_id = " << application->app_id()
+                          << " hmi_app_id = " << application->hmi_app_id()
+                          << " policy_id = " << application->policy_app_id()
+                          << " received hash = " << hash);
   SetupDefaultHMILevel(application);
   smart_objects::SmartObject saved_app;
   const std::string& device_mac = application->mac_address();
@@ -410,10 +421,11 @@ bool ResumeCtrlImpl::StartResumptionOnlyHMILevel(
     LOG4CXX_WARN(logger_, "Application does not exist.");
     return false;
   }
-  LOG4CXX_DEBUG(logger_, "HMI level resumption requested for application id "
-                             << application->app_id() << "with hmi_app_id "
-                             << application->hmi_app_id() << ", policy_app_id "
-                             << application->policy_app_id());
+  LOG4CXX_DEBUG(logger_,
+                "HMI level resumption requested for application id "
+                    << application->app_id() << "with hmi_app_id "
+                    << application->hmi_app_id() << ", policy_app_id "
+                    << application->policy_app_id());
   SetupDefaultHMILevel(application);
   const std::string& device_mac = application->mac_address();
   smart_objects::SmartObject saved_app;
@@ -481,8 +493,8 @@ void ResumeCtrlImpl::StartAppHmiStateResumption(
       is_resume_allowed_by_low_voltage && is_hmi_level_allowed_by_ign_cycle;
 
   if (restore_hmi_level_allowed) {
-    LOG4CXX_INFO(logger_, "Resume application "
-                              << application->policy_app_id());
+    LOG4CXX_INFO(logger_,
+                 "Resume application " << application->policy_app_id());
     RestoreAppHMIState(application);
     if (mobile_apis::HMILevel::eType::INVALID_ENUM !=
         application->deferred_resumption_hmi_level()) {
@@ -491,8 +503,9 @@ void ResumeCtrlImpl::StartAppHmiStateResumption(
     }
     RemoveApplicationFromSaved(application);
   } else {
-    LOG4CXX_INFO(logger_, "Do not need to resume application "
-                              << application->policy_app_id());
+    LOG4CXX_INFO(logger_,
+                 "Do not need to resume application "
+                     << application->policy_app_id());
   }
 }
 
@@ -505,9 +518,9 @@ bool ResumeCtrlImpl::CheckPersistenceFilesForResumption(
     ApplicationSharedPtr application) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN(application, false);
-  LOG4CXX_DEBUG(logger_, " Resume app_id = " << application->app_id()
-                                             << " policy_id = "
-                                             << application->policy_app_id());
+  LOG4CXX_DEBUG(logger_,
+                " Resume app_id = " << application->app_id() << " policy_id = "
+                                    << application->policy_app_id());
   smart_objects::SmartObject saved_app;
   const std::string& device_mac = application->mac_address();
   bool result = resumption_storage_->GetSavedApplication(
@@ -532,8 +545,8 @@ bool ResumeCtrlImpl::CheckApplicationHash(ApplicationSharedPtr application,
                                           const std::string& hash) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK_OR_RETURN(application, false);
-  LOG4CXX_DEBUG(logger_, "app_id : " << application->app_id()
-                                     << " hash : " << hash);
+  LOG4CXX_DEBUG(logger_,
+                "app_id : " << application->app_id() << " hash : " << hash);
   smart_objects::SmartObject saved_app;
   const std::string& device_mac = application->mac_address();
   bool result = resumption_storage_->GetSavedApplication(
@@ -662,8 +675,8 @@ void ResumeCtrlImpl::AddCommands(ApplicationSharedPtr application,
       const bool is_resumption = true;
 
       application->AddCommand(cmd_id, command);
-      application->help_prompt_manager().OnVrCommandAdded(cmd_id, command,
-                                                          is_resumption);
+      application->help_prompt_manager().OnVrCommandAdded(
+          cmd_id, command, is_resumption);
     }
     ProcessHMIRequests(MessageHelper::CreateAddCommandRequestToHMI(
         application, application_manager_));
@@ -953,15 +966,17 @@ bool ResumeCtrlImpl::CheckDelayAfterIgnOn() const {
   const uint32_t seconds_from_sdl_start = labs(curr_time - sdl_launch_time);
   const uint32_t wait_time =
       application_manager_.get_settings().resumption_delay_after_ign();
-  LOG4CXX_DEBUG(logger_, "curr_time "
-                             << curr_time << "; sdl_launch_time "
+  LOG4CXX_DEBUG(logger_,
+                "curr_time " << curr_time << "; sdl_launch_time "
                              << sdl_launch_time << "; seconds_from_sdl_start "
                              << seconds_from_sdl_start << "; wait_time "
                              << wait_time);
   return seconds_from_sdl_start <= wait_time;
 }
 
-time_t ResumeCtrlImpl::LaunchTime() const { return launch_time_; }
+time_t ResumeCtrlImpl::LaunchTime() const {
+  return launch_time_;
+}
 
 time_t ResumeCtrlImpl::GetIgnOffTime() const {
   return resumption_storage_->GetIgnOffTime();
@@ -990,7 +1005,8 @@ void ResumeCtrlImpl::ProcessHMIRequests(
     const smart_objects::SmartObjectList& requests) {
   for (smart_objects::SmartObjectList::const_iterator it = requests.begin(),
                                                       total = requests.end();
-       it != total; ++it) {
+       it != total;
+       ++it) {
     ProcessHMIRequest(*it, true);
   }
 }
@@ -1006,12 +1022,12 @@ void ResumeCtrlImpl::AddToResumptionTimerQueue(const uint32_t app_id) {
     run_resumption = true;
   }
   queue_lock_.Release();
-  LOG4CXX_DEBUG(logger_, "Application ID " << app_id
-                                           << " have been added"
-                                              " to resumption queue.");
+  LOG4CXX_DEBUG(logger_,
+                "Application ID " << app_id << " have been added"
+                                               " to resumption queue.");
   if (run_resumption) {
-    LOG4CXX_DEBUG(logger_, "Application ID " << app_id
-                                             << " will be restored by timer");
+    LOG4CXX_DEBUG(logger_,
+                  "Application ID " << app_id << " will be restored by timer");
     restore_hmi_level_timer_.Start(
         application_manager_.get_settings().app_resuming_timeout(),
         timer::kSingleShot);
@@ -1029,9 +1045,10 @@ void ResumeCtrlImpl::LoadResumeData() {
       const std::string device_id = application[strings::device_id].asString();
       const std::string app_id = application[strings::app_id].asString();
       LOG4CXX_INFO(logger_, "Data resumption is expired.");
-      LOG4CXX_DEBUG(logger_, "Resumption data for application "
-                                 << app_id << " and device id " << device_id
-                                 << " will be dropped.");
+      LOG4CXX_DEBUG(logger_,
+                    "Resumption data for application "
+                        << app_id << " and device id " << device_id
+                        << " will be dropped.");
       resumption_storage_->RemoveApplicationFromSaved(app_id, device_id);
       continue;
     }

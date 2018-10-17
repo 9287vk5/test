@@ -114,7 +114,8 @@ class PTExtRepresentation : public virtual PTRepresentation {
    * @return true, if query was successfull, otherwise - false
    */
   virtual bool GetUserPermissionsForDevice(
-      const std::string& device_id, StringArray* consented_groups = NULL,
+      const std::string& device_id,
+      StringArray* consented_groups = NULL,
       StringArray* disallowed_groups = NULL) = 0;
 
   /**
@@ -252,7 +253,8 @@ class PTExtRepresentation : public virtual PTRepresentation {
    * @param type type of information
    * @param value value of information
    */
-  virtual void Set(const std::string& app_id, const std::string& type,
+  virtual void Set(const std::string& app_id,
+                   const std::string& type,
                    const std::string& value) const = 0;
 
   /**
@@ -261,7 +263,8 @@ class PTExtRepresentation : public virtual PTRepresentation {
    * @param type type of stopwatch
    * @param seconds value for adding in seconds
    */
-  virtual void Add(const std::string& app_id, const std::string& type,
+  virtual void Add(const std::string& app_id,
+                   const std::string& type,
                    int seconds) const = 0;
 
   virtual bool CountUnconsentedGroups(const std::string& policy_app_id,

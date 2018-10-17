@@ -80,12 +80,12 @@ class TransportAdapterEvent {
                         const ApplicationHandle& application_id,
                         ::protocol_handler::RawMessagePtr data,
                         BaseErrorPtr error)
-      : event_type(type),
-        application_id(application_id),
-        device_uid(device_handle),
-        transport_adapter(adapter),
-        event_data(data),
-        event_error(error) {}
+      : event_type(type)
+      , application_id(application_id)
+      , device_uid(device_handle)
+      , transport_adapter(adapter)
+      , event_data(data)
+      , event_error(error) {}
 
   /**
    * @brief Value that describe event type.

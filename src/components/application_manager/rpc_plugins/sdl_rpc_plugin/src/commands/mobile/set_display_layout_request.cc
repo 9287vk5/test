@@ -47,8 +47,11 @@ SetDisplayLayoutRequest::SetDisplayLayoutRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 SetDisplayLayoutRequest::~SetDisplayLayoutRequest() {}
 
@@ -117,7 +120,8 @@ void SetDisplayLayoutRequest::Run() {
   (*message_)[strings::msg_params][strings::app_id] = app->app_id();
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_UI);
   SendHMIRequest(hmi_apis::FunctionID::UI_SetDisplayLayout,
-                 &((*message_)[strings::msg_params]), true);
+                 &((*message_)[strings::msg_params]),
+                 true);
 }
 
 void SetDisplayLayoutRequest::on_event(const event_engine::Event& event) {
@@ -153,7 +157,8 @@ void SetDisplayLayoutRequest::on_event(const event_engine::Event& event) {
       }
       SendResponse(response_success,
                    MessageHelper::HMIToMobileResult(result_code),
-                   info.empty() ? NULL : info.c_str(), &msg_params);
+                   info.empty() ? NULL : info.c_str(),
+                   &msg_params);
       break;
     }
     default: {

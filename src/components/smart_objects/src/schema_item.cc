@@ -36,14 +36,19 @@ namespace ns_smart_device_link {
 namespace ns_smart_objects {
 
 errors::eType ISchemaItem::validate(
-    const SmartObject& object, rpc::ValidationReport* report__,
+    const SmartObject& object,
+    rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   return errors::ERROR;
 }
 
-bool ISchemaItem::setDefaultValue(SmartObject& Object) { return false; }
+bool ISchemaItem::setDefaultValue(SmartObject& Object) {
+  return false;
+}
 
-bool ISchemaItem::hasDefaultValue(SmartObject& Object) { return false; }
+bool ISchemaItem::hasDefaultValue(SmartObject& Object) {
+  return false;
+}
 
 void ISchemaItem::applySchema(SmartObject& Object,
                               const bool RemoveFakeParameters,
@@ -54,7 +59,9 @@ void ISchemaItem::unapplySchema(SmartObject& Object) {}
 void ISchemaItem::BuildObjectBySchema(const SmartObject& pattern_object,
                                       SmartObject& result_object) {}
 
-size_t ISchemaItem::GetMemberSize() { return 0; }
+size_t ISchemaItem::GetMemberSize() {
+  return 0;
+}
 
 }  // namespace ns_smart_objects
 }  // namespace ns_smart_device_link

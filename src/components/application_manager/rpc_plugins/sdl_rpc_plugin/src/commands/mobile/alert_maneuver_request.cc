@@ -40,12 +40,16 @@ namespace commands {
 AlertManeuverRequest::AlertManeuverRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler),
-      tts_speak_result_code_(hmi_apis::Common_Result::INVALID_ENUM),
-      navi_alert_maneuver_result_code_(hmi_apis::Common_Result::INVALID_ENUM) {
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler)
+    , tts_speak_result_code_(hmi_apis::Common_Result::INVALID_ENUM)
+    , navi_alert_maneuver_result_code_(hmi_apis::Common_Result::INVALID_ENUM) {
   subscribe_on_event(hmi_apis::FunctionID::TTS_OnResetTimeout);
 }
 
@@ -81,8 +85,10 @@ void AlertManeuverRequest::Run() {
   // ProcessSoftButtons checks strings on the contents incorrect character
 
   mobile_apis::Result::eType processing_result =
-      MessageHelper::ProcessSoftButtons((*message_)[strings::msg_params], app,
-                                        policy_handler_, application_manager_);
+      MessageHelper::ProcessSoftButtons((*message_)[strings::msg_params],
+                                        app,
+                                        policy_handler_,
+                                        application_manager_);
 
   if (mobile_apis::Result::SUCCESS != processing_result) {
     LOG4CXX_ERROR(logger_, "Wrong soft buttons parameters!");
@@ -101,9 +107,11 @@ void AlertManeuverRequest::Run() {
         MessageHelper::VerifyTtsFiles(tts_chunks, app, application_manager_);
 
     if (mobile_apis::Result::FILE_NOT_FOUND == verification_result) {
-      LOG4CXX_ERROR(logger_, "MessageHelper::VerifyTtsFiles return "
-                                 << verification_result);
-      SendResponse(false, mobile_apis::Result::FILE_NOT_FOUND,
+      LOG4CXX_ERROR(logger_,
+                    "MessageHelper::VerifyTtsFiles return "
+                        << verification_result);
+      SendResponse(false,
+                   mobile_apis::Result::FILE_NOT_FOUND,
                    "One or more files needed for tts_chunks are not present");
       return;
     }
@@ -128,8 +136,8 @@ void AlertManeuverRequest::Run() {
 
   pending_requests_.Add(hmi_apis::FunctionID::Navigation_AlertManeuver);
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_Navigation);
-  SendHMIRequest(hmi_apis::FunctionID::Navigation_AlertManeuver, &msg_params,
-                 true);
+  SendHMIRequest(
+      hmi_apis::FunctionID::Navigation_AlertManeuver, &msg_params, true);
 
   if (tts_is_ok) {
     smart_objects::SmartObject msg_params =
@@ -178,8 +186,8 @@ void AlertManeuverRequest::on_event(const event_engine::Event& event) {
     }
     default: {
       LOG4CXX_ERROR(logger_, "Received unknown event" << event.id());
-      SendResponse(false, mobile_apis::Result::INVALID_ENUM,
-                   "Received unknown event");
+      SendResponse(
+          false, mobile_apis::Result::INVALID_ENUM, "Received unknown event");
       return;
     }
   }
@@ -198,7 +206,8 @@ void AlertManeuverRequest::on_event(const event_engine::Event& event) {
       return_info.find("\t") != std::string::npos) {
     must_be_empty_info = true;
   }
-  SendResponse(result, result_code,
+  SendResponse(result,
+               result_code,
                (must_be_empty_info) ? NULL : return_info.c_str(),
                &(message[strings::msg_params]));
 }
@@ -209,11 +218,13 @@ bool AlertManeuverRequest::PrepareResponseParameters(
   using namespace helpers;
 
   app_mngr::commands::ResponseInfo navigation_alert_info(
-      navi_alert_maneuver_result_code_, HmiInterfaces::HMI_INTERFACE_Navigation,
+      navi_alert_maneuver_result_code_,
+      HmiInterfaces::HMI_INTERFACE_Navigation,
       application_manager_);
 
   app_mngr::commands::ResponseInfo tts_alert_info(
-      tts_speak_result_code_, HmiInterfaces::HMI_INTERFACE_TTS,
+      tts_speak_result_code_,
+      HmiInterfaces::HMI_INTERFACE_TTS,
       application_manager_);
   const bool result =
       PrepareResultForMobileResponse(navigation_alert_info, tts_alert_info);

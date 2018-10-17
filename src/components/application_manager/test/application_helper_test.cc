@@ -80,8 +80,8 @@ class ApplicationHelperTest : public testing::Test {
  public:
   ApplicationHelperTest()
       : mock_message_helper_(
-            application_manager::MockMessageHelper::message_helper_mock()),
-        app_manager_impl_(mock_application_manager_settings_,
+            application_manager::MockMessageHelper::message_helper_mock())
+      , app_manager_impl_(mock_application_manager_settings_,
                           mock_policy_settings_) {}
 
   void SetUp() OVERRIDE {
@@ -121,7 +121,11 @@ class ApplicationHelperTest : public testing::Test {
     app_manager_impl_.Init(mock_last_state_, &mock_media_manager_);
 
     app_impl_ = std::make_shared<ApplicationImpl>(
-        application_id, policy_app_id, mac_address, device_id, app_name,
+        application_id,
+        policy_app_id,
+        mac_address,
+        device_id,
+        app_name,
         std::make_shared<usage_statistics_test::MockStatisticsManager>(),
         app_manager_impl_);
   }

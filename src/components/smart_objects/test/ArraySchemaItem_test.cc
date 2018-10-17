@@ -264,7 +264,8 @@ TEST(test_array_with_min_and_max_size, test_ArraySchemaItemTest) {
   ISchemaItemPtr item = CArraySchemaItem::create(
       CStringSchemaItem::create(TSchemaItemParameter<size_t>(),
                                 TSchemaItemParameter<size_t>(25)),
-      TSchemaItemParameter<size_t>(2), TSchemaItemParameter<size_t>(4));
+      TSchemaItemParameter<size_t>(2),
+      TSchemaItemParameter<size_t>(4));
 
   obj[0] = "Some String";
 
@@ -306,7 +307,8 @@ TEST(test_map_validate, test_ArraySchemaItemTest) {
   ISchemaItemPtr item = CArraySchemaItem::create(
       CStringSchemaItem::create(TSchemaItemParameter<size_t>(),
                                 TSchemaItemParameter<size_t>(25)),
-      TSchemaItemParameter<size_t>(2), TSchemaItemParameter<size_t>(4));
+      TSchemaItemParameter<size_t>(2),
+      TSchemaItemParameter<size_t>(4));
 
   obj["array"][0] = "Some String";
 

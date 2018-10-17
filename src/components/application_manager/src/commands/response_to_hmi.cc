@@ -43,7 +43,10 @@ ResponseToHMI::ResponseToHMI(const MessageSharedPtr& message,
                              rpc_service::RPCService& rpc_service,
                              HMICapabilities& hmi_capabilities,
                              policy::PolicyHandlerInterface& policy_handle)
-    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
+    : CommandImpl(message,
+                  application_manager,
+                  rpc_service,
+                  hmi_capabilities,
                   policy_handle) {}
 
 ResponseToHMI::~ResponseToHMI() {}
@@ -53,7 +56,9 @@ bool ResponseToHMI::Init() {
   return ReplaceMobileWithHMIAppId(*message_);
 }
 
-bool ResponseToHMI::CleanUp() { return true; }
+bool ResponseToHMI::CleanUp() {
+  return true;
+}
 
 void ResponseToHMI::Run() {
   (*message_)[strings::params][strings::protocol_type] = hmi_protocol_type_;

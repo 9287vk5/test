@@ -77,7 +77,8 @@ namespace custom_str = custom_string;
  * @param mac_address New device MAC address
  */
 void SwitchApplicationParameters(ApplicationSharedPtr app,
-                                 const uint32_t app_id, const size_t device_id,
+                                 const uint32_t app_id,
+                                 const size_t device_id,
                                  const std::string& mac_address);
 
 class ApplicationImpl : public virtual Application,
@@ -85,7 +86,8 @@ class ApplicationImpl : public virtual Application,
                         public virtual DynamicApplicationDataImpl {
  public:
   ApplicationImpl(
-      uint32_t application_id, const std::string& policy_app_id,
+      uint32_t application_id,
+      const std::string& policy_app_id,
       const std::string& mac_address,
       const connection_handler::DeviceHandle device_id,
       const custom_str::CustomString& app_name,
@@ -108,7 +110,9 @@ class ApplicationImpl : public virtual Application,
    */
   virtual void ChangeSupportingAppHMIType();
 
-  inline bool is_navi() const { return is_navi_; }
+  inline bool is_navi() const {
+    return is_navi_;
+  }
   void set_is_navi(bool allow);
 
   virtual bool is_remote_control_supported() const;
@@ -541,9 +545,13 @@ class ApplicationImpl : public virtual Application,
   DISALLOW_COPY_AND_ASSIGN(ApplicationImpl);
 };
 
-uint32_t ApplicationImpl::hmi_app_id() const { return hmi_app_id_; }
+uint32_t ApplicationImpl::hmi_app_id() const {
+  return hmi_app_id_;
+}
 
-uint32_t ApplicationImpl::app_id() const { return app_id_; }
+uint32_t ApplicationImpl::app_id() const {
+  return app_id_;
+}
 
 const mobile_api::AudioStreamingState::eType
 ApplicationImpl::audio_streaming_state() const {
@@ -561,9 +569,13 @@ ApplicationImpl::video_streaming_state() const {
                    : VideoStreamingState::INVALID_ENUM;
 }
 
-bool ApplicationImpl::app_allowed() const { return is_app_allowed_; }
+bool ApplicationImpl::app_allowed() const {
+  return is_app_allowed_;
+}
 
-bool ApplicationImpl::IsRegistered() const { return app_state_ == kRegistered; }
+bool ApplicationImpl::IsRegistered() const {
+  return app_state_ == kRegistered;
+}
 
 }  // namespace application_manager
 

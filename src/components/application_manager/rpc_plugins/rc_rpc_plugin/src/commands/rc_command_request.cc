@@ -46,12 +46,15 @@ RCCommandRequest::RCCommandRequest(
     const app_mngr::commands::MessageSharedPtr& message,
     const RCCommandParams& params)
     : application_manager::commands::CommandRequestImpl(
-          message, params.application_manager_, params.rpc_service_,
-          params.hmi_capabilities_, params.policy_handler_),
-      is_subscribed(false),
-      resource_allocation_manager_(params.resource_allocation_manager_),
-      interior_data_cache_(params.interior_data_cache_),
-      interior_data_manager_(params.interior_data_manager_) {}
+          message,
+          params.application_manager_,
+          params.rpc_service_,
+          params.hmi_capabilities_,
+          params.policy_handler_)
+    , is_subscribed(false)
+    , resource_allocation_manager_(params.resource_allocation_manager_)
+    , interior_data_cache_(params.interior_data_cache_)
+    , interior_data_manager_(params.interior_data_manager_) {}
 
 RCCommandRequest::~RCCommandRequest() {}
 
@@ -68,8 +71,8 @@ void RCCommandRequest::onTimeOut() {
   LOG4CXX_AUTO_TRACE(logger_);
   const std::string module_type = ModuleType();
   SetResourceState(module_type, ResourceState::FREE);
-  SendResponse(false, mobile_apis::Result::GENERIC_ERROR,
-               "Request timeout expired");
+  SendResponse(
+      false, mobile_apis::Result::GENERIC_ERROR, "Request timeout expired");
 }
 
 bool RCCommandRequest::CheckDriverConsent() {
@@ -117,13 +120,15 @@ void RCCommandRequest::Run() {
 
   if (!IsInterfaceAvailable(app_mngr::HmiInterfaces::HMI_INTERFACE_RC)) {
     LOG4CXX_WARN(logger_, "HMI interface RC is not available");
-    SendResponse(false, mobile_apis::Result::UNSUPPORTED_RESOURCE,
+    SendResponse(false,
+                 mobile_apis::Result::UNSUPPORTED_RESOURCE,
                  "Remote control is not supported by system");
     return;
   }
   LOG4CXX_TRACE(logger_, "RC interface is available!");
   if (!policy_handler_.CheckHMIType(
-          app->policy_app_id(), mobile_apis::AppHMIType::eType::REMOTE_CONTROL,
+          app->policy_app_id(),
+          mobile_apis::AppHMIType::eType::REMOTE_CONTROL,
           app->app_types())) {
     LOG4CXX_WARN(logger_, "Application has no remote control functions");
     SendResponse(false, mobile_apis::Result::DISALLOWED, "");
@@ -132,7 +137,8 @@ void RCCommandRequest::Run() {
   if (!resource_allocation_manager_.is_rc_enabled()) {
     LOG4CXX_WARN(logger_, "Remote control is disabled by user");
     SetResourceState(ModuleType(), ResourceState::FREE);
-    SendResponse(false, mobile_apis::Result::USER_DISALLOWED,
+    SendResponse(false,
+                 mobile_apis::Result::USER_DISALLOWED,
                  "Remote control is disabled by user");
     return;
   }
@@ -211,7 +217,8 @@ void RCCommandRequest::ProcessAccessResponse(
 
   const bool result =
       helpers::Compare<mobile_apis::Result::eType, helpers::EQ, helpers::ONE>(
-          result_code, mobile_apis::Result::SUCCESS,
+          result_code,
+          mobile_apis::Result::SUCCESS,
           mobile_apis::Result::WARNINGS);
 
   bool is_allowed = false;
@@ -231,7 +238,8 @@ void RCCommandRequest::ProcessAccessResponse(
       resource_allocation_manager_.OnDriverDisallowed(module_type,
                                                       app->app_id());
       SendResponse(
-          false, mobile_apis::Result::REJECTED,
+          false,
+          mobile_apis::Result::REJECTED,
           "The resource is in use and the driver disallows this remote "
           "control RPC");
     }
@@ -252,7 +260,8 @@ void RCCommandRequest::SendGetUserConsent(const std::string& module_type) {
   msg_params[app_mngr::strings::app_id] = app->app_id();
   msg_params[message_params::kModuleType] = module_type;
   SendHMIRequest(hmi_apis::FunctionID::RC_GetInteriorVehicleDataConsent,
-                 &msg_params, true);
+                 &msg_params,
+                 true);
 }
 }
 }

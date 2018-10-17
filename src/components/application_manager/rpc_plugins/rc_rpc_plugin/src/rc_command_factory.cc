@@ -68,7 +68,9 @@ class RCCommandCreator : public CommandCreator {
   RCCommandCreator(const RCCommandParams& params) : params_(params) {}
 
  private:
-  bool CanBeCreated() const override { return true; }
+  bool CanBeCreated() const override {
+    return true;
+  }
 
   CommandSharedPtr create(
       const commands::MessageSharedPtr& message) const override {
@@ -84,10 +86,14 @@ struct RCInvalidCommand {};
 template <>
 class RCCommandCreator<RCInvalidCommand> : public CommandCreator {
  public:
-  RCCommandCreator(const RCCommandParams& params) { UNUSED(params); }
+  RCCommandCreator(const RCCommandParams& params) {
+    UNUSED(params);
+  }
 
  private:
-  bool CanBeCreated() const override { return false; }
+  bool CanBeCreated() const override {
+    return false;
+  }
 
   CommandSharedPtr create(
       const commands::MessageSharedPtr& message) const override {
@@ -161,8 +167,9 @@ bool RCCommandFactory::IsAbleToProcess(
 CommandCreator& RCCommandFactory::get_mobile_creator_factory(
     mobile_api::FunctionID::eType id,
     mobile_api::messageType::eType message_type) const {
-  LOG4CXX_DEBUG(logger_, "CreateMobileCommand function_id: "
-                             << id << " message_type: " << message_type);
+  LOG4CXX_DEBUG(logger_,
+                "CreateMobileCommand function_id: " << id << " message_type: "
+                                                    << message_type);
   RCCommandCreatorFactory rc_factory(params_);
 
   switch (id) {
@@ -196,8 +203,9 @@ CommandCreator& RCCommandFactory::get_mobile_creator_factory(
 CommandCreator& RCCommandFactory::get_hmi_creator_factory(
     hmi_apis::FunctionID::eType id,
     hmi_apis::messageType::eType message_type) const {
-  LOG4CXX_DEBUG(logger_, "CreateHMICommand function_id: "
-                             << id << " message_type: " << message_type);
+  LOG4CXX_DEBUG(logger_,
+                "CreateHMICommand function_id: " << id << " message_type: "
+                                                 << message_type);
 
   RCCommandCreatorFactory rc_factory(params_);
 

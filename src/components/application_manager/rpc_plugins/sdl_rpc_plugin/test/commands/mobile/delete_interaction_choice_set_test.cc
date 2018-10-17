@@ -85,8 +85,8 @@ class DeleteInteractionChoiceSetRequestTest
  public:
   DeleteInteractionChoiceSetRequestTest()
       : performinteraction_choice_set_lock_(
-            std::make_shared<sync_primitives::Lock>()),
-        accessor_(choice_set_map_, performinteraction_choice_set_lock_) {}
+            std::make_shared<sync_primitives::Lock>())
+      , accessor_(choice_set_map_, performinteraction_choice_set_lock_) {}
 
   ~DeleteInteractionChoiceSetRequestTest() {
     // Fix DataAccessor release and WinQt crash
@@ -165,9 +165,10 @@ TEST_F(DeleteInteractionChoiceSetRequestTest, Run_ChoiceSetInUse_SUCCESS) {
       &((*message_)[am::strings::msg_params]
                    [am::strings::interaction_choice_set_id]);
 
-  choice_set_map_[0].insert(std::make_pair(
-      kChoiceSetId, &((*message_)[am::strings::msg_params]
-                                 [am::strings::interaction_choice_set_id])));
+  choice_set_map_[0].insert(
+      std::make_pair(kChoiceSetId,
+                     &((*message_)[am::strings::msg_params]
+                                  [am::strings::interaction_choice_set_id])));
 
   EXPECT_CALL(*app_, FindChoiceSet(kChoiceSetId))
       .WillOnce(Return(choice_set_id));

@@ -248,7 +248,8 @@ struct ModuleConfig : CompositeType {
   ModuleConfig();
   ModuleConfig(uint8_t exchange_after_x_ignition_cycles,
                int64_t exchange_after_x_kilometers,
-               uint8_t exchange_after_x_days, uint16_t timeout_after_x_seconds,
+               uint8_t exchange_after_x_days,
+               uint16_t timeout_after_x_seconds,
                const SecondsBetweenRetries& seconds_between_retries,
                const ServiceEndpoints& endpoints,
                const NumberOfNotificationsPerMinute&
@@ -376,8 +377,10 @@ struct AppLevel : CompositeType {
   AppLevel(uint16_t minutes_in_hmi_full,
            const std::string& app_registration_language_gui,
            const std::string& app_registration_language_vui,
-           uint16_t minutes_in_hmi_limited, uint16_t minutes_in_hmi_background,
-           uint16_t minutes_in_hmi_none, uint16_t count_of_user_selections,
+           uint16_t minutes_in_hmi_limited,
+           uint16_t minutes_in_hmi_background,
+           uint16_t minutes_in_hmi_none,
+           uint16_t count_of_user_selections,
            uint16_t count_of_rejections_sync_out_of_memory,
            uint16_t count_of_rejections_nickname_mismatch,
            uint16_t count_of_rejections_duplicate_name,

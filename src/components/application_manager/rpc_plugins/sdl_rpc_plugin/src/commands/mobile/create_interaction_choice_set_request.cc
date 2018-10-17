@@ -52,15 +52,19 @@ using namespace application_manager;
 CreateInteractionChoiceSetRequest::CreateInteractionChoiceSetRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler),
-      choice_set_id_(0),
-      expected_chs_count_(0),
-      received_chs_count_(0),
-      error_from_hmi_(false),
-      is_timed_out_(false) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler)
+    , choice_set_id_(0)
+    , expected_chs_count_(0)
+    , received_chs_count_(0)
+    , error_from_hmi_(false)
+    , is_timed_out_(false) {}
 
 CreateInteractionChoiceSetRequest::~CreateInteractionChoiceSetRequest() {
   LOG4CXX_AUTO_TRACE(logger_);
@@ -87,14 +91,16 @@ void CreateInteractionChoiceSetRequest::Run() {
       verification_result_image = MessageHelper::VerifyImage(
           (*message_)[strings::msg_params][strings::choice_set][i]
                      [strings::image],
-          app, application_manager_);
+          app,
+          application_manager_);
     }
     if ((*message_)[strings::msg_params][strings::choice_set][i].keyExists(
             strings::secondary_image)) {
       verification_result_secondary_image = MessageHelper::VerifyImage(
           (*message_)[strings::msg_params][strings::choice_set][i]
                      [strings::secondary_image],
-          app, application_manager_);
+          app,
+          application_manager_);
     }
     if (verification_result_image == Result::INVALID_DATA ||
         verification_result_secondary_image == Result::INVALID_DATA) {
@@ -113,8 +119,8 @@ void CreateInteractionChoiceSetRequest::Run() {
           .asInt();
 
   if (app->FindChoiceSet(choice_set_id_)) {
-    LOG4CXX_ERROR(logger_, "Choice set with id " << choice_set_id_
-                                                 << " is not found.");
+    LOG4CXX_ERROR(logger_,
+                  "Choice set with id " << choice_set_id_ << " is not found.");
     SendResponse(false, Result::INVALID_ID);
     return;
   }
@@ -128,7 +134,8 @@ void CreateInteractionChoiceSetRequest::Run() {
       (*message_)[strings::msg_params][strings::choice_set]);
   if (vr_status == MessageHelper::ChoiceSetVRCommandsStatus::MIXED) {
     // this is an error
-    SendResponse(false, Result::INVALID_DATA,
+    SendResponse(false,
+                 Result::INVALID_DATA,
                  "Some choices don't contain VR commands. Either all or none "
                  "must have voice commands.");
     return;  // exit now, this is a bad set
@@ -179,7 +186,8 @@ mobile_apis::Result::eType CreateInteractionChoiceSetRequest::CheckChoiceSet(
       return mobile_apis::Result::INVALID_DATA;
     }
     for (next_choice_set_it = current_choice_set_it + 1;
-         choice_set->end() != next_choice_set_it; ++next_choice_set_it) {
+         choice_set->end() != next_choice_set_it;
+         ++next_choice_set_it) {
       if (compareSynonyms(*current_choice_set_it, *next_choice_set_it)) {
         return mobile_apis::Result::DUPLICATE_NAME;
       }
@@ -202,13 +210,16 @@ bool CreateInteractionChoiceSetRequest::compareSynonyms(
       choice2[strings::vr_commands].asArray();
 
   smart_objects::SmartArray::iterator it;
-  it = std::find_first_of(vr_cmds_1->begin(), vr_cmds_1->end(),
-                          vr_cmds_2->begin(), vr_cmds_2->end(),
+  it = std::find_first_of(vr_cmds_1->begin(),
+                          vr_cmds_1->end(),
+                          vr_cmds_2->begin(),
+                          vr_cmds_2->end(),
                           CreateInteractionChoiceSetRequest::compareStr);
 
   if (it != vr_cmds_1->end()) {
-    LOG4CXX_INFO(logger_, "Incoming choice set has duplicated VR synonyms "
-                              << it->asString());
+    LOG4CXX_INFO(logger_,
+                 "Incoming choice set has duplicated VR synonyms "
+                     << it->asString());
     return true;
   }
 
@@ -320,8 +331,9 @@ void CreateInteractionChoiceSetRequest::SendVRAddCommandRequests(
 
     VRCommandInfo vr_command(vr_cmd_id);
     sent_commands_map_[vr_corr_id] = vr_command;
-    LOG4CXX_DEBUG(logger_, "VR_command sent corr_id "
-                               << vr_corr_id << " cmd_id " << vr_corr_id);
+    LOG4CXX_DEBUG(logger_,
+                  "VR_command sent corr_id " << vr_corr_id << " cmd_id "
+                                             << vr_corr_id);
   }
   expected_chs_count_ = chs_num;
   LOG4CXX_DEBUG(logger_, "expected_chs_count_ = " << expected_chs_count_);
@@ -329,9 +341,9 @@ void CreateInteractionChoiceSetRequest::SendVRAddCommandRequests(
 
 void CreateInteractionChoiceSetRequest::ProcessHmiError(
     const hmi_apis::Common_Result::eType vr_result) {
-  LOG4CXX_DEBUG(logger_, "Hmi response is not Success: "
-                             << vr_result
-                             << ". Stop sending VRAddCommand requests");
+  LOG4CXX_DEBUG(logger_,
+                "Hmi response is not Success: "
+                    << vr_result << ". Stop sending VRAddCommand requests");
   if (!error_from_hmi_) {
     error_from_hmi_ = true;
     std::string info =
@@ -356,9 +368,10 @@ bool CreateInteractionChoiceSetRequest::ProcessSuccesfulHMIResponse(
 
 void CreateInteractionChoiceSetRequest::CountReceivedVRResponses() {
   received_chs_count_++;
-  LOG4CXX_DEBUG(logger_, "Got VR.AddCommand response, there are "
-                             << expected_chs_count_ - received_chs_count_
-                             << " more to wait.");
+  LOG4CXX_DEBUG(logger_,
+                "Got VR.AddCommand response, there are "
+                    << expected_chs_count_ - received_chs_count_
+                    << " more to wait.");
   if (received_chs_count_ < expected_chs_count_) {
     application_manager_.updateRequestTimeout(
         connection_key(), correlation_id(), default_timeout());
@@ -410,8 +423,8 @@ void CreateInteractionChoiceSetRequest::onTimeOut() {
   // according to SDLAQ-CRS-2976
   sync_primitives::AutoLock timeout_lock_(is_timed_out_lock_);
   is_timed_out_ = true;
-  application_manager_.TerminateRequest(connection_key(), correlation_id(),
-                                        function_id());
+  application_manager_.TerminateRequest(
+      connection_key(), correlation_id(), function_id());
 }
 
 bool CreateInteractionChoiceSetRequest::Init() {
@@ -460,8 +473,8 @@ void CreateInteractionChoiceSetRequest::OnAllHMIResponsesReceived() {
     DeleteChoices();
   }
 
-  application_manager_.TerminateRequest(connection_key(), correlation_id(),
-                                        function_id());
+  application_manager_.TerminateRequest(
+      connection_key(), correlation_id(), function_id());
 }
 
 }  // namespace commands

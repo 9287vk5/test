@@ -39,25 +39,27 @@ namespace transport_adapter {
 CREATE_LOGGERPTR_GLOBAL(logger_, "TransportManager")
 
 TcpDevice::TcpDevice(const in_addr_t& in_addr, const std::string& name)
-    : Device(name, name),
-      applications_mutex_(),
-      in_addr_(in_addr),
-      last_handle_(0) {
+    : Device(name, name)
+    , applications_mutex_()
+    , in_addr_(in_addr)
+    , last_handle_(0) {
   LOG4CXX_AUTO_TRACE(logger_);
 }
 
 #if defined(BUILD_TESTS)
-TcpDevice::TcpDevice(const in_addr_t& in_addr, const std::string& device_uid,
+TcpDevice::TcpDevice(const in_addr_t& in_addr,
+                     const std::string& device_uid,
                      const std::string& transport_switch_id)
-    : Device(device_uid, device_uid, transport_switch_id),
-      applications_mutex_(),
-      in_addr_(in_addr),
-      last_handle_(0) {
+    : Device(device_uid, device_uid, transport_switch_id)
+    , applications_mutex_()
+    , in_addr_(in_addr)
+    , last_handle_(0) {
   LOG4CXX_AUTO_TRACE(logger_);
   LOG4CXX_DEBUG(logger_,
                 "Device created with transport switch emulation support.");
-  LOG4CXX_DEBUG(logger_, "Device parameters: " << device_uid << " / "
-                                               << transport_switch_id);
+  LOG4CXX_DEBUG(logger_,
+                "Device parameters: " << device_uid << " / "
+                                      << transport_switch_id);
 }
 #endif  // BUILD_TESTS
 
@@ -83,7 +85,8 @@ ApplicationList TcpDevice::GetApplicationList() const {
   ApplicationList app_list;
   for (std::map<ApplicationHandle, Application>::const_iterator it =
            applications_.begin();
-       it != applications_.end(); ++it) {
+       it != applications_.end();
+       ++it) {
     app_list.push_back(it->first);
   }
   return app_list;
@@ -124,7 +127,9 @@ void TcpDevice::RemoveApplication(const ApplicationHandle app_handle) {
   applications_.erase(app_handle);
 }
 
-TcpDevice::~TcpDevice() { LOG4CXX_AUTO_TRACE(logger_); }
+TcpDevice::~TcpDevice() {
+  LOG4CXX_AUTO_TRACE(logger_);
+}
 
 int TcpDevice::GetApplicationSocket(const ApplicationHandle app_handle) const {
   LOG4CXX_AUTO_TRACE(logger_);

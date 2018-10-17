@@ -20,14 +20,15 @@ typedef std::shared_ptr<AppsOnDevice> AppsOnDevicePtr;
 class Launcher {
  public:
   Launcher(const resumption::ResumeCtrl& resume_ctrl,
-           DeviceAppsLauncher& device_launcher, AppsLauncher& apps_launcher)
-      : device_launcher_(device_launcher),
-        apps_launcher_(apps_launcher),
-        resume_ctrl_(resume_ctrl),
-        gap_between_app_timer_("GapBetweenLaunchTimer",
+           DeviceAppsLauncher& device_launcher,
+           AppsLauncher& apps_launcher)
+      : device_launcher_(device_launcher)
+      , apps_launcher_(apps_launcher)
+      , resume_ctrl_(resume_ctrl)
+      , gap_between_app_timer_("GapBetweenLaunchTimer",
                                new timer::TimerTaskImpl<Launcher>(
-                                   this, &Launcher::OnGapBetweenLaunchExpired)),
-        wait_before_launch_timer_(
+                                   this, &Launcher::OnGapBetweenLaunchExpired))
+      , wait_before_launch_timer_(
             "WaitBeforeLainchTimer",
             new timer::TimerTaskImpl<Launcher>(this, &Launcher::LaunchNext)) {}
 
@@ -57,13 +58,16 @@ class Launcher {
           device_launcher_.settings().wait_time_between_apps(),
           timer::kSingleShot);
     } else {
-      LOG4CXX_DEBUG(logger_, "All Apps on " << apps_on_device_->first
-                                            << " postponed launched");
+      LOG4CXX_DEBUG(logger_,
+                    "All Apps on " << apps_on_device_->first
+                                   << " postponed launched");
       device_launcher_.StopLaunchingAppsOnDevice(apps_on_device_->first);
     }
   }
 
-  void OnGapBetweenLaunchExpired() { LaunchNext(); }
+  void OnGapBetweenLaunchExpired() {
+    LaunchNext();
+  }
 
   void OnAppRegistered(const ApplicationDataPtr& app_data) {
     std::vector<ApplicationDataPtr>& apps = apps_on_device_->second;
@@ -95,10 +99,11 @@ typedef std::vector<LauncherPtr> Launchers;
 
 struct LauncherGenerator {
   LauncherGenerator(resumption::ResumeCtrl& resume_ctrl,
-                    DeviceAppsLauncher& interface, AppsLauncher& apps_launcher)
-      : resume_ctrl_(resume_ctrl),
-        interface_(interface),
-        apps_launcher_(apps_launcher) {}
+                    DeviceAppsLauncher& interface,
+                    AppsLauncher& apps_launcher)
+      : resume_ctrl_(resume_ctrl)
+      , interface_(interface)
+      , apps_launcher_(apps_launcher) {}
 
   LauncherPtr operator()() const {
     return std::make_shared<Launcher>(resume_ctrl_, interface_, apps_launcher_);
@@ -114,11 +119,12 @@ DeviceAppsLauncherImpl::DeviceAppsLauncherImpl(DeviceAppsLauncher& interface,
                                                AppsLauncher& apps_launcher)
     : interface_(interface) {
   sync_primitives::AutoLock lock(launchers_lock_);
-  LauncherGenerator generate(interface.app_mngr_.resume_controller(), interface,
-                             apps_launcher);
+  LauncherGenerator generate(
+      interface.app_mngr_.resume_controller(), interface, apps_launcher);
   free_launchers_.reserve(interface.settings_.max_number_of_ios_device());
   std::generate_n(std::back_inserter(free_launchers_),
-                  interface.settings_.max_number_of_ios_device(), generate);
+                  interface.settings_.max_number_of_ios_device(),
+                  generate);
 }
 
 bool DeviceAppsLauncherImpl::LauncherFinder::operator()(
@@ -130,9 +136,9 @@ bool DeviceAppsLauncherImpl::LaunchAppsOnDevice(
     const std::string& device_mac,
     const std::vector<ApplicationDataPtr>& applications_to_launch) {
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(logger_, "On Device " << device_mac << " will be launched "
-                                      << applications_to_launch.size()
-                                      << " apps");
+  LOG4CXX_DEBUG(logger_,
+                "On Device " << device_mac << " will be launched "
+                             << applications_to_launch.size() << " apps");
   AppsOnDevicePtr apps_on_device =
       std::make_shared<AppsOnDevice>(device_mac, applications_to_launch);
   sync_primitives::AutoLock lock(launchers_lock_);
@@ -149,9 +155,9 @@ bool DeviceAppsLauncherImpl::StopLaunchingAppsOnDevice(
     const std::string& device_mac) {
   LOG4CXX_AUTO_TRACE(logger_);
   sync_primitives::AutoLock lock(launchers_lock_);
-  const Launchers::iterator it =
-      std::find_if(works_launchers_.begin(), works_launchers_.end(),
-                   LauncherFinder(device_mac));
+  const Launchers::iterator it = std::find_if(works_launchers_.begin(),
+                                              works_launchers_.end(),
+                                              LauncherFinder(device_mac));
   if (it == works_launchers_.end()) {
     return false;
   }
@@ -170,10 +176,11 @@ bool DeviceAppsLauncher::LaunchAppsOnDevice(
 
 DeviceAppsLauncher::DeviceAppsLauncher(
     application_manager::ApplicationManager& app_mngr,
-    app_launch::AppsLauncher& apps_launcher, const AppLaunchSettings& settings)
-    : app_mngr_(app_mngr),
-      settings_(settings),
-      impl_(new DeviceAppsLauncherImpl(*this, apps_launcher)) {}
+    app_launch::AppsLauncher& apps_launcher,
+    const AppLaunchSettings& settings)
+    : app_mngr_(app_mngr)
+    , settings_(settings)
+    , impl_(new DeviceAppsLauncherImpl(*this, apps_launcher)) {}
 
 bool DeviceAppsLauncher::StopLaunchingAppsOnDevice(
     const std::string& device_mac) {

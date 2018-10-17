@@ -85,9 +85,9 @@ class ChangeRegistrationRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   ChangeRegistrationRequestTest()
-      : app_set_lock_ptr_(std::make_shared<sync_primitives::Lock>()),
-        mock_app_(CreateMockApp()),
-        supported_languages_(CreateMessage(smart_objects::SmartType_Array)) {}
+      : app_set_lock_ptr_(std::make_shared<sync_primitives::Lock>())
+      , mock_app_(CreateMockApp())
+      , supported_languages_(CreateMessage(smart_objects::SmartType_Array)) {}
 
   MessageSharedPtr CreateMsgFromMobile() {
     MessageSharedPtr msg = CreateMessage(smart_objects::SmartType_Map);
@@ -324,13 +324,13 @@ TEST_F(ChangeRegistrationRequestTest,
   MessageSharedPtr ui_response = CreateMessage(smart_objects::SmartType_Map);
   MessageSharedPtr vr_response = CreateMessage(smart_objects::SmartType_Map);
   MessageSharedPtr tts_response = CreateMessage(smart_objects::SmartType_Map);
-  CreateResponseFromHMI(ui_response, hmi_apis::Common_Result::WARNINGS,
-                        "ui_info");
+  CreateResponseFromHMI(
+      ui_response, hmi_apis::Common_Result::WARNINGS, "ui_info");
   CreateResponseFromHMI(vr_response,
                         hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                         "VR is not supported by system");
-  CreateResponseFromHMI(tts_response, hmi_apis::Common_Result::SUCCESS,
-                        "tts_info");
+  CreateResponseFromHMI(
+      tts_response, hmi_apis::Common_Result::SUCCESS, "tts_info");
   (*ui_response)[am::strings::msg_params][am::strings::app_id] = kConnectionKey;
   (*vr_response)[am::strings::msg_params][am::strings::app_id] = kConnectionKey;
   (*tts_response)[am::strings::msg_params][am::strings::app_id] =
@@ -413,47 +413,56 @@ TEST_F(ChangeRegistrationRequestTest,
        OnEvent_TTS_UNSUPPORTED_RESOURCE_STATE_NOT_RESPONSE_Expect_false) {
   CheckExpectations(hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                     mobile_apis::Result::UNSUPPORTED_RESOURCE,
-                    am::HmiInterfaces::STATE_NOT_RESPONSE, false);
+                    am::HmiInterfaces::STATE_NOT_RESPONSE,
+                    false);
 }
 
 TEST_F(ChangeRegistrationRequestTest,
        OnEvent_TTS_UNSUPPORTED_RESOURCE_STATE_AVAILABLE_Expect_false) {
   CheckExpectations(hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                     mobile_apis::Result::UNSUPPORTED_RESOURCE,
-                    am::HmiInterfaces::STATE_AVAILABLE, false);
+                    am::HmiInterfaces::STATE_AVAILABLE,
+                    false);
 }
 
 TEST_F(ChangeRegistrationRequestTest,
        OnEvent_TTS_UNSUPPORTED_RESOURCE_SUCCESS_STATE_AVAILABLE_Expect_true) {
   CheckExpectations(hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                     mobile_apis::Result::UNSUPPORTED_RESOURCE,
-                    am::HmiInterfaces::STATE_AVAILABLE, true,
+                    am::HmiInterfaces::STATE_AVAILABLE,
+                    true,
                     hmi_apis::Common_Result::SUCCESS,
                     hmi_apis::Common_Result::SUCCESS);
 }
 
 TEST_F(ChangeRegistrationRequestTest,
        OnEvent_TTS_SUCCESS_STATE_AVAILABLE_Expect_true) {
-  CheckExpectations(
-      hmi_apis::Common_Result::SUCCESS, mobile_apis::Result::SUCCESS,
-      am::HmiInterfaces::STATE_AVAILABLE, true,
-      hmi_apis::Common_Result::SUCCESS, hmi_apis::Common_Result::SUCCESS);
+  CheckExpectations(hmi_apis::Common_Result::SUCCESS,
+                    mobile_apis::Result::SUCCESS,
+                    am::HmiInterfaces::STATE_AVAILABLE,
+                    true,
+                    hmi_apis::Common_Result::SUCCESS,
+                    hmi_apis::Common_Result::SUCCESS);
 }
 
 TEST_F(ChangeRegistrationRequestTest,
        OnEvent_TTS_WRONG_LANGUAGE_STATE_AVAILABLE_Expect_true) {
-  CheckExpectations(
-      hmi_apis::Common_Result::WRONG_LANGUAGE,
-      mobile_apis::Result::WRONG_LANGUAGE, am::HmiInterfaces::STATE_AVAILABLE,
-      true, hmi_apis::Common_Result::SUCCESS, hmi_apis::Common_Result::SUCCESS);
+  CheckExpectations(hmi_apis::Common_Result::WRONG_LANGUAGE,
+                    mobile_apis::Result::WRONG_LANGUAGE,
+                    am::HmiInterfaces::STATE_AVAILABLE,
+                    true,
+                    hmi_apis::Common_Result::SUCCESS,
+                    hmi_apis::Common_Result::SUCCESS);
 }
 
 TEST_F(ChangeRegistrationRequestTest,
        OnEvent_TTS_INVALID_DATA_STATE_AVAILABLE_Expect_false) {
-  CheckExpectations(
-      hmi_apis::Common_Result::INVALID_DATA, mobile_apis::Result::INVALID_DATA,
-      am::HmiInterfaces::STATE_AVAILABLE, false,
-      hmi_apis::Common_Result::SUCCESS, hmi_apis::Common_Result::SUCCESS);
+  CheckExpectations(hmi_apis::Common_Result::INVALID_DATA,
+                    mobile_apis::Result::INVALID_DATA,
+                    am::HmiInterfaces::STATE_AVAILABLE,
+                    false,
+                    hmi_apis::Common_Result::SUCCESS,
+                    hmi_apis::Common_Result::SUCCESS);
 }
 
 TEST_F(ChangeRegistrationRequestTest,
@@ -512,10 +521,10 @@ TEST_F(ChangeRegistrationRequestTest,
   CreateResponseFromHMI(ui_response,
                         hmi_apis::Common_Result::UNSUPPORTED_RESOURCE,
                         "unsupported_resource");
-  CreateResponseFromHMI(vr_response, hmi_apis::Common_Result::WARNINGS,
-                        "vr_info");
-  CreateResponseFromHMI(tts_response, hmi_apis::Common_Result::SUCCESS,
-                        "tts_info");
+  CreateResponseFromHMI(
+      vr_response, hmi_apis::Common_Result::WARNINGS, "vr_info");
+  CreateResponseFromHMI(
+      tts_response, hmi_apis::Common_Result::SUCCESS, "tts_info");
   (*ui_response)[am::strings::msg_params][am::strings::app_id] = kConnectionKey;
   (*vr_response)[am::strings::msg_params][am::strings::app_id] = kConnectionKey;
   (*tts_response)[am::strings::msg_params][am::strings::app_id] =

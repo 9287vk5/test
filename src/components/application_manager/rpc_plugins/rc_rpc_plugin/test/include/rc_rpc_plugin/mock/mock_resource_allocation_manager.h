@@ -57,7 +57,8 @@ class MockResourceAllocationManager
                void(const hmi_apis::Common_RCAccessMode::eType access_mode));
   MOCK_CONST_METHOD0(GetAccessMode, hmi_apis::Common_RCAccessMode::eType());
   MOCK_METHOD3(SetResourceState,
-               void(const std::string& module_type, const uint32_t app_id,
+               void(const std::string& module_type,
+                    const uint32_t app_id,
                     const rc_rpc_plugin::ResourceState::eType state));
   MOCK_CONST_METHOD1(IsResourceFree, bool(const std::string& module_type));
   MOCK_METHOD0(ResetAllAllocations, void());

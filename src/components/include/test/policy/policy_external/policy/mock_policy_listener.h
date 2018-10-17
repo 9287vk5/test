@@ -75,9 +75,10 @@ class MockPolicyListener : public ::policy::PolicyListener {
   MOCK_METHOD1(OnUpdateHMIAppType,
                void(std::map<std::string, policy::StringArray>));
   MOCK_METHOD1(GetAvailableApps, void(std::queue<std::string>&));
-  MOCK_METHOD3(OnSnapshotCreated, void(const policy::BinaryMessage& pt_string,
-                                       const std::vector<int>& retry_seconds,
-                                       uint32_t timeout_exceed));
+  MOCK_METHOD3(OnSnapshotCreated,
+               void(const policy::BinaryMessage& pt_string,
+                    const std::vector<int>& retry_seconds,
+                    uint32_t timeout_exceed));
   MOCK_METHOD0(CanUpdate, bool());
   MOCK_METHOD1(OnCertificateUpdated, void(const std::string&));
   MOCK_METHOD1(OnPTUFinished, void(const bool ptu_result));
@@ -85,18 +86,20 @@ class MockPolicyListener : public ::policy::PolicyListener {
                      void(const policy::AppPermissions&, const std::string&));
   MOCK_METHOD1(GetDevicesIds,
                std::vector<std::string>(const std::string& policy_app_id));
-  MOCK_METHOD3(OnUpdateHMILevel, void(const std::string& device_id,
-                                      const std::string& policy_app_id,
-                                      const std::string& hmi_level));
+  MOCK_METHOD3(OnUpdateHMILevel,
+               void(const std::string& device_id,
+                    const std::string& policy_app_id,
+                    const std::string& hmi_level));
   MOCK_CONST_METHOD1(GetRegisteredLinks,
                      void(std::map<std::string, std::string>&));
   MOCK_METHOD1(OnRemoteAllowedChanged, void(bool new_consent));
   MOCK_METHOD2(OnRemoteAppPermissionsChanged,
                void(const std::string& device_id,
                     const std::string& application_id));
-  MOCK_METHOD3(OnUpdateHMIStatus, void(const std::string& device_id,
-                                       const std::string& policy_app_id,
-                                       const std::string& hmi_level));
+  MOCK_METHOD3(OnUpdateHMIStatus,
+               void(const std::string& device_id,
+                    const std::string& policy_app_id,
+                    const std::string& hmi_level));
 };
 
 }  // namespace policy_test

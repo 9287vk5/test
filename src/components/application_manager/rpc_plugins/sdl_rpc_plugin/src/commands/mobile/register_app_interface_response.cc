@@ -103,8 +103,9 @@ void RegisterAppInterfaceResponse::Run() {
   // Add registered application to the policy db right after response sent to
   // mobile to be able to check all other API according to app permissions
   if (!app) {
-    LOG4CXX_ERROR(logger_, "Application with connection key "
-                               << connection_key() << " is not registered.");
+    LOG4CXX_ERROR(logger_,
+                  "Application with connection key " << connection_key()
+                                                     << " is not registered.");
     return;
   }
 

@@ -70,9 +70,14 @@ class ProtocolPacket {
   class ProtocolHeader {
    public:
     ProtocolHeader();
-    ProtocolHeader(uint8_t version, bool protection, uint8_t frameType,
-                   uint8_t serviceType, uint8_t frameData, uint8_t sessionID,
-                   uint32_t dataSize, uint32_t messageID);
+    ProtocolHeader(uint8_t version,
+                   bool protection,
+                   uint8_t frameType,
+                   uint8_t serviceType,
+                   uint8_t frameData,
+                   uint8_t sessionID,
+                   uint32_t dataSize,
+                   uint32_t messageID);
     uint8_t version;
     bool protection_flag;
     uint8_t frameType;
@@ -146,9 +151,15 @@ class ProtocolPacket {
    * \param messageID ID of message or hash code - only for second protocol
    * \param data Message string if provided
    */
-  ProtocolPacket(ConnectionID connection_id, uint8_t version, bool protection,
-                 uint8_t frameType, uint8_t serviceType, uint8_t frameData,
-                 uint8_t sessionId, uint32_t dataSize, uint32_t messageID,
+  ProtocolPacket(ConnectionID connection_id,
+                 uint8_t version,
+                 bool protection,
+                 uint8_t frameType,
+                 uint8_t serviceType,
+                 uint8_t frameData,
+                 uint8_t sessionId,
+                 uint32_t dataSize,
+                 uint32_t messageID,
                  const uint8_t* data = 0);
 
   /*Serialization*/

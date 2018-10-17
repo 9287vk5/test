@@ -59,66 +59,95 @@ bool Resources::GetProcInfo(Resources::PidStats& output) {
   if (false == ReadStatFile(proc_buf)) {
     return false;
   }
-  uint32_t num_succes = sscanf(
-      proc_buf.c_str(),
-      "%d"     // pid
-      " %*s"   // com
-      " %c"    // state
-      " %d"    // ppid
-      " %d"    // pgrp
-      " %d"    // session
-      " %d"    // tty_nr
-      " %d"    // tpgid
-      " %u"    // flags
-      " %lu"   // minflt
-      " %lu"   // cminflt
-      " %lu"   // majflt
-      " %lu"   // cmajflt
-      " %lu"   // utime
-      " %lu"   // stime
-      " %ld"   // cutime
-      " %ld"   // cstime
-      " %ld"   // priority
-      " %ld"   // nice
-      " %ld"   // num_threads
-      " %ld"   // itrealvalue
-      " %llu"  // starttime
-      " %lu"   // vsize
-      " %ld"   // rss
-      " %lu"   // rsslim
-      " %lu"   // startcode
-      " %lu"   // endcode
-      " %lu"   // startstack
-      " %lu"   // kstkesp
-      " %lu"   // kstkip
-      " %lu"   // signal
-      " %lu"   // blocked
-      " %lu"   // sigignore
-      " %lu"   // sigcatch
-      " %lu"   // wchan
-      " %lu"   // nswap
-      " %lu"   // cnswap
-      " %d"    // exit_signal
-      " %d"    // processor
-      " %u"    // rt_priority
-      " %u"    // policy
-      " %llu"  // delayacct_blkio_ticks
-      " %lu"   // guest_time
-      " %ld"   // cguest_time
-      ,
-      &(output.pid), &(output.state), &(output.ppid), &(output.pgrp),
-      &(output.session), &(output.tty_nr), &(output.tpgid), &(output.flags),
-      &(output.minflt), &(output.cminflt), &(output.majflt), &(output.cmajflt),
-      &(output.utime), &(output.stime), &(output.cutime), &(output.cstime),
-      &(output.priority), &(output.nice), &(output.num_threads),
-      &(output.itrealvalue), &(output.starttime), &(output.vsize),
-      &(output.rss), &(output.rsslim), &(output.startcode), &(output.endcode),
-      &(output.startstack), &(output.kstkesp), &(output.kstkeip),
-      &(output.signal), &(output.blocked), &(output.sigignore),
-      &(output.sigcatch), &(output.wchan), &(output.nswap), &(output.cnswap),
-      &(output.exit_signal), &(output.processor), &(output.rt_priority),
-      &(output.policy), &(output.delayacct_blkio_ticks), &(output.guest_time),
-      &(output.cguest_time));
+  uint32_t num_succes = sscanf(proc_buf.c_str(),
+                               "%d"     // pid
+                               " %*s"   // com
+                               " %c"    // state
+                               " %d"    // ppid
+                               " %d"    // pgrp
+                               " %d"    // session
+                               " %d"    // tty_nr
+                               " %d"    // tpgid
+                               " %u"    // flags
+                               " %lu"   // minflt
+                               " %lu"   // cminflt
+                               " %lu"   // majflt
+                               " %lu"   // cmajflt
+                               " %lu"   // utime
+                               " %lu"   // stime
+                               " %ld"   // cutime
+                               " %ld"   // cstime
+                               " %ld"   // priority
+                               " %ld"   // nice
+                               " %ld"   // num_threads
+                               " %ld"   // itrealvalue
+                               " %llu"  // starttime
+                               " %lu"   // vsize
+                               " %ld"   // rss
+                               " %lu"   // rsslim
+                               " %lu"   // startcode
+                               " %lu"   // endcode
+                               " %lu"   // startstack
+                               " %lu"   // kstkesp
+                               " %lu"   // kstkip
+                               " %lu"   // signal
+                               " %lu"   // blocked
+                               " %lu"   // sigignore
+                               " %lu"   // sigcatch
+                               " %lu"   // wchan
+                               " %lu"   // nswap
+                               " %lu"   // cnswap
+                               " %d"    // exit_signal
+                               " %d"    // processor
+                               " %u"    // rt_priority
+                               " %u"    // policy
+                               " %llu"  // delayacct_blkio_ticks
+                               " %lu"   // guest_time
+                               " %ld"   // cguest_time
+                               ,
+                               &(output.pid),
+                               &(output.state),
+                               &(output.ppid),
+                               &(output.pgrp),
+                               &(output.session),
+                               &(output.tty_nr),
+                               &(output.tpgid),
+                               &(output.flags),
+                               &(output.minflt),
+                               &(output.cminflt),
+                               &(output.majflt),
+                               &(output.cmajflt),
+                               &(output.utime),
+                               &(output.stime),
+                               &(output.cutime),
+                               &(output.cstime),
+                               &(output.priority),
+                               &(output.nice),
+                               &(output.num_threads),
+                               &(output.itrealvalue),
+                               &(output.starttime),
+                               &(output.vsize),
+                               &(output.rss),
+                               &(output.rsslim),
+                               &(output.startcode),
+                               &(output.endcode),
+                               &(output.startstack),
+                               &(output.kstkesp),
+                               &(output.kstkeip),
+                               &(output.signal),
+                               &(output.blocked),
+                               &(output.sigignore),
+                               &(output.sigcatch),
+                               &(output.wchan),
+                               &(output.nswap),
+                               &(output.cnswap),
+                               &(output.exit_signal),
+                               &(output.processor),
+                               &(output.rt_priority),
+                               &(output.policy),
+                               &(output.delayacct_blkio_ticks),
+                               &(output.guest_time),
+                               &(output.cguest_time));
   if (num_succes != 43) {  // 43 is number of iteams in Resources::PidStats
     LOG4CXX_ERROR(logger_, "Couldn't parse all iteams in /proc/PID/stat file");
     return false;
@@ -127,9 +156,9 @@ bool Resources::GetProcInfo(Resources::PidStats& output) {
 #elif defined(__QNXNTO__)
   int fd = open(GetProcPath().c_str(), O_RDONLY);
   if (0 >= fd) {
-    LOG4CXX_ERROR(logger_, "Failed open process proc file : "
-                               << GetProcPath()
-                               << "; error no : " << strerror(errno));
+    LOG4CXX_ERROR(logger_,
+                  "Failed open process proc file : "
+                      << GetProcPath() << "; error no : " << strerror(errno));
 
     close(fd);
     return false;

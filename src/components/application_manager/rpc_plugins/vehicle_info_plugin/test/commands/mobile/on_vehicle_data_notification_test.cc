@@ -71,8 +71,8 @@ class OnVehicleDataNotificationTest
     : public CommandsTest<CommandsTestMocks::kIsNice> {
  public:
   OnVehicleDataNotificationTest()
-      : command_msg_(CreateMessage(smart_objects::SmartType_Map)),
-        command_(CreateCommand<OnVehicleDataNotification>(command_msg_)) {}
+      : command_msg_(CreateMessage(smart_objects::SmartType_Map))
+      , command_(CreateCommand<OnVehicleDataNotification>(command_msg_)) {}
 
   MessageSharedPtr command_msg_;
   NotificationPtr command_;
@@ -99,9 +99,12 @@ MATCHER_P2(CheckMessageData, key, value, "") {
       (*arg)[am::strings::msg_params][key].asInt() == value;
 
   using namespace helpers;
-  return Compare<bool, EQ, ALL>(
-      true, kIsMobileProtocolTypeCorrect, kIsProtocolVersionCorrect,
-      kIsNotificationCorrect, kIsConnectionKeyCorrect, kAreMsgParamsCorrect);
+  return Compare<bool, EQ, ALL>(true,
+                                kIsMobileProtocolTypeCorrect,
+                                kIsProtocolVersionCorrect,
+                                kIsNotificationCorrect,
+                                kIsConnectionKeyCorrect,
+                                kAreMsgParamsCorrect);
 }
 
 }  // namespace on_vehicle_data_notification

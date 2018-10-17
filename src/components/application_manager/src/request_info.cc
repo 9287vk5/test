@@ -99,7 +99,9 @@ bool RequestInfo::isExpired() {
   return date_time::getmSecs(end_time_) <= date_time::getmSecs(curr_time);
 }
 
-uint64_t RequestInfo::hash() { return GenerateHash(app_id(), requestId()); }
+uint64_t RequestInfo::hash() {
+  return GenerateHash(app_id(), requestId());
+}
 
 uint64_t RequestInfo::GenerateHash(uint32_t var1, uint32_t var2) {
   uint64_t hash_result = 0;
@@ -116,9 +118,10 @@ FakeRequestInfo::FakeRequestInfo(uint32_t app_id, uint32_t correaltion_id) {
 
 bool RequestInfoSet::Add(RequestInfoPtr request_info) {
   DCHECK_OR_RETURN(request_info, false);
-  LOG4CXX_DEBUG(logger_, "Add request app_id = " << request_info->app_id()
-                                                 << "; corr_id = "
-                                                 << request_info->requestId());
+  LOG4CXX_DEBUG(
+      logger_,
+      "Add request app_id = " << request_info->app_id()
+                              << "; corr_id = " << request_info->requestId());
   sync_primitives::AutoLock lock(this_lock_);
   CheckSetSizes();
   const std::pair<HashSortedRequestInfoSet::iterator, bool>& insert_resilt =
@@ -133,10 +136,10 @@ bool RequestInfoSet::Add(RequestInfoPtr request_info) {
     CheckSetSizes();
     return true;
   } else {
-    LOG4CXX_ERROR(logger_, "Request with app_id = " << request_info->app_id()
-                                                    << "; corr_id "
-                                                    << request_info->requestId()
-                                                    << " Already exist ");
+    LOG4CXX_ERROR(logger_,
+                  "Request with app_id = "
+                      << request_info->app_id() << "; corr_id "
+                      << request_info->requestId() << " Already exist ");
   }
   CheckSetSizes();
   return false;
@@ -228,7 +231,8 @@ uint32_t RequestInfoSet::RemoveRequests(
   sync_primitives::AutoLock lock(this_lock_);
   HashSortedRequestInfoSet::iterator it =
       std::find_if(hash_sorted_pending_requests_.begin(),
-                   hash_sorted_pending_requests_.end(), filter);
+                   hash_sorted_pending_requests_.end(),
+                   filter);
   while (it != hash_sorted_pending_requests_.end()) {
     HashSortedRequestInfoSet::iterator to_erase = it++;
     Erase(*to_erase);

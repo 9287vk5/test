@@ -109,7 +109,9 @@ class AppLaunchCtrlTest : public ::testing::Test {
     return test_app_datas_[index].second;
   }
 
-  MockAppPtr GetTestApp(size_t index) { return test_app_datas_[index].first; }
+  MockAppPtr GetTestApp(size_t index) {
+    return test_app_datas_[index].first;
+  }
 
   const std::string DeviceMac(size_t device_number) {
     std::ostringstream ss;
@@ -168,8 +170,8 @@ class AppLaunchCtrlTest : public ::testing::Test {
 app_launch::ApplicationData AppDataFromApp(
     application_manager::Application& app) {
   // TODO(AK) Use amc op device
-  return app_launch::ApplicationData(app.policy_app_id(), app.bundle_id(),
-                                     "Dummy Deevice Id");
+  return app_launch::ApplicationData(
+      app.policy_app_id(), app.bundle_id(), "Dummy Deevice Id");
 }
 
 struct AppDataComparator {
@@ -245,7 +247,8 @@ TEST_F(AppLaunchCtrlTest, LaunchMultipleApps) {
   std::vector<AppAndAppData> apps_and_data = DeviceApps(DeviceMac(1));
   std::vector<app_launch::ApplicationDataPtr> apps;
   for (std::vector<AppAndAppData>::iterator it = apps_and_data.begin();
-       it != apps_and_data.end(); ++it) {
+       it != apps_and_data.end();
+       ++it) {
     apps.push_back(it->second);
   }
 
@@ -256,7 +259,8 @@ TEST_F(AppLaunchCtrlTest, LaunchMultipleApps) {
 
   // Expect multiple call
   for (std::vector<AppAndAppData>::iterator it = apps_and_data.begin();
-       it != apps_and_data.end(); ++it) {
+       it != apps_and_data.end();
+       ++it) {
     EXPECT_CALL(connection_handler_mock_,
                 RunAppOnDevice(it->second->device_mac_, it->second->bundle_id_))
         .Times(AtLeast(1))
@@ -275,7 +279,8 @@ TEST_F(AppLaunchCtrlTest, LaunchMultipleAppsNoRegister) {
   std::vector<AppAndAppData> apps_and_data = DeviceApps(DeviceMac(1));
   std::vector<app_launch::ApplicationDataPtr> apps;
   for (std::vector<AppAndAppData>::iterator it = apps_and_data.begin();
-       it != apps_and_data.end(); ++it) {
+       it != apps_and_data.end();
+       ++it) {
     apps.push_back(it->second);
   }
 
@@ -287,7 +292,8 @@ TEST_F(AppLaunchCtrlTest, LaunchMultipleAppsNoRegister) {
 
   // Expect multiple call
   for (std::vector<AppAndAppData>::iterator it = apps_and_data.begin();
-       it != apps_and_data.end(); ++it) {
+       it != apps_and_data.end();
+       ++it) {
     const AppAndAppData& app_data = *it;
     EXPECT_CALL(connection_handler_mock_,
                 RunAppOnDevice(app_data.second->device_mac_,
@@ -309,16 +315,18 @@ TEST_F(AppLaunchCtrlTest, LaunchMultipleAppsInHMILevelOrder) {
 
   {
     app_launch::ApplicationDataPtr app_data = apps_and_data[0].second;
-    EXPECT_CALL(resume_ctrl_mock_, GetSavedAppHmiLevel(app_data->mobile_app_id_,
-                                                       app_data->device_mac_))
+    EXPECT_CALL(
+        resume_ctrl_mock_,
+        GetSavedAppHmiLevel(app_data->mobile_app_id_, app_data->device_mac_))
         .WillOnce(Return(mobile_apis::HMILevel::HMI_FULL));
     apps.push_back(app_data);
   }
 
   {
     app_launch::ApplicationDataPtr app_data = apps_and_data[1].second;
-    EXPECT_CALL(resume_ctrl_mock_, GetSavedAppHmiLevel(app_data->mobile_app_id_,
-                                                       app_data->device_mac_))
+    EXPECT_CALL(
+        resume_ctrl_mock_,
+        GetSavedAppHmiLevel(app_data->mobile_app_id_, app_data->device_mac_))
         .WillOnce(Return(mobile_apis::HMILevel::HMI_LIMITED));
     ;
     apps.push_back(app_data);
@@ -326,8 +334,9 @@ TEST_F(AppLaunchCtrlTest, LaunchMultipleAppsInHMILevelOrder) {
 
   {
     app_launch::ApplicationDataPtr app_data = apps_and_data[2].second;
-    EXPECT_CALL(resume_ctrl_mock_, GetSavedAppHmiLevel(app_data->mobile_app_id_,
-                                                       app_data->device_mac_))
+    EXPECT_CALL(
+        resume_ctrl_mock_,
+        GetSavedAppHmiLevel(app_data->mobile_app_id_, app_data->device_mac_))
         .WillOnce(Return(mobile_apis::HMILevel::HMI_BACKGROUND));
     ;
     apps.push_back(app_data);
@@ -339,7 +348,8 @@ TEST_F(AppLaunchCtrlTest, LaunchMultipleAppsInHMILevelOrder) {
       .WillOnce(Return(apps));
   // Expect multiple call
   for (std::vector<AppAndAppData>::iterator it = apps_and_data.begin();
-       it != apps_and_data.end(); ++it) {
+       it != apps_and_data.end();
+       ++it) {
     EXPECT_CALL(connection_handler_mock_,
                 RunAppOnDevice(it->second->device_mac_, it->second->bundle_id_))
         .Times(AtLeast(1))

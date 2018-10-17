@@ -60,11 +60,11 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "MediaManager")
 MediaManagerImpl::MediaManagerImpl(
     application_manager::ApplicationManager& application_manager,
     const MediaManagerSettings& settings)
-    : settings_(settings),
-      protocol_handler_(NULL),
-      a2dp_player_(NULL),
-      from_mic_recorder_(NULL),
-      application_manager_(application_manager) {
+    : settings_(settings)
+    , protocol_handler_(NULL)
+    , a2dp_player_(NULL)
+    , from_mic_recorder_(NULL)
+    , application_manager_(application_manager) {
   Init();
 }
 
@@ -187,8 +187,8 @@ void MediaManagerImpl::StopA2DPSource(int32_t application_key) {
 void MediaManagerImpl::StartMicrophoneRecording(int32_t application_key,
                                                 const std::string& output_file,
                                                 int32_t duration) {
-  LOG4CXX_INFO(logger_, "MediaManagerImpl::StartMicrophoneRecording to "
-                            << output_file);
+  LOG4CXX_INFO(logger_,
+               "MediaManagerImpl::StartMicrophoneRecording to " << output_file);
   application_manager::ApplicationSharedPtr app =
       application_manager_.application(application_key);
   std::string file_path = settings().app_storage_folder();
@@ -220,8 +220,9 @@ void MediaManagerImpl::StartMicrophoneRecording(int32_t application_key,
   std::vector<uint8_t> buf;
   if (file_system::ReadBinaryFile(record_file_source, buf)) {
     if (file_system::Write(file_path, buf)) {
-      LOG4CXX_INFO(logger_, "File " << record_file_source << " copied to "
-                                    << output_file);
+      LOG4CXX_INFO(logger_,
+                   "File " << record_file_source << " copied to "
+                           << output_file);
     } else {
       LOG4CXX_WARN(logger_, "Could not write to file " << output_file);
     }
@@ -282,8 +283,8 @@ void MediaManagerImpl::OnMessageReceived(
   const uint32_t streaming_app_id = message->connection_key();
   const ServiceType service_type = message->service_type();
 
-  if (Compare<ServiceType, NEQ, ALL>(service_type, ServiceType::kMobileNav,
-                                     ServiceType::kAudio)) {
+  if (Compare<ServiceType, NEQ, ALL>(
+          service_type, ServiceType::kMobileNav, ServiceType::kAudio)) {
     LOG4CXX_DEBUG(logger_, "Unsupported service type in MediaManager");
     return;
   }

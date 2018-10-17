@@ -146,10 +146,11 @@ typedef enum {
 
 struct TransportDescription {
   TransportDescription(const TransportType transport_type,
-                       const bool ios_transport, const bool android_transport)
-      : transport_type_(transport_type),
-        ios_transport_(ios_transport),
-        android_transport_(android_transport) {}
+                       const bool ios_transport,
+                       const bool android_transport)
+      : transport_type_(transport_type)
+      , ios_transport_(ios_transport)
+      , android_transport_(android_transport) {}
 
   TransportType transport_type_;
   bool ios_transport_;
@@ -264,8 +265,10 @@ class ProtocolHandlerImpl
     * \param connection_id Identifier of the actual transport for the service
     * \param session_id ID of session to be ended
     */
-  void SendEndService(int32_t primary_connection_id, int32_t connection_id,
-                      uint8_t session_id, uint8_t service_type);
+  void SendEndService(int32_t primary_connection_id,
+                      int32_t connection_id,
+                      uint8_t session_id,
+                      uint8_t service_type);
 
   void NotifyOnFailedHandshake() OVERRIDE;
 
@@ -283,9 +286,12 @@ class ProtocolHandlerImpl
    * \param service_type Type of session: RPC or BULK Data. RPC by default
    * \param protection Protection flag
    */
-  void SendStartSessionAck(ConnectionID connection_id, uint8_t session_id,
-                           uint8_t input_protocol_version, uint32_t hash_code,
-                           uint8_t service_type, bool protection);
+  void SendStartSessionAck(ConnectionID connection_id,
+                           uint8_t session_id,
+                           uint8_t input_protocol_version,
+                           uint32_t hash_code,
+                           uint8_t service_type,
+                           bool protection);
 
   /**
    * \brief Sends acknowledgement of starting session to mobile application
@@ -302,9 +308,12 @@ class ProtocolHandlerImpl
    * \param full_version full protocol version (major.minor.patch) used by the
    *                     mobile proxy
    */
-  void SendStartSessionAck(ConnectionID connection_id, uint8_t session_id,
-                           uint8_t protocol_version, uint32_t hash_code,
-                           uint8_t service_type, bool protection,
+  void SendStartSessionAck(ConnectionID connection_id,
+                           uint8_t session_id,
+                           uint8_t protocol_version,
+                           uint32_t hash_code,
+                           uint8_t service_type,
+                           bool protection,
                            utils::SemanticVersion& full_version);
 
   /**
@@ -323,9 +332,12 @@ class ProtocolHandlerImpl
    *                     mobile proxy
    * \param params Parameters added in the payload
    */
-  void SendStartSessionAck(ConnectionID connection_id, uint8_t session_id,
-                           uint8_t protocol_version, uint32_t hash_code,
-                           uint8_t service_type, bool protection,
+  void SendStartSessionAck(ConnectionID connection_id,
+                           uint8_t session_id,
+                           uint8_t protocol_version,
+                           uint32_t hash_code,
+                           uint8_t service_type,
+                           bool protection,
                            utils::SemanticVersion& full_version,
                            BsonObject& params);
 
@@ -340,8 +352,10 @@ class ProtocolHandlerImpl
    * \param protocol_version Version of protocol used for communication
    * \param service_type Type of session: RPC or BULK Data. RPC by default
    */
-  void SendStartSessionNAck(ConnectionID connection_id, uint8_t session_id,
-                            uint8_t protocol_version, uint8_t service_type);
+  void SendStartSessionNAck(ConnectionID connection_id,
+                            uint8_t session_id,
+                            uint8_t protocol_version,
+                            uint8_t service_type);
 
   /**
    * \brief Sends fail of starting session to mobile application
@@ -351,8 +365,10 @@ class ProtocolHandlerImpl
    * \param service_type Type of session: RPC or BULK Data. RPC by default
    * \param rejected_params List of rejected params to send in payload
    */
-  void SendStartSessionNAck(ConnectionID connection_id, uint8_t session_id,
-                            uint8_t protocol_version, uint8_t service_type,
+  void SendStartSessionNAck(ConnectionID connection_id,
+                            uint8_t session_id,
+                            uint8_t protocol_version,
+                            uint8_t service_type,
                             std::vector<std::string>& rejectedParams);
 
   /**
@@ -366,8 +382,10 @@ class ProtocolHandlerImpl
    * mobile app for using when ending session.
    * \param service_type Type of session: RPC or BULK Data. RPC by default
    */
-  void SendEndSessionAck(ConnectionID connection_id, uint8_t session_id,
-                         uint8_t protocol_version, uint8_t service_type);
+  void SendEndSessionAck(ConnectionID connection_id,
+                         uint8_t session_id,
+                         uint8_t protocol_version,
+                         uint8_t service_type);
 
   /**
    * \brief Sends fail of ending session to mobile application
@@ -377,8 +395,10 @@ class ProtocolHandlerImpl
    * \param protocol_version Version of protocol used for communication
    * \param service_type Type of session: RPC or BULK Data. RPC by default
    */
-  void SendEndSessionNAck(ConnectionID connection_id, uint32_t session_id,
-                          uint8_t protocol_version, uint8_t service_type);
+  void SendEndSessionNAck(ConnectionID connection_id,
+                          uint32_t session_id,
+                          uint8_t protocol_version,
+                          uint8_t service_type);
   /**
    * \brief Sends fail of ending session to mobile application (variant for
    * Protocol v5)
@@ -389,8 +409,10 @@ class ProtocolHandlerImpl
    * \param service_type Type of session: RPC or BULK Data. RPC by default
    * \param rejected_params List of rejected params to send in payload
    */
-  void SendEndSessionNAck(ConnectionID connection_id, uint32_t session_id,
-                          uint8_t protocol_version, uint8_t service_type,
+  void SendEndSessionNAck(ConnectionID connection_id,
+                          uint32_t session_id,
+                          uint8_t protocol_version,
+                          uint8_t service_type,
                           std::vector<std::string>& rejected_params);
 
   SessionObserver& get_session_observer() OVERRIDE;
@@ -415,7 +437,8 @@ class ProtocolHandlerImpl
     return raw_ford_messages_to_mobile_;
   }
 
-  void set_tcp_config(bool tcp_enabled, std::string tcp_address,
+  void set_tcp_config(bool tcp_enabled,
+                      std::string tcp_address,
                       std::string tcp_port) {
     tcp_enabled_ = tcp_enabled;
     tcp_ip_address_ = tcp_address;
@@ -425,13 +448,15 @@ class ProtocolHandlerImpl
 
  private:
   void SendEndServicePrivate(int32_t primary_connection_id,
-                             int32_t connection_id, uint8_t session_id,
+                             int32_t connection_id,
+                             uint8_t session_id,
                              uint8_t service_type);
 
   /*
    * Prepare and send heartbeat acknowledge message
    */
-  RESULT_CODE SendHeartBeatAck(ConnectionID connection_id, uint8_t session_id,
+  RESULT_CODE SendHeartBeatAck(ConnectionID connection_id,
+                               uint8_t session_id,
                                uint32_t message_id);
 
   /*
@@ -443,15 +468,18 @@ class ProtocolHandlerImpl
    * Prepare and send RegisterSecondaryTransportAck message
    */
   RESULT_CODE SendRegisterSecondaryTransportAck(
-      ConnectionID connection_id, ConnectionID primary_transport_connection_id,
+      ConnectionID connection_id,
+      ConnectionID primary_transport_connection_id,
       uint8_t session_id);
 
   /*
    * Prepare and send RegisterSecondaryTransportNAck message
    */
   RESULT_CODE SendRegisterSecondaryTransportNAck(
-      ConnectionID connection_id, ConnectionID primary_transport_connection_id,
-      uint8_t session_id, BsonObject* reason = NULL);
+      ConnectionID connection_id,
+      ConnectionID primary_transport_connection_id,
+      uint8_t session_id,
+      BsonObject* reason = NULL);
 
   /**
    * @brief Notifies about receiving message from TM.
@@ -523,10 +551,13 @@ class ProtocolHandlerImpl
    * \param is_final_message if is_final_message = true - it is last message
    * \return \saRESULT_CODE Status of operation
    */
-  RESULT_CODE SendSingleFrameMessage(
-      const ConnectionID connection_id, const uint8_t session_id,
-      const uint32_t protocol_version, const uint8_t service_type,
-      const size_t data_size, const uint8_t* data, const bool is_final_message);
+  RESULT_CODE SendSingleFrameMessage(const ConnectionID connection_id,
+                                     const uint8_t session_id,
+                                     const uint32_t protocol_version,
+                                     const uint8_t service_type,
+                                     const size_t data_size,
+                                     const uint8_t* data,
+                                     const bool is_final_message);
 
   /**
    * \brief Sends message which size doesn't permit to send it in one frame.
@@ -545,7 +576,8 @@ class ProtocolHandlerImpl
                                     const uint8_t session_id,
                                     const uint8_t protocol_version,
                                     const uint8_t service_type,
-                                    const size_t data_size, const uint8_t* data,
+                                    const size_t data_size,
+                                    const uint8_t* data,
                                     const size_t max_frame_size,
                                     const bool is_final_message);
 
@@ -640,7 +672,8 @@ class ProtocolHandlerImpl
 
   void GenerateSecondaryTransportsForStartSessionAck(
       const std::vector<std::string>& secondary_transport_types,
-      bool device_is_ios, bool device_is_android,
+      bool device_is_ios,
+      bool device_is_android,
       std::vector<std::string>& secondaryTransports) const;
 
   void GenerateServiceTransportsForStartSessionAck(

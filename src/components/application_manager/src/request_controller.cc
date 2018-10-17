@@ -47,16 +47,16 @@ using namespace sync_primitives;
 CREATE_LOGGERPTR_GLOBAL(logger_, "RequestController")
 
 RequestController::RequestController(const RequestControlerSettings& settings)
-    : pool_state_(UNDEFINED),
-      pool_size_(settings.thread_pool_size()),
-      request_tracker_(settings),
-      duplicate_message_count_(),
-      timer_("AM RequestCtrlTimer",
+    : pool_state_(UNDEFINED)
+    , pool_size_(settings.thread_pool_size())
+    , request_tracker_(settings)
+    , duplicate_message_count_()
+    , timer_("AM RequestCtrlTimer",
              new timer::TimerTaskImpl<RequestController>(
-                 this, &RequestController::TimeoutThread)),
-      timer_stop_flag_(false),
-      is_low_voltage_(false),
-      settings_(settings) {
+                 this, &RequestController::TimeoutThread))
+    , timer_stop_flag_(false)
+    , is_low_voltage_(false)
+    , settings_(settings) {
   LOG4CXX_AUTO_TRACE(logger_);
   InitializeThreadpool();
   timer_.Start(0, timer::kSingleShot);
@@ -137,10 +137,10 @@ bool RequestController::CheckPendingRequestsAmount(
     const bool available_to_add =
         pending_requests_amount > pending_requests_size;
     if (!available_to_add) {
-      LOG4CXX_WARN(logger_, "Pending requests count "
-                                << pending_requests_size
-                                << " exceed application limit "
-                                << pending_requests_amount);
+      LOG4CXX_WARN(logger_,
+                   "Pending requests count " << pending_requests_size
+                                             << " exceed application limit "
+                                             << pending_requests_amount);
     }
     return available_to_add;
   }
@@ -156,9 +156,10 @@ RequestController::TResult RequestController::addMobileRequest(
     cond_var_.NotifyOne();
     return INVALID_DATA;
   }
-  LOG4CXX_DEBUG(logger_, "correlation_id : " << request->correlation_id()
-                                             << "connection_key : "
-                                             << request->connection_key());
+  LOG4CXX_DEBUG(
+      logger_,
+      "correlation_id : " << request->correlation_id()
+                          << "connection_key : " << request->connection_key());
   RequestController::TResult result = CheckPosibilitytoAdd(request, hmi_level);
   if (SUCCESS == result) {
     AutoLock auto_lock_list(mobile_request_list_lock_);
@@ -225,11 +226,11 @@ void RequestController::TerminateRequest(const uint32_t correlation_id,
                                          const int32_t function_id,
                                          bool force_terminate) {
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(
-      logger_, "correlation_id = " << correlation_id
-                                   << " connection_key = " << connection_key
-                                   << " function_id = " << function_id
-                                   << " force_terminate = " << force_terminate);
+  LOG4CXX_DEBUG(logger_,
+                "correlation_id = "
+                    << correlation_id << " connection_key = " << connection_key
+                    << " function_id = " << function_id
+                    << " force_terminate = " << force_terminate);
   {
     AutoLock auto_lock(duplicate_message_count_lock_);
     auto dup_it = duplicate_message_count_.find(correlation_id);
@@ -279,8 +280,9 @@ void RequestController::OnHMIResponse(const uint32_t correlation_id,
 void RequestController::terminateWaitingForExecutionAppRequests(
     const uint32_t& app_id) {
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(logger_, "app_id: " << app_id << "Waiting for execution"
-                                    << mobile_request_list_.size());
+  LOG4CXX_DEBUG(logger_,
+                "app_id: " << app_id << "Waiting for execution"
+                           << mobile_request_list_.size());
   AutoLock auto_lock(mobile_request_list_lock_);
   std::list<RequestPtr>::iterator request_it = mobile_request_list_.begin();
   while (mobile_request_list_.end() != request_it) {
@@ -291,8 +293,8 @@ void RequestController::terminateWaitingForExecutionAppRequests(
       ++request_it;
     }
   }
-  LOG4CXX_DEBUG(logger_, "Waiting for execution "
-                             << mobile_request_list_.size());
+  LOG4CXX_DEBUG(logger_,
+                "Waiting for execution " << mobile_request_list_.size());
 }
 
 void RequestController::terminateWaitingForResponseAppRequests(
@@ -337,9 +339,10 @@ void RequestController::updateRequestTimeout(const uint32_t& app_id,
                                              const uint32_t& new_timeout) {
   LOG4CXX_AUTO_TRACE(logger_);
 
-  LOG4CXX_DEBUG(logger_, "app_id : " << app_id << " mobile_correlation_id : "
-                                     << correlation_id
-                                     << " new_timeout : " << new_timeout);
+  LOG4CXX_DEBUG(logger_,
+                "app_id : " << app_id
+                            << " mobile_correlation_id : " << correlation_id
+                            << " new_timeout : " << new_timeout);
   LOG4CXX_DEBUG(logger_,
                 "New_timeout is NULL. RequestCtrl will "
                 "not manage this request any more");
@@ -351,14 +354,15 @@ void RequestController::updateRequestTimeout(const uint32_t& app_id,
     request_info->updateTimeOut(new_timeout);
     waiting_for_response_.Add(request_info);
     NotifyTimer();
-    LOG4CXX_INFO(logger_, "Timeout updated for "
-                              << " app_id: " << app_id
-                              << " correlation_id: " << correlation_id
-                              << " new_timeout (ms): " << new_timeout);
+    LOG4CXX_INFO(logger_,
+                 "Timeout updated for "
+                     << " app_id: " << app_id << " correlation_id: "
+                     << correlation_id << " new_timeout (ms): " << new_timeout);
   } else {
-    LOG4CXX_ERROR(logger_, "Can't find request with "
-                               << " app_id: " << app_id
-                               << " correlation_id: " << correlation_id);
+    LOG4CXX_ERROR(logger_,
+                  "Can't find request with "
+                      << " app_id: " << app_id
+                      << " correlation_id: " << correlation_id);
   }
 }
 
@@ -382,8 +386,9 @@ bool RequestController::IsLowVoltage() {
 
 void RequestController::TimeoutThread() {
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(logger_, "ENTER Waiting fore response count: "
-                             << waiting_for_response_.Size());
+  LOG4CXX_DEBUG(
+      logger_,
+      "ENTER Waiting fore response count: " << waiting_for_response_.Size());
   sync_primitives::AutoLock auto_lock(timer_lock);
   while (!timer_stop_flag_) {
     RequestInfoPtr probably_expired =
@@ -412,14 +417,15 @@ void RequestController::TimeoutThread() {
       }
       continue;
     }
-    LOG4CXX_INFO(logger_, "Timeout for "
-                              << (RequestInfo::HMIRequest ==
-                                          probably_expired->requst_type()
-                                      ? "HMI"
-                                      : "Mobile") << " request id: "
-                              << probably_expired->requestId()
-                              << " connection_key: "
-                              << probably_expired->app_id() << " is expired");
+    LOG4CXX_INFO(logger_,
+                 "Timeout for "
+                     << (RequestInfo::HMIRequest ==
+                                 probably_expired->requst_type()
+                             ? "HMI"
+                             : "Mobile")
+                     << " request id: " << probably_expired->requestId()
+                     << " connection_key: " << probably_expired->app_id()
+                     << " is expired");
     const uint32_t experied_request_id = probably_expired->requestId();
     const uint32_t experied_app_id = probably_expired->app_id();
 
@@ -438,8 +444,9 @@ void RequestController::TimeoutThread() {
       }
     }
   }
-  LOG4CXX_DEBUG(logger_, "EXIT Waiting for response count : "
-                             << waiting_for_response_.Size());
+  LOG4CXX_DEBUG(
+      logger_,
+      "EXIT Waiting for response count : " << waiting_for_response_.Size());
 }
 
 RequestController::Worker::Worker(RequestController* requestController)
@@ -496,8 +503,8 @@ void RequestController::Worker::threadMain() {
         }
         request_controller_->duplicate_message_count_[corr_id]++;
         request_controller_->duplicate_message_count_lock_.Release();
-        cmd_request->SendResponse(false, mobile_apis::Result::INVALID_ID,
-                                  "Duplicate correlation_id");
+        cmd_request->SendResponse(
+            false, mobile_apis::Result::INVALID_ID, "Duplicate correlation_id");
       }
       continue;
     }
@@ -517,9 +524,10 @@ void RequestController::Worker::threadMain() {
     // execute
     if ((false == request_controller_->IsLowVoltage()) &&
         request_ptr->CheckPermissions() && init_res) {
-      LOG4CXX_DEBUG(logger_, "Execute MobileRequest corr_id = "
-                                 << request_info_ptr->requestId()
-                                 << " with timeout: " << timeout_in_mseconds);
+      LOG4CXX_DEBUG(logger_,
+                    "Execute MobileRequest corr_id = "
+                        << request_info_ptr->requestId()
+                        << " with timeout: " << timeout_in_mseconds);
       request_ptr->Run();
     }
   }

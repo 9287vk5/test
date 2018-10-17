@@ -40,14 +40,13 @@ namespace formatters = ns_smart_device_link::ns_json_handler::formatters;
 namespace jhs = ns_smart_device_link::ns_json_handler::strings;
 
 RPCHandlerImpl::RPCHandlerImpl(ApplicationManager& app_manager)
-    : app_manager_(app_manager),
-      messages_from_mobile_("AM FromMobile", this),
-      messages_from_hmi_("AM FromHMI", this),
-      hmi_so_factory_(hmi_apis::HMI_API()),
-      mobile_so_factory_(mobile_apis::MOBILE_API())
+    : app_manager_(app_manager)
+    , messages_from_mobile_("AM FromMobile", this)
+    , messages_from_hmi_("AM FromHMI", this)
+    , hmi_so_factory_(hmi_apis::HMI_API())
+    , mobile_so_factory_(mobile_apis::MOBILE_API())
 #ifdef TELEMETRY_MONITOR
-      ,
-      metric_observer_(NULL)
+    , metric_observer_(NULL)
 #endif  // TELEMETRY_MONITOR
 {
 }
@@ -230,9 +229,10 @@ bool RPCHandlerImpl::ConvertMessageToSO(
     const Message& message,
     ns_smart_device_link::ns_smart_objects::SmartObject& output) {
   LOG4CXX_AUTO_TRACE(logger_);
-  LOG4CXX_DEBUG(logger_, "\t\t\tMessage to convert: protocol "
-                             << message.protocol_version() << "; json "
-                             << message.json_message());
+  LOG4CXX_DEBUG(logger_,
+                "\t\t\tMessage to convert: protocol "
+                    << message.protocol_version() << "; json "
+                    << message.json_message());
 
   switch (message.protocol_version()) {
     case protocol_handler::MajorProtocolVersion::PROTOCOL_VERSION_5:
@@ -241,8 +241,11 @@ bool RPCHandlerImpl::ConvertMessageToSO(
     case protocol_handler::MajorProtocolVersion::PROTOCOL_VERSION_2: {
       const bool conversion_result =
           formatters::CFormatterJsonSDLRPCv2::fromString(
-              message.json_message(), output, message.function_id(),
-              message.type(), message.correlation_id());
+              message.json_message(),
+              output,
+              message.function_id(),
+              message.type(),
+              message.correlation_id());
 
       rpc::ValidationReport report("RPC");
 
@@ -267,8 +270,10 @@ bool RPCHandlerImpl::ConvertMessageToSO(
                          << message.json_message());
         std::shared_ptr<smart_objects::SmartObject> response(
             MessageHelper::CreateNegativeResponse(
-                message.connection_key(), message.function_id(),
-                message.correlation_id(), mobile_apis::Result::INVALID_DATA));
+                message.connection_key(),
+                message.function_id(),
+                message.correlation_id(),
+                mobile_apis::Result::INVALID_DATA));
 
         (*response)[strings::msg_params][strings::info] =
             rpc::PrettyFormat(report);
@@ -286,15 +291,17 @@ bool RPCHandlerImpl::ConvertMessageToSO(
           message.protocol_version();
       if (message.binary_data()) {
         if (message.payload_size() < message.data_size()) {
-          LOG4CXX_ERROR(logger_, "Incomplete binary"
-                                     << " binary size should be  "
-                                     << message.data_size()
-                                     << " payload data size is "
-                                     << message.payload_size());
+          LOG4CXX_ERROR(logger_,
+                        "Incomplete binary"
+                            << " binary size should be  " << message.data_size()
+                            << " payload data size is "
+                            << message.payload_size());
           std::shared_ptr<smart_objects::SmartObject> response(
               MessageHelper::CreateNegativeResponse(
-                  message.connection_key(), message.function_id(),
-                  message.correlation_id(), mobile_apis::Result::INVALID_DATA));
+                  message.connection_key(),
+                  message.function_id(),
+                  message.correlation_id(),
+                  mobile_apis::Result::INVALID_DATA));
           app_manager_.GetRPCService().ManageMobileCommand(
               response, commands::Command::SOURCE_SDL);
           return false;
@@ -309,8 +316,8 @@ bool RPCHandlerImpl::ConvertMessageToSO(
       int32_t result =
 #endif
           formatters::FormatterJsonRpc::FromString<
-              hmi_apis::FunctionID::eType, hmi_apis::messageType::eType>(
-              message.json_message(), output);
+              hmi_apis::FunctionID::eType,
+              hmi_apis::messageType::eType>(message.json_message(), output);
       LOG4CXX_DEBUG(logger_,
                     "Convertion result: "
                         << result << " function id "
@@ -323,8 +330,9 @@ bool RPCHandlerImpl::ConvertMessageToSO(
       rpc::ValidationReport report("RPC");
 
       if (output.validate(&report) != smart_objects::errors::OK) {
-        LOG4CXX_ERROR(logger_, "Incorrect parameter from HMI"
-                                   << rpc::PrettyFormat(report));
+        LOG4CXX_ERROR(logger_,
+                      "Incorrect parameter from HMI"
+                          << rpc::PrettyFormat(report));
 
         output.erase(strings::msg_params);
         output[strings::params][hmi_response::code] =
@@ -372,8 +380,9 @@ bool RPCHandlerImpl::ConvertMessageToSO(
       break;
     }
     default:
-      LOG4CXX_WARN(logger_, "Application used unsupported protocol :"
-                                << message.protocol_version() << ".");
+      LOG4CXX_WARN(logger_,
+                   "Application used unsupported protocol :"
+                       << message.protocol_version() << ".");
       return false;
   }
 
@@ -406,7 +415,9 @@ std::shared_ptr<Message> RPCHandlerImpl::ConvertRawMsgToMessage(
   return outgoing_message;
 }
 
-hmi_apis::HMI_API& RPCHandlerImpl::hmi_so_factory() { return hmi_so_factory_; }
+hmi_apis::HMI_API& RPCHandlerImpl::hmi_so_factory() {
+  return hmi_so_factory_;
+}
 
 mobile_apis::MOBILE_API& RPCHandlerImpl::mobile_so_factory() {
   return mobile_so_factory_;

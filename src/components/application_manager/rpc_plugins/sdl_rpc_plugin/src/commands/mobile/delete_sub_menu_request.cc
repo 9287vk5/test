@@ -46,10 +46,14 @@ namespace commands {
 DeleteSubMenuRequest::DeleteSubMenuRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 DeleteSubMenuRequest::~DeleteSubMenuRequest() {}
 
@@ -176,7 +180,8 @@ void DeleteSubMenuRequest::on_event(const event_engine::Event& event) {
             (*message_)[strings::msg_params][strings::menu_id].asInt());
       }
 
-      SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
+      SendResponse(result,
+                   MessageHelper::HMIToMobileResult(result_code),
                    response_info.empty() ? NULL : response_info.c_str(),
                    &(message[strings::msg_params]));
       break;

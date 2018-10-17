@@ -93,12 +93,12 @@ class RequestControllerTestClass : public ::testing::Test {
                  const uint32_t app_requests_time_scale = 0u,
                  const uint32_t pending_requests_amount = 0u)
         : app_hmi_level_none_requests_time_scale_(
-              app_hmi_level_none_requests_time_scale),
-          app_hmi_level_none_time_scale_max_requests_(
-              app_hmi_level_none_time_scale_max_requests),
-          app_time_scale_max_requests_(app_time_scale_max_requests),
-          app_requests_time_scale_(app_requests_time_scale),
-          pending_requests_amount_(pending_requests_amount) {}
+              app_hmi_level_none_requests_time_scale)
+        , app_hmi_level_none_time_scale_max_requests_(
+              app_hmi_level_none_time_scale_max_requests)
+        , app_time_scale_max_requests_(app_time_scale_max_requests)
+        , app_requests_time_scale_(app_requests_time_scale)
+        , pending_requests_amount_(pending_requests_amount) {}
   };
 
   RequestControllerTestClass() {
@@ -120,7 +120,8 @@ class RequestControllerTestClass : public ::testing::Test {
   }
 
   RequestController::TResult AddRequest(
-      const TestSettings& settings, RequestPtr request,
+      const TestSettings& settings,
+      RequestPtr request,
       const RequestInfo::RequestType request_type =
           RequestInfo::RequestType::HMIRequest,
       const mobile_apis::HMILevel::eType& hmi_level =
@@ -170,7 +171,8 @@ TEST_F(RequestControllerTestClass,
       .WillRepeatedly(NotifyTestAsyncWaiter(&waiter_valid));
 
   EXPECT_EQ(RequestController::SUCCESS,
-            AddRequest(default_settings_, request_valid,
+            AddRequest(default_settings_,
+                       request_valid,
                        RequestInfo::RequestType::MobileRequest,
                        mobile_apis::HMILevel::HMI_NONE));
   EXPECT_TRUE(waiter_valid.WaitFor(1, 1000));
@@ -185,7 +187,8 @@ TEST_F(RequestControllerTestClass,
       .WillByDefault(NotifyTestAsyncWaiter(&waiter_dup));
 
   EXPECT_EQ(RequestController::SUCCESS,
-            AddRequest(default_settings_, request_dup_corr_id,
+            AddRequest(default_settings_,
+                       request_dup_corr_id,
                        RequestInfo::RequestType::MobileRequest,
                        mobile_apis::HMILevel::HMI_NONE));
   EXPECT_FALSE(waiter_dup.WaitFor(1, 1000));
@@ -199,7 +202,8 @@ TEST_F(RequestControllerTestClass,
   // (in the default settings they setted to 0)
   for (size_t i = 0; i < kMaxRequestAmount; ++i) {
     EXPECT_EQ(RequestController::SUCCESS,
-              AddRequest(default_settings_, GetMockRequest(i),
+              AddRequest(default_settings_,
+                         GetMockRequest(i),
                          RequestInfo::RequestType::MobileRequest,
                          mobile_apis::HMILevel::HMI_FULL));
   }
@@ -216,7 +220,8 @@ TEST_F(
   // Adding requests to fit in pending_requests_amount_
   for (size_t i = 0; i < kNumberOfRequests; ++i) {
     EXPECT_EQ(RequestController::TResult::SUCCESS,
-              AddRequest(settings, GetMockRequest(),
+              AddRequest(settings,
+                         GetMockRequest(),
                          RequestInfo::RequestType::MobileRequest,
                          mobile_apis::HMILevel::HMI_FULL));
   }
@@ -224,7 +229,8 @@ TEST_F(
   // Trying to add one more extra request
   // Expect overflow and TOO_MANY_PENDING_REQUESTS result
   EXPECT_EQ(RequestController::TResult::TOO_MANY_PENDING_REQUESTS,
-            AddRequest(settings, GetMockRequest(),
+            AddRequest(settings,
+                       GetMockRequest(),
                        RequestInfo::RequestType::MobileRequest,
                        mobile_apis::HMILevel::HMI_FULL));
 }
@@ -243,7 +249,8 @@ TEST_F(RequestControllerTestClass, IsLowVoltage_SetOnWakeUp_FALSE) {
 
 TEST_F(RequestControllerTestClass, AddMobileRequest_SetValidData_SUCCESS) {
   EXPECT_EQ(RequestController::SUCCESS,
-            AddRequest(default_settings_, GetMockRequest(),
+            AddRequest(default_settings_,
+                       GetMockRequest(),
                        RequestInfo::RequestType::MobileRequest,
                        mobile_apis::HMILevel::HMI_FULL));
 }
@@ -251,20 +258,23 @@ TEST_F(RequestControllerTestClass, AddMobileRequest_SetValidData_SUCCESS) {
 TEST_F(RequestControllerTestClass,
        AddMobileRequest_SetInvalidData_INVALID_DATA) {
   EXPECT_EQ(RequestController::INVALID_DATA,
-            AddRequest(default_settings_, empty_mock_request_,
+            AddRequest(default_settings_,
+                       empty_mock_request_,
                        RequestInfo::RequestType::MobileRequest,
                        mobile_apis::HMILevel::HMI_NONE));
 }
 
 TEST_F(RequestControllerTestClass, AddHMIRequest_AddRequest_SUCCESS) {
   EXPECT_EQ(RequestController::SUCCESS,
-            AddRequest(default_settings_, GetMockRequest(),
+            AddRequest(default_settings_,
+                       GetMockRequest(),
                        RequestInfo::RequestType::HMIRequest));
 }
 
 TEST_F(RequestControllerTestClass, AddHMIRequest_AddInvalidData_INVALID_DATA) {
   EXPECT_EQ(RequestController::INVALID_DATA,
-            AddRequest(default_settings_, empty_mock_request_,
+            AddRequest(default_settings_,
+                       empty_mock_request_,
                        RequestInfo::RequestType::HMIRequest));
 }
 
@@ -275,7 +285,8 @@ TEST_F(RequestControllerTestClass, OnTimer_SUCCESS) {
 
   TestAsyncWaiter waiter;
   EXPECT_EQ(RequestController::SUCCESS,
-            AddRequest(default_settings_, mock_request,
+            AddRequest(default_settings_,
+                       mock_request,
                        RequestInfo::RequestType::MobileRequest));
 
   EXPECT_CALL(*mock_request, onTimeOut())

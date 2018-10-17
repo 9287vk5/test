@@ -66,7 +66,8 @@ class CommandHolderImpl : public CommandHolder {
    * @param type Command type
    * @param command Command
    */
-  void Suspend(ApplicationSharedPtr application, CommandType type,
+  void Suspend(ApplicationSharedPtr application,
+               CommandType type,
                smart_objects::SmartObjectSPtr command) FINAL;
 
   /**

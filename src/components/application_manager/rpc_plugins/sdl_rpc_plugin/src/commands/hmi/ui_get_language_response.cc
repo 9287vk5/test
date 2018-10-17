@@ -42,10 +42,14 @@ namespace commands {
 UIGetLanguageResponse::UIGetLanguageResponse(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : ResponseFromHMI(message, application_manager, rpc_service,
-                      hmi_capabilities, policy_handle) {}
+    : ResponseFromHMI(message,
+                      application_manager,
+                      rpc_service,
+                      hmi_capabilities,
+                      policy_handle) {}
 
 UIGetLanguageResponse::~UIGetLanguageResponse() {}
 
@@ -63,9 +67,10 @@ void UIGetLanguageResponse::Run() {
 
   hmi_capabilities_.set_active_ui_language(language);
 
-  LOG4CXX_DEBUG(logger_, "Raising event for function_id "
-                             << function_id() << " and correlation_id "
-                             << correlation_id());
+  LOG4CXX_DEBUG(logger_,
+                "Raising event for function_id " << function_id()
+                                                 << " and correlation_id "
+                                                 << correlation_id());
   event_engine::Event event(FunctionID::UI_GetLanguage);
   event.set_smart_object(*message_);
   event.raise(application_manager_.event_dispatcher());

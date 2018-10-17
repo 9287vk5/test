@@ -67,7 +67,8 @@ class CacheManager : public CacheManagerInterface {
    * and list of allowed params.
    */
   virtual void CheckPermissions(const policy_table::Strings& groups,
-                                const PTString& hmi_level, const PTString& rpc,
+                                const PTString& hmi_level,
+                                const PTString& rpc,
                                 CheckPermissionResult& result);
 
   /**
@@ -261,7 +262,8 @@ class CacheManager : public CacheManagerInterface {
    * appear (Navigation, Phone etc)
    * @return true in case initial application data was obtained successfuly.
    */
-  bool GetInitialAppData(const std::string& app_id, StringArray& nicknames,
+  bool GetInitialAppData(const std::string& app_id,
+                         StringArray& nicknames,
                          StringArray& app_hmi_types);
 
   /**
@@ -470,7 +472,8 @@ class CacheManager : public CacheManagerInterface {
    * @param type type of information
    * @param value value of information
    */
-  void Set(const std::string& app_id, usage_statistics::AppInfoId type,
+  void Set(const std::string& app_id,
+           usage_statistics::AppInfoId type,
            const std::string& value);
 
   /**
@@ -479,7 +482,8 @@ class CacheManager : public CacheManagerInterface {
    * @param type type of stopwatch
    * @param seconds value for adding in seconds
    */
-  void Add(const std::string& app_id, usage_statistics::AppStopwatchId type,
+  void Add(const std::string& app_id,
+           usage_statistics::AppStopwatchId type,
            int seconds);
 
   /**
@@ -718,7 +722,9 @@ class CacheManager : public CacheManagerInterface {
 
   const PolicySettings& get_settings() const;
 
-  std::shared_ptr<policy_table::Table> pt() const { return pt_; }
+  std::shared_ptr<policy_table::Table> pt() const {
+    return pt_;
+  }
 
   /**
    * @brief OnDeviceSwitching Processes existing policy permissions for devices

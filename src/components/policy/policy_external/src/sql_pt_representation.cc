@@ -130,8 +130,9 @@ void SQLPTRepresentation::CheckPermissions(const PTString& app_id,
   utils::dbms::SQLQuery query(db());
 
   if (!query.Prepare(sql_pt::kSelectRpc)) {
-    LOG4CXX_WARN(logger_, "Incorrect select statement from rpcs"
-                              << query.LastError().text());
+    LOG4CXX_WARN(logger_,
+                 "Incorrect select statement from rpcs"
+                     << query.LastError().text());
     return;
   }
   query.Bind(0, app_id);
@@ -140,10 +141,10 @@ void SQLPTRepresentation::CheckPermissions(const PTString& app_id,
 
   bool ret = query.Next();
   result.hmi_level_permitted = ret ? kRpcAllowed : kRpcDisallowed;
-  LOG4CXX_INFO(logger_, "Level is "
-                            << (result.hmi_level_permitted == kRpcAllowed
-                                    ? "permitted"
-                                    : "not permitted"));
+  LOG4CXX_INFO(logger_,
+               "Level is " << (result.hmi_level_permitted == kRpcAllowed
+                                   ? "permitted"
+                                   : "not permitted"));
   std::string parameter;
   while (ret) {
     if (!query.IsNull(0)) {
@@ -267,8 +268,8 @@ std::vector<UserFriendlyMessage> SQLPTRepresentation::GetUserFriendlyMsg(
 }
 
 EndpointUrls SQLPTRepresentation::GetUpdateUrls(int service_type) {
-  LOG4CXX_INFO(logger_, "SQLPTRepresentation::GetUpdateUrls for "
-                            << service_type);
+  LOG4CXX_INFO(logger_,
+               "SQLPTRepresentation::GetUpdateUrls for " << service_type);
   utils::dbms::SQLQuery query(db());
   EndpointUrls ret;
   if (query.Prepare(sql_pt::kSelectEndpoint)) {
@@ -378,10 +379,11 @@ InitResult SQLPTRepresentation::Init(const PolicySettings* settings) {
       }
     }
     if (!is_opened) {
-      LOG4CXX_ERROR(logger_, "Open retry sequence failed. Tried "
-                                 << attempts << " attempts with "
-                                 << open_attempt_timeout_ms
-                                 << " open timeout(ms) for each.");
+      LOG4CXX_ERROR(logger_,
+                    "Open retry sequence failed. Tried "
+                        << attempts << " attempts with "
+                        << open_attempt_timeout_ms
+                        << " open timeout(ms) for each.");
       return InitResult::FAIL;
     }
   }
@@ -406,8 +408,9 @@ InitResult SQLPTRepresentation::Init(const PolicySettings* settings) {
             utils::dbms::SQLQuery check_first_run(db());
             if (check_first_run.Prepare(sql_pt::kIsFirstRun) &&
                 check_first_run.Next()) {
-              LOG4CXX_INFO(logger_, "Selecting is first run "
-                                        << check_first_run.GetBoolean(0));
+              LOG4CXX_INFO(logger_,
+                           "Selecting is first run "
+                               << check_first_run.GetBoolean(0));
               if (check_first_run.GetBoolean(0)) {
                 utils::dbms::SQLQuery set_not_first_run(db());
                 set_not_first_run.Exec(sql_pt::kSetNotFirstRun);
@@ -429,13 +432,15 @@ InitResult SQLPTRepresentation::Init(const PolicySettings* settings) {
   }
   utils::dbms::SQLQuery query(db());
   if (!query.Exec(sql_pt::kCreateSchema)) {
-    LOG4CXX_ERROR(logger_, "Failed creating schema of database: "
-                               << query.LastError().text());
+    LOG4CXX_ERROR(
+        logger_,
+        "Failed creating schema of database: " << query.LastError().text());
     return InitResult::FAIL;
   }
   if (!query.Exec(sql_pt::kInsertInitData)) {
-    LOG4CXX_ERROR(logger_, "Failed insert init data to database: "
-                               << query.LastError().text());
+    LOG4CXX_ERROR(
+        logger_,
+        "Failed insert init data to database: " << query.LastError().text());
     return InitResult::FAIL;
   }
   return InitResult::SUCCESS;
@@ -466,7 +471,9 @@ bool SQLPTRepresentation::Drop() {
   return true;
 }
 
-void SQLPTRepresentation::WriteDb() { db_->Backup(); }
+void SQLPTRepresentation::WriteDb() {
+  db_->Backup();
+}
 
 bool SQLPTRepresentation::Clear() {
   utils::dbms::SQLQuery query(db());
@@ -476,8 +483,9 @@ bool SQLPTRepresentation::Clear() {
     return false;
   }
   if (!query.Exec(sql_pt::kInsertInitData)) {
-    LOG4CXX_ERROR(logger_, "Failed insert init data to database: "
-                               << query.LastError().text());
+    LOG4CXX_ERROR(
+        logger_,
+        "Failed insert init data to database: " << query.LastError().text());
     return false;
   }
   return true;
@@ -491,13 +499,15 @@ bool SQLPTRepresentation::RefreshDB() {
     return false;
   }
   if (!query.Exec(sql_pt::kCreateSchema)) {
-    LOG4CXX_ERROR(logger_, "Failed creating schema of database: "
-                               << query.LastError().text());
+    LOG4CXX_ERROR(
+        logger_,
+        "Failed creating schema of database: " << query.LastError().text());
     return false;
   }
   if (!query.Exec(sql_pt::kInsertInitData)) {
-    LOG4CXX_ERROR(logger_, "Failed insert init data to database: "
-                               << query.LastError().text());
+    LOG4CXX_ERROR(
+        logger_,
+        "Failed insert init data to database: " << query.LastError().text());
     return false;
   }
   return true;
@@ -1102,8 +1112,9 @@ bool SQLPTRepresentation::SaveAppGroup(
     query.Bind(0, app_id);
     query.Bind(1, *it);
     if (!query.Exec() || !query.Reset()) {
-      LOG4CXX_WARN(logger_, "Incorrect insert into app group."
-                                << query.LastError().text());
+      LOG4CXX_WARN(logger_,
+                   "Incorrect insert into app group."
+                       << query.LastError().text());
       return false;
     }
   }
@@ -1175,8 +1186,9 @@ bool SQLPTRepresentation::SaveRequestType(
   } else if (types.is_initialized()) {
     LOG4CXX_WARN(logger_, "Request types empty.");
     query.Bind(0, app_id);
-    query.Bind(1, std::string(policy_table::EnumToJsonString(
-                      policy_table::RequestType::RT_EMPTY)));
+    query.Bind(1,
+               std::string(policy_table::EnumToJsonString(
+                   policy_table::RequestType::RT_EMPTY)));
     if (!query.Exec() || !query.Reset()) {
       LOG4CXX_WARN(logger_, "Incorrect insert into request types.");
       return false;
@@ -1417,7 +1429,8 @@ bool SQLPTRepresentation::SaveLanguage(const std::string& code) {
 }
 
 bool SQLPTRepresentation::SaveMessageString(
-    const std::string& type, const std::string& lang,
+    const std::string& type,
+    const std::string& lang,
     const policy_table::MessageString& strings) {
   // Section is empty for SDL specific
   return true;
@@ -1768,8 +1781,8 @@ bool SQLPTRepresentation::SaveModuleType(
       query.Bind(0, app_id);
       std::string module(policy_table::EnumToJsonString(*it));
       query.Bind(1, module);
-      LOG4CXX_DEBUG(logger_, "Module(app: " << app_id << ", type: " << module
-                                            << ")");
+      LOG4CXX_DEBUG(logger_,
+                    "Module(app: " << app_id << ", type: " << module << ")");
       if (!query.Exec() || !query.Reset()) {
         LOG4CXX_WARN(logger_, "Incorrect insert into module type.");
         return false;
@@ -1777,8 +1790,9 @@ bool SQLPTRepresentation::SaveModuleType(
     }
   } else if (types.is_initialized()) {
     query.Bind(0, app_id);
-    query.Bind(1, std::string(policy_table::EnumToJsonString(
-                      policy_table::ModuleType::MT_EMPTY)));
+    query.Bind(1,
+               std::string(policy_table::EnumToJsonString(
+                   policy_table::ModuleType::MT_EMPTY)));
     if (!query.Exec() || !query.Reset()) {
       LOG4CXX_WARN(logger_, "Incorrect insert into module types.");
       return false;
@@ -2052,9 +2066,10 @@ bool SQLPTRepresentation::IsDBVersionActual() const {
 
   const int32_t saved_db_version = query.GetInteger(0);
   const int32_t current_db_version = GetDBVersion();
-  LOG4CXX_DEBUG(logger_, "Saved DB version is: " << saved_db_version
-                                                 << ". Current DB vesion is: "
-                                                 << current_db_version);
+  LOG4CXX_DEBUG(logger_,
+                "Saved DB version is: " << saved_db_version
+                                        << ". Current DB vesion is: "
+                                        << current_db_version);
 
   return current_db_version == saved_db_version;
 }
@@ -2150,7 +2165,9 @@ void SQLPTRepresentation::SetPreloaded(bool value) {
   }
 }
 
-bool SQLPTRepresentation::SetVINValue(const std::string& value) { return true; }
+bool SQLPTRepresentation::SetVINValue(const std::string& value) {
+  return true;
+}
 
 bool SQLPTRepresentation::SaveExternalConsentEntities(
     const int64_t group_id,
@@ -2176,8 +2193,9 @@ bool SQLPTRepresentation::SaveExternalConsentEntities(
     query.Bind(2, it_entity->entity_id);
     query.Bind(3, external_consent_entity_type);
     if (!query.Exec() || !query.Reset()) {
-      LOG4CXX_ERROR(logger_, "Can't insert '" << external_consent_entity_type
-                                              << "' external consent entity.");
+      LOG4CXX_ERROR(logger_,
+                    "Can't insert '" << external_consent_entity_type
+                                     << "' external consent entity.");
       return false;
     }
   }

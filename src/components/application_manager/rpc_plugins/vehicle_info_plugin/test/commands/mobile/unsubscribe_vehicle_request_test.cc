@@ -69,16 +69,18 @@ class UnsubscribeVehicleRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   UnsubscribeVehicleRequestTest()
-      : mock_app_(CreateMockApp()),
-        vi_app_extension_ptr_(
+      : mock_app_(CreateMockApp())
+      , vi_app_extension_ptr_(
             std::make_shared<vehicle_info_plugin::VehicleInfoAppExtension>(
-                vi_plugin_, *mock_app_)),
-        app_set_lock_ptr_(std::make_shared<sync_primitives::Lock>()) {}
+                vi_plugin_, *mock_app_))
+      , app_set_lock_ptr_(std::make_shared<sync_primitives::Lock>()) {}
 
  protected:
   void UnsubscribeSuccessfully();
   void SetUp() OVERRIDE {
-    vi_plugin_.Init(app_mngr_, mock_rpc_service_, mock_hmi_capabilities_,
+    vi_plugin_.Init(app_mngr_,
+                    mock_rpc_service_,
+                    mock_hmi_capabilities_,
                     mock_policy_handler_);
     ON_CALL(*mock_app_, AddExtension(vi_app_extension_ptr_));
     vi_plugin_.OnApplicationEvent(application_manager::plugin_manager::

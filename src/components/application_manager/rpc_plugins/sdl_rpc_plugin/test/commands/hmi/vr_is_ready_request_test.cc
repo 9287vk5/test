@@ -116,7 +116,8 @@ class VRIsReadyRequestTest
     EXPECT_CALL(mock_rpc_service_, ManageHMICommand(capabilities));
   }
 
-  void PrepareEvent(bool is_message_contain_param, Event& event,
+  void PrepareEvent(bool is_message_contain_param,
+                    Event& event,
                     bool is_vr_cooperating_available = false) {
     MessageSharedPtr msg = CreateMessage(smart_objects::SmartType_Map);
     if (is_message_contain_param) {
@@ -135,7 +136,8 @@ TEST_F(VRIsReadyRequestTest, Run_NoKeyAvailableInMessage_HmiInterfacesIgnored) {
   const bool is_message_contain_param = false;
   Event event(hmi_apis::FunctionID::VR_IsReady);
   PrepareEvent(is_message_contain_param, event);
-  SetUpExpectations(is_vr_cooperating_available, is_send_message_to_hmi,
+  SetUpExpectations(is_vr_cooperating_available,
+                    is_send_message_to_hmi,
                     is_message_contain_param,
                     am::HmiInterfaces::STATE_NOT_RESPONSE);
   command_->on_event(event);
@@ -147,7 +149,8 @@ TEST_F(VRIsReadyRequestTest, Run_KeyAvailableEqualToFalse_StateNotAvailable) {
   const bool is_message_contain_param = true;
   Event event(hmi_apis::FunctionID::VR_IsReady);
   PrepareEvent(is_message_contain_param, event);
-  SetUpExpectations(is_vr_cooperating_available, is_send_message_to_hmi,
+  SetUpExpectations(is_vr_cooperating_available,
+                    is_send_message_to_hmi,
                     is_message_contain_param,
                     am::HmiInterfaces::STATE_NOT_AVAILABLE);
   command_->on_event(event);
@@ -159,7 +162,8 @@ TEST_F(VRIsReadyRequestTest, Run_KeyAvailableEqualToTrue_StateAvailable) {
   const bool is_message_contain_param = true;
   Event event(hmi_apis::FunctionID::VR_IsReady);
   PrepareEvent(is_message_contain_param, event, is_vr_cooperating_available);
-  SetUpExpectations(is_vr_cooperating_available, is_send_message_to_hmi,
+  SetUpExpectations(is_vr_cooperating_available,
+                    is_send_message_to_hmi,
                     is_message_contain_param,
                     am::HmiInterfaces::STATE_AVAILABLE);
   command_->on_event(event);

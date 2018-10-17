@@ -44,12 +44,12 @@
 CREATE_LOGGERPTR_GLOBAL(logger_, "Utils")
 
 timer::Timer::Timer(const std::string& name, TimerTask* task)
-    : name_(name),
-      task_(task),
-      state_lock_(),
-      delegate_(new TimerDelegate(this, state_lock_)),
-      thread_(threads::CreateThread(name_.c_str(), delegate_.get())),
-      single_shot_(true) {
+    : name_(name)
+    , task_(task)
+    , state_lock_()
+    , delegate_(new TimerDelegate(this, state_lock_))
+    , thread_(threads::CreateThread(name_.c_str(), delegate_.get()))
+    , single_shot_(true) {
   LOG4CXX_AUTO_TRACE(logger_);
   DCHECK(!name_.empty());
   DCHECK(task_);
@@ -162,12 +162,12 @@ void timer::Timer::OnTimeout() const {
 
 timer::Timer::TimerDelegate::TimerDelegate(
     const Timer* timer, sync_primitives::Lock& state_lock_ref)
-    : timer_(timer),
-      timeout_(0),
-      stop_flag_(true),
-      finalized_flag_(false),
-      state_lock_ref_(state_lock_ref),
-      state_condition_() {
+    : timer_(timer)
+    , timeout_(0)
+    , stop_flag_(true)
+    , finalized_flag_(false)
+    , state_lock_ref_(state_lock_ref)
+    , state_condition_() {
   DCHECK(timer_);
 }
 
@@ -183,7 +183,9 @@ void timer::Timer::TimerDelegate::set_stop_flag(const bool stop_flag) {
   stop_flag_ = stop_flag;
 }
 
-bool timer::Timer::TimerDelegate::stop_flag() const { return stop_flag_; }
+bool timer::Timer::TimerDelegate::stop_flag() const {
+  return stop_flag_;
+}
 
 void timer::Timer::TimerDelegate::set_finalized_flag(
     const bool finalized_flag) {

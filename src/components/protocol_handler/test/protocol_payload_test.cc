@@ -68,8 +68,8 @@ void prepare_data(uint8_t* data_for_sending, ProtocolPayloadV2& message) {
   data_for_sending[offset++] = jsonSize;
 
   if (message.json.length() != 0) {
-    memcpy(data_for_sending + offset, message.json.c_str(),
-           message.json.size());
+    memcpy(
+        data_for_sending + offset, message.json.c_str(), message.json.size());
   }
 
   if (message.data.size() != 0) {

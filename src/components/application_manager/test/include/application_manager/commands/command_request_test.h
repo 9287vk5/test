@@ -64,7 +64,9 @@ class CallRun {
  public:
   CallRun(CommandRequestImpl& command) : command_(command) {}
 
-  void operator()() { command_.Run(); }
+  void operator()() {
+    command_.Run();
+  }
 
   CommandRequestImpl& command_;
 };
@@ -74,7 +76,9 @@ class CallOnEvent {
   CallOnEvent(CommandRequestImpl& command, Event& event)
       : command_(command), event_(event) {}
 
-  void operator()() { command_.on_event(event_); }
+  void operator()() {
+    command_.on_event(event_);
+  }
 
   CommandRequestImpl& command_;
   Event& event_;
@@ -83,7 +87,8 @@ class CallOnEvent {
 template <const CommandsTestMocks kIsNice = CommandsTestMocks::kNotNice>
 class CommandRequestTest : public CommandsTest<kIsNice> {
  public:
-  typedef typename TypeIf<kIsNice, NiceMock<MockEventDispatcher>,
+  typedef typename TypeIf<kIsNice,
+                          NiceMock<MockEventDispatcher>,
                           MockEventDispatcher>::Result MockEventDisp;
 
   template <class CallableT>

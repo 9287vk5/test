@@ -53,9 +53,13 @@ class TestMessage {
   size_t priority;
 };
 
-size_t TestMessage::PriorityOrder() const { return priority; }
+size_t TestMessage::PriorityOrder() const {
+  return priority;
+}
 
-std::string TestMessage::msg() const { return msg_; }
+std::string TestMessage::msg() const {
+  return msg_;
+}
 
 bool operator==(const TestMessage& msg1, const TestMessage& msg2) {
   return (msg1.msg() == msg2.msg() &&

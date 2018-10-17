@@ -61,7 +61,8 @@ class CommandHolder {
    * @param type Command type
    * @param command Command
    */
-  virtual void Suspend(ApplicationSharedPtr application, CommandType type,
+  virtual void Suspend(ApplicationSharedPtr application,
+                       CommandType type,
                        smart_objects::SmartObjectSPtr command) = 0;
 
   /**

@@ -47,16 +47,20 @@ namespace commands {
 DeleteCommandRequest::DeleteCommandRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler),
-      is_ui_send_(false),
-      is_vr_send_(false),
-      is_ui_received_(false),
-      is_vr_received_(false),
-      ui_result_(hmi_apis::Common_Result::INVALID_ENUM),
-      vr_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler)
+    , is_ui_send_(false)
+    , is_vr_send_(false)
+    , is_ui_received_(false)
+    , is_vr_received_(false)
+    , ui_result_(hmi_apis::Common_Result::INVALID_ENUM)
+    , vr_result_(hmi_apis::Common_Result::INVALID_ENUM) {}
 
 DeleteCommandRequest::~DeleteCommandRequest() {}
 
@@ -134,8 +138,8 @@ bool DeleteCommandRequest::PrepareResponseParameters(
   const bool is_vr_or_ui_warning =
       Compare<hmi_apis::Common_Result::eType, EQ, ONE>(
           hmi_apis::Common_Result::WARNINGS, ui_result_, vr_result_);
-  info = app_mngr::commands::MergeInfos(ui_delete_info, ui_info_,
-                                        vr_delete_info, vr_info_);
+  info = app_mngr::commands::MergeInfos(
+      ui_delete_info, ui_info_, vr_delete_info, vr_info_);
   if (is_vr_or_ui_warning && !ui_delete_info.is_unsupported_resource &&
       !vr_delete_info.is_unsupported_resource) {
     LOG4CXX_DEBUG(logger_, "VR or UI result is warning");
@@ -199,10 +203,10 @@ void DeleteCommandRequest::on_event(const event_engine::Event& event) {
   smart_objects::SmartObject* command = application->FindCommand(cmd_id);
 
   if (!command) {
-    LOG4CXX_ERROR(logger_, "Command id " << cmd_id
-                                         << " not found for "
-                                            "application with connection key "
-                                         << connection_key());
+    LOG4CXX_ERROR(logger_,
+                  "Command id " << cmd_id << " not found for "
+                                             "application with connection key "
+                                << connection_key());
     return;
   }
   mobile_apis::Result::eType result_code = mobile_apis::Result::INVALID_ENUM;
@@ -212,8 +216,8 @@ void DeleteCommandRequest::on_event(const event_engine::Event& event) {
     application->RemoveCommand(cmd_id);
     application->help_prompt_manager().OnVrCommandDeleted(cmd_id, false);
   }
-  SendResponse(result, result_code, info.empty() ? NULL : info.c_str(),
-               &msg_params);
+  SendResponse(
+      result, result_code, info.empty() ? NULL : info.c_str(), &msg_params);
 }
 
 bool DeleteCommandRequest::Init() {

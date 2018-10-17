@@ -38,17 +38,19 @@
 namespace security_manager {
 
 SecurityQuery::QueryHeader::QueryHeader()
-    : query_type(INVALID_QUERY_TYPE),
-      query_id(INVALID_QUERY_ID),
-      seq_number(0),
-      json_size(0) {}
+    : query_type(INVALID_QUERY_TYPE)
+    , query_id(INVALID_QUERY_ID)
+    , seq_number(0)
+    , json_size(0) {}
 
-SecurityQuery::QueryHeader::QueryHeader(uint8_t queryType, uint32_t queryId,
-                                        uint32_t seqNumber, uint32_t jsonSize)
-    : query_type(queryType),
-      query_id(queryId),
-      seq_number(seqNumber),
-      json_size(jsonSize) {}
+SecurityQuery::QueryHeader::QueryHeader(uint8_t queryType,
+                                        uint32_t queryId,
+                                        uint32_t seqNumber,
+                                        uint32_t jsonSize)
+    : query_type(queryType)
+    , query_id(queryId)
+    , seq_number(seqNumber)
+    , json_size(jsonSize) {}
 
 SecurityQuery::SecurityQuery()
     : header_(INVALID_QUERY_TYPE, INVALID_QUERY_ID, 0), connection_key_(0) {}
@@ -57,9 +59,9 @@ SecurityQuery::SecurityQuery(const SecurityQuery::QueryHeader& header,
                              const uint32_t connection_key,
                              const uint8_t* const raw_data,
                              const size_t raw_data_size)
-    : header_(header),
-      connection_key_(connection_key),
-      data_(raw_data, raw_data + raw_data_size) {}
+    : header_(header)
+    , connection_key_(connection_key)
+    , data_(raw_data, raw_data + raw_data_size) {}
 
 SecurityQuery::SecurityQuery(const SecurityQuery::QueryHeader& header,
                              const uint32_t connection_key)
@@ -105,7 +107,8 @@ bool SecurityQuery::SerializeQuery(const uint8_t* const raw_data,
   header_.json_size =
       BE_TO_LE32(*reinterpret_cast<const uint32_t*>(raw_data + 8));
 
-  if (header_.json_size > raw_data_size - header_size) return false;
+  if (header_.json_size > raw_data_size - header_size)
+    return false;
 
   if (header_.json_size > 0) {
     const char* const json_data =
@@ -139,7 +142,8 @@ const std::vector<uint8_t> SecurityQuery::DeserializeQuery() const {
   // copy binary data
   std::copy(data_.begin(), data_.end(), data_sending.begin() + header_size);
   // copy text (json) data
-  std::copy(json_message_.begin(), json_message_.end(),
+  std::copy(json_message_.begin(),
+            json_message_.end(),
             data_sending.begin() + header_size + data_.size());
   return data_sending;
 }
@@ -167,14 +171,20 @@ const SecurityQuery::QueryHeader& SecurityQuery::get_header() const {
   return header_;
 }
 
-const uint8_t* SecurityQuery::get_data() const { return &data_[0]; }
+const uint8_t* SecurityQuery::get_data() const {
+  return &data_[0];
+}
 
-size_t SecurityQuery::get_data_size() const { return data_.size(); }
+size_t SecurityQuery::get_data_size() const {
+  return data_.size();
+}
 
 const std::string& SecurityQuery::get_json_message() const {
   return json_message_;
 }
 
-uint32_t SecurityQuery::get_connection_key() const { return connection_key_; }
+uint32_t SecurityQuery::get_connection_key() const {
+  return connection_key_;
+}
 
 }  // namespace security_manager

@@ -51,16 +51,19 @@ class MockSessionObserver : public ::protocol_handler::SessionObserver {
                void(const transport_manager::ConnectionUID connection_handle,
                     const uint8_t sessionId,
                     const protocol_handler::ServiceType& service_type,
-                    const bool is_protected, const BsonObject* params));
+                    const bool is_protected,
+                    const BsonObject* params));
   MOCK_METHOD4(
       OnSessionEndedCallback,
       uint32_t(const transport_manager::ConnectionUID connection_handle,
-               const uint8_t sessionId, const uint32_t& hashCode,
+               const uint8_t sessionId,
+               const uint32_t& hashCode,
                const protocol_handler::ServiceType& service_type));
   MOCK_METHOD4(
       OnSessionEndedCallback,
       uint32_t(const transport_manager::ConnectionUID connection_handle,
-               const uint8_t sessionId, uint32_t* hashCode,
+               const uint8_t sessionId,
+               uint32_t* hashCode,
                const protocol_handler::ServiceType& service_type));
   MOCK_METHOD1(OnApplicationFloodCallBack,
                void(const uint32_t& connection_key));
@@ -73,14 +76,16 @@ class MockSessionObserver : public ::protocol_handler::SessionObserver {
       TransportTypeProfileStringFromDeviceHandle,
       const std::string(transport_manager::DeviceHandle device_handle));
   MOCK_CONST_METHOD2(
-      KeyFromPair, uint32_t(transport_manager::ConnectionUID connection_handle,
-                            uint8_t session_id));
+      KeyFromPair,
+      uint32_t(transport_manager::ConnectionUID connection_handle,
+               uint8_t session_id));
   MOCK_CONST_METHOD3(PairFromKey,
                      void(uint32_t key,
                           transport_manager::ConnectionUID* connection_handle,
                           uint8_t* sessionId));
   MOCK_CONST_METHOD4(GetDataOnSessionKey,
-                     int32_t(uint32_t key, uint32_t* app_id,
+                     int32_t(uint32_t key,
+                             uint32_t* app_id,
                              std::list<int32_t>* sessions_list,
                              transport_manager::DeviceHandle* device_id));
 
@@ -95,7 +100,8 @@ class MockSessionObserver : public ::protocol_handler::SessionObserver {
                      bool(transport_manager::ConnectionUID connection_handle,
                           uint8_t session_id));
   MOCK_CONST_METHOD3(ProtocolVersionUsed,
-                     bool(uint32_t connection_id, uint8_t session_id,
+                     bool(uint32_t connection_id,
+                          uint8_t session_id,
                           uint8_t& protocol_version));
   MOCK_CONST_METHOD2(SessionServiceExists,
                      bool(const uint32_t connection_key,

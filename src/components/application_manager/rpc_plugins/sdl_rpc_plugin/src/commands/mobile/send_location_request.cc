@@ -46,8 +46,11 @@ SendLocationRequest::SendLocationRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 SendLocationRequest::~SendLocationRequest() {}
 
@@ -59,8 +62,9 @@ void SendLocationRequest::Run() {
   ApplicationSharedPtr app = application_manager_.application(connection_key());
 
   if (!app) {
-    LOG4CXX_ERROR(logger_, "An application with connection key "
-                               << connection_key() << " is not registered.");
+    LOG4CXX_ERROR(logger_,
+                  "An application with connection key "
+                      << connection_key() << " is not registered.");
     SendResponse(false, mobile_apis::Result::APPLICATION_NOT_REGISTERED);
     return;
   }
@@ -117,7 +121,8 @@ void SendLocationRequest::Run() {
     mobile_apis::Result::eType verification_result =
         mobile_apis::Result::SUCCESS;
     verification_result = MessageHelper::VerifyImage(
-        (*message_)[strings::msg_params][strings::location_image], app,
+        (*message_)[strings::msg_params][strings::location_image],
+        app,
         application_manager_);
     if (mobile_apis::Result::INVALID_DATA == verification_result) {
       LOG4CXX_ERROR(logger_, "VerifyImage INVALID_DATA!");
@@ -130,8 +135,8 @@ void SendLocationRequest::Run() {
   request_msg_params = msg_params;
   request_msg_params[strings::app_id] = app->hmi_app_id();
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_Navigation);
-  SendHMIRequest(hmi_apis::FunctionID::Navigation_SendLocation,
-                 &request_msg_params, true);
+  SendHMIRequest(
+      hmi_apis::FunctionID::Navigation_SendLocation, &request_msg_params, true);
 }
 
 void SendLocationRequest::on_event(const event_engine::Event& event) {
@@ -147,7 +152,8 @@ void SendLocationRequest::on_event(const event_engine::Event& event) {
     GetInfo(message, response_info);
     const bool result = PrepareResultForMobileResponse(
         result_code, HmiInterfaces::HMI_INTERFACE_Navigation);
-    SendResponse(result, MessageHelper::HMIToMobileResult(result_code),
+    SendResponse(result,
+                 MessageHelper::HMIToMobileResult(result_code),
                  response_info.empty() ? NULL : response_info.c_str(),
                  &(message[strings::params]));
     return;
@@ -179,7 +185,8 @@ bool SendLocationRequest::CheckFieldsCompatibility() {
   return true;
 }
 void insert_if_contains(
-    const smart_objects::SmartObject& msg_params, const std::string& param_key,
+    const smart_objects::SmartObject& msg_params,
+    const std::string& param_key,
     std::vector<utils::custom_string::CustomString>& output_vector) {
   if (msg_params.keyExists(param_key)) {
     output_vector.push_back(msg_params[param_key].asCustomString());
@@ -192,8 +199,8 @@ bool SendLocationRequest::IsWhiteSpaceExist() {
   const smart_objects::SmartObject& msg_params =
       (*message_)[strings::msg_params];
   insert_if_contains(msg_params, strings::location_name, fields_to_check);
-  insert_if_contains(msg_params, strings::location_description,
-                     fields_to_check);
+  insert_if_contains(
+      msg_params, strings::location_description, fields_to_check);
   insert_if_contains(msg_params, strings::phone_number, fields_to_check);
 
   if (msg_params.keyExists(strings::address_lines)) {
@@ -212,8 +219,8 @@ bool SendLocationRequest::IsWhiteSpaceExist() {
     insert_if_contains(address_so, strings::country_name, fields_to_check);
     insert_if_contains(address_so, strings::country_code, fields_to_check);
     insert_if_contains(address_so, strings::postal_code, fields_to_check);
-    insert_if_contains(address_so, strings::administrative_area,
-                       fields_to_check);
+    insert_if_contains(
+        address_so, strings::administrative_area, fields_to_check);
     insert_if_contains(address_so, strings::locality, fields_to_check);
     insert_if_contains(address_so, strings::sub_locality, fields_to_check);
     insert_if_contains(address_so, strings::thoroughfare, fields_to_check);
@@ -225,8 +232,8 @@ bool SendLocationRequest::IsWhiteSpaceExist() {
   for (; it != fields_to_check.end(); ++it) {
     const std::string& str = it->AsMBString();
     if (!CheckSyntax(str, false)) {
-      LOG4CXX_ERROR(logger_, "string '" << str
-                                        << "'' contains invalid characters");
+      LOG4CXX_ERROR(logger_,
+                    "string '" << str << "'' contains invalid characters");
       return true;
     }
   }

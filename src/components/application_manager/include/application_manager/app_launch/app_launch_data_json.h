@@ -119,7 +119,9 @@ class AppLaunchDataJson : public AppLaunchDataImpl {
   /**
    * @return pointer to LastState functionality
    */
-  resumption::LastState& last_state() const { return last_state_; }
+  resumption::LastState& last_state() const {
+    return last_state_;
+  }
 
   /**
    * @brief delete record with oldest timestamp

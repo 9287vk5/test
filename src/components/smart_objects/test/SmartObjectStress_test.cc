@@ -101,7 +101,8 @@ class StressTestHelper : public ::testing::Test {
     return std::string(buff);
   }
 
-  void makeRandomObject(SmartObject& obj, const int size,
+  void makeRandomObject(SmartObject& obj,
+                        const int size,
                         std::string key_path) {
     int type_id = rand() % 8;
 
@@ -147,7 +148,8 @@ class StressTestHelper : public ::testing::Test {
         break;
       }
       case 5:  // map
-        if (size <= 0) break;
+        if (size <= 0)
+          break;
 
         // std::cout << "Creating a map with size: " << size << std::endl;
         mVerifyMap[key_path] = "map";
@@ -157,19 +159,22 @@ class StressTestHelper : public ::testing::Test {
           obj[key] = key;
 #else
           obj[key] = SmartObject();
-          makeRandomObject(obj[key], size - 1,
+          makeRandomObject(obj[key],
+                           size - 1,
                            key_path + key + ' ');  // recursion
 #endif  // MAP_WORKAROUND
         }
         break;
       case 6:  // array
-        if (size <= 0) break;
+        if (size <= 0)
+          break;
 
         // std::cout << "Creating an array with size: " << size << std::endl;
         mVerifyMap[key_path] = "array";
         for (int i = 0; i < size; i++) {
           obj[i] = SmartObject();  // just init it as an array
-          makeRandomObject(obj[i], size - 1,
+          makeRandomObject(obj[i],
+                           size - 1,
                            key_path + generate_key("A", i) + ' ');  // recursion
         }
         break;
@@ -246,7 +251,8 @@ TEST_F(StressTestHelper, StressTest) {
   }
 
   for (VerificationMap::const_iterator it = mVerifyMap.begin();
-       it != mVerifyMap.end(); it++) {
+       it != mVerifyMap.end();
+       it++) {
     std::string value(it->second);
     SmartObject obj = get_object(objects, it->first);
 

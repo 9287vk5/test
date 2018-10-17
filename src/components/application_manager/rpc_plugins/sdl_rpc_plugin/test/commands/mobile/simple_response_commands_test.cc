@@ -92,24 +92,35 @@ class MobileResponseCommandsTest
   typedef Command CommandType;
 };
 
-typedef Types<
-    commands::ListFilesResponse, commands::DeleteCommandResponse,
-    commands::AlertManeuverResponse, commands::AlertResponse,
-    commands::SubscribeButtonResponse, commands::AddSubMenuResponse,
-    commands::DialNumberResponse, commands::EndAudioPassThruResponse,
-    commands::UnregisterAppInterfaceResponse,
-    commands::UnsubscribeWayPointsResponse, commands::UpdateTurnListResponse,
-    commands::UnsubscribeButtonResponse, commands::SliderResponse,
-    commands::SpeakResponse, commands::SubscribeWayPointsResponse,
-    commands::SystemResponse, commands::GetWayPointsResponse,
-    commands::PerformInteractionResponse,
-    commands::PerformAudioPassThruResponse,
-    commands::SetGlobalPropertiesResponse, commands::SetMediaClockTimerResponse,
-    commands::ShowConstantTBTResponse, commands::ShowResponse,
-    commands::SystemResponse, commands::AddCommandResponse,
-    commands::SendLocationResponse, commands::SetAppIconResponse,
-    commands::SetDisplayLayoutResponse,
-    commands::ChangeRegistrationResponse> ResponseCommandsList;
+typedef Types<commands::ListFilesResponse,
+              commands::DeleteCommandResponse,
+              commands::AlertManeuverResponse,
+              commands::AlertResponse,
+              commands::SubscribeButtonResponse,
+              commands::AddSubMenuResponse,
+              commands::DialNumberResponse,
+              commands::EndAudioPassThruResponse,
+              commands::UnregisterAppInterfaceResponse,
+              commands::UnsubscribeWayPointsResponse,
+              commands::UpdateTurnListResponse,
+              commands::UnsubscribeButtonResponse,
+              commands::SliderResponse,
+              commands::SpeakResponse,
+              commands::SubscribeWayPointsResponse,
+              commands::SystemResponse,
+              commands::GetWayPointsResponse,
+              commands::PerformInteractionResponse,
+              commands::PerformAudioPassThruResponse,
+              commands::SetGlobalPropertiesResponse,
+              commands::SetMediaClockTimerResponse,
+              commands::ShowConstantTBTResponse,
+              commands::ShowResponse,
+              commands::SystemResponse,
+              commands::AddCommandResponse,
+              commands::SendLocationResponse,
+              commands::SetAppIconResponse,
+              commands::SetDisplayLayoutResponse,
+              commands::ChangeRegistrationResponse> ResponseCommandsList;
 
 TYPED_TEST_CASE(MobileResponseCommandsTest, ResponseCommandsList);
 
@@ -136,8 +147,8 @@ MATCHER_P2(CheckMessageParams, success, result, "") {
           (*arg)[am::strings::msg_params][am::strings::result_code].asInt());
 
   using namespace helpers;
-  return Compare<bool, EQ, ALL>(true, is_msg_type_correct, is_success_correct,
-                                is_result_code_correct);
+  return Compare<bool, EQ, ALL>(
+      true, is_msg_type_correct, is_success_correct, is_result_code_correct);
 }
 
 TEST_F(GenericResponseFromHMICommandsTest, Run_SUCCESS) {

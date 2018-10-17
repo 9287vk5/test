@@ -56,7 +56,9 @@
 policy::PolicyManager* CreateManager() {
   return new policy::PolicyManagerImpl();
 }
-void DeleteManager(policy::PolicyManager* pm) { delete pm; }
+void DeleteManager(policy::PolicyManager* pm) {
+  delete pm;
+}
 
 namespace {
 const uint32_t kDefaultRetryTimeoutInMSec =
@@ -68,21 +70,21 @@ namespace policy {
 CREATE_LOGGERPTR_GLOBAL(logger_, "Policy")
 
 PolicyManagerImpl::PolicyManagerImpl()
-    : PolicyManager(),
-      listener_(NULL),
-      cache_(new CacheManager),
-      access_remote_(
-          new AccessRemoteImpl(std::static_pointer_cast<CacheManager>(cache_))),
-      retry_sequence_timeout_(kDefaultRetryTimeoutInMSec),
-      retry_sequence_index_(0),
-      timer_retry_sequence_("Retry sequence timer",
+    : PolicyManager()
+    , listener_(NULL)
+    , cache_(new CacheManager)
+    , access_remote_(
+          new AccessRemoteImpl(std::static_pointer_cast<CacheManager>(cache_)))
+    , retry_sequence_timeout_(kDefaultRetryTimeoutInMSec)
+    , retry_sequence_index_(0)
+    , timer_retry_sequence_("Retry sequence timer",
                             new timer::TimerTaskImpl<PolicyManagerImpl>(
-                                this, &PolicyManagerImpl::RetrySequence)),
-      ignition_check(true),
-      retry_sequence_url_(0, 0, ""),
-      wrong_ptu_update_received_(false),
-      send_on_update_sent_out_(false),
-      trigger_ptu_(false) {}
+                                this, &PolicyManagerImpl::RetrySequence))
+    , ignition_check(true)
+    , retry_sequence_url_(0, 0, "")
+    , wrong_ptu_update_received_(false)
+    , send_on_update_sent_out_(false)
+    , trigger_ptu_(false) {}
 
 void PolicyManagerImpl::set_listener(PolicyListener* listener) {
   listener_ = listener;
@@ -130,10 +132,11 @@ void PolicyManagerImpl::CheckTriggers() {
   const bool exceed_ignition_cycles = ExceededIgnitionCycles();
   const bool exceed_days = ExceededDays();
 
-  LOG4CXX_DEBUG(logger_, "\nDays exceeded: " << std::boolalpha << exceed_days
-                                             << "\nIgnition cycles exceeded: "
-                                             << std::boolalpha
-                                             << exceed_ignition_cycles);
+  LOG4CXX_DEBUG(
+      logger_,
+      "\nDays exceeded: " << std::boolalpha << exceed_days
+                          << "\nIgnition cycles exceeded: " << std::boolalpha
+                          << exceed_ignition_cycles);
 
   if (exceed_ignition_cycles || exceed_days) {
     update_status_manager_.ScheduleUpdate();
@@ -143,8 +146,9 @@ void PolicyManagerImpl::CheckTriggers() {
 bool PolicyManagerImpl::LoadPT(const std::string& file,
                                const BinaryMessage& pt_content) {
   LOG4CXX_INFO(logger_, "LoadPT of size " << pt_content.size());
-  LOG4CXX_DEBUG(logger_, "PTU content is: " << std::string(pt_content.begin(),
-                                                           pt_content.end()));
+  LOG4CXX_DEBUG(
+      logger_,
+      "PTU content is: " << std::string(pt_content.begin(), pt_content.end()));
 
 #ifdef USE_HMI_PTU_DECRYPTION
   // Assuemes Policy Table was parsed, formatted, and/or decrypted by
@@ -309,7 +313,8 @@ void PolicyManagerImpl::StartPTExchange() {
   }
 
   if (update_status_manager_.IsUpdatePending() && update_required) {
-    if (trigger_ptu_) update_status_manager_.ScheduleUpdate();
+    if (trigger_ptu_)
+      update_status_manager_.ScheduleUpdate();
     LOG4CXX_INFO(logger_,
                  "Starting exchange skipped, since another exchange "
                  "is in progress.");
@@ -408,17 +413,17 @@ void PolicyManagerImpl::CheckPermissions(const PTString& device_id,
     return;
   }
 
-  LOG4CXX_INFO(logger_, "CheckPermissions for " << app_id << " and rpc " << rpc
-                                                << " for " << hmi_level
-                                                << " level.");
+  LOG4CXX_INFO(logger_,
+               "CheckPermissions for " << app_id << " and rpc " << rpc
+                                       << " for " << hmi_level << " level.");
 
   ApplicationOnDevice who = {device_id, app_id};
   policy_table::Strings groups;
   if (access_remote_->IsAppRemoteControl(who)) {
     groups = access_remote_->GetGroups(who);
-    LOG4CXX_INFO(logger_, "CheckPermissions for " << app_id << " and rpc "
-                                                  << rpc << " for " << hmi_level
-                                                  << " level.");
+    LOG4CXX_INFO(logger_,
+                 "CheckPermissions for " << app_id << " and rpc " << rpc
+                                         << " for " << hmi_level << " level.");
   } else {
     groups = cache_->GetGroups(app_id);
   }
@@ -466,8 +471,10 @@ void PolicyManagerImpl::SendNotificationOnPermissionsUpdated(
   }
 
   Permissions notification_data;
-  PrepareNotificationData(functional_groupings, app_groups,
-                          app_group_permissions, notification_data);
+  PrepareNotificationData(functional_groupings,
+                          app_groups,
+                          app_group_permissions,
+                          notification_data);
 
   LOG4CXX_INFO(logger_,
                "Send notification for application_id:" << application_id);
@@ -481,8 +488,8 @@ void PolicyManagerImpl::SendNotificationOnPermissionsUpdated(
     return;
   }
 
-  listener()->OnPermissionsUpdated(application_id, notification_data,
-                                   default_hmi);
+  listener()->OnPermissionsUpdated(
+      application_id, notification_data, default_hmi);
 }
 
 bool PolicyManagerImpl::CleanupUnpairedDevices() {
@@ -585,13 +592,15 @@ void PolicyManagerImpl::CheckPendingPermissionsChanges(
   std::map<std::string, AppPermissions>::iterator it_pending =
       app_permissions_diff_.find(policy_app_id);
   if (app_permissions_diff_.end() == it_pending) {
-    LOG4CXX_WARN(logger_, "No pending permissions had been found for appID: "
-                              << policy_app_id);
+    LOG4CXX_WARN(
+        logger_,
+        "No pending permissions had been found for appID: " << policy_app_id);
     return;
   }
 
-  LOG4CXX_DEBUG(logger_, "Pending permissions had been found for appID: "
-                             << policy_app_id);
+  LOG4CXX_DEBUG(
+      logger_,
+      "Pending permissions had been found for appID: " << policy_app_id);
 
   // Change appPermissionsConsentNeeded depending on unconsented groups
   // presence
@@ -602,15 +611,17 @@ void PolicyManagerImpl::CheckPendingPermissionsChanges(
 
   for (; it_groups != it_end_groups; ++it_groups) {
     if (policy::kGroupUndefined == it_groups->state) {
-      LOG4CXX_DEBUG(logger_, "Unconsented groups still present for appID: "
-                                 << policy_app_id);
+      LOG4CXX_DEBUG(
+          logger_,
+          "Unconsented groups still present for appID: " << policy_app_id);
       it_pending->second.appPermissionsConsentNeeded = true;
       return;
     }
   }
 
-  LOG4CXX_DEBUG(logger_, "Unconsented groups not present anymore for appID: "
-                             << policy_app_id);
+  LOG4CXX_DEBUG(
+      logger_,
+      "Unconsented groups not present anymore for appID: " << policy_app_id);
   it_pending->second.appPermissionsConsentNeeded = false;
   return;
 }
@@ -648,14 +659,15 @@ std::vector<UserFriendlyMessage> PolicyManagerImpl::GetUserFriendlyMessages(
 }
 
 void PolicyManagerImpl::GetUserConsentForApp(
-    const std::string& device_id, const std::string& policy_app_id,
+    const std::string& device_id,
+    const std::string& policy_app_id,
     std::vector<FunctionalGroupPermission>& permissions) {
   LOG4CXX_AUTO_TRACE(logger_);
 
   FunctionalIdType group_types;
   if (!cache_->GetPermissionsForApp(device_id, policy_app_id, group_types)) {
-    LOG4CXX_WARN(logger_, "Can't get user permissions for app "
-                              << policy_app_id);
+    LOG4CXX_WARN(logger_,
+                 "Can't get user permissions for app " << policy_app_id);
     return;
   }
 
@@ -690,12 +702,13 @@ void PolicyManagerImpl::GetUserConsentForApp(
   } else if (cache_->IsPredataPolicy(policy_app_id)) {
     allowed_groups = ExcludeSame(no_auto, predataconsented_groups);
   }
-  FillFunctionalGroupPermissions(allowed_groups, group_names, kGroupAllowed,
-                                 permissions);
+  FillFunctionalGroupPermissions(
+      allowed_groups, group_names, kGroupAllowed, permissions);
 }
 
 void PolicyManagerImpl::GetPermissionsForApp(
-    const std::string& device_id, const std::string& policy_app_id,
+    const std::string& device_id,
+    const std::string& policy_app_id,
     std::vector<FunctionalGroupPermission>& permissions) {
   LOG4CXX_AUTO_TRACE(logger_);
   std::string app_id_to_check = policy_app_id;
@@ -715,15 +728,15 @@ void PolicyManagerImpl::GetPermissionsForApp(
   bool ret = false;
   if (access_remote_->IsAppRemoteControl(who)) {
     allowed_by_default = false;
-    ret = access_remote_->GetPermissionsForApp(device_id, policy_app_id,
-                                               group_types);
+    ret = access_remote_->GetPermissionsForApp(
+        device_id, policy_app_id, group_types);
   } else {
     ret = cache_->GetPermissionsForApp(device_id, app_id_to_check, group_types);
   }
 
   if (!ret) {
-    LOG4CXX_WARN(logger_, "Can't get user permissions for app "
-                              << policy_app_id);
+    LOG4CXX_WARN(logger_,
+                 "Can't get user permissions for app " << policy_app_id);
     return;
   }
 
@@ -742,8 +755,8 @@ void PolicyManagerImpl::GetPermissionsForApp(
     GroupType type =
         (kDefaultId == app_id_to_check ? kTypeDefault : kTypePreDataConsented);
 
-    FillFunctionalGroupPermissions(group_types[type], group_names,
-                                   kGroupAllowed, permissions);
+    FillFunctionalGroupPermissions(
+        group_types[type], group_names, kGroupAllowed, permissions);
   } else {
     // The code bellow allows to process application which
     // has specific permissions(not default and pre_DataConsent).
@@ -753,8 +766,8 @@ void PolicyManagerImpl::GetPermissionsForApp(
 
     // In case of GENIVI all groups are allowed
     FunctionalGroupIDs common_allowed = all_groups;
-    FillFunctionalGroupPermissions(common_allowed, group_names, kGroupAllowed,
-                                   permissions);
+    FillFunctionalGroupPermissions(
+        common_allowed, group_names, kGroupAllowed, permissions);
   }
   return;
 }
@@ -1107,8 +1120,8 @@ bool PolicyManagerImpl::CheckAppStorageFolder() const {
   const std::string app_storage_folder = get_settings().app_storage_folder();
   LOG4CXX_DEBUG(logger_, "AppStorageFolder " << app_storage_folder);
   if (!file_system::DirectoryExists(app_storage_folder)) {
-    LOG4CXX_WARN(logger_, "Storage directory doesn't exist "
-                              << app_storage_folder);
+    LOG4CXX_WARN(logger_,
+                 "Storage directory doesn't exist " << app_storage_folder);
     return false;
   }
   if (!(file_system::IsWritingAllowed(app_storage_folder) &&
@@ -1194,8 +1207,10 @@ bool PolicyManagerImpl::GetHMITypes(const std::string& application_id,
   const policy_table::AppHMITypes* hmi_types =
       cache_->GetHMITypes(application_id);
   if (hmi_types) {
-    std::transform(hmi_types->begin(), hmi_types->end(),
-                   std::back_inserter(*app_types), HMITypeToInt());
+    std::transform(hmi_types->begin(),
+                   hmi_types->end(),
+                   std::back_inserter(*app_types),
+                   HMITypeToInt());
   }
   return hmi_types;
 }
@@ -1213,8 +1228,9 @@ void PolicyManagerImpl::SendHMILevelChanged(const ApplicationOnDevice& who) {
   if (GetDefaultHmi(who.app_id, &default_hmi)) {
     listener()->OnUpdateHMIStatus(who.dev_id, who.app_id, default_hmi);
   } else {
-    LOG4CXX_WARN(logger_, "Couldn't get default HMI level for application "
-                              << who.app_id);
+    LOG4CXX_WARN(logger_,
+                 "Couldn't get default HMI level for application "
+                     << who.app_id);
   }
 }
 
@@ -1238,8 +1254,8 @@ void PolicyManagerImpl::GetPermissions(const std::string device_id,
     app_groups.push_back((*it).group_name);
   }
 
-  PrepareNotificationData(functional_groupings, app_groups,
-                          app_group_permissions, *data);
+  PrepareNotificationData(
+      functional_groupings, app_groups, app_group_permissions, *data);
 }
 
 void PolicyManagerImpl::SendAppPermissionsChanged(
@@ -1254,7 +1270,8 @@ void PolicyManagerImpl::OnPrimaryGroupsChanged(
   const std::vector<std::string> devices =
       listener()->GetDevicesIds(application_id);
   for (std::vector<std::string>::const_iterator i = devices.begin();
-       i != devices.end(); ++i) {
+       i != devices.end();
+       ++i) {
     const ApplicationOnDevice who = {*i, application_id};
     if (access_remote_->IsAppRemoteControl(who)) {
       SendAppPermissionsChanged(who.dev_id, who.app_id);

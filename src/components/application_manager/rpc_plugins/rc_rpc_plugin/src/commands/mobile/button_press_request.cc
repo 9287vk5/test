@@ -130,14 +130,15 @@ bool CheckIfButtonExistInRCCaps(
       const mobile_apis::ButtonName::eType current_button =
           static_cast<mobile_apis::ButtonName::eType>(current_id);
       if (current_button == button) {
-        LOG4CXX_TRACE(logger_, "Button id " << current_button
-                                            << " exist in capabilities");
+        LOG4CXX_TRACE(logger_,
+                      "Button id " << current_button
+                                   << " exist in capabilities");
         return true;
       }
     }
   }
-  LOG4CXX_TRACE(logger_, "Button id " << button
-                                      << " do not exist in capabilities");
+  LOG4CXX_TRACE(logger_,
+                "Button id " << button << " do not exist in capabilities");
   return false;
 }
 
@@ -203,16 +204,19 @@ void ButtonPressRequest::Execute() {
 
   if (button_name_matches_module_type && button_id_exist_in_caps) {
     SendHMIRequest(hmi_apis::FunctionID::Buttons_ButtonPress,
-                   &(*message_)[app_mngr::strings::msg_params], true);
+                   &(*message_)[app_mngr::strings::msg_params],
+                   true);
   } else if (!button_name_matches_module_type) {
     LOG4CXX_WARN(logger_, "Request module type and button name mismatch!");
     SetResourceState(module_type, ResourceState::FREE);
-    SendResponse(false, mobile_apis::Result::INVALID_DATA,
+    SendResponse(false,
+                 mobile_apis::Result::INVALID_DATA,
                  "Request module type and button name mismatch!");
   } else {
     LOG4CXX_WARN(logger_, "Requested button is not exists in capabilities!");
     SetResourceState(module_type, ResourceState::FREE);
-    SendResponse(false, mobile_apis::Result::UNSUPPORTED_RESOURCE,
+    SendResponse(false,
+                 mobile_apis::Result::UNSUPPORTED_RESOURCE,
                  "Requested button is not exists in capabilities!");
   }
 }
@@ -237,8 +241,8 @@ void ButtonPressRequest::SetResourceState(const std::string& module_type,
   LOG4CXX_AUTO_TRACE(logger_);
   app_mngr::ApplicationSharedPtr app =
       application_manager_.application(CommandRequestImpl::connection_key());
-  resource_allocation_manager_.SetResourceState(module_type, app->app_id(),
-                                                state);
+  resource_allocation_manager_.SetResourceState(
+      module_type, app->app_id(), state);
 }
 
 void ButtonPressRequest::on_event(const app_mngr::event_engine::Event& event) {
@@ -257,7 +261,8 @@ void ButtonPressRequest::on_event(const app_mngr::event_engine::Event& event) {
 
   bool result =
       helpers::Compare<mobile_apis::Result::eType, helpers::EQ, helpers::ONE>(
-          result_code, mobile_apis::Result::SUCCESS,
+          result_code,
+          mobile_apis::Result::SUCCESS,
           mobile_apis::Result::WARNINGS);
 
   if (mobile_apis::Result::READ_ONLY == result_code) {

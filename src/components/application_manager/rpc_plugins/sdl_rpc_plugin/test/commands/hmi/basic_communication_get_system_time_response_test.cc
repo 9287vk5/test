@@ -48,7 +48,9 @@ using sdl_rpc_plugin::commands::BasicCommunicationGetSystemTimeResponse;
 using test::components::event_engine_test::MockEventDispatcher;
 using testing::ReturnRef;
 
-ACTION_P(GetEventId, event_id) { *event_id = arg0.id(); }
+ACTION_P(GetEventId, event_id) {
+  *event_id = arg0.id();
+}
 
 class BasicCommunicationGetSystemTimeResponseTest
     : public CommandsTest<CommandsTestMocks::kIsNice> {};

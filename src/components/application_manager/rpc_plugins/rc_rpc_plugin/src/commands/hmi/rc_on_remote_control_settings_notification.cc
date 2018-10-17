@@ -53,10 +53,13 @@ RCOnRemoteControlSettingsNotification::RCOnRemoteControlSettingsNotification(
     const app_mngr::commands::MessageSharedPtr& message,
     const RCCommandParams& params)
     : application_manager::commands::NotificationFromHMI(
-          message, params.application_manager_, params.rpc_service_,
-          params.hmi_capabilities_, params.policy_handler_),
-      resource_allocation_manager_(params.resource_allocation_manager_),
-      interior_data_manager_(params.interior_data_manager_) {}
+          message,
+          params.application_manager_,
+          params.rpc_service_,
+          params.hmi_capabilities_,
+          params.policy_handler_)
+    , resource_allocation_manager_(params.resource_allocation_manager_)
+    , interior_data_manager_(params.interior_data_manager_) {}
 
 RCOnRemoteControlSettingsNotification::
     ~RCOnRemoteControlSettingsNotification() {}
@@ -113,12 +116,14 @@ void RCOnRemoteControlSettingsNotification::Run() {
       access_mode = static_cast<hmi_apis::Common_RCAccessMode::eType>(
           (*message_)[app_mngr::strings::msg_params]
                      [message_params::kAccessMode].asUInt());
-      LOG4CXX_DEBUG(logger_, "Setting up access mode : "
-                                 << AccessModeToString(access_mode));
+      LOG4CXX_DEBUG(
+          logger_,
+          "Setting up access mode : " << AccessModeToString(access_mode));
     } else {
       access_mode = resource_allocation_manager_.GetAccessMode();
-      LOG4CXX_DEBUG(logger_, "No access mode received. Using last known: "
-                                 << AccessModeToString(access_mode));
+      LOG4CXX_DEBUG(logger_,
+                    "No access mode received. Using last known: "
+                        << AccessModeToString(access_mode));
     }
     resource_allocation_manager_.SetAccessMode(access_mode);
   } else {

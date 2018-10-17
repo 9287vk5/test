@@ -39,11 +39,11 @@ namespace policy {
 CREATE_LOGGERPTR_GLOBAL(logger_, "Policy")
 
 UpdateStatusManager::UpdateStatusManager()
-    : listener_(NULL),
-      current_status_(std::make_shared<UpToDateStatus>()),
-      last_processed_event_(kNoEvent),
-      apps_search_in_progress_(false),
-      app_registered_from_non_consented_device_(true) {}
+    : listener_(NULL)
+    , current_status_(std::make_shared<UpToDateStatus>())
+    , last_processed_event_(kNoEvent)
+    , apps_search_in_progress_(false)
+    , app_registered_from_non_consented_device_(true) {}
 
 UpdateStatusManager::~UpdateStatusManager() {}
 
@@ -133,7 +133,9 @@ bool UpdateStatusManager::IsUpdatePending() const {
   return current_status_->IsUpdatePending();
 }
 
-void UpdateStatusManager::ScheduleUpdate() { ProcessEvent(kScheduleUpdate); }
+void UpdateStatusManager::ScheduleUpdate() {
+  ProcessEvent(kScheduleUpdate);
+}
 
 void UpdateStatusManager::ScheduleManualUpdate() {
   ProcessEvent(kScheduleManualUpdate);

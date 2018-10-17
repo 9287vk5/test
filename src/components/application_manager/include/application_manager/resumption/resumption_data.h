@@ -140,7 +140,8 @@ class ResumptionData {
    * returns FALSE
    */
   virtual bool GetSavedApplication(
-      const std::string& policy_app_id, const std::string& device_id,
+      const std::string& policy_app_id,
+      const std::string& device_id,
       smart_objects::SmartObject& saved_app) const = 0;
 
   /**
@@ -270,7 +271,9 @@ class ResumptionData {
    * @param result - will contain created array
    */
   template <typename Iterator>
-  void Append(Iterator first, Iterator last, const std::string& key,
+  void Append(Iterator first,
+              Iterator last,
+              const std::string& key,
               smart_objects::SmartObject& result) const {
     int i = 0;
     result[key] = smart_objects::SmartObject(smart_objects::SmartType_Array);

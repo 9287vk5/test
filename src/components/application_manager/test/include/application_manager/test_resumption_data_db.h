@@ -46,7 +46,9 @@ namespace resumption_test {
 
 class TestResumptionDataDB : public ResumptionDataDB {
  public:
-  utils::dbms::SQLDatabase* get_db_handle() { return db(); }
+  utils::dbms::SQLDatabase* get_db_handle() {
+    return db();
+  }
 
   application_manager_test::MockApplicationManager mock_application_manager_;
   TestResumptionDataDB(DbStorage db_storage)

@@ -58,7 +58,9 @@ struct MessageFromHmi : public MessageSharedPointer {
   explicit MessageFromHmi(const MessageSharedPointer& message)
       : MessageSharedPointer(message) {}
   // PrioritizedQueue requres this method to decide which priority to assign
-  size_t PriorityOrder() const { return (*this)->Priority().OrderingValue(); }
+  size_t PriorityOrder() const {
+    return (*this)->Priority().OrderingValue();
+  }
 };
 
 struct MessageToHmi : public MessageSharedPointer {
@@ -66,7 +68,9 @@ struct MessageToHmi : public MessageSharedPointer {
   explicit MessageToHmi(const MessageSharedPointer& message)
       : MessageSharedPointer(message) {}
   // PrioritizedQueue requres this method to decide which priority to assign
-  size_t PriorityOrder() const { return (*this)->Priority().OrderingValue(); }
+  size_t PriorityOrder() const {
+    return (*this)->Priority().OrderingValue();
+  }
 };
 
 typedef threads::MessageLoopThread<utils::PrioritizedQueue<MessageFromHmi> >
@@ -99,11 +103,17 @@ class HMIMessageHandlerImpl : public HMIMessageHandler,
     return message_adapters_;
   }
 
-  HMIMessageObserver* observer() const { return observer_; }
+  HMIMessageObserver* observer() const {
+    return observer_;
+  }
 
-  impl::ToHmiQueue* messages_to_hmi() { return &messages_to_hmi_; }
+  impl::ToHmiQueue* messages_to_hmi() {
+    return &messages_to_hmi_;
+  }
 
-  impl::FromHmiQueue* messages_from_hmi() { return &messages_from_hmi_; }
+  impl::FromHmiQueue* messages_from_hmi() {
+    return &messages_from_hmi_;
+  }
 #endif  // BUILD_TESTS
 
  private:

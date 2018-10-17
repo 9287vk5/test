@@ -107,16 +107,18 @@ class DefaultCommandCreator : public CommandCreator {
                         rpc_service::RPCService& rpc_service,
                         HMICapabilities& hmi_capabilities,
                         PolicyHandlerInterface& policy_handler)
-      : application_manager_(application_manager),
-        rpc_service_(rpc_service),
-        hmi_capabilities_(hmi_capabilities),
-        policy_handler_(policy_handler) {}
+      : application_manager_(application_manager)
+      , rpc_service_(rpc_service)
+      , hmi_capabilities_(hmi_capabilities)
+      , policy_handler_(policy_handler) {}
 
  private:
   /**
    * @return return true
    **/
-  bool CanBeCreated() const override { return true; }
+  bool CanBeCreated() const override {
+    return true;
+  }
 
   /**
    * @brief Create command object and return pointer to it
@@ -125,8 +127,10 @@ class DefaultCommandCreator : public CommandCreator {
    **/
   CommandSharedPtr create(
       const commands::MessageSharedPtr& message) const override {
-    CommandSharedPtr command(new CommandType(message, application_manager_,
-                                             rpc_service_, hmi_capabilities_,
+    CommandSharedPtr command(new CommandType(message,
+                                             application_manager_,
+                                             rpc_service_,
+                                             hmi_capabilities_,
                                              policy_handler_));
     return command;
   }
@@ -166,7 +170,9 @@ class DefaultCommandCreator<InvalidCommand> : public CommandCreator {
   /**
    * @return return false
    **/
-  bool CanBeCreated() const override { return false; }
+  bool CanBeCreated() const override {
+    return false;
+  }
   /**
    * @brief Create command object and return pointer to it
    * @param  message SmartObject shared pointer.
@@ -184,10 +190,10 @@ struct CommandCreatorFactory {
                         rpc_service::RPCService& rpc_service,
                         HMICapabilities& hmi_capabilities,
                         PolicyHandlerInterface& policy_handler)
-      : application_manager_(application_manager),
-        rpc_service_(rpc_service),
-        hmi_capabilities_(hmi_capabilities),
-        policy_handler_(policy_handler) {}
+      : application_manager_(application_manager)
+      , rpc_service_(rpc_service)
+      , hmi_capabilities_(hmi_capabilities)
+      , policy_handler_(policy_handler) {}
 
   template <typename CommandType>
   CommandCreator& GetCreator() {

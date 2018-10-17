@@ -40,14 +40,13 @@ namespace application_manager {
 CREATE_LOGGERPTR_GLOBAL(logger_, "ApplicationManager")
 
 InitialApplicationDataImpl::InitialApplicationDataImpl()
-    : app_types_(NULL),
-      vr_synonyms_(NULL),
-      tts_name_(NULL),
-      ngn_media_screen_name_(NULL)
+    : app_types_(NULL)
+    , vr_synonyms_(NULL)
+    , tts_name_(NULL)
+    , ngn_media_screen_name_(NULL)
 
-      ,
-      language_(mobile_api::Language::INVALID_ENUM),
-      ui_language_(mobile_api::Language::INVALID_ENUM) {}
+    , language_(mobile_api::Language::INVALID_ENUM)
+    , ui_language_(mobile_api::Language::INVALID_ENUM) {}
 
 InitialApplicationDataImpl::~InitialApplicationDataImpl() {
   if (app_types_) {
@@ -174,31 +173,31 @@ InitialApplicationDataImpl::perform_interaction_layout() const {
 }
 
 DynamicApplicationDataImpl::DynamicApplicationDataImpl()
-    : help_prompt_(NULL),
-      timeout_prompt_(NULL),
-      vr_help_title_(NULL),
-      vr_help_(NULL),
-      tbt_state_(mobile_api::TBTState::INVALID_ENUM),
-      show_command_(NULL),
-      keyboard_props_(NULL),
-      menu_title_(NULL),
-      menu_icon_(NULL),
-      tbt_show_command_(NULL),
-      day_color_scheme_(NULL),
-      night_color_scheme_(NULL),
-      display_layout_(""),
-      commands_(),
-      commands_lock_ptr_(std::make_shared<sync_primitives::RecursiveLock>()),
-      sub_menu_(),
-      sub_menu_lock_ptr_(std::make_shared<sync_primitives::Lock>()),
-      choice_set_map_(),
-      choice_set_map_lock_ptr_(std::make_shared<sync_primitives::Lock>()),
-      performinteraction_choice_set_map_(),
-      performinteraction_choice_set_lock_ptr_(
-          std::make_shared<sync_primitives::RecursiveLock>()),
-      is_perform_interaction_active_(false),
-      is_reset_global_properties_active_(false),
-      perform_interaction_mode_(-1) {}
+    : help_prompt_(NULL)
+    , timeout_prompt_(NULL)
+    , vr_help_title_(NULL)
+    , vr_help_(NULL)
+    , tbt_state_(mobile_api::TBTState::INVALID_ENUM)
+    , show_command_(NULL)
+    , keyboard_props_(NULL)
+    , menu_title_(NULL)
+    , menu_icon_(NULL)
+    , tbt_show_command_(NULL)
+    , day_color_scheme_(NULL)
+    , night_color_scheme_(NULL)
+    , display_layout_("")
+    , commands_()
+    , commands_lock_ptr_(std::make_shared<sync_primitives::RecursiveLock>())
+    , sub_menu_()
+    , sub_menu_lock_ptr_(std::make_shared<sync_primitives::Lock>())
+    , choice_set_map_()
+    , choice_set_map_lock_ptr_(std::make_shared<sync_primitives::Lock>())
+    , performinteraction_choice_set_map_()
+    , performinteraction_choice_set_lock_ptr_(
+          std::make_shared<sync_primitives::RecursiveLock>())
+    , is_perform_interaction_active_(false)
+    , is_reset_global_properties_active_(false)
+    , perform_interaction_mode_(-1) {}
 
 DynamicApplicationDataImpl::~DynamicApplicationDataImpl() {
   if (help_prompt_) {
@@ -242,13 +241,15 @@ DynamicApplicationDataImpl::~DynamicApplicationDataImpl() {
   }
 
   for (CommandsMap::iterator command_it = commands_.begin();
-       commands_.end() != command_it; ++command_it) {
+       commands_.end() != command_it;
+       ++command_it) {
     delete command_it->second;
   }
   commands_.clear();
 
   for (SubMenuMap::iterator sub_menu_it = sub_menu_.begin();
-       sub_menu_.end() != sub_menu_it; ++sub_menu_it) {
+       sub_menu_.end() != sub_menu_it;
+       ++sub_menu_it) {
     delete sub_menu_it->second;
   }
   sub_menu_.clear();
@@ -585,7 +586,8 @@ smart_objects::SmartObject* DynamicApplicationDataImpl::FindChoiceSet(
 }
 
 void DynamicApplicationDataImpl::AddPerformInteractionChoiceSet(
-    uint32_t correlation_id, uint32_t choice_set_id,
+    uint32_t correlation_id,
+    uint32_t choice_set_id,
     const smart_objects::SmartObject& vr_commands) {
   sync_primitives::AutoLock lock(performinteraction_choice_set_lock_ptr_);
   performinteraction_choice_set_map_[correlation_id].insert(std::make_pair(

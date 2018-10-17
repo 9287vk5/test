@@ -55,8 +55,9 @@ StreamerAdapter::~StreamerAdapter() {
 void StreamerAdapter::StartActivity(int32_t application_key) {
   LOG4CXX_AUTO_TRACE(logger);
   if (is_app_performing_activity(application_key)) {
-    LOG4CXX_WARN(logger, "Activity for application: "
-                             << application_key << " has been already started");
+    LOG4CXX_WARN(logger,
+                 "Activity for application: " << application_key
+                                              << " has been already started");
     return;
   }
   messages_.Reset();
@@ -66,7 +67,8 @@ void StreamerAdapter::StartActivity(int32_t application_key) {
   thread_->start(threads::ThreadOptions(kStackSize));
 
   for (std::set<MediaListenerPtr>::iterator it = media_listeners_.begin();
-       media_listeners_.end() != it; ++it) {
+       media_listeners_.end() != it;
+       ++it) {
     (*it)->OnActivityStarted(application_key);
   }
   current_application_ = application_key;
@@ -75,8 +77,9 @@ void StreamerAdapter::StartActivity(int32_t application_key) {
 void StreamerAdapter::StopActivity(int32_t application_key) {
   LOG4CXX_AUTO_TRACE(logger);
   if (!is_app_performing_activity(application_key)) {
-    LOG4CXX_WARN(logger, "Activity for application: "
-                             << application_key << " has not been started");
+    LOG4CXX_WARN(logger,
+                 "Activity for application: " << application_key
+                                              << " has not been started");
     return;
   }
 
@@ -84,7 +87,8 @@ void StreamerAdapter::StopActivity(int32_t application_key) {
   thread_->stop();
 
   for (std::set<MediaListenerPtr>::iterator it = media_listeners_.begin();
-       media_listeners_.end() != it; ++it) {
+       media_listeners_.end() != it;
+       ++it) {
     (*it)->OnActivityEnded(application_key);
   }
   current_application_ = 0;
@@ -94,8 +98,9 @@ void StreamerAdapter::SendData(int32_t application_key,
                                const ::protocol_handler::RawMessagePtr msg) {
   LOG4CXX_AUTO_TRACE(logger);
   if (!is_app_performing_activity(application_key)) {
-    LOG4CXX_ERROR(logger, "Activity for application: "
-                              << application_key << " has not been started");
+    LOG4CXX_ERROR(logger,
+                  "Activity for application: " << application_key
+                                               << " has not been started");
     return;
   }
   messages_.push(msg);
@@ -144,9 +149,10 @@ void StreamerAdapter::Streamer::threadMain() {
       static int32_t messages_for_session = 0;
       ++messages_for_session;
 
-      LOG4CXX_DEBUG(logger, "Handling map streaming message. This is "
-                                << messages_for_session << " message for "
-                                << adapter_->current_application_);
+      LOG4CXX_DEBUG(logger,
+                    "Handling map streaming message. This is "
+                        << messages_for_session << " message for "
+                        << adapter_->current_application_);
       std::set<MediaListenerPtr>::iterator it =
           adapter_->media_listeners_.begin();
       for (; adapter_->media_listeners_.end() != it; ++it) {

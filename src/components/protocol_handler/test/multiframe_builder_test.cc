@@ -82,7 +82,9 @@ template <typename IntegerType>
 struct Incrementor {
   IntegerType value;
   explicit Incrementor(const IntegerType value = 0u) : value(value) {}
-  IntegerType operator()() { return ++value; }
+  IntegerType operator()() {
+    return ++value;
+  }
 };
 
 class MultiFrameBuilderTest : public ::testing::Test {
@@ -117,11 +119,16 @@ class MultiFrameBuilderTest : public ::testing::Test {
           ASSERT_GT(multi_frames_count, 1);
           data_vector.resize(++multi_frames_count * mtu_);
 
-          std::generate(data_vector.begin(), data_vector.end(),
-                        Incrementor<uint8_t>(0u));
+          std::generate(
+              data_vector.begin(), data_vector.end(), Incrementor<uint8_t>(0u));
 
-          PrepareMultiFrames(connection_id, protocol_version, service_type,
-                             session_id, message_id, mtu_, data_vector,
+          PrepareMultiFrames(connection_id,
+                             protocol_version,
+                             service_type,
+                             session_id,
+                             message_id,
+                             mtu_,
+                             data_vector,
                              some_data.multiframes);
           messages_map.insert(std::make_pair(message_id, some_data));
         }
@@ -170,7 +177,8 @@ class MultiFrameBuilderTest : public ::testing::Test {
   // Support method for first and consecutive frame disassembling
   void PrepareMultiFrames(const ConnectionID connection_id,
                           const uint8_t protocol_version,
-                          const uint8_t service_type, const uint8_t session_id,
+                          const uint8_t service_type,
+                          const uint8_t session_id,
                           const uint32_t message_id,
                           const size_t max_payload_size,
                           const UCharDataVector& data,
@@ -200,10 +208,16 @@ class MultiFrameBuilderTest : public ::testing::Test {
     out_data[6] = frames_count >> 8;
     out_data[7] = frames_count;
 
-    ProtocolFramePtr first_frame(new ProtocolPacket(
-        connection_id, protocol_version, PROTECTION_OFF, FRAME_TYPE_FIRST,
-        service_type, FRAME_DATA_FIRST, session_id, FIRST_FRAME_DATA_SIZE,
-        message_id, out_data));
+    ProtocolFramePtr first_frame(new ProtocolPacket(connection_id,
+                                                    protocol_version,
+                                                    PROTECTION_OFF,
+                                                    FRAME_TYPE_FIRST,
+                                                    service_type,
+                                                    FRAME_DATA_FIRST,
+                                                    session_id,
+                                                    FIRST_FRAME_DATA_SIZE,
+                                                    message_id,
+                                                    out_data));
     // Note: PHIMpl already prepare First frames the total_data_bytes on
     // desirialization
     first_frame->set_total_data_bytes(data_size);
@@ -219,17 +233,25 @@ class MultiFrameBuilderTest : public ::testing::Test {
                                     ? FRAME_DATA_LAST_CONSECUTIVE
                                     : (i % FRAME_DATA_MAX_CONSECUTIVE + 1);
 
-      const ProtocolFramePtr consecutive_frame(new ProtocolPacket(
-          connection_id, protocol_version, PROTECTION_OFF,
-          FRAME_TYPE_CONSECUTIVE, service_type, data_type, session_id,
-          frame_size, message_id, &data[max_payload_size * i]));
+      const ProtocolFramePtr consecutive_frame(
+          new ProtocolPacket(connection_id,
+                             protocol_version,
+                             PROTECTION_OFF,
+                             FRAME_TYPE_CONSECUTIVE,
+                             service_type,
+                             data_type,
+                             session_id,
+                             frame_size,
+                             message_id,
+                             &data[max_payload_size * i]));
       out_frames.push_back(consecutive_frame);
     }
   }
 
   void AddConnections() {
     for (MultiFrameTestMap::iterator connection_it = test_data_map_.begin();
-         connection_it != test_data_map_.end(); ++connection_it) {
+         connection_it != test_data_map_.end();
+         ++connection_it) {
       const ConnectionID connection_id = connection_it->first;
       ASSERT_TRUE(multiframe_builder_.AddConnection(connection_id));
     }
@@ -260,7 +282,8 @@ TEST_F(MultiFrameBuilderTest, Add_NonSingleOrConsecutive_Frames) {
   UCharDataVector types;
   types.reserve(std::numeric_limits<uint8_t>::max());
   for (uint8_t type = std::numeric_limits<uint8_t>::min();
-       type < std::numeric_limits<uint8_t>::max(); ++type) {
+       type < std::numeric_limits<uint8_t>::max();
+       ++type) {
     if (type != FRAME_TYPE_FIRST && type != FRAME_TYPE_CONSECUTIVE) {
       types.push_back(type);
     }
@@ -269,8 +292,15 @@ TEST_F(MultiFrameBuilderTest, Add_NonSingleOrConsecutive_Frames) {
   for (UCharDataVector::iterator it = types.begin(); it != types.end(); ++it) {
     const uint8_t frame_type = *it;
     const ProtocolFramePtr unexpected_frame(
-        new ProtocolPacket(0u, PROTOCOL_VERSION_3, PROTECTION_OFF, frame_type,
-                           SERVICE_TYPE_RPC, FRAME_DATA_FIRST, 0u, 0u, 0u));
+        new ProtocolPacket(0u,
+                           PROTOCOL_VERSION_3,
+                           PROTECTION_OFF,
+                           frame_type,
+                           SERVICE_TYPE_RPC,
+                           FRAME_DATA_FIRST,
+                           0u,
+                           0u,
+                           0u));
     EXPECT_EQ(RESULT_FAIL, multiframe_builder_.AddFrame(unexpected_frame))
         << "Unexpected frame: " << unexpected_frame;
 
@@ -281,18 +311,21 @@ TEST_F(MultiFrameBuilderTest, Add_NonSingleOrConsecutive_Frames) {
 
 TEST_F(MultiFrameBuilderTest, Add_FirstFrames_NoConnections) {
   for (MultiFrameTestMap::iterator connection_it = test_data_map_.begin();
-       connection_it != test_data_map_.end(); ++connection_it) {
+       connection_it != test_data_map_.end();
+       ++connection_it) {
     SessionToMutiframeDataTestMap& session_map = connection_it->second;
     const ConnectionID connection_id = connection_it->first;
 
     for (SessionToMutiframeDataTestMap::iterator session_it =
              session_map.begin();
-         session_it != session_map.end(); ++session_it) {
+         session_it != session_map.end();
+         ++session_it) {
       MessageIDToMutiframeDataTestMap& messageId_map = session_it->second;
 
       for (MessageIDToMutiframeDataTestMap::iterator messageId_it =
                messageId_map.begin();
-           messageId_it != messageId_map.end(); ++messageId_it) {
+           messageId_it != messageId_map.end();
+           ++messageId_it) {
         const MutiframeData& multiframe_data = messageId_it->second;
 
         const ProtocolFramePtrList& multiframes = multiframe_data.multiframes;
@@ -313,17 +346,20 @@ TEST_F(MultiFrameBuilderTest, Add_FirstFrames_NoConnections) {
 TEST_F(MultiFrameBuilderTest, Add_FirstFrames_only) {
   AddConnections();
   for (MultiFrameTestMap::iterator connection_it = test_data_map_.begin();
-       connection_it != test_data_map_.end(); ++connection_it) {
+       connection_it != test_data_map_.end();
+       ++connection_it) {
     SessionToMutiframeDataTestMap& session_map = connection_it->second;
 
     for (SessionToMutiframeDataTestMap::iterator session_it =
              session_map.begin();
-         session_it != session_map.end(); ++session_it) {
+         session_it != session_map.end();
+         ++session_it) {
       MessageIDToMutiframeDataTestMap& messageId_map = session_it->second;
 
       for (MessageIDToMutiframeDataTestMap::iterator messageId_it =
                messageId_map.begin();
-           messageId_it != messageId_map.end(); ++messageId_it) {
+           messageId_it != messageId_map.end();
+           ++messageId_it) {
         const MutiframeData& multiframe_data = messageId_it->second;
 
         const ProtocolFramePtrList& multiframes = multiframe_data.multiframes;
@@ -358,17 +394,20 @@ TEST_F(MultiFrameBuilderTest, Add_ConsecutiveFrame) {
 TEST_F(MultiFrameBuilderTest, Add_ConsecutiveFrames_OneByOne) {
   AddConnections();
   for (MultiFrameTestMap::iterator connection_it = test_data_map_.begin();
-       connection_it != test_data_map_.end(); ++connection_it) {
+       connection_it != test_data_map_.end();
+       ++connection_it) {
     SessionToMutiframeDataTestMap& session_map = connection_it->second;
 
     for (SessionToMutiframeDataTestMap::iterator session_it =
              session_map.begin();
-         session_it != session_map.end(); ++session_it) {
+         session_it != session_map.end();
+         ++session_it) {
       MessageIDToMutiframeDataTestMap& messageId_map = session_it->second;
 
       for (MessageIDToMutiframeDataTestMap::iterator messageId_it =
                messageId_map.begin();
-           messageId_it != messageId_map.end(); ++messageId_it) {
+           messageId_it != messageId_map.end();
+           ++messageId_it) {
         const MutiframeData& multiframe_data = messageId_it->second;
 
         VerifyConsecutiveAdd(multiframe_data);

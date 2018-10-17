@@ -63,7 +63,9 @@ class SpinMutex {
       }
     }
   }
-  void Unlock() { state_ = 0; }
+  void Unlock() {
+    state_ = 0;
+  }
   ~SpinMutex() {}
 
  private:
@@ -164,10 +166,14 @@ class AutoLock {
     // std::cerr << "lock is at " << &lock << std::endl;
     lock_.Acquire();
   }
-  ~AutoLock() { lock_.Release(); }
+  ~AutoLock() {
+    lock_.Release();
+  }
 
  private:
-  BaseLock& GetLock() { return lock_; }
+  BaseLock& GetLock() {
+    return lock_;
+  }
   BaseLock& lock_;
 
  private:
@@ -193,11 +199,15 @@ class AutoUnlock {
   explicit AutoUnlock(const std::shared_ptr<BaseLock>& lock) : lock_(*lock) {
     lock_.Release();
   }
-  explicit AutoUnlock(BaseLock& lock) : lock_(lock) { lock_.Release(); }
+  explicit AutoUnlock(BaseLock& lock) : lock_(lock) {
+    lock_.Release();
+  }
   explicit AutoUnlock(AutoLock& lock) : lock_(lock.GetLock()) {
     lock_.Release();
   }
-  ~AutoUnlock() { lock_.Acquire(); }
+  ~AutoUnlock() {
+    lock_.Acquire();
+  }
 
  private:
   BaseLock& lock_;

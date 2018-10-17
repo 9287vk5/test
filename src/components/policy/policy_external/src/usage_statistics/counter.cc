@@ -54,10 +54,11 @@ void GlobalCounter::operator++() const {
 
 AppCounter::AppCounter(
     std::shared_ptr<usage_statistics::StatisticsManager> statistics_manager,
-    const std::string& app_id, AppCounterId counter_type)
-    : app_id_(app_id),
-      counter_type_(counter_type),
-      statistics_manager_(statistics_manager) {}
+    const std::string& app_id,
+    AppCounterId counter_type)
+    : app_id_(app_id)
+    , counter_type_(counter_type)
+    , statistics_manager_(statistics_manager) {}
 
 void AppCounter::operator++() const {
   if (statistics_manager_) {
@@ -67,10 +68,11 @@ void AppCounter::operator++() const {
 
 AppInfo::AppInfo(
     std::shared_ptr<usage_statistics::StatisticsManager> statistics_manager,
-    const std::string& app_id, AppInfoId info_type)
-    : app_id_(app_id),
-      info_type_(info_type),
-      statistics_manager_(statistics_manager) {}
+    const std::string& app_id,
+    AppInfoId info_type)
+    : app_id_(app_id)
+    , info_type_(info_type)
+    , statistics_manager_(statistics_manager) {}
 
 void AppInfo::Update(const std::string& new_info) const {
   if (statistics_manager_) {
@@ -81,22 +83,25 @@ void AppInfo::Update(const std::string& new_info) const {
 AppStopwatchImpl::AppStopwatchImpl(
     std::shared_ptr<usage_statistics::StatisticsManager> statistics_manager,
     const std::string& app_id)
-    : app_id_(app_id),
-      stopwatch_type_(SECONDS_HMI_NONE),
-      statistics_manager_(statistics_manager),
-      timer_("HMI levels timer", new timer::TimerTaskImpl<AppStopwatchImpl>(
-                                     this, &AppStopwatchImpl::WriteTime)),
-      time_out_(60) {}
+    : app_id_(app_id)
+    , stopwatch_type_(SECONDS_HMI_NONE)
+    , statistics_manager_(statistics_manager)
+    , timer_("HMI levels timer",
+             new timer::TimerTaskImpl<AppStopwatchImpl>(
+                 this, &AppStopwatchImpl::WriteTime))
+    , time_out_(60) {}
 
 AppStopwatchImpl::AppStopwatchImpl(
     std::shared_ptr<StatisticsManager> statistics_manager,
-    const std::string& app_id, uint32_t timeout)
-    : app_id_(app_id),
-      stopwatch_type_(SECONDS_HMI_NONE),
-      statistics_manager_(statistics_manager),
-      timer_("HMI levels timer", new timer::TimerTaskImpl<AppStopwatchImpl>(
-                                     this, &AppStopwatchImpl::WriteTime)),
-      time_out_(timeout) {}
+    const std::string& app_id,
+    uint32_t timeout)
+    : app_id_(app_id)
+    , stopwatch_type_(SECONDS_HMI_NONE)
+    , statistics_manager_(statistics_manager)
+    , timer_("HMI levels timer",
+             new timer::TimerTaskImpl<AppStopwatchImpl>(
+                 this, &AppStopwatchImpl::WriteTime))
+    , time_out_(timeout) {}
 
 AppStopwatchImpl::~AppStopwatchImpl() {}
 

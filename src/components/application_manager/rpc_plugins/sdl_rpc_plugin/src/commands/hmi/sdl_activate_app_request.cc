@@ -73,7 +73,8 @@ struct SendLaunchApp
       : app_to_launch_(app_to_launch), application_manager_(am) {}
   void operator()(
       const SDLActivateAppRequest::V4ProtoApps::value_type ptr) const {
-    MessageHelper::SendLaunchApp((*ptr).app_id(), app_to_launch_->SchemaUrl(),
+    MessageHelper::SendLaunchApp((*ptr).app_id(),
+                                 app_to_launch_->SchemaUrl(),
                                  app_to_launch_->PackageName(),
                                  application_manager_);
     return;
@@ -84,10 +85,14 @@ struct SendLaunchApp
 SDLActivateAppRequest::SDLActivateAppRequest(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : RequestFromHMI(message, application_manager, rpc_service,
-                     hmi_capabilities, policy_handle) {}
+    : RequestFromHMI(message,
+                     application_manager,
+                     rpc_service,
+                     hmi_capabilities,
+                     policy_handle) {}
 
 SDLActivateAppRequest::~SDLActivateAppRequest() {}
 
@@ -98,8 +103,8 @@ uint32_t SDLActivateAppRequest::app_id() const {
     return 0;
   }
   if (!(*message_)[msg_params].keyExists(strings::app_id)) {
-    LOG4CXX_DEBUG(logger_, strings::app_id
-                               << " section is absent in the message.");
+    LOG4CXX_DEBUG(logger_,
+                  strings::app_id << " section is absent in the message.");
     return 0;
   }
   return (*message_)[msg_params][strings::app_id].asUInt();
@@ -115,7 +120,8 @@ void SDLActivateAppRequest::Run() {
     LOG4CXX_DEBUG(logger_,
                   "DeactivateHmi state is active. "
                   "Sends response with result code REJECTED");
-    SendErrorResponse(correlation_id(), static_cast<eType>(function_id()),
+    SendErrorResponse(correlation_id(),
+                      static_cast<eType>(function_id()),
                       hmi_apis::Common_Result::REJECTED,
                       "HMIDeactivate is active");
   } else {
@@ -136,8 +142,9 @@ void SDLActivateAppRequest::Run() {
       application_manager_.application(application_id);
 
   if (!app_to_activate) {
-    LOG4CXX_WARN(logger_, "Can't find application within regular apps: "
-                              << application_id);
+    LOG4CXX_WARN(
+        logger_,
+        "Can't find application within regular apps: " << application_id);
 
     // Here is the hack - in fact SDL gets hmi_app_id in appID field and
     // replaces it with connection_key only for normally registered apps, but
@@ -147,14 +154,16 @@ void SDLActivateAppRequest::Run() {
         application_manager_.WaitingApplicationByID(application_id);
 
     if (!app_to_activate) {
-      LOG4CXX_WARN(logger_, "Can't find application within waiting apps: "
-                                << application_id);
+      LOG4CXX_WARN(
+          logger_,
+          "Can't find application within waiting apps: " << application_id);
       return;
     }
   }
 
-  LOG4CXX_DEBUG(logger_, "Found application to activate. Application id is "
-                             << app_to_activate->app_id());
+  LOG4CXX_DEBUG(logger_,
+                "Found application to activate. Application id is "
+                    << app_to_activate->app_id());
 
   if (application_manager_.state_controller().IsStateActive(
           HmiState::StateID::STATE_ID_DEACTIVATE_HMI)) {
@@ -183,8 +192,8 @@ void SDLActivateAppRequest::Run() {
                   "Can't find regular foreground app with the same "
                   "connection id:"
                       << device_handle);
-    SendErrorResponse(correlation_id(), SDL_ActivateApp, NO_APPS_REGISTERED,
-                      "");
+    SendErrorResponse(
+        correlation_id(), SDL_ActivateApp, NO_APPS_REGISTERED, "");
     return;
   }
 
@@ -194,14 +203,16 @@ void SDLActivateAppRequest::Run() {
 
   if (foreground_v4_app) {
     LOG4CXX_DEBUG(logger_, "Sending request to foreground application.");
-    MessageHelper::SendLaunchApp(
-        foreground_v4_app->app_id(), app_to_activate->SchemaUrl(),
-        app_to_activate->PackageName(), application_manager_);
+    MessageHelper::SendLaunchApp(foreground_v4_app->app_id(),
+                                 app_to_activate->SchemaUrl(),
+                                 app_to_activate->PackageName(),
+                                 application_manager_);
   } else {
     LOG4CXX_DEBUG(logger_,
                   "No preffered (foreground) application is found. "
                   "Sending request to all v4 applications.");
-    std::for_each(v4_proto_apps.begin(), v4_proto_apps.end(),
+    std::for_each(v4_proto_apps.begin(),
+                  v4_proto_apps.end(),
                   SendLaunchApp(app_to_activate, application_manager_));
   }
 
@@ -214,8 +225,8 @@ void SDLActivateAppRequest::onTimeOut() {
   using namespace hmi_apis::Common_Result;
   using namespace application_manager;
   unsubscribe_from_event(BasicCommunication_OnAppRegistered);
-  SendErrorResponse(correlation_id(), SDL_ActivateApp,
-                    APPLICATION_NOT_REGISTERED, "");
+  SendErrorResponse(
+      correlation_id(), SDL_ActivateApp, APPLICATION_NOT_REGISTERED, "");
 }
 
 void SDLActivateAppRequest::on_event(const event_engine::Event& event) {
@@ -252,8 +263,8 @@ uint32_t SDLActivateAppRequest::hmi_app_id(
     return 0;
   }
   if (so[msg_params][application].keyExists(strings::app_id)) {
-    LOG4CXX_DEBUG(logger_, strings::app_id
-                               << " section is absent in the message.");
+    LOG4CXX_DEBUG(logger_,
+                  strings::app_id << " section is absent in the message.");
     return 0;
   }
   return so[msg_params][application][strings::app_id].asUInt();
@@ -263,8 +274,10 @@ SDLActivateAppRequest::V4ProtoApps SDLActivateAppRequest::get_v4_proto_apps(
     const connection_handler::DeviceHandle handle) const {
   const ApplicationSet app_list = application_manager_.applications().GetData();
   V4ProtoApps v4_proto_apps;
-  std::copy_if(app_list.begin(), app_list.end(),
-               std::back_inserter(v4_proto_apps), ProtoV4AppsOnDevice(handle));
+  std::copy_if(app_list.begin(),
+               app_list.end(),
+               std::back_inserter(v4_proto_apps),
+               ProtoV4AppsOnDevice(handle));
   return v4_proto_apps;
 }
 

@@ -48,14 +48,14 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "ApplicationManager")
 namespace application_manager {
 
 HMILanguageHandler::HMILanguageHandler(ApplicationManager& application_manager)
-    : event_engine::EventObserver(application_manager.event_dispatcher()),
-      capabilities_ui_language_(hmi_apis::Common_Language::INVALID_ENUM),
-      capabilities_vr_language_(hmi_apis::Common_Language::INVALID_ENUM),
-      capabilities_tts_language_(hmi_apis::Common_Language::INVALID_ENUM),
-      is_ui_language_received_(false),
-      is_vr_language_received_(false),
-      is_tts_language_received_(false),
-      application_manager_(application_manager) {
+    : event_engine::EventObserver(application_manager.event_dispatcher())
+    , capabilities_ui_language_(hmi_apis::Common_Language::INVALID_ENUM)
+    , capabilities_vr_language_(hmi_apis::Common_Language::INVALID_ENUM)
+    , capabilities_tts_language_(hmi_apis::Common_Language::INVALID_ENUM)
+    , is_ui_language_received_(false)
+    , is_vr_language_received_(false)
+    , is_tts_language_received_(false)
+    , application_manager_(application_manager) {
   subscribe_on_event(hmi_apis::FunctionID::BasicCommunication_OnAppRegistered);
 }
 
@@ -78,8 +78,9 @@ void HMILanguageHandler::set_language_for(
       LOG4CXX_WARN(logger_, "Unknown interface has been passed " << interface);
       return;
   }
-  LOG4CXX_DEBUG(logger_, "Setting language " << language << " for interface "
-                                             << interface);
+  LOG4CXX_DEBUG(logger_,
+                "Setting language " << language << " for interface "
+                                    << interface);
   Json::Value& dictionary = last_state_->get_dictionary();
   dictionary[LanguagesKey][key] = language;
   return;
@@ -157,20 +158,20 @@ void HMILanguageHandler::set_handle_response_for(
   LOG4CXX_AUTO_TRACE(logger_);
   using namespace helpers;
   if (!request.keyExists(strings::params)) {
-    LOG4CXX_ERROR(logger_, "Object does not have " << strings::params
-                                                   << " key.");
+    LOG4CXX_ERROR(logger_,
+                  "Object does not have " << strings::params << " key.");
     return;
   }
 
   if (!request[strings::params].keyExists(strings::function_id)) {
-    LOG4CXX_ERROR(logger_, "Object does not have " << strings::function_id
-                                                   << " key.");
+    LOG4CXX_ERROR(logger_,
+                  "Object does not have " << strings::function_id << " key.");
     return;
   }
 
   if (!request[strings::params].keyExists(strings::correlation_id)) {
-    LOG4CXX_ERROR(logger_, "Object does not have " << strings::correlation_id
-                                                   << " key.");
+    LOG4CXX_ERROR(
+        logger_, "Object does not have " << strings::correlation_id << " key.");
     return;
   }
 
@@ -179,7 +180,8 @@ void HMILanguageHandler::set_handle_response_for(
           request[strings::params][strings::function_id].asInt());
 
   if (!Compare<hmi_apis::FunctionID::eType, EQ, ONE>(
-          function_id, hmi_apis::FunctionID::UI_GetLanguage,
+          function_id,
+          hmi_apis::FunctionID::UI_GetLanguage,
           hmi_apis::FunctionID::VR_GetLanguage,
           hmi_apis::FunctionID::TTS_GetLanguage)) {
     LOG4CXX_ERROR(logger_,
@@ -192,13 +194,14 @@ void HMILanguageHandler::set_handle_response_for(
 
   subscribe_on_event(function_id, correlation_id);
 
-  LOG4CXX_DEBUG(logger_, "Subscribed for function_id " << function_id
-                                                       << " and correlation_id "
-                                                       << correlation_id);
+  LOG4CXX_DEBUG(logger_,
+                "Subscribed for function_id "
+                    << function_id << " and correlation_id " << correlation_id);
 }
 
 void HMILanguageHandler::set_default_capabilities_languages(
-    hmi_apis::Common_Language::eType ui, hmi_apis::Common_Language::eType vr,
+    hmi_apis::Common_Language::eType ui,
+    hmi_apis::Common_Language::eType vr,
     hmi_apis::Common_Language::eType tts) {
   capabilities_ui_language_ = ui;
   if (hmi_apis::Common_Language::INVALID_ENUM == persisted_ui_language_) {
@@ -268,10 +271,10 @@ void HMILanguageHandler::VerifyWithPersistedLanguages() {
   for (; accessor.end() != it;) {
     ApplicationConstSharedPtr app = *it++;
 
-    LOG4CXX_INFO(logger_, "Application with app_id "
-                              << app->app_id()
-                              << " will be unregistered because of "
-                                 "HMI language(s) mismatch.");
+    LOG4CXX_INFO(logger_,
+                 "Application with app_id "
+                     << app->app_id() << " will be unregistered because of "
+                                         "HMI language(s) mismatch.");
 
     CheckApplication(std::make_pair(app->app_id(), false));
   }
@@ -312,9 +315,9 @@ void HMILanguageHandler::HandleWrongLanguageApp(const Apps::value_type& app) {
       commands::Command::SOURCE_SDL);
   application_manager_.UnregisterApplication(
       app.first, mobile_apis::Result::SUCCESS, false);
-  LOG4CXX_INFO(logger_, "Unregistering application with app_id "
-                            << app.first
-                            << " because of HMI language(s) mismatch.");
+  LOG4CXX_INFO(logger_,
+               "Unregistering application with app_id "
+                   << app.first << " because of HMI language(s) mismatch.");
 }
 
 void HMILanguageHandler::CheckApplication(const Apps::value_type app) {
@@ -324,9 +327,10 @@ void HMILanguageHandler::CheckApplication(const Apps::value_type app) {
     sync_primitives::AutoLock lock(apps_lock_);
     Apps::iterator it = apps_.find(app.first);
     if (apps_.end() == it) {
-      LOG4CXX_INFO(logger_, "Adding application id "
-                                << app.first
-                                << " Application registered: " << app.second);
+      LOG4CXX_INFO(logger_,
+                   "Adding application id "
+                       << app.first
+                       << " Application registered: " << app.second);
       apps_.insert(app);
       return;
     }

@@ -43,7 +43,9 @@ EventObserver::EventObserver(EventDispatcher& event_dispatcher)
   id_ = reinterpret_cast<unsigned long>(this);
 }
 
-EventObserver::~EventObserver() { unsubscribe_from_all_events(); }
+EventObserver::~EventObserver() {
+  unsubscribe_from_all_events();
+}
 
 void EventObserver::subscribe_on_event(const Event::EventID& event_id,
                                        int32_t hmi_correlation_id) {

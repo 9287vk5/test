@@ -67,7 +67,8 @@ bool CFormatterJsonSDLRPCv2::toString(const smart_objects_ns::SmartObject& obj,
 CFormatterJsonSDLRPCv2::tMetaFormatterErrorCode
 CFormatterJsonSDLRPCv2::MetaFormatToString(
     const smart_objects_ns::SmartObject& object,
-    const smart_objects_ns::CSmartSchema& schema, std::string& outStr) {
+    const smart_objects_ns::CSmartSchema& schema,
+    std::string& outStr) {
   meta_formatter_error_code::tMetaFormatterErrorCode result_code =
       meta_formatter_error_code::kErrorOk;
 

@@ -73,7 +73,8 @@ class TcpDevice : public Device {
    * @param device_uid Unique device id
    * @param transport_switch_id Id used for transport switching
    */
-  TcpDevice(const in_addr_t& in_addr, const std::string& device_uid,
+  TcpDevice(const in_addr_t& in_addr,
+            const std::string& device_uid,
             const std::string& transport_switch_id);
 #endif
 
@@ -139,7 +140,9 @@ class TcpDevice : public Device {
    *
    * @return Address.
    */
-  in_addr_t in_addr() const { return in_addr_; }
+  in_addr_t in_addr() const {
+    return in_addr_;
+  }
 
  private:
   struct Application {

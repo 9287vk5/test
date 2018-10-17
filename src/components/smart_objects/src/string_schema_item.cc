@@ -47,7 +47,8 @@ std::shared_ptr<CStringSchemaItem> CStringSchemaItem::create(
 }
 
 errors::eType CStringSchemaItem::validate(
-    const SmartObject& Object, rpc::ValidationReport* report__,
+    const SmartObject& Object,
+    rpc::ValidationReport* report__,
     const utils::SemanticVersion& MessageVersion) {
   if (SmartType_String != Object.getType()) {
     std::string validation_info = "Incorrect type, expected: " +
@@ -80,7 +81,9 @@ errors::eType CStringSchemaItem::validate(
   return errors::OK;
 }
 
-SmartType CStringSchemaItem::getSmartType() const { return SmartType_String; }
+SmartType CStringSchemaItem::getSmartType() const {
+  return SmartType_String;
+}
 
 std::string CStringSchemaItem::getDefaultValue() const {
   return std::string("");
@@ -90,9 +93,9 @@ CStringSchemaItem::CStringSchemaItem(
     const TSchemaItemParameter<size_t>& MinLength,
     const TSchemaItemParameter<size_t>& MaxLength,
     const TSchemaItemParameter<std::string>& DefaultValue)
-    : CDefaultSchemaItem<std::string>(DefaultValue),
-      mMinLength(MinLength),
-      mMaxLength(MaxLength) {}
+    : CDefaultSchemaItem<std::string>(DefaultValue)
+    , mMinLength(MinLength)
+    , mMaxLength(MaxLength) {}
 
 }  // namespace ns_smart_objects
 }  // namespace ns_smart_device_link

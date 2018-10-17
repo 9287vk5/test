@@ -82,8 +82,10 @@ TEST(TelemetryMonitorTest, MessageProcess) {
   ON_CALL(protocol_handler_settings_mock, multiframe_waiting_timeout())
       .WillByDefault(Return(init_value));
   protocol_handler::ProtocolHandlerImpl protocol_handler_mock(
-      protocol_handler_settings_mock, session_observer_mock,
-      connection_handler_mock, transport_manager_mock);
+      protocol_handler_settings_mock,
+      session_observer_mock,
+      connection_handler_mock,
+      transport_manager_mock);
 
   EXPECT_CALL(am_observeble, SetTelemetryObserver(_));
   EXPECT_CALL(transport_manager_mock, SetTelemetryObserver(_));
@@ -93,8 +95,8 @@ TEST(TelemetryMonitorTest, MessageProcess) {
   // streamer_mock will be freed by telemetry_monitor on destruction
   telemetry_monitor.Start();
   telemetry_monitor.set_streamer(streamer_mock);
-  telemetry_monitor.Init(&protocol_handler_mock, &am_observeble,
-                         &transport_manager_mock);
+  telemetry_monitor.Init(
+      &protocol_handler_mock, &am_observeble, &transport_manager_mock);
   std::shared_ptr<telemetry_monitor::MetricWrapper> test_metric;
   EXPECT_CALL(*streamer_mock, PushMessage(test_metric));
   telemetry_monitor.SendMetric(test_metric);

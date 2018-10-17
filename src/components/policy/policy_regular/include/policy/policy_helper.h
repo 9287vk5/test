@@ -140,7 +140,8 @@ struct CheckAppPolicy {
  * parameters
  */
 struct FillNotificationData {
-  FillNotificationData(Permissions& data, GroupConsent group_state,
+  FillNotificationData(Permissions& data,
+                       GroupConsent group_state,
                        GroupConsent undefined_group_consent);
   bool operator()(const RpcValueType& rpc);
   void UpdateHMILevels(const policy_table::HmiLevels& in_hmi,
@@ -197,7 +198,9 @@ struct FunctionalGroupInserter {
  * @param permissions Struct to be filled with provided params
  */
 void FillFunctionalGroupPermissions(
-    FunctionalGroupIDs& ids, FunctionalGroupNames& names, GroupConsent state,
+    FunctionalGroupIDs& ids,
+    FunctionalGroupNames& names,
+    GroupConsent state,
     std::vector<FunctionalGroupPermission>& permissions);
 
 /**

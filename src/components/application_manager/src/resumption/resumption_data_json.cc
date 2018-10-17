@@ -57,8 +57,9 @@ void ResumptionDataJson::SaveApplication(
   DCHECK_OR_RETURN_VOID(application);
 
   const std::string& policy_app_id = application->policy_app_id();
-  LOG4CXX_DEBUG(logger_, "app_id : " << application->app_id()
-                                     << " policy_app_id : " << policy_app_id);
+  LOG4CXX_DEBUG(logger_,
+                "app_id : " << application->app_id()
+                            << " policy_app_id : " << policy_app_id);
   const std::string hash = application->curHash();
   const uint32_t grammar_id = application->get_grammar_id();
   const uint32_t time_stamp = (uint32_t)time(NULL);
@@ -109,7 +110,8 @@ bool ResumptionDataJson::IsHMIApplicationIdExist(uint32_t hmi_app_id) const {
   LOG4CXX_AUTO_TRACE(logger_);
   sync_primitives::AutoLock autolock(resumption_lock_);
   for (Json::Value::iterator it = GetSavedApplications().begin();
-       it != GetSavedApplications().end(); ++it) {
+       it != GetSavedApplications().end();
+       ++it) {
     if ((*it).isMember(strings::hmi_app_id)) {
       if ((*it)[strings::hmi_app_id].asUInt() == hmi_app_id) {
         return true;
@@ -147,7 +149,8 @@ void ResumptionDataJson::IncrementIgnOffCount() {
   sync_primitives::AutoLock autolock(resumption_lock_);
   Json::Value to_save = Json::arrayValue;
   for (Json::Value::iterator it = GetSavedApplications().begin();
-       it != GetSavedApplications().end(); ++it) {
+       it != GetSavedApplications().end();
+       ++it) {
     if ((*it).isMember(strings::ign_off_count)) {
       Json::Value& ign_off_count = (*it)[strings::ign_off_count];
       const uint32_t counter_value = ign_off_count.asUInt();
@@ -170,7 +173,8 @@ void ResumptionDataJson::DecrementIgnOffCount() {
   sync_primitives::AutoLock autolock(resumption_lock_);
 
   for (Json::Value::iterator it = GetSavedApplications().begin();
-       it != GetSavedApplications().end(); ++it) {
+       it != GetSavedApplications().end();
+       ++it) {
     if ((*it).isMember(strings::ign_off_count)) {
       const uint32_t ign_off_count = (*it)[strings::ign_off_count].asUInt();
       if (0 == ign_off_count) {
@@ -210,7 +214,8 @@ bool ResumptionDataJson::GetHashId(const std::string& policy_app_id,
 }
 
 bool ResumptionDataJson::GetSavedApplication(
-    const std::string& policy_app_id, const std::string& device_id,
+    const std::string& policy_app_id,
+    const std::string& device_id,
     smart_objects::SmartObject& saved_app) const {
   using namespace app_mngr;
   LOG4CXX_AUTO_TRACE(logger_);
@@ -233,7 +238,8 @@ bool ResumptionDataJson::RemoveApplicationFromSaved(
   bool result = false;
   std::vector<Json::Value> temp;
   for (Json::Value::iterator it = GetSavedApplications().begin();
-       it != GetSavedApplications().end(); ++it) {
+       it != GetSavedApplications().end();
+       ++it) {
     if ((*it).isMember(strings::app_id) && (*it).isMember(strings::device_id)) {
       const std::string& saved_policy_app_id =
           (*it)[strings::app_id].asString();
@@ -295,8 +301,9 @@ void ResumptionDataJson::IncrementGlobalIgnOnCounter() {
   if (resumption.isMember(strings::global_ign_on_counter)) {
     const uint32_t global_ign_on_counter =
         resumption[strings::global_ign_on_counter].asUInt();
-    LOG4CXX_DEBUG(logger_, "Global IGN ON counter in resumption data: "
-                               << global_ign_on_counter);
+    LOG4CXX_DEBUG(
+        logger_,
+        "Global IGN ON counter in resumption data: " << global_ign_on_counter);
     resumption[strings::global_ign_on_counter] = global_ign_on_counter + 1;
     LOG4CXX_DEBUG(logger_,
                   "Global IGN ON counter new value: "
@@ -330,7 +337,8 @@ Json::Value& ResumptionDataJson::GetFromSavedOrAppend(
   LOG4CXX_AUTO_TRACE(logger_);
   sync_primitives::AutoLock autolock(resumption_lock_);
   for (Json::Value::iterator it = GetSavedApplications().begin();
-       it != GetSavedApplications().end(); ++it) {
+       it != GetSavedApplications().end();
+       ++it) {
     if (device_id == (*it)[strings::device_id].asString() &&
         policy_app_id == (*it)[strings::app_id].asString()) {
       return *it;
@@ -348,7 +356,8 @@ void ResumptionDataJson::GetDataForLoadResumeData(
   smart_objects::SmartObject so_array_data(smart_objects::SmartType_Array);
   int i = 0;
   for (Json::Value::iterator it = GetSavedApplications().begin();
-       it != GetSavedApplications().end(); ++it) {
+       it != GetSavedApplications().end();
+       ++it) {
     if (((*it).isMember(strings::hmi_level)) &&
         ((*it).isMember(strings::ign_off_count)) &&
         ((*it).isMember(strings::time_stamp)) &&
@@ -371,15 +380,17 @@ ResumptionDataJson::~ResumptionDataJson() {
 }
 
 void ResumptionDataJson::UpdateHmiLevel(
-    const std::string& policy_app_id, const std::string& device_id,
+    const std::string& policy_app_id,
+    const std::string& device_id,
     mobile_apis::HMILevel::eType hmi_level) {
   LOG4CXX_AUTO_TRACE(logger_);
   using namespace app_mngr;
 
   int idx = GetObjectIndex(policy_app_id, device_id);
   if (-1 == idx) {
-    LOG4CXX_WARN(logger_, "Application isn't saved with mobile_app_id = "
-                              << policy_app_id << " device_id = " << device_id);
+    LOG4CXX_WARN(logger_,
+                 "Application isn't saved with mobile_app_id = "
+                     << policy_app_id << " device_id = " << device_id);
     return;
   }
   GetSavedApplications()[idx][strings::hmi_level] = hmi_level;
@@ -494,9 +505,9 @@ bool ResumptionDataJson::DropAppDataResumption(const std::string& device_id,
   sync_primitives::AutoLock autolock(resumption_lock_);
   Json::Value& application = GetFromSavedOrAppend(app_id, device_id);
   if (application.isNull()) {
-    LOG4CXX_DEBUG(logger_, "Application "
-                               << app_id << " with device_id " << device_id
-                               << " hasn't been found in resumption data.");
+    LOG4CXX_DEBUG(logger_,
+                  "Application " << app_id << " with device_id " << device_id
+                                 << " hasn't been found in resumption data.");
     return false;
   }
   application[strings::application_commands].clear();
@@ -506,9 +517,10 @@ bool ResumptionDataJson::DropAppDataResumption(const std::string& device_id,
   application[strings::application_subscriptions].clear();
   application[strings::application_files].clear();
   application.removeMember(strings::grammar_id);
-  LOG4CXX_DEBUG(logger_, "Resumption data for application "
-                             << app_id << " with device_id " << device_id
-                             << " has been dropped.");
+  LOG4CXX_DEBUG(logger_,
+                "Resumption data for application "
+                    << app_id << " with device_id " << device_id
+                    << " has been dropped.");
   return true;
 }
 

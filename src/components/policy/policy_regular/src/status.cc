@@ -75,7 +75,9 @@ void policy::UpdateNeededStatus::ProcessEvent(
   }
 }
 
-bool policy::UpdateNeededStatus::IsUpdateRequired() const { return true; }
+bool policy::UpdateNeededStatus::IsUpdateRequired() const {
+  return true;
+}
 
 policy::UpdatingStatus::UpdatingStatus()
     : Status("UPDATING", policy::PolicyTableStatus::StatusUpdatePending) {}
@@ -107,9 +109,13 @@ void policy::UpdatingStatus::ProcessEvent(
   }
 }
 
-bool policy::UpdatingStatus::IsUpdatePending() const { return true; }
+bool policy::UpdatingStatus::IsUpdatePending() const {
+  return true;
+}
 
-bool policy::UpdatingStatus::IsUpdateRequired() const { return true; }
+bool policy::UpdatingStatus::IsUpdateRequired() const {
+  return true;
+}
 
 policy::Status::Status(const std::string& string_status,
                        const policy::PolicyTableStatus enum_status)
@@ -125,6 +131,10 @@ policy::PolicyTableStatus policy::Status::get_status() const {
   return enum_status_;
 }
 
-bool policy::Status::IsUpdateRequired() const { return false; }
+bool policy::Status::IsUpdateRequired() const {
+  return false;
+}
 
-bool policy::Status::IsUpdatePending() const { return false; }
+bool policy::Status::IsUpdatePending() const {
+  return false;
+}

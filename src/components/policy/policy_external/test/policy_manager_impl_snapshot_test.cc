@@ -306,8 +306,8 @@ TEST_F(
   std::sort(result.begin(), result.end());
   // Checks
   ASSERT_EQ(pt_request_types_.size(), result.size());
-  EXPECT_TRUE(std::equal(pt_request_types_.begin(), pt_request_types_.end(),
-                         result.begin()));
+  EXPECT_TRUE(std::equal(
+      pt_request_types_.begin(), pt_request_types_.end(), result.begin()));
 }
 
 TEST_F(PolicyManagerImplTest2, AddDevice_RegisterDevice_TRUE) {

@@ -51,8 +51,8 @@ struct PermissionsAppender
     : public std::unary_function<void,
                                  const smart_objects::SmartArray::value_type&> {
   PermissionsAppender(policy::PermissionConsent& consents)
-      : allowed_key_(application_manager::hmi_response::allowed),
-        consents_(consents) {}
+      : allowed_key_(application_manager::hmi_response::allowed)
+      , consents_(consents) {}
   void operator()(const smart_objects::SmartArray::value_type& item) const {
     using namespace policy;
     using namespace application_manager;
@@ -115,10 +115,14 @@ namespace commands {
 OnAppPermissionConsentNotification::OnAppPermissionConsentNotification(
     const application_manager::commands::MessageSharedPtr& message,
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handle)
-    : NotificationFromHMI(message, application_manager, rpc_service,
-                          hmi_capabilities, policy_handle) {}
+    : NotificationFromHMI(message,
+                          application_manager,
+                          rpc_service,
+                          hmi_capabilities,
+                          policy_handle) {}
 
 OnAppPermissionConsentNotification::~OnAppPermissionConsentNotification() {}
 
@@ -165,10 +169,11 @@ void OnAppPermissionConsentNotification::Run() {
         msg_params[strings::external_consent_status].asArray();
     ExternalConsentStatusAppender status_appender(external_consent_status);
     std::for_each(system_external_consent_status->begin(),
-                  system_external_consent_status->end(), status_appender);
+                  system_external_consent_status->end(),
+                  status_appender);
   }
-  policy_handler_.OnAppPermissionConsent(connection_key, permission_consent,
-                                         external_consent_status);
+  policy_handler_.OnAppPermissionConsent(
+      connection_key, permission_consent, external_consent_status);
 #else
   policy_handler_.OnAppPermissionConsent(connection_key, permission_consent);
 #endif

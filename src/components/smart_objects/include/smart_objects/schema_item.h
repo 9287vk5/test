@@ -62,7 +62,8 @@ class ISchemaItem {
    * @return ns_smart_objects::errors::eType
    **/
   virtual errors::eType validate(
-      const SmartObject& Object, rpc::ValidationReport* report__,
+      const SmartObject& Object,
+      rpc::ValidationReport* report__,
       const utils::SemanticVersion& MessageVersion = utils::SemanticVersion());
 
   /**

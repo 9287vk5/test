@@ -154,8 +154,10 @@ smart_objects::SmartObject ResumptionData::GetApplicationSubscriptions(
   const ButtonSubscriptions& button_subscriptions = button_accessor.GetData();
 
   LOG4CXX_DEBUG(logger_, "SubscribedButtons:" << button_subscriptions.size());
-  Append(button_subscriptions.begin(), button_subscriptions.end(),
-         strings::application_buttons, subscriptions);
+  Append(button_subscriptions.begin(),
+         button_subscriptions.end(),
+         strings::application_buttons,
+         subscriptions);
 
   for (auto extension : application->Extensions()) {
     extension->SaveResumptionData(subscriptions);
@@ -180,7 +182,8 @@ smart_objects::SmartObject ResumptionData::GetApplicationFiles(
   const AppFilesMap& app_files = application->getAppFiles();
   int i = 0;
   for (AppFilesMap::const_iterator file_it = app_files.begin();
-       file_it != app_files.end(); file_it++) {
+       file_it != app_files.end();
+       file_it++) {
     const AppFile& file = file_it->second;
     if (file.is_persistent) {
       smart_objects::SmartObject file_data =

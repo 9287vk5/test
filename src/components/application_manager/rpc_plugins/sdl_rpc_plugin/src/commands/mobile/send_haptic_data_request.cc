@@ -46,8 +46,11 @@ SendHapticDataRequest::SendHapticDataRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 SendHapticDataRequest::~SendHapticDataRequest() {}
 
@@ -67,7 +70,8 @@ void SendHapticDataRequest::Run() {
   if (app->is_navi() || app->mobile_projection_enabled()) {
     SendHMIRequest(hmi_apis::FunctionID::UI_SendHapticData, &msg_params, true);
   } else {
-    SendResponse(false, mobile_apis::Result::DISALLOWED,
+    SendResponse(false,
+                 mobile_apis::Result::DISALLOWED,
                  "Application is not of type Navigation or Mobile Projection");
   }
 }
@@ -85,7 +89,8 @@ void SendHapticDataRequest::on_event(const event_engine::Event& event) {
               message[strings::params][hmi_response::code].asUInt()));
 
       const bool result = Compare<mobile_api::Result::eType, EQ, ONE>(
-          result_code, mobile_api::Result::SUCCESS,
+          result_code,
+          mobile_api::Result::SUCCESS,
           mobile_api::Result::WARNINGS);
 
       SendResponse(result, result_code, NULL, &(message[strings::msg_params]));

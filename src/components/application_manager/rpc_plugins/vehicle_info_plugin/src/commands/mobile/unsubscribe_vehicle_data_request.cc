@@ -52,8 +52,11 @@ UnsubscribeVehicleDataRequest::UnsubscribeVehicleDataRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {}
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {}
 
 UnsubscribeVehicleDataRequest::~UnsubscribeVehicleDataRequest() {}
 
@@ -109,9 +112,10 @@ void UnsubscribeVehicleDataRequest::Run() {
           continue;
         }
 
-        LOG4CXX_DEBUG(logger_, "Unsubscribed app with connection key "
-                                   << connection_key()
-                                   << " from VehicleDataType: " << key_type);
+        LOG4CXX_DEBUG(logger_,
+                      "Unsubscribed app with connection key "
+                          << connection_key()
+                          << " from VehicleDataType: " << key_type);
 
         ++unsubscribed_items;
 
@@ -142,21 +146,24 @@ void UnsubscribeVehicleDataRequest::Run() {
     if (HasDisallowedParams()) {
       SendResponse(false, mobile_apis::Result::DISALLOWED);
     } else {
-      SendResponse(false, mobile_apis::Result::INVALID_DATA,
-                   "No data in the request.");
+      SendResponse(
+          false, mobile_apis::Result::INVALID_DATA, "No data in the request.");
     }
     return;
   }
 
   if (0 == unsubscribed_items) {
-    SendResponse(false, mobile_apis::Result::IGNORED,
-                 "Was not subscribed on any VehicleData.", &response_params);
+    SendResponse(false,
+                 mobile_apis::Result::IGNORED,
+                 "Was not subscribed on any VehicleData.",
+                 &response_params);
     return;
   }
 
   if (is_everything_already_unsubscribed) {
     if (!vi_already_unsubscribed_by_this_app_.empty()) {
-      SendResponse(false, mobile_apis::Result::IGNORED,
+      SendResponse(false,
+                   mobile_apis::Result::IGNORED,
                    "Some provided VehicleData was not subscribed.",
                    &response_params);
     } else {
@@ -167,7 +174,8 @@ void UnsubscribeVehicleDataRequest::Run() {
 
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_VehicleInfo);
   SendHMIRequest(hmi_apis::FunctionID::VehicleInfo_UnsubscribeVehicleData,
-                 &msg_params, true);
+                 &msg_params,
+                 true);
 }
 
 void UnsubscribeVehicleDataRequest::on_event(const event_engine::Event& event) {
@@ -217,12 +225,13 @@ void UnsubscribeVehicleDataRequest::on_event(const event_engine::Event& event) {
   if (result) {
     SetAllowedToTerminate(false);
   }
-  SendResponse(result, result_code,
+  SendResponse(result,
+               result_code,
                response_info.empty() ? NULL : response_info.c_str(),
                &(message[strings::msg_params]));
   if (result) {
-    application_manager_.TerminateRequest(connection_key(), correlation_id(),
-                                          function_id());
+    application_manager_.TerminateRequest(
+        connection_key(), correlation_id(), function_id());
   }
 }
 
@@ -248,8 +257,8 @@ bool UnsubscribeVehicleDataRequest::IsSomeoneSubscribedFor(
   LOG4CXX_AUTO_TRACE(logger_);
   SubscribedToIVIPredicate finder(param_id);
   DataAccessor<ApplicationSet> accessor = application_manager_.applications();
-  ApplicationSetConstIt it = std::find_if(accessor.GetData().begin(),
-                                          accessor.GetData().end(), finder);
+  ApplicationSetConstIt it = std::find_if(
+      accessor.GetData().begin(), accessor.GetData().end(), finder);
   return it != accessor.GetData().end();
 }
 

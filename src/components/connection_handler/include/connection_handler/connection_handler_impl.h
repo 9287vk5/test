@@ -209,7 +209,8 @@ class ConnectionHandlerImpl
       const transport_manager::ConnectionUID connection_handle,
       const uint8_t session_id,
       const protocol_handler::ServiceType& service_type,
-      const bool is_protected, const BsonObject* params);
+      const bool is_protected,
+      const BsonObject* params);
 
   /**
    * \brief Callback function used by ProtocolHandler
@@ -223,7 +224,8 @@ class ConnectionHandlerImpl
    */
   uint32_t OnSessionEndedCallback(
       const transport_manager::ConnectionUID connection_handle,
-      const uint8_t session_id, uint32_t* hashCode,
+      const uint8_t session_id,
+      uint32_t* hashCode,
       const protocol_handler::ServiceType& service_type) OVERRIDE;
 
   /**
@@ -386,7 +388,8 @@ class ConnectionHandlerImpl
    * \param connection_handle Connection handler within which session exists
    * \param session_id Identifier of the session to be ended
    */
-  void CloseSession(ConnectionHandle connection_handle, uint8_t session_id,
+  void CloseSession(ConnectionHandle connection_handle,
+                    uint8_t session_id,
                     CloseSessionReason close_reason) OVERRIDE;
 
   /**
@@ -469,7 +472,8 @@ class ConnectionHandlerImpl
    * @param method writes value protocol version to protocol_version
    * @return TRUE if session and connection exist otherwise returns FALSE
    */
-  bool ProtocolVersionUsed(uint32_t connection_id, uint8_t session_id,
+  bool ProtocolVersionUsed(uint32_t connection_id,
+                           uint8_t session_id,
                            uint8_t& protocol_version) const OVERRIDE;
 
   /**
@@ -481,7 +485,9 @@ class ConnectionHandlerImpl
    * \return int32_t -1 in case of error or 0 in case of success
    */
   int32_t GetDataOnSessionKey(
-      uint32_t key, uint32_t* app_id, std::list<int32_t>* sessions_list,
+      uint32_t key,
+      uint32_t* app_id,
+      std::list<int32_t>* sessions_list,
       connection_handler::DeviceHandle* device_id) const OVERRIDE;
 
   const ConnectionHandlerSettings& get_settings() const OVERRIDE;
@@ -538,7 +544,8 @@ class ConnectionHandlerImpl
    * Also it can be invoked before OnServiceStartedCallback() returns.
    **/
   virtual void NotifyServiceStartedResult(
-      uint32_t session_key, bool result,
+      uint32_t session_key,
+      bool result,
       std::vector<std::string>& rejected_params);
 
   /**

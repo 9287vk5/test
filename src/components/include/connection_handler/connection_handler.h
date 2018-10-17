@@ -186,7 +186,9 @@ class ConnectionHandler {
    * \return int32_t -1 in case of error or 0 in case of success
    */
   virtual int32_t GetDataOnSessionKey(
-      uint32_t key, uint32_t* app_id, std::list<int32_t>* sessions_list,
+      uint32_t key,
+      uint32_t* app_id,
+      std::list<int32_t>* sessions_list,
       connection_handler::DeviceHandle* device_id) const = 0;
 
   /**
@@ -257,7 +259,8 @@ class ConnectionHandler {
    * Also it can be invoked before OnServiceStartedCallback() returns.
    **/
   virtual void NotifyServiceStartedResult(
-      uint32_t session_key, bool result,
+      uint32_t session_key,
+      bool result,
       std::vector<std::string>& rejected_params) = 0;
 
   /**

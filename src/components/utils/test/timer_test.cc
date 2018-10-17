@@ -60,7 +60,9 @@ class TestTask : public timer::TimerTask {
  public:
   TestTask() : timer_(NULL), calls_count_(0u) {}
 
-  void set_timer(timer::Timer* timer) { timer_ = timer; }
+  void set_timer(timer::Timer* timer) {
+    timer_ = timer;
+  }
 
   virtual void PerformTimer() const {}
 
@@ -71,7 +73,9 @@ class TestTask : public timer::TimerTask {
     PerformTimer();
   }
 
-  size_t calls_count() const { return calls_count_; }
+  size_t calls_count() const {
+    return calls_count_;
+  }
 
  protected:
   mutable timer::Timer* timer_;

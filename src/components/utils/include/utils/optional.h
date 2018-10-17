@@ -56,7 +56,9 @@ class Optional {
   /**
    * @brief operator bool operator for checking if optional is initialized
    */
-  operator bool() const { return is_initialized_; }
+  operator bool() const {
+    return is_initialized_;
+  }
 
   /**
    * @brief operator * access to object
@@ -67,7 +69,9 @@ class Optional {
     return *object_;
   }
 
-  ErrorType error() const { return error_; }
+  ErrorType error() const {
+    return error_;
+  }
 
  private:
   ObjectType* object_;

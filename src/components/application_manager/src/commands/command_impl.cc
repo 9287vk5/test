@@ -58,25 +58,35 @@ CommandImpl::CommandImpl(const MessageSharedPtr& message,
                          rpc_service::RPCService& rpc_service,
                          HMICapabilities& hmi_capabilities,
                          policy::PolicyHandlerInterface& policy_handler)
-    : message_(message),
-      default_timeout_(application_manager.get_settings().default_timeout()),
-      allowed_to_terminate_(true),
-      application_manager_(application_manager),
-      rpc_service_(rpc_service),
-      hmi_capabilities_(hmi_capabilities),
-      policy_handler_(policy_handler) {}
+    : message_(message)
+    , default_timeout_(application_manager.get_settings().default_timeout())
+    , allowed_to_terminate_(true)
+    , application_manager_(application_manager)
+    , rpc_service_(rpc_service)
+    , hmi_capabilities_(hmi_capabilities)
+    , policy_handler_(policy_handler) {}
 
-CommandImpl::~CommandImpl() { CleanUp(); }
+CommandImpl::~CommandImpl() {
+  CleanUp();
+}
 
-bool CommandImpl::CheckPermissions() { return true; }
+bool CommandImpl::CheckPermissions() {
+  return true;
+}
 
-bool CommandImpl::Init() { return true; }
+bool CommandImpl::Init() {
+  return true;
+}
 
-bool CommandImpl::CleanUp() { return true; }
+bool CommandImpl::CleanUp() {
+  return true;
+}
 
 void CommandImpl::Run() {}
 
-uint32_t CommandImpl::default_timeout() const { return default_timeout_; }
+uint32_t CommandImpl::default_timeout() const {
+  return default_timeout_;
+}
 
 uint32_t CommandImpl::correlation_id() const {
   return (*message_)[strings::params][strings::correlation_id].asUInt();
@@ -92,7 +102,9 @@ uint32_t CommandImpl::connection_key() const {
 
 void CommandImpl::onTimeOut() {}
 
-bool CommandImpl::AllowedToTerminate() { return allowed_to_terminate_; }
+bool CommandImpl::AllowedToTerminate() {
+  return allowed_to_terminate_;
+}
 
 void CommandImpl::SetAllowedToTerminate(const bool allowed) {
   allowed_to_terminate_ = allowed;
@@ -108,9 +120,10 @@ bool CommandImpl::ReplaceMobileWithHMIAppId(
       LOG4CXX_ERROR(logger_, "Substitution mobile --> HMI id is failed.");
       return false;
     }
-    LOG4CXX_DEBUG(logger_, "ReplaceMobileWithHMIAppId from "
-                               << message[strings::app_id].asInt() << " to "
-                               << application->hmi_app_id());
+    LOG4CXX_DEBUG(logger_,
+                  "ReplaceMobileWithHMIAppId from "
+                      << message[strings::app_id].asInt() << " to "
+                      << application->hmi_app_id());
     message[strings::app_id] = application->hmi_app_id();
   } else {
     switch (message.getType()) {
@@ -153,9 +166,10 @@ bool CommandImpl::ReplaceHMIWithMobileAppId(
       LOG4CXX_ERROR(logger_, "Substitution HMI --> mobile id is failed.");
       return false;
     }
-    LOG4CXX_DEBUG(logger_, "ReplaceHMIWithMobileAppId from "
-                               << message[strings::app_id].asInt() << " to "
-                               << application->app_id());
+    LOG4CXX_DEBUG(logger_,
+                  "ReplaceHMIWithMobileAppId from "
+                      << message[strings::app_id].asInt() << " to "
+                      << application->app_id());
     message[strings::app_id] = application->app_id();
   } else {
     switch (message.getType()) {

@@ -84,8 +84,8 @@ class PutFileRequestTest
     : public CommandRequestTest<CommandsTestMocks::kIsNice> {
  public:
   PutFileRequestTest()
-      : msg_(CreateMessage(::smart_objects::SmartType_Map)),
-        mock_app_(CreateMockApp()) {}
+      : msg_(CreateMessage(::smart_objects::SmartType_Map))
+      , mock_app_(CreateMockApp()) {}
 
   void SetUp() OVERRIDE {
     binary_data_.push_back(1u);

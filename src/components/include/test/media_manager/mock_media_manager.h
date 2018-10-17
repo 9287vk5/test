@@ -44,14 +44,16 @@ class MockMediaManager : public media_manager::MediaManager {
   MOCK_METHOD1(PlayA2DPSource, void(int32_t application_key));
   MOCK_METHOD1(StopA2DPSource, void(int32_t application_key));
   MOCK_METHOD3(StartMicrophoneRecording,
-               void(int32_t application_key, const std::string& outputFileName,
+               void(int32_t application_key,
+                    const std::string& outputFileName,
                     int32_t duration));
   MOCK_METHOD1(StopMicrophoneRecording, void(int32_t application_key));
   MOCK_METHOD2(StartStreaming,
                void(int32_t application_key,
                     protocol_handler::ServiceType service_type));
-  MOCK_METHOD2(StopStreaming, void(int32_t application_key,
-                                   protocol_handler::ServiceType service_type));
+  MOCK_METHOD2(StopStreaming,
+               void(int32_t application_key,
+                    protocol_handler::ServiceType service_type));
   MOCK_METHOD2(FramesProcessed,
                void(int32_t application_key, int32_t frame_number));
   MOCK_CONST_METHOD0(settings, const media_manager::MediaManagerSettings&());

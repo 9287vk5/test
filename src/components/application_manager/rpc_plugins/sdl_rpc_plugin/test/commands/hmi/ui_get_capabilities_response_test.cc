@@ -151,8 +151,9 @@ TEST_F(UIGetCapabilitiesResponseTest, SetAudioPassThru_SUCCESS) {
 
   smart_objects::SmartObject audio_pass_thru_capabilities_so = (*command_msg)
       [strings::msg_params][strings::audio_pass_thru_capabilities];
-  EXPECT_CALL(mock_hmi_capabilities_, set_audio_pass_thru_capabilities(
-                                          audio_pass_thru_capabilities_so));
+  EXPECT_CALL(
+      mock_hmi_capabilities_,
+      set_audio_pass_thru_capabilities(audio_pass_thru_capabilities_so));
 
   command->Run();
 }

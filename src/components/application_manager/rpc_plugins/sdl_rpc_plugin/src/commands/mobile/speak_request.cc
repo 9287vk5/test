@@ -49,8 +49,11 @@ SpeakRequest::SpeakRequest(
     app_mngr::rpc_service::RPCService& rpc_service,
     app_mngr::HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandRequestImpl(message, application_manager, rpc_service,
-                         hmi_capabilities, policy_handler) {
+    : CommandRequestImpl(message,
+                         application_manager,
+                         rpc_service,
+                         hmi_capabilities,
+                         policy_handler) {
   subscribe_on_event(hmi_apis::FunctionID::TTS_OnResetTimeout);
 }
 
@@ -81,9 +84,11 @@ void SpeakRequest::Run() {
       MessageHelper::VerifyTtsFiles(tts_chunks, app, application_manager_);
 
   if (mobile_apis::Result::FILE_NOT_FOUND == verification_result) {
-    LOG4CXX_ERROR(logger_, "MessageHelper::VerifyTtsFiles return "
-                               << verification_result);
-    SendResponse(false, mobile_apis::Result::FILE_NOT_FOUND,
+    LOG4CXX_ERROR(logger_,
+                  "MessageHelper::VerifyTtsFiles return "
+                      << verification_result);
+    SendResponse(false,
+                 mobile_apis::Result::FILE_NOT_FOUND,
                  "One or more files needed for tts_chunks are not present");
     return;
   }
@@ -93,7 +98,8 @@ void SpeakRequest::Run() {
       hmi_apis::Common_MethodName::SPEAK;
   StartAwaitForInterface(HmiInterfaces::HMI_INTERFACE_TTS);
   SendHMIRequest(hmi_apis::FunctionID::TTS_Speak,
-                 &message_->getElement(strings::msg_params), true);
+                 &message_->getElement(strings::msg_params),
+                 true);
 }
 
 void SpeakRequest::on_event(const event_engine::Event& event) {
@@ -147,8 +153,8 @@ void SpeakRequest::ProcessTTSSpeakResponse(
 
   const char* return_info = NULL;
 
-  SendResponse(result, result_code, return_info,
-               &(message[strings::msg_params]));
+  SendResponse(
+      result, result_code, return_info, &(message[strings::msg_params]));
 }
 
 bool SpeakRequest::IsWhiteSpaceExist() {

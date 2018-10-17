@@ -102,9 +102,11 @@ TEST_F(NaviSetVideoConfigRequestTest, OnEventWithSuccessResponse) {
   event.set_smart_object(*event_msg);
 
   std::vector<std::string> empty;
-  EXPECT_CALL(app_mngr_, OnStreamingConfigured(
-                             kAppId, protocol_handler::ServiceType::kMobileNav,
-                             true, empty)).Times(1);
+  EXPECT_CALL(
+      app_mngr_,
+      OnStreamingConfigured(
+          kAppId, protocol_handler::ServiceType::kMobileNav, true, empty))
+      .Times(1);
 
   command->on_event(event);
 }
@@ -149,9 +151,10 @@ TEST_F(NaviSetVideoConfigRequestTest, OnEventWithRejectedResponse) {
   event.set_smart_object(*event_msg);
 
   std::vector<std::string> rejected_params;
-  EXPECT_CALL(app_mngr_, OnStreamingConfigured(
-                             kAppId, protocol_handler::ServiceType::kMobileNav,
-                             false, _)).WillOnce(SaveArg<3>(&rejected_params));
+  EXPECT_CALL(app_mngr_,
+              OnStreamingConfigured(
+                  kAppId, protocol_handler::ServiceType::kMobileNav, false, _))
+      .WillOnce(SaveArg<3>(&rejected_params));
 
   command->on_event(event);
 
@@ -178,9 +181,11 @@ TEST_F(NaviSetVideoConfigRequestTest,
   event.set_smart_object(*event_msg);
 
   std::vector<std::string> empty;
-  EXPECT_CALL(app_mngr_, OnStreamingConfigured(
-                             kAppId, protocol_handler::ServiceType::kMobileNav,
-                             false, empty)).WillOnce(Return());
+  EXPECT_CALL(
+      app_mngr_,
+      OnStreamingConfigured(
+          kAppId, protocol_handler::ServiceType::kMobileNav, false, empty))
+      .WillOnce(Return());
 
   command->on_event(event);
 }
@@ -193,9 +198,11 @@ TEST_F(NaviSetVideoConfigRequestTest, OnTimeout) {
       CreateCommand<NaviSetVideoConfigRequest>(request_msg);
 
   std::vector<std::string> empty;
-  EXPECT_CALL(app_mngr_, OnStreamingConfigured(
-                             kAppId, protocol_handler::ServiceType::kMobileNav,
-                             false, empty)).WillOnce(Return());
+  EXPECT_CALL(
+      app_mngr_,
+      OnStreamingConfigured(
+          kAppId, protocol_handler::ServiceType::kMobileNav, false, empty))
+      .WillOnce(Return());
 
   EXPECT_CALL(app_mngr_, TerminateRequest(_, _, _)).Times(1);
 

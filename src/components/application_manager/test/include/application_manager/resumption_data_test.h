@@ -63,18 +63,18 @@ using namespace mobile_apis;
 class ResumptionDataTest : public ::testing::Test {
  protected:
   ResumptionDataTest()
-      : kCountOfCommands_(5u),
-        kCountOfChoice_(2u),
-        kCountOfChoiceSets_(4u),
-        kCountOfSubmenues_(3u),
-        kCountOfFiles_(8u),
-        kCountOfVrhelptitle_(2u),
-        kMacAddress_("12345"),
-        sublock_ptr_(std::make_shared<sync_primitives::Lock>()),
-        comlock_ptr_(std::make_shared<sync_primitives::Lock>()),
-        setlock_ptr_(std::make_shared<sync_primitives::Lock>()),
-        btnlock_ptr_(std::make_shared<sync_primitives::Lock>()),
-        ivilock_ptr_(std::make_shared<sync_primitives::Lock>()) {}
+      : kCountOfCommands_(5u)
+      , kCountOfChoice_(2u)
+      , kCountOfChoiceSets_(4u)
+      , kCountOfSubmenues_(3u)
+      , kCountOfFiles_(8u)
+      , kCountOfVrhelptitle_(2u)
+      , kMacAddress_("12345")
+      , sublock_ptr_(std::make_shared<sync_primitives::Lock>())
+      , comlock_ptr_(std::make_shared<sync_primitives::Lock>())
+      , setlock_ptr_(std::make_shared<sync_primitives::Lock>())
+      , btnlock_ptr_(std::make_shared<sync_primitives::Lock>())
+      , ivilock_ptr_(std::make_shared<sync_primitives::Lock>()) {}
   // Check structure in saved application
   void CheckSavedApp(sm::SmartObject& saved_data);
   // Set data for resumption

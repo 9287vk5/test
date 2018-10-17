@@ -60,12 +60,15 @@ CREATE_LOGGERPTR_GLOBAL(logger_, "Profile")
 char* ini_write_inst(const char* fname, uint8_t flag) {
   FILE* fp = 0;
 
-  if (NULL == fname) return NULL;
-  if ('\0' == *fname) return NULL;
+  if (NULL == fname)
+    return NULL;
+  if ('\0' == *fname)
+    return NULL;
 
   if ((fp = fopen(fname, "a")) == 0)
     if (flag & INI_FLAG_FILE_UP_CREA)
-      if ((fp = fopen(fname, "w")) == 0) return NULL;
+      if ((fp = fopen(fname, "w")) == 0)
+        return NULL;
   if (0 == fp) {
     return NULL;
   }
@@ -90,7 +93,9 @@ char* ini_write_inst(const char* fname, uint8_t flag) {
   return const_cast<char*>(fname);
 }
 
-char* ini_read_value(const char* fname, const char* chapter, const char* item,
+char* ini_read_value(const char* fname,
+                     const char* chapter,
+                     const char* item,
                      char* value) {
   FILE* fp = 0;
   bool chapter_found = false;
@@ -106,9 +111,11 @@ char* ini_read_value(const char* fname, const char* chapter, const char* item,
     return NULL;
 
   *value = '\0';
-  if (('\0' == *fname) || ('\0' == *chapter) || ('\0' == *item)) return NULL;
+  if (('\0' == *fname) || ('\0' == *chapter) || ('\0' == *item))
+    return NULL;
 
-  if ((fp = fopen(fname, "r")) == 0) return NULL;
+  if ((fp = fopen(fname, "r")) == 0)
+    return NULL;
 
   snprintf(tag, INI_LINE_LEN, "%s", chapter);
   for (uint32_t i = 0; i < strlen(tag); i++) {
@@ -123,7 +130,8 @@ char* ini_read_value(const char* fname, const char* chapter, const char* item,
         chapter_found = true;
 
         snprintf(tag, INI_LINE_LEN, "%s", item);
-        for (uint32_t i = 0; i < strlen(tag); i++) tag[i] = toupper(tag[i]);
+        for (uint32_t i = 0; i < strlen(tag); i++)
+          tag[i] = toupper(tag[i]);
       }
     } else {
       // FIXME (dchmerev): Unnecessary condition
@@ -144,8 +152,11 @@ char* ini_read_value(const char* fname, const char* chapter, const char* item,
   return NULL;
 }
 
-char ini_write_value(const char* fname, const char* chapter, const char* item,
-                     const char* value, uint8_t flag) {
+char ini_write_value(const char* fname,
+                     const char* chapter,
+                     const char* item,
+                     const char* value,
+                     uint8_t flag) {
   FILE* rd_fp, * wr_fp = 0;
   uint16_t i, cr_count;
   int32_t wr_result;
@@ -163,11 +174,13 @@ char ini_write_value(const char* fname, const char* chapter, const char* item,
 
   if ((NULL == fname) || (NULL == chapter) || (NULL == item) || (NULL == value))
     return FALSE;
-  if (('\0' == *fname) || ('\0' == *chapter) || ('\0' == *item)) return FALSE;
+  if (('\0' == *fname) || ('\0' == *chapter) || ('\0' == *item))
+    return FALSE;
 
   if (0 == (rd_fp = fopen(fname, "r"))) {
     ini_write_inst(fname, flag);
-    if (0 == (rd_fp = fopen(fname, "r"))) return FALSE;
+    if (0 == (rd_fp = fopen(fname, "r")))
+      return FALSE;
   }
 
 #if USE_MKSTEMP
@@ -203,7 +216,8 @@ char ini_write_value(const char* fname, const char* chapter, const char* item,
 #endif  // #else #if USE_MKSTEMP
 
   snprintf(tag, INI_LINE_LEN, "%s", chapter);
-  for (uint32_t i = 0; i < strlen(tag); i++) tag[i] = toupper(tag[i]);
+  for (uint32_t i = 0; i < strlen(tag); i++)
+    tag[i] = toupper(tag[i]);
 
   wr_result = 1;
   cr_count = 0;
@@ -217,7 +231,8 @@ char ini_write_value(const char* fname, const char* chapter, const char* item,
           chapter_found = true;
           // coding style
           snprintf(tag, INI_LINE_LEN, "%s", item);
-          for (uint32_t i = 0; i < strlen(tag); i++) tag[i] = toupper(tag[i]);
+          for (uint32_t i = 0; i < strlen(tag); i++)
+            tag[i] = toupper(tag[i]);
         }
       } else {
         if ((INI_RIGHT_CHAPTER == result) || (INI_WRONG_CHAPTER == result)) {
@@ -229,7 +244,8 @@ char ini_write_value(const char* fname, const char* chapter, const char* item,
              first chapter is significant */
           value_written = true;
         } else if (result == INI_RIGHT_ITEM) {
-          for (i = 0; i < cr_count; i++) fprintf(wr_fp, "\n");
+          for (i = 0; i < cr_count; i++)
+            fprintf(wr_fp, "\n");
           cr_count = 0;
           wr_result = fprintf(wr_fp, "%s=%s\n", item, value);
           value_written = true;
@@ -241,14 +257,16 @@ char ini_write_value(const char* fname, const char* chapter, const char* item,
     if (0 == strcmp(val, "\n")) {
       cr_count++;
     } else {
-      for (uint32_t i = 0; i < cr_count; i++) fprintf(wr_fp, "\n");
+      for (uint32_t i = 0; i < cr_count; i++)
+        fprintf(wr_fp, "\n");
       cr_count = 0;
       wr_result = fprintf(wr_fp, "%s", line);
     }
   }
   if (0 < (wr_result) && (!value_written)) {
     if (flag & INI_FLAG_ITEM_UP_CREA) {
-      if (!chapter_found) fprintf(wr_fp, "\n[%s]\n", chapter);
+      if (!chapter_found)
+        fprintf(wr_fp, "\n[%s]\n", chapter);
       fprintf(wr_fp, "%s=%s\n", item, value);
       value_written = true;
     }
@@ -310,7 +328,8 @@ Ini_search_id ini_parse_line(const char* line, const char* tag, char* value) {
         break;
       }
     }
-    if (*line_ptr == '\0') return INI_NOTHING;
+    if (*line_ptr == '\0')
+      return INI_NOTHING;
 
     snprintf(temp_str, INI_LINE_LEN, "%s", line_ptr);
     temp_ptr = strrchr(temp_str, ']');

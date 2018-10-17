@@ -469,8 +469,10 @@ class ApplicationManager {
   virtual void RemoveAppFromTTSGlobalPropertiesList(const uint32_t app_id) = 0;
 
   virtual mobile_apis::Result::eType SaveBinary(
-      const std::vector<uint8_t>& binary_data, const std::string& file_path,
-      const std::string& file_name, const uint64_t offset) = 0;
+      const std::vector<uint8_t>& binary_data,
+      const std::string& file_path,
+      const std::string& file_name,
+      const uint64_t offset) = 0;
   /*
    * @brief Sets SDL access to all mobile apps
    *
@@ -496,9 +498,12 @@ class ApplicationManager {
    * @param bits_per_sample The quality the audio is recorded.
    * @param audio_type      Type of audio data
    */
-  virtual void StartAudioPassThruThread(
-      int32_t session_key, int32_t correlation_id, int32_t max_duration,
-      int32_t sampling_rate, int32_t bits_per_sample, int32_t audio_type) = 0;
+  virtual void StartAudioPassThruThread(int32_t session_key,
+                                        int32_t correlation_id,
+                                        int32_t max_duration,
+                                        int32_t sampling_rate,
+                                        int32_t bits_per_sample,
+                                        int32_t audio_type) = 0;
 
   virtual void StartDevicesDiscovery() = 0;
 
@@ -573,7 +578,8 @@ class ApplicationManager {
    * @return SUCCESS, if allowed, otherwise result code of check
    */
   virtual mobile_apis::Result::eType CheckPolicyPermissions(
-      const ApplicationSharedPtr app, const std::string& function_id,
+      const ApplicationSharedPtr app,
+      const std::string& function_id,
       const RPCParams& rpc_params,
       CommandParametersPermissions* params_permissions = NULL) = 0;
 
@@ -669,7 +675,8 @@ class ApplicationManager {
    * @return new regular HMI state
    */
   virtual HmiStatePtr CreateRegularState(
-      std::shared_ptr<Application> app, mobile_apis::HMILevel::eType hmi_level,
+      std::shared_ptr<Application> app,
+      mobile_apis::HMILevel::eType hmi_level,
       mobile_apis::AudioStreamingState::eType audio_state,
       mobile_apis::VideoStreamingState::eType video_state,
       mobile_apis::SystemContext::eType system_context) const = 0;
@@ -699,7 +706,9 @@ class ApplicationManager {
    *                        only when result is false.
    */
   virtual void OnStreamingConfigured(
-      uint32_t app_id, protocol_handler::ServiceType service_type, bool result,
+      uint32_t app_id,
+      protocol_handler::ServiceType service_type,
+      bool result,
       std::vector<std::string>& rejected_params) = 0;
 
   virtual const ApplicationManagerSettings& get_settings() const = 0;

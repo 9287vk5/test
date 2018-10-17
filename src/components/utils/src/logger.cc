@@ -56,4 +56,6 @@ void deinit_logger() {
   logger::logger_status = logger::LoggerThreadNotCreated;
 }
 
-log4cxx_time_t time_now() { return apr_time_now(); }
+log4cxx_time_t time_now() {
+  return apr_time_now();
+}

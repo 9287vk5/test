@@ -49,9 +49,11 @@ using protocol_handler::RESULT_CODE;
 using protocol_handler::FRAME_TYPE_CONTROL;
 using protocol_handler::FRAME_DATA_START_SERVICE_NACK;
 
-bool CheckRegularMatches(const ProtocolPacket& packet, RESULT_CODE result,
+bool CheckRegularMatches(const ProtocolPacket& packet,
+                         RESULT_CODE result,
                          testing::MatchResultListener& result_listener,
-                         uint8_t ExpectedFrameType, uint8_t ExpectedFrameData,
+                         uint8_t ExpectedFrameType,
+                         uint8_t ExpectedFrameData,
                          uint8_t ExpectedEncryption) {
   if (result != protocol_handler::RESULT_OK) {
     result_listener << "Error while message deserialization.";
@@ -82,7 +84,9 @@ bool CheckRegularMatches(const ProtocolPacket& packet, RESULT_CODE result,
  * Check error id
  */
 
-MATCHER_P2(ControlMessage, ExpectedFrameData, ExpectedEncryption,
+MATCHER_P2(ControlMessage,
+           ExpectedFrameData,
+           ExpectedEncryption,
            (std::string(ExpectedEncryption ? "Protected" : "Unprotected") +
             " control message ")) {
   // Nack shall be always with flag protected off
@@ -96,14 +100,21 @@ MATCHER_P2(ControlMessage, ExpectedFrameData, ExpectedEncryption,
   const RESULT_CODE result =
       packet.deserializePacket(message->data(), message->data_size());
 
-  if (!CheckRegularMatches(packet, result, *result_listener, FRAME_TYPE_CONTROL,
-                           ExpectedFrameData, ExpectedEncryption)) {
+  if (!CheckRegularMatches(packet,
+                           result,
+                           *result_listener,
+                           FRAME_TYPE_CONTROL,
+                           ExpectedFrameData,
+                           ExpectedEncryption)) {
     return false;
   }
   return true;
 }
 
-MATCHER_P4(ControlMessage, ExpectedFrameData, ExpectedEncryption, ConnectionKey,
+MATCHER_P4(ControlMessage,
+           ExpectedFrameData,
+           ExpectedEncryption,
+           ConnectionKey,
            VectorMatcher,
            (std::string(ExpectedEncryption ? "Protected" : "Unprotected") +
             " control message ")) {
@@ -118,8 +129,12 @@ MATCHER_P4(ControlMessage, ExpectedFrameData, ExpectedEncryption, ConnectionKey,
   const RESULT_CODE result =
       packet.deserializePacket(message->data(), message->data_size());
 
-  if (!CheckRegularMatches(packet, result, *result_listener, FRAME_TYPE_CONTROL,
-                           ExpectedFrameData, ExpectedEncryption)) {
+  if (!CheckRegularMatches(packet,
+                           result,
+                           *result_listener,
+                           FRAME_TYPE_CONTROL,
+                           ExpectedFrameData,
+                           ExpectedEncryption)) {
     return false;
   }
 
@@ -149,8 +164,11 @@ MATCHER_P4(ControlMessage, ExpectedFrameData, ExpectedEncryption, ConnectionKey,
  * Matcher for checking RawMessage with any ExpectedMessage
  */
 
-MATCHER_P4(ExpectedMessage, ExpectedFrameType, ExpectedFrameData,
-           ExpectedEncryption, ExpectedServiceType,
+MATCHER_P4(ExpectedMessage,
+           ExpectedFrameType,
+           ExpectedFrameData,
+           ExpectedEncryption,
+           ExpectedServiceType,
            (std::string(ExpectedEncryption ? "Protected" : "Unprotected") +
             " message ")) {
   // Nack shall be always with flag protected off
@@ -165,8 +183,12 @@ MATCHER_P4(ExpectedMessage, ExpectedFrameType, ExpectedFrameData,
   const RESULT_CODE result =
       packet.deserializePacket(message->data(), message->data_size());
 
-  if (!CheckRegularMatches(packet, result, *result_listener, ExpectedFrameType,
-                           ExpectedFrameData, ExpectedEncryption)) {
+  if (!CheckRegularMatches(packet,
+                           result,
+                           *result_listener,
+                           ExpectedFrameType,
+                           ExpectedFrameData,
+                           ExpectedEncryption)) {
     return false;
   }
   if (ExpectedServiceType != packet.service_type()) {

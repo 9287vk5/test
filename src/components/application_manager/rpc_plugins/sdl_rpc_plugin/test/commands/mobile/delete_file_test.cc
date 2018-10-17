@@ -83,7 +83,8 @@ typedef NiceMock<
     ::test::components::application_manager_test::MockHMICapabilities>
     MockHMICapabilities;
 
-ACTION_TEMPLATE(SetArgPointer, HAS_1_TEMPLATE_PARAMS(int, k),
+ACTION_TEMPLATE(SetArgPointer,
+                HAS_1_TEMPLATE_PARAMS(int, k),
                 AND_1_VALUE_PARAMS(vec)) {
   *std::tr1::get<k>(args) = *vec;
 }

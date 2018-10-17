@@ -50,7 +50,9 @@ class MockHMIMessageAdapterImpl : public HMIMessageAdapterImpl {
   MOCK_METHOD0(SubscribeTo, void());
   MOCK_METHOD1(SendMessageToHMI, void(MessageSharedPointer SPtr));
 
-  HMIMessageHandler* get_handler() { return HMIMessageAdapterImpl::handler(); }
+  HMIMessageHandler* get_handler() {
+    return HMIMessageAdapterImpl::handler();
+  }
 };
 
 }  // namespace hmi_message_handler_test

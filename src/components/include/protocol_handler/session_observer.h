@@ -72,14 +72,14 @@ struct SessionContext {
    * @brief Constructor
    */
   SessionContext()
-      : primary_connection_id_(0),
-        connection_id_(0),
-        initial_session_id_(0),
-        new_session_id_(0),
-        service_type_(protocol_handler::kInvalidServiceType),
-        hash_id_(0),
-        is_protected_(false),
-        is_new_service_(false) {}
+      : primary_connection_id_(0)
+      , connection_id_(0)
+      , initial_session_id_(0)
+      , new_session_id_(0)
+      , service_type_(protocol_handler::kInvalidServiceType)
+      , hash_id_(0)
+      , is_protected_(false)
+      , is_new_service_(false) {}
 
   /**
    * @brief Constructor
@@ -97,17 +97,19 @@ struct SessionContext {
    **/
   SessionContext(transport_manager::ConnectionUID primary_connection_id,
                  transport_manager::ConnectionUID connection_id,
-                 uint8_t session_id, uint8_t new_session_id,
-                 protocol_handler::ServiceType service_type, uint32_t hash_id,
+                 uint8_t session_id,
+                 uint8_t new_session_id,
+                 protocol_handler::ServiceType service_type,
+                 uint32_t hash_id,
                  const bool is_protected)
-      : primary_connection_id_(primary_connection_id),
-        connection_id_(connection_id),
-        initial_session_id_(session_id),
-        new_session_id_(new_session_id),
-        service_type_(service_type),
-        hash_id_(hash_id),
-        is_protected_(is_protected),
-        is_new_service_(false) {}
+      : primary_connection_id_(primary_connection_id)
+      , connection_id_(connection_id)
+      , initial_session_id_(session_id)
+      , new_session_id_(new_session_id)
+      , service_type_(service_type)
+      , hash_id_(hash_id)
+      , is_protected_(is_protected)
+      , is_new_service_(false) {}
 };
 
 /**
@@ -136,7 +138,8 @@ class SessionObserver {
       const transport_manager::ConnectionUID connection_handle,
       const uint8_t sessionId,
       const protocol_handler::ServiceType& service_type,
-      const bool is_protected, const BsonObject* params) = 0;
+      const bool is_protected,
+      const BsonObject* params) = 0;
 
   /**
    * \brief Callback function used by ProtocolHandler
@@ -151,7 +154,8 @@ class SessionObserver {
    */
   virtual uint32_t OnSessionEndedCallback(
       const transport_manager::ConnectionUID connection_handle,
-      const uint8_t sessionId, uint32_t* hashCode,
+      const uint8_t sessionId,
+      uint32_t* hashCode,
       const protocol_handler::ServiceType& service_type) = 0;
 
   /**
@@ -218,7 +222,9 @@ class SessionObserver {
    * \return int32_t -1 in case of error or 0 in case of success
    */
   virtual int32_t GetDataOnSessionKey(
-      uint32_t key, uint32_t* app_id, std::list<int32_t>* sessions_list,
+      uint32_t key,
+      uint32_t* app_id,
+      std::list<int32_t>* sessions_list,
       transport_manager::DeviceHandle* device_id) const = 0;
 
   /**
@@ -256,7 +262,8 @@ class SessionObserver {
    * @param method writes value protocol version to protocol_version
    * @return TRUE if session and connection exist otherwise returns FALSE
    */
-  virtual bool ProtocolVersionUsed(uint32_t connection_id, uint8_t session_id,
+  virtual bool ProtocolVersionUsed(uint32_t connection_id,
+                                   uint8_t session_id,
                                    uint8_t& protocol_version) const = 0;
 
   /**

@@ -76,22 +76,21 @@ using namespace mobile_apis::HMILevel;
 class ResumeCtrlTest : public ::testing::Test {
  protected:
   ResumeCtrlTest()
-      : kTestAppId_(10u),
-        kTestPolicyAppId_("test_policy_app_id"),
-        kMacAddress_("12345"),
-        kDefaultTestLevel_(eType::HMI_NONE),
-        kCorId_(7u),
-        kTestDevId_(5u),
-        kTestGrammarId_(10),
-        kHash_("saved_hash"),
-        kAppResumingTimeout_(30000u)  // miliseconds
-        ,
-        kTestTimeStamp_(1452074434u),
-        app_set_lock_ptr_(std::make_shared<sync_primitives::Lock>()),
-        kDefaultDeferredTestLevel_(eType::INVALID_ENUM),
-        kNaviLowbandwidthLevel_("LIMITED"),
-        kProjectionLowbandwidthLevel_("NONE"),
-        kMediaLowbandwidthLevel_("NONE") {
+      : kTestAppId_(10u)
+      , kTestPolicyAppId_("test_policy_app_id")
+      , kMacAddress_("12345")
+      , kDefaultTestLevel_(eType::HMI_NONE)
+      , kCorId_(7u)
+      , kTestDevId_(5u)
+      , kTestGrammarId_(10)
+      , kHash_("saved_hash")
+      , kAppResumingTimeout_(30000u)  // miliseconds
+      , kTestTimeStamp_(1452074434u)
+      , app_set_lock_ptr_(std::make_shared<sync_primitives::Lock>())
+      , kDefaultDeferredTestLevel_(eType::INVALID_ENUM)
+      , kNaviLowbandwidthLevel_("LIMITED")
+      , kProjectionLowbandwidthLevel_("NONE")
+      , kMediaLowbandwidthLevel_("NONE") {
     profile::Profile profile_;
     profile_.set_config_file_name("smartDeviceLink.ini");
     resumption_delay_before_ign_ = profile_.resumption_delay_before_ign();
@@ -281,7 +280,9 @@ TEST_F(ResumeCtrlTest, StartResumption_AppWithFiles) {
   for (uint32_t i = 0; i < count_of_files; ++i) {
     EXPECT_CALL(*mock_app_,
                 AddFile(CheckAppFile(
-                    true, true, file_names[i],
+                    true,
+                    true,
+                    file_names[i],
                     static_cast<mobile_apis::FileType::eType>(file_types[i]))));
   }
 
@@ -733,8 +734,9 @@ TEST_F(ResumeCtrlTest,
       .WillRepeatedly(Return(restored_test_type));
 
   // ... then RemoveApplicationFromSaved() will not be called
-  EXPECT_CALL(*mock_storage_, RemoveApplicationFromSaved(
-                                  kTestPolicyAppId_, kMacAddress_)).Times(0);
+  EXPECT_CALL(*mock_storage_,
+              RemoveApplicationFromSaved(kTestPolicyAppId_, kMacAddress_))
+      .Times(0);
 
   ON_CALL(mock_app_mngr_, GetUserConsentForDevice("12345"))
       .WillByDefault(Return(policy::kDeviceAllowed));
@@ -787,8 +789,9 @@ TEST_F(
   EXPECT_CALL(*mock_app_, deferred_resumption_hmi_level())
       .WillRepeatedly(Return(restored_test_type));
 
-  EXPECT_CALL(*mock_storage_, RemoveApplicationFromSaved(
-                                  kTestPolicyAppId_, kMacAddress_)).Times(0);
+  EXPECT_CALL(*mock_storage_,
+              RemoveApplicationFromSaved(kTestPolicyAppId_, kMacAddress_))
+      .Times(0);
 
   ON_CALL(mock_app_mngr_, GetUserConsentForDevice("12345"))
       .WillByDefault(Return(policy::kDeviceAllowed));
@@ -1204,13 +1207,16 @@ TEST_F(ResumeCtrlTest, CheckApplicationkHash_) {
 }
 
 TEST_F(ResumeCtrlTest, GetSavedAppHmiLevel_NoAskedApp_INVALID_ENUM) {
-  ON_CALL(*mock_storage_, GetSavedApplication(kTestPolicyAppId_, kMacAddress_,
-                                              _)).WillByDefault(Return(false));
+  ON_CALL(*mock_storage_,
+          GetSavedApplication(kTestPolicyAppId_, kMacAddress_, _))
+      .WillByDefault(Return(false));
   EXPECT_EQ(mobile_apis::HMILevel::INVALID_ENUM,
             res_ctrl_->GetSavedAppHmiLevel(kTestPolicyAppId_, kMacAddress_));
 }
 
-ACTION_P(SetHmiLevel, hmi_level) { arg2[am::strings::hmi_level] = hmi_level; }
+ACTION_P(SetHmiLevel, hmi_level) {
+  arg2[am::strings::hmi_level] = hmi_level;
+}
 
 TEST_F(ResumeCtrlTest, GetSavedAppHmiLevel_AskedAppFound_INVALID_ENUM) {
   const mobile_apis::HMILevel::eType hmi_level =

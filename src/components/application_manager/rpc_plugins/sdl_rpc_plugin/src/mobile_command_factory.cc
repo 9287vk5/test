@@ -134,8 +134,8 @@ CommandCreator& MobileCommandFactory::get_creator_factory(
     mobile_apis::FunctionID::eType id,
     mobile_apis::messageType::eType message_type,
     app_mngr::commands::Command::CommandSource source) const {
-  CommandCreatorFactory factory(application_manager_, rpc_service_,
-                                hmi_capabilities_, policy_handler_);
+  CommandCreatorFactory factory(
+      application_manager_, rpc_service_, hmi_capabilities_, policy_handler_);
 
   switch (id) {
     case mobile_apis::FunctionID::RegisterAppInterfaceID: {
@@ -402,12 +402,13 @@ CommandCreator& MobileCommandFactory::get_creator_factory(
 
 MobileCommandFactory::MobileCommandFactory(
     ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : application_manager_(application_manager),
-      rpc_service_(rpc_service),
-      hmi_capabilities_(hmi_capabilities),
-      policy_handler_(policy_handler) {}
+    : application_manager_(application_manager)
+    , rpc_service_(rpc_service)
+    , hmi_capabilities_(hmi_capabilities)
+    , policy_handler_(policy_handler) {}
 
 bool MobileCommandFactory::IsAbleToProcess(
     const int32_t function_id,
@@ -431,8 +432,9 @@ CommandSharedPtr MobileCommandFactory::CreateCommand(
       static_cast<mobile_apis::FunctionID::eType>(
           (*message)[strings::params][strings::function_id].asInt());
 
-  LOG4CXX_DEBUG(logger_, "MobileCommandFactory::CreateCommand function_id: "
-                             << function_id);
+  LOG4CXX_DEBUG(
+      logger_,
+      "MobileCommandFactory::CreateCommand function_id: " << function_id);
 
   return get_creator_factory(function_id, message_type, source).create(message);
 }

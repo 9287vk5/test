@@ -39,22 +39,32 @@ namespace application_manager {
 namespace commands {
 
 CommandResponseImpl::CommandResponseImpl(
-    const MessageSharedPtr& message, ApplicationManager& application_manager,
-    rpc_service::RPCService& rpc_service, HMICapabilities& hmi_capabilities,
+    const MessageSharedPtr& message,
+    ApplicationManager& application_manager,
+    rpc_service::RPCService& rpc_service,
+    HMICapabilities& hmi_capabilities,
     policy::PolicyHandlerInterface& policy_handler)
-    : CommandImpl(message, application_manager, rpc_service, hmi_capabilities,
+    : CommandImpl(message,
+                  application_manager,
+                  rpc_service,
+                  hmi_capabilities,
                   policy_handler) {}
 
 CommandResponseImpl::~CommandResponseImpl() {}
 
-bool CommandResponseImpl::Init() { return true; }
+bool CommandResponseImpl::Init() {
+  return true;
+}
 
-bool CommandResponseImpl::CleanUp() { return true; }
+bool CommandResponseImpl::CleanUp() {
+  return true;
+}
 
 void CommandResponseImpl::Run() {}
 
 void CommandResponseImpl::SendResponse(
-    bool success, const mobile_apis::Result::eType& result_code,
+    bool success,
+    const mobile_apis::Result::eType& result_code,
     bool final_message) {
   LOG4CXX_INFO(logger_, "Trying to send response");
 
