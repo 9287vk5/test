@@ -39,7 +39,7 @@ pipeline {
                     } finally {
                         sh 'there are cpp warnings'
                     }
-                    CppcheckPublisher ( pattern: ‘cppcheck.xml’ )
+                    CppcheckPublisher ( pattern: 'cppcheck.xml' )
                 }
             }
         }
