@@ -40,7 +40,8 @@ pipeline {
                         sh 'there are cpp warnings'
                     }
                 }
-                CppcheckPublisher ( pattern: 'cppcheck.xml' )
+                step([$class: 'CppcheckPublisher', allowNoReport: false, displayAllErrors: true, displayErrorSeverity: false, displayInformationSeverity: false, displayNoCategorySeverity: false, displayPerformanceSeverity: false, displayPortabilitySeverity: false, displayStyleSeverity: false, displayWarningSeverity: false, failureThreshold: '', healthy: '', ignoreBlankFiles: false, newFailureThreshold: '', newThreshold: '', numBuildsInGraph: 0, pattern: 'cppcheck.xml', severityError: true, severityInformation: true, severityNoCategory: true, severityPerformance: true, severityPortability: true, severityStyle: true, severityWarning: true, threshold: '', unHealthy: '', xSize: 500, ySize: 200])
+                /*CppcheckPublisher ( pattern: 'cppcheck.xml' )*/
             }
         }
         /*
