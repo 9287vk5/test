@@ -18,31 +18,29 @@ pipeline {
                 '''
                 echo 'Desc: "SDL: " ${GIT_BRANCH:0:29} " " ${GIT_COMMIT:0:8}'
             }
-        }/*
+        }
         stage ('check-style') {
             steps { 
                 script { 
                     try { 
                         sh 'tools/infrastructure/check_style.sh' 
                     } catch (Exception e) {
-                        sh 'echo "check-style good"'
-                    }
-                }
-            }
-        }*/
-        stage ('cppcheck') {
-            steps { 
-                script { 
-                    sh 'echo "cppcheck will run **********************************************"'
-                    try {
-                        sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' 
-                    } finally {
-                        sh 'ls -la'
+                        sh 'echo "check-style finished"'
                     }
                 }
             }
         }
-        /*
+        stage ('cppcheck') {
+            steps { 
+                script { 
+                    try {
+                        sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' 
+                    } finally {
+                        sh 'echo "cppcheck finished"'
+                    }
+                }
+            }
+        }
         stage ('cmake') {
             steps {
                 dir('build') {
@@ -65,10 +63,10 @@ pipeline {
                     '''
                 }
             }
-        }*/
+        }
         stage ('archive') {
             steps {
-           /*     archive 'build/OpenSDL.tar.gz'*/
+                archive 'build/OpenSDL.tar.gz'
                 archive 'cppcheck.xml'
             }
         }
