@@ -18,7 +18,7 @@ pipeline {
                 '''
                 echo 'Desc: "SDL: " ${GIT_BRANCH:0:29} " " ${GIT_COMMIT:0:8}'
             }
-        }
+        }/*
         stage ('check-style') {
             steps { 
                 script { 
@@ -29,7 +29,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage ('cppcheck') {
             steps { 
                 script { 
@@ -37,7 +37,7 @@ pipeline {
                     try {
                         sh 'cppcheck --enable=all --inconclusive -i "src/3rd_party-static" -i "src/3rd_party" --xml --xml-version=2 -q src 2> cppcheck.xml' 
                     } finally {
-                        sh 'cppcheck finished'
+                        sh 'ls -la'
                     }
                 }
             }
@@ -65,11 +65,12 @@ pipeline {
                     '''
                 }
             }
-        }
+        }*/
         stage ('archive') {
             steps {
-                archive 'build/OpenSDL.tar.gz'
+           /*     archive 'build/OpenSDL.tar.gz'*/
+                archive 'cppcheck.xml'
             }
-        }*/
+        }
     }
 }
