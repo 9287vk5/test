@@ -48,10 +48,18 @@ pipeline {
                 }
             }
         }
-        stage ('build') {
+        stage ('zaglushka') {
+            steps {
+                dir('build') {
+                    sh 'touch OpenSDL.tar.gz'
+                }
+            }
+        }
+        /*stage ('build') {
             steps {
                 dir('build') {
                     sh '''
+
                     make install-3rd_party_logger
                     make install -j4
                     cp -r src/3rdparty/LINUX/x86/lib/* bin
@@ -69,6 +77,12 @@ pipeline {
                 archive 'build/OpenSDL.tar.gz'
                 archive 'cppcheck.xml'
             }
-        }
+        }*/
     }
+    post {
+        success {
+            archive 'build/OpenSDL.tar.gz'
+            archive 'cppcheck.xml'
+    }
+}
 }
